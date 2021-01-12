@@ -1,0 +1,25 @@
+<form xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Ui:etc/ui_configuration.xsd">
+    <fieldset name="assign_to_company_account">
+        <settings>
+            <label translate="true">Assign as Sub-user</label>
+        </settings>
+        <field name="company_account_id"
+               formElement="input"
+               component="OTO_CustomerToSubUser/js/form/company-account-id">
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="source" xsi:type="string">assign_to_company_account</item>
+                    <item name="disabled" xsi:type="boolean">true</item>
+                    <item name="elementTmpl" xsi:type="string">OTO_CustomerToSubUser/form/element/company-account-id</item>
+                </item>
+            </argument>
+            <settings>
+                <label translate="true">Company Account Name</label>
+                <validation>
+                    <rule name="required-entry" xsi:type="boolean">true</rule>
+                </validation>
+                <dataType>text</dataType>
+            </settings>
+        </field>
+    </fieldset>
+</form>
