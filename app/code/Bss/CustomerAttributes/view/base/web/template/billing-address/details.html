@@ -1,0 +1,43 @@
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<div if="isAddressDetailsVisible() && currentBillingAddress()" class="billing-address-details">
+    <text args="currentBillingAddress().prefix"/> <text args="currentBillingAddress().firstname"/> <text args="currentBillingAddress().middlename"/>
+    <text args="currentBillingAddress().lastname"/> <text args="currentBillingAddress().suffix"/><br/>
+    <text args="_.values(currentBillingAddress().street).join(', ')"/><br/>
+    <text args="currentBillingAddress().city "/>, <span text="currentBillingAddress().region"></span> <text args="currentBillingAddress().postcode"/><br/>
+    <text args="getCountryName(currentBillingAddress().countryId)"/><br/>
+    <a if="currentBillingAddress().telephone" attr="'href': 'tel:' + currentBillingAddress().telephone" text="currentBillingAddress().telephone"></a><br/>
+
+    <each args="data: currentBillingAddress().customAttributes, as: 'element'">
+        <div if="$parent.getCustomAttributeLabel(element)">
+            <text args="$parent.getCustomAttributeLabel(element)"/>
+            <br/>
+        </div>
+        <div ifnot="$parent.getCustomAttributeLabel(element)">
+            <each args="data: Object.keys(element), as: 'attribute'">
+                <if args="typeof element[attribute] === 'object'">
+                    <if args="element[attribute].label">
+                        <text args="element[attribute].label"/>
+                    </if>
+                    <div ifnot="element[attribute].label">
+                        <if args="element[attribute].value">
+                            <text args="element[attribute].value"/>
+                        </if>
+                    </div>
+                </if>
+            </each>
+        </div>
+    </each>
+
+    <button visible="!isAddressSameAsShipping()"
+            type="button"
+            class="action action-edit-address"
+            click="editAddress">
+        <span translate="'Edit'"></span>
+    </button>
+</div>
+
