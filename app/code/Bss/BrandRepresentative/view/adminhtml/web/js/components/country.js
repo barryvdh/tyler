@@ -1,5 +1,3 @@
-<?xml version="1.0"?>
-<!--
 /**
  * BSS Commerce Co.
  *
@@ -16,10 +14,23 @@
  * @copyright  Copyright (c) 2021 BSS Commerce Co. ( http://bsscommerce.com )
  * @license    http://bsscommerce.com/Bss-Commerce-License.txt
  */
--->
-<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-        xsi:noNamespaceSchemaLocation="urn:magento:framework:Module/etc/module.xsd">
-    <module name="Bss_BrandRepresentative" setup_version="1.0.0" >
-        <sequence name="Magento_Catalog" />
-    </module>
-</config>
+
+define([
+    'Magento_Ui/js/form/element/select'
+], function (Select) {
+    'use strict';
+
+    return Select.extend({
+        /**
+         * Defines if value has changed.
+         *
+         * @returns {Boolean}
+         */
+        hasChanged: function () {
+            let hasChanged = this._super();
+            if (hasChanged) {
+                console.log(this)
+            }
+        },
+    });
+});

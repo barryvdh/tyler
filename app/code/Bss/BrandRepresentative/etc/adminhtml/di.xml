@@ -18,8 +18,9 @@
  */
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-        xsi:noNamespaceSchemaLocation="urn:magento:framework:Module/etc/module.xsd">
-    <module name="Bss_BrandRepresentative" setup_version="1.0.0" >
-        <sequence name="Magento_Catalog" />
-    </module>
+        xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
+<!--    <type name="Magento\Catalog\Model\Category\DataProvider">-->
+<!--        <plugin name="bss-category-data-provider-after-load"-->
+<!--                type="Bss\BrandRepresentative\Plugin\Model\Category\DataProvider" sortOrder="10"/>-->
+<!--    </type>-->
 </config>
