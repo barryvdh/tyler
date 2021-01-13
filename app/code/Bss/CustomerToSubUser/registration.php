@@ -5,6 +5,6 @@ use Magento\Framework\Component\ComponentRegistrar;
 
 ComponentRegistrar::register(
     ComponentRegistrar::MODULE,
-    'OTO_CustomerToSubUser',
+    'Bss_CustomerToSubUser',
     __DIR__
 );

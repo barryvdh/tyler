@@ -1,0 +1,82 @@
+<form xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Ui:etc/ui_configuration.xsd">
+    <argument name="data" xsi:type="array">
+        <item name="config" xsi:type="array">
+            <item name="exports" xsi:type="array">
+                <item name="test_test" xsi:type="string">customer_form.customer_form_data_source:data</item>
+            </item>
+        </item>
+    </argument>
+    <fieldset name="assign_to_company_account">
+        <settings>
+            <label translate="true">Assign as Sub-user</label>
+        </settings>
+        <field name="company_account_id"
+               formElement="input"
+               component="Bss_CustomerToSubUser/js/view/form/element/company-account-id">
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="source" xsi:type="string">assign_to_company_account</item>
+                    <item name="elementTmpl" xsi:type="string">Bss_CustomerToSubUser/form/element/company-account-id</item>
+                </item>
+            </argument>
+            <settings>
+                <label translate="true">Company Account Name</label>
+                <dataType>text</dataType>
+            </settings>
+        </field>
+
+        <field name="company_account_roles"
+               formElement="select"
+               component="Bss_CustomerToSubUser/js/view/form/element/company-account-roles">
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="source" xsi:type="string">company_account_roles</item>
+                </item>
+            </argument>
+            <settings>
+                <label translate="true">List roles</label>
+                <dataType>text</dataType>
+            </settings>
+            <formElements>
+                <select>
+                    <settings>
+                        <options>
+                            <option name="1" xsi:type="array">
+                                <item name="value" xsi:type="string">1</item>
+                                <item name="label" xsi:type="string">Option #1</item>
+                            </option>
+                            <option name="2" xsi:type="array">
+                                <item name="value" xsi:type="string">2</item>
+                                <item name="label" xsi:type="string">Option #2</item>
+                            </option>
+                            <option name="3" xsi:type="array">
+                                <item name="value" xsi:type="string">3</item>
+                                <item name="label" xsi:type="string">Option #3</item>
+                            </option>
+                        </options>
+                        <caption translate="true">-- Please Select --</caption>
+                    </settings>
+                </select>
+            </formElements>
+        </field>
+
+
+        <insertListing name="company_account_listing"
+                       component="Bss_CustomerToSubUser/js/view/form/insert-company-account-listing">
+            <settings>
+                <dataLinks>
+                    <exports>true</exports>
+                    <imports>true</imports>
+                </dataLinks>
+                <externalProvider>company_account_listing.company_account_listing_data_source</externalProvider>
+                <selectionsProvider>company_account_listing.company_account_listing.company_account_listing_columns.ids</selectionsProvider>
+                <autoRender>true</autoRender>
+                <dataScope>company_account_listing</dataScope>
+                <ns>company_account_listing</ns>
+                <exports>
+                    <link name="website_id">${ $.externalProvider }:params.website_id</link>
+                </exports>
+            </settings>
+        </insertListing>
+    </fieldset>
+</form>

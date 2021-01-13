@@ -1,0 +1,43 @@
+@loading-bg-color: #f5f3f0;
+@min-ph-height: 32px;
+
+.waiting {
+    min-height: @min-ph-height;
+    direction: ltr;
+    position: relative;
+    overflow: hidden;
+    background-color: @color-white-fog;
+    padding: 0.6rem 1rem 0.6rem;
+
+    &::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        right: 0;
+        bottom: 0;
+        left: 50%;
+        z-index: 1;
+        width: 500%;
+        margin-left: -250%;
+        -webkit-animation: waitingAnim 1s linear infinite;
+        animation: waitingAnim 1s linear infinite;
+        background: linear-gradient(90deg,hsla(0,0%,100%,0) 46%,hsla(0,0%,100%,.75) 50%,hsla(0,0%,100%,0) 54%) 50% 50%;
+    }
+}
+
+@-webkit-keyframes waitingAnim {
+    0% {
+        transform: translate3d(-30%, 0, 0);
+    }
+    to {
+        transform: translate3d(30%, 0, 0);
+    }
+}
+@keyframes waitingAnim {
+    0% {
+        transform: translate3d(-30%, 0, 0);
+    }
+    to {
+        transform: translate3d(30%, 0, 0);
+    }
+}

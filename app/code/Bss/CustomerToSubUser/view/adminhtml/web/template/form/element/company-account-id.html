@@ -1,0 +1,17 @@
+<div data-bind="css: {waiting: !wasAssigned()}">
+    <strong data-bind="text: getCompanyAccountName()"></strong>
+</div>
+<input readonly class="admin__control-text" type="text" style="display: none"
+       data-bind="
+        event: {change: userChanges},
+        value: value,
+        hasFocus: focused,
+        valueUpdate: valueUpdate,
+        attr: {
+            name: inputName,
+            placeholder: placeholder,
+            'aria-describedby': noticeId,
+            id: uid,
+            disabled: disabled,
+            maxlength: 255
+    }"/>

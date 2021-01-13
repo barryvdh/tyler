@@ -67,3 +67,13 @@ atlassian*
 /generated/*
 !/generated/.htaccess
 .DS_Store
+
+.bash_history
+.composer/*
+.config/*
+app/Helper/*
+app/etc/config_.php
+app/etc/config__.php
+app/etc/env_.php
+composer.json
+composer.lock

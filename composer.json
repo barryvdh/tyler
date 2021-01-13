@@ -11,9 +11,10 @@
         "sort-packages": true
     },
     "require": {
-        "amasty/module-advanced-permissions": "^1.4",
         "magento/composer-root-update-plugin": "~1.0",
-        "magento/product-community-edition": "2.4.0"
+        "magento/product-community-edition": "2.4.0",
+        "magepal/magento2-gmailsmtpapp": "^2.8",
+        "symfony/var-dumper": "^5.2"
     },
     "require-dev": {
         "allure-framework/allure-phpunit": "~1.2.0",
@@ -47,7 +48,8 @@
             ]
         },
         "files": [
-            "app/etc/NonComposerComponentRegistration.php"
+            "app/etc/NonComposerComponentRegistration.php",
+            "app/Helper/Helper.php"
         ],
         "exclude-from-classmap": [
             "**/dev/**",
@@ -68,10 +70,6 @@
     "version": "2.4.0",
     "minimum-stability": "stable",
     "repositories": {
-        "amasty": {
-            "type": "composer",
-            "url": "https://composer.amasty.com/community/"
-        },
         "0": {
             "type": "composer",
             "url": "https://repo.magento.com/"
