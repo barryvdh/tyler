@@ -18,9 +18,6 @@
 
     <dataSource name="company_account_listing_data_source" component="Magento_Ui/js/grid/provider">
         <settings>
-            <filterUrlParams>
-                <param name="id">*</param>
-            </filterUrlParams>
             <storageConfig>
                 <param name="indexField" xsi:type="string">entity_id</param>
             </storageConfig>
@@ -29,7 +26,7 @@
         <aclResource>anonymous</aclResource>
         <dataProvider class="Bss\CustomerToSubUser\Ui\Component\Customer\DataProvider" name="company_account_listing_data_source">
             <settings>
-                <requestFieldName>id</requestFieldName>
+                <requestFieldName>entity_id</requestFieldName>
                 <primaryFieldName>entity_id</primaryFieldName>
             </settings>
         </dataProvider>
@@ -49,7 +46,7 @@
     </listingToolbar>
 
     <columns name="spinner_columns" class="Magento\Customer\Ui\Component\Listing\Columns">
-        <selectionsColumn name="ids">
+        <selectionsColumn name="ids" component="Bss_CustomerToSubUser/js/view/grid/columns/multiselect">
             <argument name="data" xsi:type="array">
                 <item name="config" xsi:type="array">
                     <item name="resizeEnabled" xsi:type="boolean">false</item>

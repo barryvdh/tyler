@@ -1,11 +1,4 @@
 <form xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Ui:etc/ui_configuration.xsd">
-    <argument name="data" xsi:type="array">
-        <item name="config" xsi:type="array">
-            <item name="exports" xsi:type="array">
-                <item name="test_test" xsi:type="string">customer_form.customer_form_data_source:data</item>
-            </item>
-        </item>
-    </argument>
     <fieldset name="assign_to_company_account">
         <settings>
             <label translate="true">Assign as Sub-user</label>
@@ -60,21 +53,18 @@
             </formElements>
         </field>
 
-
-        <insertListing name="company_account_listing"
-                       component="Bss_CustomerToSubUser/js/view/form/insert-company-account-listing">
+        <insertListing name="company_account_listing">
             <settings>
-                <dataLinks>
-                    <exports>true</exports>
-                    <imports>true</imports>
-                </dataLinks>
                 <externalProvider>company_account_listing.company_account_listing_data_source</externalProvider>
                 <selectionsProvider>company_account_listing.company_account_listing.company_account_listing_columns.ids</selectionsProvider>
                 <autoRender>true</autoRender>
                 <dataScope>company_account_listing</dataScope>
                 <ns>company_account_listing</ns>
+                <imports>
+                    <link name="websiteId">${ $.provider }:data.customer.website_id</link>
+                </imports>
                 <exports>
-                    <link name="website_id">${ $.externalProvider }:params.website_id</link>
+                    <link name="websiteId">${ $.externalProvider }:params.website_id</link>
                 </exports>
             </settings>
         </insertListing>

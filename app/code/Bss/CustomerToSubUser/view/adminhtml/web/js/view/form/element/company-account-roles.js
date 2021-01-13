@@ -26,6 +26,7 @@ define([
         initObservable: function () {
             this._super();
             CompanyAccount.data.subscribe(this.whenSelectCompanyAccount, this);
+
             return this;
         },
 

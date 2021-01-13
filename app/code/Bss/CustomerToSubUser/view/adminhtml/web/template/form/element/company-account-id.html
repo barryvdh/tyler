@@ -1,5 +1,5 @@
-<div data-bind="css: {waiting: !wasAssigned()}">
-    <strong data-bind="text: getCompanyAccountName()"></strong>
+<div class="company-account-name" data-bind="css: {waiting: !wasAssigned()}">
+    <strong data-bind="text: companyAccountName()"></strong>
 </div>
 <input readonly class="admin__control-text" type="text" style="display: none"
        data-bind="

@@ -6,20 +6,10 @@ define([
     'use strict';
 
     return Field.extend({
-        /**
-         * The customer was assigned to company account
-         *
-         * @return {Boolean}
-         */
-        wasAssigned: ko.computed(function () {
-            var companyAccount = CompanyAccount.data();
-
-            if (companyAccount) {
-                companyAccount.hasOwnProperty('entity_id')
-            }
-
-            return false;
-        }),
+        defaults: {
+            companyAccountName: null,
+            wasAssigned: false
+        },
 
         /**
          * Invokes initialize method of parent class,
@@ -29,6 +19,7 @@ define([
             this._super();
 
             console.log(this.elementTmpl);
+
             return this;
         },
 
@@ -40,29 +31,41 @@ define([
         initObservable: function () {
             this._super();
 
+            this.observe('companyAccountName wasAssigned');
+            CompanyAccount.data.subscribe(this.whenCompanyAccountUpdate, this);
+            this.value.subscribe(this.whenValueUpdate, this);
+
             return this;
         },
 
         /**
-         * Get company account was assigned
+         * If value was empty, then clear the local data
          *
-         * @returns {Object|null}
+         * @param {String} value
          */
-        getCompanyAccount: function () {
-            return CompanyAccount.data();
+        whenValueUpdate: function (value) {
+            if (!value) {
+                CompanyAccount.data(null);
+            }
         },
 
         /**
-         * Get company account name
+         * When company account was selected
          *
-         * @returns {string}
+         * @param {Object} data
          */
-        getCompanyAccountName: function () {
-            return ko.computed(function () {
-                if (this.wasAssigned()) {
-                    return this.getCompanyAccount()['firstname'] + this.getCompanyAccount()['lastname'];
-                }
-            }, this, { pure: true })
+        whenCompanyAccountUpdate: function (data) {
+            var nameNEmail = null;
+
+            if (data) {
+                nameNEmail = data.name + ' (' + data.email + ')';
+                this.value(data['entity_id']);
+            }
+
+            this.wasAssigned(nameNEmail !== null);
+            this.companyAccountName(nameNEmail);
+
+            return this;
         }
     });
 });
