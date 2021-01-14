@@ -1,12 +1,12 @@
 <form xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Ui:etc/ui_configuration.xsd">
     <fieldset name="bss_brand_representative" sortOrder="10">
         <settings>
-            <label translate="true">Brand Representative</label>
+            <label translate="true">Sales Representative</label>
             <collapsible>true</collapsible>
         </settings>
-
         <dynamicRows name="bss_brand_representative_email" component="Magento_Ui/js/dynamic-rows/dynamic-rows">
             <settings>
+                <label translate="true">Configuration</label>
                 <addButtonLabel translate="true">Add Representative</addButtonLabel>
                 <dndConfig>
                     <param name="enabled" xsi:type="boolean">false</param>
@@ -21,59 +21,25 @@
                         <item name="componentType" xsi:type="string">container</item>
                     </item>
                 </argument>
-<!--                <field name="is_default" component="Magento_Catalog/js/form/element/checkbox" sortOrder="0" formElement="checkbox">-->
-<!--                    <argument name="data" xsi:type="array">-->
-<!--                        <item name="config" xsi:type="array">-->
-<!--                            <item name="prefixElementName" xsi:type="string">option_</item>-->
-<!--                            <item name="inputCheckBoxName" xsi:type="string">default</item>-->
-<!--                            <item name="isMultiple" xsi:type="boolean">true</item>-->
-<!--                            <item name="value" xsi:type="string">1</item>-->
-<!--                            <item name="columnsHeaderClasses" xsi:type="string">control-table-options-th</item>-->
-<!--                            <item name="modules" xsi:type="array">-->
-<!--                                <item name="rows" xsi:type="string">ns = ${ $.ns }, index = attribute_options_multiselect</item>-->
-<!--                            </item>-->
-<!--                        </item>-->
-<!--                    </argument>-->
-<!--                    <settings>-->
-<!--                        <additionalClasses>-->
-<!--                            <class name="control-table-options-cell">true</class>-->
-<!--                        </additionalClasses>-->
-<!--                        <dataType>boolean</dataType>-->
-<!--                        <label translate="true">Is Default</label>-->
-<!--                    </settings>-->
-<!--                </field>-->
-<!--                <field name="store_id" component="Magento_Ui/js/form/element/select" formElement="select">-->
-<!--                    <settings>-->
-<!--                        <dataType>text</dataType>-->
-<!--                        <label translate="true">Store</label>-->
-<!--                        <disabled>false</disabled>-->
-<!--                        <dataScope>store_id</dataScope>-->
-<!--                    </settings>-->
-<!--                    <formElements>-->
-<!--                        <select>-->
-<!--                            <settings>-->
-<!--                                <options class="Magento\Store\Ui\Component\Listing\Column\Store\Options"/>-->
-<!--                            </settings>-->
-<!--                        </select>-->
-<!--                    </formElements>-->
-<!--                </field>-->
-                <field name="bss_brand_email" sortOrder="0" formElement="textarea">
+                <field name="bss_email" sortOrder="0" formElement="textarea">
                     <argument name="data" xsi:type="array">
                         <item name="config" xsi:type="array">
-                            <item name="source" xsi:type="string">bss_brand_email</item>
+                            <item name="source" xsi:type="string">bss_email</item>
+                            <item name="resizeDefaultWidth" xsi:type="number">150</item>
                         </item>
                     </argument>
                     <settings>
                         <dataType>text</dataType>
-                        <label translate="true">Brand Email</label>
+                        <label translate="true">Email</label>
                         <disabled>false</disabled>
-                        <dataScope>bss_brand_email</dataScope>
+                        <dataScope>bss_email</dataScope>
                     </settings>
                 </field>
                 <field name="bss_country" component="Bss_BrandRepresentative/js/components/country" sortOrder="10" formElement="select">
                     <argument name="data" xsi:type="array">
                         <item name="config" xsi:type="array">
                             <item name="source" xsi:type="string">bss_country</item>
+                            <item name="default" xsi:type="string">CA</item>
                         </item>
                     </argument>
                     <settings>
@@ -103,16 +69,36 @@
                         <listens>
                             <link name="${ $.provider }:${ $.parentScope }.bss_country">setCountryId</link>
                         </listens>
+                        <imports>
+                            <link name="country_id">${ $.provider }:${ $.parentScope }.bss_country</link>
+                        </imports>
                     </settings>
                     <formElements>
-                        <select>
+                        <multiselect>
                             <settings>
-                                <options class="Bss\BrandRepresentative\Model\Config\Source\CountryOptions"/>
+                                <options class="Bss\BrandRepresentative\Model\Config\Source\ProvinceOptions"/>
+                                <filterBy>
+                                    <field>country_id</field>
+                                    <target>${ $.provider }:${ $.parentScope }.bss_country</target>
+                                </filterBy>
                             </settings>
-                        </select>
+                        </multiselect>
                     </formElements>
                 </field>
-                <actionDelete template="Magento_Backend/dynamic-rows/cells/action-delete" sortOrder="30">
+<!--                <field name="bss_province_text" sortOrder="30" formElement="textarea">-->
+<!--                    <argument name="data" xsi:type="array">-->
+<!--                        <item name="config" xsi:type="array">-->
+<!--                            <item name="source" xsi:type="string">bss_province_text</item>-->
+<!--                        </item>-->
+<!--                    </argument>-->
+<!--                    <settings>-->
+<!--                        <dataType>text</dataType>-->
+<!--                        <label translate="true">Province</label>-->
+<!--                        <disabled>false</disabled>-->
+<!--                        <dataScope>bss_province_text</dataScope>-->
+<!--                    </settings>-->
+<!--                </field>-->
+                <actionDelete template="Magento_Backend/dynamic-rows/cells/action-delete" sortOrder="40">
                     <settings>
                         <componentType>actionDelete</componentType>
                         <dataType>text</dataType>

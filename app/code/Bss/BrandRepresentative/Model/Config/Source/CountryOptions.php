@@ -57,8 +57,7 @@ class CountryOptions extends AbstractSource
      */
     public function getAllOptions(): array
     {
-        return $this->countryCollection->loadData()->toOptionArray(
-            false
-        );
+        return $this->countryCollection->addCountryCodeFilter(["CA","US"])->loadData()
+            ->toOptionArray(false);
     }
 }

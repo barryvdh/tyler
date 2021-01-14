@@ -84,8 +84,8 @@ class DataProvider
         \Magento\Catalog\Model\Category\DataProvider $subject,
         array $meta
     ) {
-        die('ccc');
-        //$data = $subject->getData();
+
+        $data = $subject->getData();
         //$meta = $this->addBssDataProvider($meta, $data);
         return $meta;
     }
