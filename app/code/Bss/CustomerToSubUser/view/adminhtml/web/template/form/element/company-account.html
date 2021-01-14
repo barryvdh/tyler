@@ -1,0 +1,40 @@
+<div class="business-card">
+    <div class="profile">
+        <div class="profile-image avatar" data-bind="
+            css: {
+                waiting: !wasAssigned(),
+                'man-avatar': wasAssigned()
+            }
+        "></div>
+        <div class="profile-title">
+            <h1 class="name" data-bind="css: { waiting: !wasAssigned() }, text: companyAccount()['name'] || ''"></h1>
+            <h3 class="group" data-bind="css: { waiting: !wasAssigned() }, text: getGroupName()"></h3>
+            <span class="store" data-bind="css: { waiting: !wasAssigned() }, text: companyAccount()['created_in'] || ''"></span>
+        </div>
+    </div>
+    <div class="info">
+        <div class="info-contact">
+            <span class="info-text phone" data-bind="css: { waiting: !wasAssigned()}, text: companyAccount()['billing_telephone'] || ''"></span>
+            <span class="info-text email" data-bind="css: { waiting: !wasAssigned()}, text: companyAccount()['email'] || ''"></span>
+            <span class="info-text website" data-bind="css: { waiting: !wasAssigned()}, text: getWebsiteName()"></span>
+        </div>
+        <div class="info-address">
+            <strong class="address-label" data-bind="css: { waiting: !wasAssigned() }, text: companyAccount()['shipping_full'] ? $t('Shipping Address') : ''"></strong>
+            <p class="address-value" data-bind="css: { waiting: !wasAssigned() }, text: companyAccount()['shipping_full'] || ''"></p>
+        </div>
+    </div>
+</div>
+<input readonly class="admin__control-text" type="text" style="display: none"
+       data-bind="
+        event: {change: userChanges},
+        value: value,
+        hasFocus: focused,
+        valueUpdate: valueUpdate,
+        attr: {
+            name: inputName,
+            placeholder: placeholder,
+            'aria-describedby': noticeId,
+            id: uid,
+            disabled: disabled,
+            maxlength: 255
+    }"/>

@@ -31,17 +31,31 @@ class CompanyRoleManagement implements CompanyRoleManagementInterface
      */
     private $roleRepository;
 
+    /**
+     * @var \Magento\Framework\Api\FilterBuilder
+     */
+    private $filterBuilder;
+
+    /**
+     * @var \Magento\Framework\Api\Search\FilterGroupBuilder
+     */
+    private $filterGroupBuilder;
+
     // @codingStandardsIgnoreLine
     public function __construct(
         \Psr\Log\LoggerInterface $logger,
         \Magento\Framework\Api\SearchCriteriaBuilder $searchBuilder,
         \Magento\Customer\Api\CustomerRepositoryInterface $customerRepository,
-        \Bss\CompanyAccount\Api\SubRoleRepositoryInterface $roleRepository
+        \Bss\CompanyAccount\Api\SubRoleRepositoryInterface $roleRepository,
+        \Magento\Framework\Api\FilterBuilder $filterBuilder,
+        \Magento\Framework\Api\Search\FilterGroupBuilder $filterGroupBuilder
     ) {
         $this->logger = $logger;
         $this->searchBuilder = $searchBuilder;
         $this->customerRepository = $customerRepository;
         $this->roleRepository = $roleRepository;
+        $this->filterBuilder = $filterBuilder;
+        $this->filterGroupBuilder = $filterGroupBuilder;
     }
 
     /**
@@ -54,11 +68,22 @@ class CompanyRoleManagement implements CompanyRoleManagementInterface
                 $emailOrId = $this->customerRepository->get($emailOrId, $websiteId)->getId();
             }
 
-            $this->searchBuilder->addFilter(
-                SubRoleInterface::CUSTOMER_ID,
-                $emailOrId
-            );
+            $filterByCompanyAccountId = $this->filterBuilder
+                ->setField(SubRoleInterface::CUSTOMER_ID)
+                ->setValue($emailOrId)
+                ->setConditionType('eq')
+                ->create();
 
+            $adminRoleFilter = $this->filterBuilder
+                ->setField(SubRoleInterface::CUSTOMER_ID)
+                ->setConditionType('null')
+                ->create();
+            $filterGroups = $this->filterGroupBuilder
+                ->addFilter($filterByCompanyAccountId)
+                ->addFilter($adminRoleFilter)
+                ->create();
+
+            $this->searchBuilder->setFilterGroups([$filterGroups]);
             $searchResult = $this->roleRepository->getList($this->searchBuilder->create());
 
             return $searchResult->getItems();

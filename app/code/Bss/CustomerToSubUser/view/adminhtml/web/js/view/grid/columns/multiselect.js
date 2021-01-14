@@ -9,7 +9,14 @@ define([
         defaults: {
             headerTmpl: 'Bss_CustomerToSubUser/grid/columns/multiselect',
             bodyTmpl: 'Bss_CustomerToSubUser/grid/cells/multiselect',
-            hasSelected: ko.observable(false)
+            hasSelected: ko.observable(false),
+            listens: {
+                params: 'whenParamsWereUpdate'
+            }
+        },
+
+        whenParamsWereUpdate: function (value) {
+            console.log(value);
         },
 
         /**
@@ -95,6 +102,24 @@ define([
             }
 
             this.hasSelected(checkboxVisibility);
+        },
+
+        /**
+         * Prevent select all function
+         *
+         * @returns {Multiselect} Chainable.
+         */
+        selectAll: function () {
+            return this;
+        },
+
+        /**
+         * Prevent deselect all function
+         *
+         * @returns {Multiselect} Chainable
+         */
+        deselectAll: function () {
+            return this;
         }
     });
 });

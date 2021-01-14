@@ -5,15 +5,14 @@
         </settings>
         <field name="company_account_id"
                formElement="input"
-               component="Bss_CustomerToSubUser/js/view/form/element/company-account-id">
+               component="Bss_CustomerToSubUser/js/view/form/element/company-account">
             <argument name="data" xsi:type="array">
                 <item name="config" xsi:type="array">
                     <item name="source" xsi:type="string">assign_to_company_account</item>
-                    <item name="elementTmpl" xsi:type="string">Bss_CustomerToSubUser/form/element/company-account-id</item>
                 </item>
             </argument>
             <settings>
-                <label translate="true">Company Account Name</label>
+                <label translate="true">Company Account Info</label>
                 <dataType>text</dataType>
             </settings>
         </field>

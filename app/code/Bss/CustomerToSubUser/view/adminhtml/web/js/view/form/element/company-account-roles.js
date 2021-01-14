@@ -2,11 +2,17 @@ define([
     'jquery',
     'ko',
     'Magento_Ui/js/form/element/select',
-    'Bss_CustomerToSubUser/js/model/company-account'
-], function ($, ko, Select, CompanyAccount) {
+    'Bss_CustomerToSubUser/js/model/company-account',
+    'Bss_CustomerToSubUser/js/service/RESTfulService'
+], function ($, ko, Select, CompanyAccount, service) {
     'use strict';
 
     return Select.extend({
+        defaults: {
+            elementTmpl: 'Bss_CustomerToSubUser/form/element/company-roles',
+            wasAssigned: false
+        },
+
         /**
          * Invokes initialize method of parent class,
          * contains initialization logic
@@ -26,6 +32,9 @@ define([
          */
         initObservable: function () {
             this._super();
+
+            this.observe('wasAssigned');
+
             CompanyAccount.data.subscribe(this.whenSelectCompanyAccount, this);
 
             return this;
@@ -37,24 +46,32 @@ define([
          * @param {Object|null} data
          */
         whenSelectCompanyAccount: function (data) {
+            var visible = false,
+                request,
+                options = [];
+
             if (data && data.hasOwnProperty('entity_id')) {
-                this.getCompanyAccountRoles(data['entity_id']);
-                this.visible(true);
-            } else {
-                this.visible(false);
+                try {
+                    request = service.getRolesByCompanyAccountId(data['entity_id'], data['website_id']);
+                    request.done(function (res) {
+                        options = res.map(function (item) {
+                            return {
+                                label: item['role_name'],
+                                value: item['role_id']
+                            };
+                        });
+
+                        this.options(options);
+                    }.bind(this));
+                } catch (e) {
+                    console.error(e);
+                }
+
+                visible = true;
             }
-        },
 
-        getCompanyAccountRoles: function (id) {
-            var request;
-
-            try {
-                request = $.ajax({
-
-                });
-            } catch (e) {
-                console.error(e);
-            }
+            this.value(null);
+            this.wasAssigned(visible);
         }
     });
 });

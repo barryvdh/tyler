@@ -1,0 +1,12 @@
+<?php
+/** @var \Magento\Backend\Block\Template $block */
+?>
+<script>
+    require([
+        "mage/url"
+    ], function (urlBuilder) {
+        urlBuilder.setBaseUrl(
+            '<?= /** @noEscape */ $block->getBaseUrl()?>'
+        );
+    });
+</script>
