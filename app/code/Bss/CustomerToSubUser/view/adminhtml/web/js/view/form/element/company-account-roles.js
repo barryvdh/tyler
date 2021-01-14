@@ -1,8 +1,9 @@
 define([
+    'jquery',
     'ko',
     'Magento_Ui/js/form/element/select',
     'Bss_CustomerToSubUser/js/model/company-account'
-], function (ko, Select, CompanyAccount) {
+], function ($, ko, Select, CompanyAccount) {
     'use strict';
 
     return Select.extend({
@@ -37,9 +38,22 @@ define([
          */
         whenSelectCompanyAccount: function (data) {
             if (data && data.hasOwnProperty('entity_id')) {
+                this.getCompanyAccountRoles(data['entity_id']);
                 this.visible(true);
             } else {
                 this.visible(false);
+            }
+        },
+
+        getCompanyAccountRoles: function (id) {
+            var request;
+
+            try {
+                request = $.ajax({
+
+                });
+            } catch (e) {
+                console.error(e);
             }
         }
     });
