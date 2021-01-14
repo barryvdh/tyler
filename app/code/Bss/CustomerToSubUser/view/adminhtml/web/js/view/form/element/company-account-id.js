@@ -7,7 +7,7 @@ define([
 
     return Field.extend({
         defaults: {
-            companyAccountName: null,
+            companyAccount: {},
             wasAssigned: false
         },
 
@@ -31,7 +31,7 @@ define([
         initObservable: function () {
             this._super();
 
-            this.observe('companyAccountName wasAssigned');
+            this.observe('companyAccountName wasAssigned companyAccount');
             CompanyAccount.data.subscribe(this.whenCompanyAccountUpdate, this);
             this.value.subscribe(this.whenValueUpdate, this);
 
@@ -55,15 +55,17 @@ define([
          * @param {Object} data
          */
         whenCompanyAccountUpdate: function (data) {
-            var nameNEmail = null;
+            console.log(data);
+            var name = null, tmpCompanyData = {};
 
             if (data) {
-                nameNEmail = data.name + ' (' + data.email + ')';
+                tmpCompanyData = data;
+                name = data.name;
                 this.value(data['entity_id']);
             }
 
-            this.wasAssigned(nameNEmail !== null);
-            this.companyAccountName(nameNEmail);
+            this.companyAccount(tmpCompanyData);
+            this.wasAssigned(name !== null);
 
             return this;
         }
