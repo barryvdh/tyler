@@ -2,16 +2,23 @@
     <fieldset name="bss_brand_representative" sortOrder="10">
         <settings>
             <label translate="true">Sales Representative</label>
+            <additionalClasses>
+                <class name="admin__field-wide">true</class>
+            </additionalClasses>
             <collapsible>true</collapsible>
         </settings>
         <dynamicRows name="bss_brand_representative_email" component="Magento_Ui/js/dynamic-rows/dynamic-rows">
             <settings>
                 <label translate="true">Configuration</label>
+                <additionalClasses>
+                    <class name="admin__field-wide">true</class>
+                </additionalClasses>
                 <addButtonLabel translate="true">Add Representative</addButtonLabel>
                 <dndConfig>
                     <param name="enabled" xsi:type="boolean">false</param>
                 </dndConfig>
                 <componentType>dynamicRows</componentType>
+
             </settings>
             <container name="record" component="Magento_Ui/js/dynamic-rows/record">
                 <argument name="data" xsi:type="array">

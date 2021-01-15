@@ -63,7 +63,7 @@ class InstallData implements InstallDataInterface
             [
                 'group' => 'bss_brand_representative',
                 'label' => 'Email Configuration',
-                'type'  => 'varchar',
+                'type'  => 'text',
                 'input' => 'text',
                 'required' => false,
                 'sort_order' => 9,

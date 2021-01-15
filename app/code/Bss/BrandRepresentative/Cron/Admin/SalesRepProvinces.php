@@ -1,5 +1,4 @@
-<?xml version="1.0"?>
-<!--
+<?php
 /**
  * BSS Commerce Co.
  *
@@ -16,10 +15,16 @@
  * @copyright  Copyright (c) 2021 BSS Commerce Co. ( http://bsscommerce.com )
  * @license    http://bsscommerce.com/Bss-Commerce-License.txt
  */
--->
-<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-        xsi:noNamespaceSchemaLocation="urn:magento:framework:Event/etc/events.xsd">
-<!--    <event name="catalog_category_save_after">-->
-<!--        <observer name="bss_catalog_save_after" instance="Bss\BrandRepresentative\Observer\CategorySaveAfter" />-->
-<!--    </event>-->
-</config>
+
+namespace Bss\BrandRepresentative\Cron\Admin;
+
+/**
+ * Class SalesRepProvinces
+ */
+class SalesRepProvinces
+{
+    public function execute()
+    {
+        return $this;
+    }
+}

@@ -17,16 +17,9 @@
  */
 namespace Bss\BrandRepresentative\Plugin\Model\Category;
 
-use Bss\BrandRepresentative\Model\Config\Source\CountryOptions;
 use Magento\Framework\App\RequestInterface;
 use Magento\Framework\Module\Manager as ModuleManager;
-use Magento\Ui\Component\Container;
-use Magento\Ui\Component\Form\Element\DataType\Text;
-use Magento\Ui\Component\Form\Element\Select;
-use Magento\Ui\Component\Form\Element\MultiSelect;
-use Magento\Ui\Component\Form\Element\Textarea;
-use Magento\Ui\Component\Form\Field;
-
+use Magento\Framework\Serialize\Serializer\Json;
 /**
  * Class DataProvider
  *
@@ -52,24 +45,24 @@ class DataProvider
     protected $request;
 
     /**
-     * @var CountryOptions
+     * @var Json
      */
-    protected $countryOptions;
+    protected $json;
 
     /**
      * DataProvider constructor.
      * @param ModuleManager $moduleManager
      * @param RequestInterface $request
-     * @param CountryOptions $countryOptions
+     * @param Json $Json
      */
     public function __construct(
         ModuleManager $moduleManager,
         RequestInterface $request,
-        CountryOptions $countryOptions
+        Json $Json
     ) {
         $this->moduleManager = $moduleManager;
         $this->request = $request;
-        $this->countryOptions = $countryOptions;
+        $this->json = $Json;
     }
 
     /**
@@ -84,146 +77,30 @@ class DataProvider
         \Magento\Catalog\Model\Category\DataProvider $subject,
         array $meta
     ) {
-
-        $data = $subject->getData();
-        //$meta = $this->addBssDataProvider($meta, $data);
         return $meta;
     }
 
-    /**
-     * Bss Customer Group MetaData
-     *
-     * @param array $meta
-     * @param array $data
-     * @return array
-     */
-    private function addBssDataProvider(array $meta, $data): array
+    public function prepareBssData($data)
     {
-        $meta['bss_brand_representative'] = [
-            'arguments' => [
-                'data' => [
-                    'config' => [
-                        'label' => __('Brand Representative'),
-                        'collapsible' => true,
-                        'sortOrder' => 6,
-                        'componentType' => 'fieldset',
-                    ]
-                ]
-            ],
-            'children' => [
-                'bss_brand_representative_email' => $this->prepareDynamicRow(),
-            ]
-        ];
-        return $meta;
+        $newData = [];
+        foreach ($data as $id => $categoryData) {
+            if (isset($categoryData['bss_brand_representative_email'])) {
+                $dataToSave = $this->json->unserialize($categoryData['bss_brand_representative_email']);
+                $categoryData['bss_brand_representative_email'] = $dataToSave;
+            }
+            $newData[$id] = $categoryData;
+        }
+        return $newData;
     }
 
     /**
-     * @return array
+     * @param \Magento\Catalog\Model\Category\DataProvider $subject
+     * @param array $result
+     * @return mixed
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    private function prepareDynamicRow(): array
+    public function afterGetData(\Magento\Catalog\Model\Category\DataProvider $subject, array $result)
     {
-        return [
-            'arguments' => [
-                'data' => [
-                    'config' => [
-                        'componentType' => 'dynamicRows',
-                        'component' => 'Magento_Ui/js/dynamic-rows/dynamic-rows',
-                        'label' => __('Email Configuration'),
-                        'renderDefaultRecord' => false,
-                        'recordTemplate' => 'record',
-                        'dataScope' => '',
-                        'dndConfig' => [
-                            'enabled' => false,
-                        ],
-                        'required' => false,
-                        'sortOrder' =>'1',
-                    ],
-                ],
-            ],
-            'children' => [
-                'record' => [
-                    'arguments' => [
-                        'data' => [
-                            'config' => [
-                                'componentType' => Container::NAME,
-                                'isTemplate' => true,
-                                'is_collection' => true,
-                                'component' => 'Magento_Ui/js/dynamic-rows/record',
-                                'dataScope' => '',
-                            ],
-                        ],
-                    ],
-                    'children' => [
-                        'brand_emails' => [
-                            'arguments' => [
-                                'data' => [
-                                    'config' => [
-                                        'dataType' => Text::NAME,
-                                        'formElement' => Textarea::NAME,
-                                        'componentType' => Field::NAME,
-                                        'dataScope' => 'brand_emails',
-                                        'label' => __('Brand Emails'),
-                                        'visible' => true,
-                                        'sortOrder' => 10,
-                                    ],
-                                ],
-                            ],
-                        ],
-                        'bss_country' => [
-                            'arguments' => [
-                                'data' => [
-                                    'config' => [
-                                        'formElement' => Select::NAME,
-                                        'componentType' => Field::NAME,
-                                        'component' => 'Bss_BrandRepresentative/js/components/country',
-                                        'dataType' => Text::NAME,
-                                        'dataScope' => 'bss_country',
-                                        'label' => __('Country'),
-                                        'options' => $this->countryOptions->getAllOptions(),
-                                        'value' => [],
-                                        'sortOrder' => 20
-                                    ],
-                                ],
-                            ],
-                        ],
-                        'bss_province' => [
-                            'arguments' => [
-                                'data' => [
-                                    'config' => [
-                                        'formElement' => MultiSelect::NAME,
-                                        'componentType' => Field::NAME,
-                                        'component' => 'Bss_BrandRepresentative/js/components/province',
-                                        'dataType' => Text::NAME,
-                                        'label' => __('Province'),
-                                        'dataScope' => 'bss_province',
-                                        'options' => [],
-                                        'value' => [],
-                                        'sortOrder' => 30,
-                                        'imports' => [
-                                            'countryId' => '${ $.provider }:${ $.parentScope }.bss_country'
-                                        ],
-                                        'listens' => [
-                                            'countryId' => 'setCountryId'
-                                        ],
-                                    ],
-                                ],
-                            ],
-                        ],
-                        'actionDelete' => [
-                            'arguments' => [
-                                'data' => [
-                                    'config' => [
-                                        'componentType' => 'actionDelete',
-                                        'dataType' => Text::NAME,
-                                        'label' => 'Action',
-                                        'sortOrder' => 60,
-                                    ],
-                                ],
-                            ],
-                        ],
-                    ],
-                ],
-            ],
-        ];
+        return $this->prepareBssData($result);
     }
 }

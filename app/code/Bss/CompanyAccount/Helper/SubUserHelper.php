@@ -26,12 +26,9 @@ use Magento\Framework\Exception\CouldNotSaveException;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Exception\NotFoundException;
 use Magento\Framework\Intl\DateTimeFactory;
-use Magento\Setup\Exception;
 
 /**
  * Class SubUserHelper
- *
- * @package Bss\CompanyAccount\Helper
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
@@ -247,7 +244,7 @@ class SubUserHelper
             if ($user->getSubUserStatus()) {
                 /** @var \Magento\Customer\Model\Customer $customer */
                 $customer = $this->customerRepository->getById($customerId);
-                try{
+                try {
                     $this->emailHelper->sendWelcomeMailToSubUser($customer, $user);
                 } catch (\Exception $exception) {
                     $messageErrorEmail = $exception->getMessage();

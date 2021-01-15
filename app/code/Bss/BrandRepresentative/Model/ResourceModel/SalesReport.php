@@ -1,5 +1,4 @@
-<?xml version="1.0"?>
-<!--
+<?php
 /**
  * BSS Commerce Co.
  *
@@ -16,12 +15,21 @@
  * @copyright  Copyright (c) 2021 BSS Commerce Co. ( http://bsscommerce.com )
  * @license    http://bsscommerce.com/Bss-Commerce-License.txt
  */
--->
-<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-        xsi:noNamespaceSchemaLocation="urn:magento:framework:Module/etc/module.xsd">
-    <module name="Bss_BrandRepresentative" setup_version="1.0.0" >
-        <sequence name="Magento_Sales" />
-        <sequence name="Magento_Checkout" />
-        <sequence name="Magento_Catalog" />
-    </module>
-</config>
+
+namespace Bss\BrandRepresentative\Model\ResourceModel;
+
+use Magento\Framework\Model\ResourceModel\Db\AbstractDb;
+
+/**
+ * Class SalesReport that connect to database
+ */
+class SalesReport extends AbstractDb
+{
+    /**
+     * @inheritdoc
+     */
+    protected function _construct()
+    {
+        $this->_init('bss_sales_report', 'id');
+    }
+}
