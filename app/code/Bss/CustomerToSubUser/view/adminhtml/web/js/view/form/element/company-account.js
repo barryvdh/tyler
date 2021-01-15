@@ -2,8 +2,9 @@ define([
     'underscore',
     'ko',
     'Magento_Ui/js/form/element/abstract',
-    'Bss_CustomerToSubUser/js/model/company-account'
-], function (_, ko, Field, CompanyAccount) {
+    'Bss_CustomerToSubUser/js/model/company-account',
+    'Bss_CustomerToSubUser/js/service/RESTfulService'
+], function (_, ko, Field, CompanyAccount, service) {
     'use strict';
 
     return Field.extend({
@@ -11,12 +12,25 @@ define([
             elementTmpl: 'Bss_CustomerToSubUser/form/element/company-account',
             companyAccount: {},
             wasAssigned: false,
+            isNoCompanyAccountData: false,
             params: {},
+            roleId: ko.observable(null),
             imports: {
-                websiteId: '${ $.provider }:data.customer.website_id'
+                websiteId: '${ $.provider }:data.customer.website_id',
+                customerEmail: '${ $.provider }:data.customer.email'
             },
             listens: {
-                websiteId: 'whenChangeWebsite'
+                websiteId: 'whenChangeWebsite',
+                'params.listCompanyAccounts': 'whenListCompanyAccountsCome'
+            },
+            exports: {
+                roleId: 'customer_form.areas.assign_to_company_account.assign_to_company_account.company_account_roles:params.selectedRole'
+            }
+        },
+
+        whenListCompanyAccountsCome: function (accounts) {
+            if (accounts.length > 0) {
+                this.initData();
             }
         },
 
@@ -27,9 +41,33 @@ define([
         initialize: function () {
             this._super();
 
-            console.log(this.elementTmpl);
-
             return this;
+        },
+
+        initData: function () {
+            var request, companyAccountData;
+
+            try {
+                request = service.getAssignedCompanyAccount(this.customerEmail, this.websiteId);
+                request.done(function (companyAccountResponse) {
+                    companyAccountData = this._getRowData(companyAccountResponse['company_customer'].id);
+
+                    if (companyAccountData) {
+                        CompanyAccount.data(companyAccountData);
+                        CompanyAccount.roleUser(
+                            {
+                                'entity_id': companyAccountData['entity_id'],
+                                'role_id': companyAccountResponse['sub_user']['related_role_id'],
+                                'sub_id': companyAccountResponse['sub_user']['sub_id']
+                            }
+                        );
+                    } else {
+                        this.isNoCompanyAccountData(true);
+                    }
+                }.bind(this));
+            } catch (e) {
+                console.error(e);
+            }
         },
 
         /**
@@ -40,7 +78,7 @@ define([
         initObservable: function () {
             this._super();
 
-            this.observe('companyAccountName wasAssigned companyAccount');
+            this.observe('wasAssigned companyAccount roleId isNoCompanyAccountData');
             CompanyAccount.data.subscribe(this.whenCompanyAccountUpdate, this);
             this.value.subscribe(this.whenValueUpdate, this);
 
@@ -88,6 +126,7 @@ define([
 
             this.companyAccount(tmpCompanyData);
             this.wasAssigned(name !== null);
+            this.isNoCompanyAccountData(name === null);
 
             return this;
         },
@@ -145,6 +184,19 @@ define([
             });
 
             return label.join(', ');
-        }
+        },
+
+        /**
+         * Get company account data from grid
+         *
+         * @param {Number} id
+         * @returns {*}
+         * @private
+         */
+        _getRowData: function (id) {
+            return this.params.listCompanyAccounts.find(function (customer) {
+                return customer[customer['id_field_name']] == id; //eslint-disable-line eqeqeq
+            }.bind(this));
+        },
     });
 });

@@ -4,6 +4,7 @@ define([
     'use strict';
 
     return {
-        data: ko.observable(null)
+        data: ko.observable(null),
+        roleUser: ko.observable(null)
     };
 });

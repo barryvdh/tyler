@@ -6,4 +6,10 @@
             <resource ref="anonymous"/>
         </resources>
     </route>
+    <route method="GET" url="/V1/company-account/company-account/:email/:websiteId">
+        <service class="Bss\CustomerToSubUser\Api\CompanyRoleManagementInterface" method="getCompanyAccountBySubEmail"/>
+        <resources>
+            <resource ref="anonymous"/>
+        </resources>
+    </route>
 </routes>

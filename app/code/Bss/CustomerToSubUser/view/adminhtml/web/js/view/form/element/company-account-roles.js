@@ -10,7 +10,10 @@ define([
     return Select.extend({
         defaults: {
             elementTmpl: 'Bss_CustomerToSubUser/form/element/company-roles',
-            wasAssigned: false
+            wasAssigned: false,
+            listens: {
+                'params.selectedRole': 'whenRoleUpdate'
+            }
         },
 
         /**
@@ -62,6 +65,11 @@ define([
                         });
 
                         this.options(options);
+                        this.value(
+                            CompanyAccount.roleUser() ?
+                                CompanyAccount.roleUser()['entity_id'] === CompanyAccount.data()['entity_id'] ?
+                                    CompanyAccount.roleUser()['role_id'] : null : null
+                        );
                     }.bind(this));
                 } catch (e) {
                     console.error(e);
@@ -70,7 +78,6 @@ define([
                 visible = true;
             }
 
-            this.value(null);
             this.wasAssigned(visible);
         }
     });

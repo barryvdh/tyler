@@ -8,6 +8,15 @@
         </arguments>
     </type>
 
+    <type name="Bss\CompanyAccount\Model\ResourceModel\SubUser">
+        <plugin name="validate_unique_email_plugin"
+                type="Bss\CustomerToSubUser\Plugin\ResourceModel\ValidateUniqueEmailPlugin" sortOrder="20"/>
+    </type>
+    <type name="Bss\CompanyAccount\Model\ResourceModel\Customer">
+        <plugin name="validate_unique_email_plugin"
+                type="Bss\CustomerToSubUser\Plugin\ResourceModel\ValidateUniqueEmailPlugin" sortOrder="20"/>
+    </type>
+
     <preference for="Bss\CustomerToSubUser\Api\CompanyRoleManagementInterface"
                 type="Bss\CustomerToSubUser\Model\CompanyRoleManagement"/>
 </config>

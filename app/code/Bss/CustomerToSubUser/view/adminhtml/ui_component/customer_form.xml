@@ -1,5 +1,5 @@
 <form xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Ui:etc/ui_configuration.xsd">
-    <fieldset name="assign_to_company_account">
+    <fieldset name="assign_to_company_account" class="Bss\CustomerToSubUser\Ui\Component\Customer\Form\AssignToCompanyAccountFieldset">
         <settings>
             <label translate="true">Assign as Sub-user</label>
         </settings>
