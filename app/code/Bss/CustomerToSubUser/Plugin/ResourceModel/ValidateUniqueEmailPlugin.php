@@ -155,8 +155,8 @@ class ValidateUniqueEmailPlugin
         $assignAsSubUser = $this->request->getParam('assign_to_company_account');
         $currentCustomerId = $this->request->getParam('customer')['entity_id'] ?? null;
 
-        dd($customerEmail, $currentCustomerId, $websiteId);
-        if ($assignAsSubUser && $currentCustomerId) {
+        dd($currentCustomerId, $assignAsSubUser);
+        if ($assignAsSubUser && $currentCustomerId && $assignAsSubUser['company_account_id']) {
             /** Begin validate unique email compatible with our module */
             $connection = $this->resource->getConnection();
 
@@ -188,7 +188,7 @@ class ValidateUniqueEmailPlugin
 
             vadu_log($subUserSelect->__toString());
 
-            return dd($connection->fetchOne($subUserSelect, $customerBind));
+            return $connection->fetchOne($subUserSelect, $customerBind);
         }
 
         return $process($customerEmail, $websiteId);

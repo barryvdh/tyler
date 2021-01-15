@@ -3,18 +3,27 @@ define([
     'ko',
     'Magento_Ui/js/form/element/abstract',
     'Bss_CustomerToSubUser/js/model/company-account',
-    'Bss_CustomerToSubUser/js/service/RESTfulService'
-], function (_, ko, Field, CompanyAccount, service) {
+    'Bss_CustomerToSubUser/js/service/RESTfulService',
+    'uiRegistry'
+], function (
+    _,
+    ko,
+    Field,
+    CompanyAccount,
+    service,
+    uiRegistry
+) {
     'use strict';
 
     return Field.extend({
         defaults: {
+            isCompanyAccountAttributeSelector: 'index = bss_is_company_account',
             elementTmpl: 'Bss_CustomerToSubUser/form/element/company-account',
             companyAccount: {},
             wasAssigned: false,
             isNoCompanyAccountData: false,
             params: {},
-            roleId: ko.observable(null),
+            subId: null,
             imports: {
                 websiteId: '${ $.provider }:data.customer.website_id',
                 customerEmail: '${ $.provider }:data.customer.email'
@@ -58,9 +67,10 @@ define([
                             {
                                 'entity_id': companyAccountData['entity_id'],
                                 'role_id': companyAccountResponse['sub_user']['related_role_id'],
-                                'sub_id': companyAccountResponse['sub_user']['sub_id']
+                                'sub_id': companyAccountResponse['sub_user']['sub_user_id']
                             }
                         );
+                        this.subId(companyAccountResponse['sub_user']['sub_user_id']);
                     } else {
                         this.isNoCompanyAccountData(true);
                     }
@@ -78,9 +88,22 @@ define([
         initObservable: function () {
             this._super();
 
-            this.observe('wasAssigned companyAccount roleId isNoCompanyAccountData');
+            this.observe('wasAssigned companyAccount roleId isNoCompanyAccountData subId');
             CompanyAccount.data.subscribe(this.whenCompanyAccountUpdate, this);
             this.value.subscribe(this.whenValueUpdate, this);
+            CompanyAccount.roleUser.subscribe(function (data) {
+                var oldValue = JSON.parse(this.value()), subId;
+
+                if (data && data['sub_id']) {
+                    subId = {
+                        'sub_id': data['sub_id']
+                    };
+
+                    this.value(
+                        JSON.stringify({...oldValue, ...subId})
+                    );
+                }
+            }, this);
 
             return this;
         },
@@ -115,20 +138,63 @@ define([
          * @param {Object} data
          */
         whenCompanyAccountUpdate: function (data) {
-            var name = null,
-                tmpCompanyData = {};
+            var companyIdData = null,
+                tmpCompanyData = {},
+                isCompanyAccountSwitcherComponent;
 
             if (data) {
                 tmpCompanyData = data;
-                name = data.name;
-                this.value(data['entity_id']);
+                companyIdData = {
+                    'company_account_id': data['entity_id']
+                };
+
+                if (CompanyAccount.roleUser() &&
+                    CompanyAccount.roleUser()['sub_id']
+                ) {
+                    companyIdData = {
+                        ...companyIdData,
+                        ...{
+                            'sub_id': CompanyAccount.roleUser()['sub_id']
+                        }
+                    }
+                }
             }
 
             this.companyAccount(tmpCompanyData);
-            this.wasAssigned(name !== null);
-            this.isNoCompanyAccountData(name === null);
+            this.wasAssigned(companyIdData !== null);
+            this.isNoCompanyAccountData(companyIdData === null);
+            this.value(companyIdData !== null ? JSON.stringify(companyIdData) : '');
+
+            // Set fieldset is not changed if company account data is not selected
+            this._resetFieldset(this, companyIdData !== null);
+
+            // Force ensure that the is company account attribute is '0' if the current customer was assigned as company account
+            isCompanyAccountSwitcherComponent = uiRegistry.get(this.isCompanyAccountAttributeSelector);
+
+            if (isCompanyAccountSwitcherComponent) {
+                isCompanyAccountSwitcherComponent.disabled(companyIdData !== null);
+                isCompanyAccountSwitcherComponent.value('0');
+            }
 
             return this;
+        },
+
+        /**
+         * Set the changed status of fieldset
+         *
+         * @param {Object} component
+         * @param {Boolean} isClear
+         * @private
+         */
+        _resetFieldset(component, isClear) {
+            if (component.containers.length > 0) {
+                component.containers.forEach(function (container) {
+                    if (container.index === 'assign_to_company_account') {
+                        container.changed(isClear);
+                        this._resetFieldset(container, isClear);
+                    }
+                }.bind(this));
+            }
         },
 
         /**
