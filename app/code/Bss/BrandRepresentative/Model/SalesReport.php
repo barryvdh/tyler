@@ -24,6 +24,8 @@ use Magento\Framework\Model\AbstractModel;
 class SalesReport extends AbstractModel implements IdentityInterface
 {
     public const CACHE_TAG = 'bss_sales_report';
+    public const SENT_STATUS_SENT = 1;
+    public const SENT_STATUS_NOT_SEND = 0;
     protected $_cacheTag = 'bss_sales_report';
     protected $_eventPrefix = 'bss_sales_report';
 

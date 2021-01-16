@@ -18,8 +18,11 @@
 
 namespace Bss\BrandRepresentative\Observer\Sales\Order;
 
+use Bss\BrandRepresentative\Helper\Data;
+use Bss\BrandRepresentative\Model\ReportProcessor;
 use Magento\Framework\Event\Observer;
 use Magento\Framework\Event\ObserverInterface;
+use Psr\Log\LoggerInterface;
 
 /**
  * Class Report
@@ -29,15 +32,43 @@ use Magento\Framework\Event\ObserverInterface;
 class Report implements ObserverInterface
 {
     /**
+     * @var LoggerInterface
+     */
+    protected $logger;
+
+    /**
+     * @var Data
+     */
+    protected $helper;
+
+    /**
+     * @var ReportProcessor
+     */
+    protected $reportProcessor;
+
+    /**
+     * Report constructor.
+     * @param LoggerInterface $logger
+     * @param Data $helper
+     * @param ReportProcessor $reportProcessor
+     */
+    public function __construct(
+        LoggerInterface $logger,
+        Data $helper,
+        ReportProcessor $reportProcessor
+    ) {
+        $this->logger = $logger;
+        $this->helper = $helper;
+        $this->reportProcessor = $reportProcessor;
+    }
+
+    /**
      * @param Observer $observer
      * @return $this|void
      */
     public function execute(Observer $observer)
     {
         $order = $observer->getData('order');
-        $comment = $this->getRequest()->getParams();
-        echo "<pre>";
-        var_dump($order, $comment);
-        die;
+        $saveStatus = $this->reportProcessor->processSaveReport($order->getData());
     }
 }

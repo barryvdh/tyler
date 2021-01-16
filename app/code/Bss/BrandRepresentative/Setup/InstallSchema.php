@@ -144,6 +144,23 @@ class InstallSchema implements InstallSchemaInterface
                     'nullable' => true
                 ],
                 'Province'
+            )->addColumn(
+                'representative_email',
+                Table::TYPE_TEXT,
+                128,
+                [
+                    'nullable' => true
+                ],
+                'Representative Email'
+            )
+            ->addColumn(
+                'sent_status',
+                Table::TYPE_SMALLINT,
+                3,
+                [
+                    'nullable' => true
+                ],
+                'Send Status'
             )->setComment('Order Table');
         $installer->getConnection()->createTable($table);
 
