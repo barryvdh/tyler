@@ -1,22 +1,17 @@
 define([
-    'jquery',
-    'ko',
+    'underscore',
     'Magento_Ui/js/form/element/select',
     'Bss_CustomerToSubUser/js/model/company-account'
-], function ($, ko, Select, CompanyAccount) {
+], function (_, Select, CompanyAccount) {
     'use strict';
 
     return Select.extend({
-        /**
-         * Invokes initialize method of parent class,
-         * contains initialization logic
-         */
-        initialize: function () {
-            this._super();
-
-            this.whenSelectCompanyAccount(null);
-
-            return this;
+        defaults: {
+            elementTmpl: 'Bss_CustomerToSubUser/form/element/company-roles',
+            wasAssigned: false,
+            validation: {
+                'required-entry': false
+            }
         },
 
         /**
@@ -26,9 +21,74 @@ define([
          */
         initObservable: function () {
             this._super();
+
+            this.observe('wasAssigned');
+
             CompanyAccount.data.subscribe(this.whenSelectCompanyAccount, this);
+            CompanyAccount.roleId.subscribe(this.whenRoleForceSelected, this);
+            this.wasAssigned.subscribe(function (wasAssigned) {
+                this.validation['required-entry'] = wasAssigned;
+                this.additionalClasses._required(wasAssigned);
+
+                this.error('');
+            }, this);
 
             return this;
+        },
+
+        /**
+         * Force selected a role by id
+         *
+         * @param {Number|null} roleId
+         */
+        whenRoleForceSelected: function (roleId) {
+            console.log('subscriber: role updated');
+            this._selectRole(roleId);
+        },
+
+        /**
+         * Select role option
+         *
+         * @param {Number|undefined} roleId
+         * @private
+         */
+        _selectRole: function (roleId) {
+            var roleUser = CompanyAccount.roleUser(),
+                companyAccount = CompanyAccount.data();
+
+            try {
+                if (companyAccount && roleUser &&
+                    roleUser['entity_id'] == companyAccount['entity_id'] // eslint-disable-line eqeqeq
+                ) {
+                    roleId = roleUser['role_id'];
+                }
+            } catch (e) {
+                console.error(e);
+            }
+            this.value(roleId);
+        },
+
+        /**
+         * Filters 'initialOptions' property by 'field' and 'value' passed,
+         * calls 'setOptions' passing the result to it
+         *
+         * @param {*} value
+         * @param {String} field
+         */
+        filter: function (value, field) {
+            var source = this.initialOptions,
+                result;
+
+            field = field || this.filterBy.field;
+
+            result = _.filter(source, function (item) {
+                // eslint-disable-next-line eqeqeq
+                return item[field] == value || item.value === '' || item[field] === 'admin';
+            });
+
+            this.setOptions(result);
+            this._selectRole();
+            console.log('filter roles: value-' + value + '; ' + ', init value: ' + this.value());
         },
 
         /**
@@ -37,24 +97,7 @@ define([
          * @param {Object|null} data
          */
         whenSelectCompanyAccount: function (data) {
-            if (data && data.hasOwnProperty('entity_id')) {
-                this.getCompanyAccountRoles(data['entity_id']);
-                this.visible(true);
-            } else {
-                this.visible(false);
-            }
-        },
-
-        getCompanyAccountRoles: function (id) {
-            var request;
-
-            try {
-                request = $.ajax({
-
-                });
-            } catch (e) {
-                console.error(e);
-            }
+            this.wasAssigned(Boolean(data && data.hasOwnProperty('entity_id')));
         }
     });
 });

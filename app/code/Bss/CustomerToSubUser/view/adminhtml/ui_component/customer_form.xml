@@ -1,52 +1,49 @@
 <form xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Ui:etc/ui_configuration.xsd">
-    <fieldset name="assign_to_company_account">
+    <fieldset name="assign_to_company_account" class="Bss\CustomerToSubUser\Ui\Component\Customer\Form\AssignToCompanyAccountFieldset">
         <settings>
             <label translate="true">Assign as Sub-user</label>
         </settings>
-        <field name="company_account_id"
-               formElement="input"
-               component="Bss_CustomerToSubUser/js/view/form/element/company-account-id">
-            <argument name="data" xsi:type="array">
-                <item name="config" xsi:type="array">
-                    <item name="source" xsi:type="string">assign_to_company_account</item>
-                    <item name="elementTmpl" xsi:type="string">Bss_CustomerToSubUser/form/element/company-account-id</item>
-                </item>
-            </argument>
+
+        <field name="sub_id" formElement="hidden">
             <settings>
-                <label translate="true">Company Account Name</label>
                 <dataType>text</dataType>
             </settings>
         </field>
 
-        <field name="company_account_roles"
+        <field name="company_account_id"
+               formElement="input"
+               component="Bss_CustomerToSubUser/js/view/form/element/company-account">
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="source" xsi:type="string">assign_to_company_account</item>
+                </item>
+            </argument>
+            <settings>
+                <label translate="true">Company Account Info</label>
+                <dataType>text</dataType>
+            </settings>
+        </field>
+
+        <field name="role_id"
                formElement="select"
                component="Bss_CustomerToSubUser/js/view/form/element/company-account-roles">
             <argument name="data" xsi:type="array">
                 <item name="config" xsi:type="array">
-                    <item name="source" xsi:type="string">company_account_roles</item>
+                    <item name="source" xsi:type="string">assign_to_company_account</item>
                 </item>
             </argument>
             <settings>
-                <label translate="true">List roles</label>
+                <label translate="true">Role</label>
                 <dataType>text</dataType>
             </settings>
             <formElements>
                 <select>
                     <settings>
-                        <options>
-                            <option name="1" xsi:type="array">
-                                <item name="value" xsi:type="string">1</item>
-                                <item name="label" xsi:type="string">Option #1</item>
-                            </option>
-                            <option name="2" xsi:type="array">
-                                <item name="value" xsi:type="string">2</item>
-                                <item name="label" xsi:type="string">Option #2</item>
-                            </option>
-                            <option name="3" xsi:type="array">
-                                <item name="value" xsi:type="string">3</item>
-                                <item name="label" xsi:type="string">Option #3</item>
-                            </option>
-                        </options>
+                        <options class="Bss\CustomerToSubUser\ViewModel\Role"/>
+                        <filterBy>
+                            <field>company_account_id</field>
+                            <target>${ $.provider }:${ $.parentScope }.company_account_id</target>
+                        </filterBy>
                         <caption translate="true">-- Please Select --</caption>
                     </settings>
                 </select>
@@ -68,5 +65,8 @@
                 </exports>
             </settings>
         </insertListing>
+    </fieldset>
+    <fieldset name="customer">
+        <field name="bss_is_company_account" component="Bss_CustomerToSubUser/js/view/form/element/is-company-account" />
     </fieldset>
 </form>

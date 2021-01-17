@@ -9,7 +9,11 @@ define([
         defaults: {
             headerTmpl: 'Bss_CustomerToSubUser/grid/columns/multiselect',
             bodyTmpl: 'Bss_CustomerToSubUser/grid/cells/multiselect',
-            hasSelected: ko.observable(false)
+            hasSelected: false,
+            exports: {
+                rows: 'customer_form.areas.assign_to_company_account.' +
+                    'assign_to_company_account.company_account_id:params.listCompanyAccounts'
+            }
         },
 
         /**
@@ -41,6 +45,8 @@ define([
         initObservable: function () {
             this._super();
 
+            this.observe('hasSelected');
+
             this.selected.subscribe(this.whenSelectedChange, this);
             CompanyAccount.data.subscribe(this.whenCompanyAccountUpdate, this);
 
@@ -53,9 +59,18 @@ define([
          * @param {Object} companyAccData
          */
         whenCompanyAccountUpdate: function (companyAccData) {
+            var visibility = false;
+
             if (companyAccData === null && this.selected().length > 0) {
                 this.selected([]);
             }
+
+            if (companyAccData !== null) {
+                this.selected([companyAccData['entity_id']]);
+                visibility = companyAccData['entity_id'];
+            }
+
+            this.hasSelected(visibility);
         },
 
         /**
@@ -75,9 +90,7 @@ define([
                 selectedId = ids.shift();
 
                 //jscs:disable jsDoc
-                companyAccount = this.rows().find(function (customer) {
-                    return customer[this.indexField] === selectedId;
-                }.bind(this));
+                companyAccount = this._getRowData(selectedId);
 
                 if (!companyAccount) {
                     this.selected([]);
@@ -95,6 +108,37 @@ define([
             }
 
             this.hasSelected(checkboxVisibility);
+        },
+
+        /**
+         * Get company account data from grid
+         *
+         * @param {Number} id
+         * @returns {*}
+         * @private
+         */
+        _getRowData: function (id) {
+            return this.rows().find(function (customer) {
+                return customer[this.indexField] === id;
+            }.bind(this));
+        },
+
+        /**
+         * Prevent select all function
+         *
+         * @returns {Multiselect} Chainable.
+         */
+        selectAll: function () {
+            return this;
+        },
+
+        /**
+         * Prevent deselect all function
+         *
+         * @returns {Multiselect} Chainable
+         */
+        deselectAll: function () {
+            return this;
         }
     });
 });
