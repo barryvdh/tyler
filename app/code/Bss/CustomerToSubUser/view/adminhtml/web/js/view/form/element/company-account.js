@@ -4,26 +4,24 @@ define([
     'Magento_Ui/js/form/element/abstract',
     'Bss_CustomerToSubUser/js/model/company-account',
     'Bss_CustomerToSubUser/js/service/RESTfulService',
-    'uiRegistry'
+    'Bss_CustomerToSubUser/js/action/is-company-account-field'
 ], function (
     _,
     ko,
     Field,
     CompanyAccount,
     service,
-    uiRegistry
+    isCompanyAccountField
 ) {
     'use strict';
 
     return Field.extend({
         defaults: {
-            isCompanyAccountAttributeSelector: 'index = bss_is_company_account',
             elementTmpl: 'Bss_CustomerToSubUser/form/element/company-account',
             companyAccount: {},
             wasAssigned: false,
             isNoCompanyAccountData: false,
             params: {},
-            subId: null,
             imports: {
                 websiteId: '${ $.provider }:data.customer.website_id',
                 customerEmail: '${ $.provider }:data.customer.email'
@@ -31,12 +29,14 @@ define([
             listens: {
                 websiteId: 'whenChangeWebsite',
                 'params.listCompanyAccounts': 'whenListCompanyAccountsCome'
-            },
-            exports: {
-                roleId: 'customer_form.areas.assign_to_company_account.assign_to_company_account.company_account_roles:params.selectedRole'
             }
         },
 
+        /**
+         * After load then list of company account, fetch the assigned company account data
+         *
+         * @param {Array} accounts
+         */
         whenListCompanyAccountsCome: function (accounts) {
             if (accounts.length > 0) {
                 this.initData();
@@ -53,6 +53,9 @@ define([
             return this;
         },
 
+        /**
+         * Fetch the sub-user and company account data
+         */
         initData: function () {
             var request, companyAccountData;
 
@@ -62,6 +65,7 @@ define([
                     companyAccountData = this._getRowData(companyAccountResponse['company_customer'].id);
 
                     if (companyAccountData) {
+                        console.log('company account update in side (init data): ' + this.value());
                         CompanyAccount.data(companyAccountData);
                         CompanyAccount.roleUser(
                             {
@@ -70,7 +74,7 @@ define([
                                 'sub_id': companyAccountResponse['sub_user']['sub_user_id']
                             }
                         );
-                        this.subId(companyAccountResponse['sub_user']['sub_user_id']);
+                        this._setRole();
                     } else {
                         this.isNoCompanyAccountData(true);
                     }
@@ -91,19 +95,6 @@ define([
             this.observe('wasAssigned companyAccount roleId isNoCompanyAccountData subId');
             CompanyAccount.data.subscribe(this.whenCompanyAccountUpdate, this);
             this.value.subscribe(this.whenValueUpdate, this);
-            CompanyAccount.roleUser.subscribe(function (data) {
-                var oldValue = JSON.parse(this.value()), subId;
-
-                if (data && data['sub_id']) {
-                    subId = {
-                        'sub_id': data['sub_id']
-                    };
-
-                    this.value(
-                        JSON.stringify({...oldValue, ...subId})
-                    );
-                }
-            }, this);
 
             return this;
         },
@@ -117,6 +108,7 @@ define([
         whenChangeWebsite: function (id) {
             // eslint-disable-next-line eqeqeq
             if (CompanyAccount.data() && CompanyAccount.data()['website_id'] != id) {
+                console.log('company account update in side (website change): ' + this.value());
                 CompanyAccount.data(null);
             }
         },
@@ -124,12 +116,18 @@ define([
         /**
          * If value was empty, then clear the local data
          *
-         * @param {String} value
+         * @param {String|Number|Object} value
          */
         whenValueUpdate: function (value) {
-            if (!value) {
-                CompanyAccount.data(null);
+            var companyAccountData = null;
+
+            if (value) {
+                companyAccountData = this._getRowData(value);
             }
+
+            console.log('company account update in side (value change): ' + this.value());
+            CompanyAccount.data(companyAccountData);
+            this._setRole();
         },
 
         /**
@@ -138,63 +136,52 @@ define([
          * @param {Object} data
          */
         whenCompanyAccountUpdate: function (data) {
-            var companyIdData = null,
-                tmpCompanyData = {},
-                isCompanyAccountSwitcherComponent;
+            var companyIdData = '',
+                tmpCompanyData = {};
 
             if (data) {
                 tmpCompanyData = data;
-                companyIdData = {
-                    'company_account_id': data['entity_id']
-                };
-
-                if (CompanyAccount.roleUser() &&
-                    CompanyAccount.roleUser()['sub_id']
-                ) {
-                    companyIdData = {
-                        ...companyIdData,
-                        ...{
-                            'sub_id': CompanyAccount.roleUser()['sub_id']
-                        }
-                    }
-                }
+                companyIdData = Number(data['entity_id']);
             }
 
             this.companyAccount(tmpCompanyData);
-            this.wasAssigned(companyIdData !== null);
-            this.isNoCompanyAccountData(companyIdData === null);
-            this.value(companyIdData !== null ? JSON.stringify(companyIdData) : '');
+            this.wasAssigned(Boolean(companyIdData));
+            this.isNoCompanyAccountData(!companyIdData);
 
-            // Set fieldset is not changed if company account data is not selected
-            this._resetFieldset(this, companyIdData !== null);
+            console.log('Subscriber: company account update in side listener: ' + this.value());
+            this.value(companyIdData);
 
-            // Force ensure that the is company account attribute is '0' if the current customer was assigned as company account
-            isCompanyAccountSwitcherComponent = uiRegistry.get(this.isCompanyAccountAttributeSelector);
-
-            if (isCompanyAccountSwitcherComponent) {
-                isCompanyAccountSwitcherComponent.disabled(companyIdData !== null);
-                isCompanyAccountSwitcherComponent.value('0');
-            }
+            // Force ensure that the is company account attribute is '0'
+            // if the current customer was assigned as company account
+            isCompanyAccountField.toggle(Boolean(companyIdData));
 
             return this;
         },
 
         /**
-         * Set the changed status of fieldset
+         * Set selected role to role component
          *
-         * @param {Object} component
-         * @param {Boolean} isClear
          * @private
          */
-        _resetFieldset(component, isClear) {
-            if (component.containers.length > 0) {
-                component.containers.forEach(function (container) {
-                    if (container.index === 'assign_to_company_account') {
-                        container.changed(isClear);
-                        this._resetFieldset(container, isClear);
-                    }
-                }.bind(this));
+        _setRole: function () {
+            CompanyAccount.roleId.valueHasMutated();
+        },
+
+        /**
+         * Get company account data from grid
+         *
+         * @param {Number} id
+         * @returns {*}
+         * @private
+         */
+        _getRowData: function (id) {
+            if (this.params.listCompanyAccounts) {
+                return this.params.listCompanyAccounts.find(function (customer) {
+                    return customer[customer['id_field_name']] == id; //eslint-disable-line eqeqeq
+                });
             }
+
+            return null;
         },
 
         /**
@@ -250,19 +237,6 @@ define([
             });
 
             return label.join(', ');
-        },
-
-        /**
-         * Get company account data from grid
-         *
-         * @param {Number} id
-         * @returns {*}
-         * @private
-         */
-        _getRowData: function (id) {
-            return this.params.listCompanyAccounts.find(function (customer) {
-                return customer[customer['id_field_name']] == id; //eslint-disable-line eqeqeq
-            }.bind(this));
-        },
+        }
     });
 });

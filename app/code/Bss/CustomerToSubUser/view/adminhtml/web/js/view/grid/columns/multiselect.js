@@ -9,17 +9,11 @@ define([
         defaults: {
             headerTmpl: 'Bss_CustomerToSubUser/grid/columns/multiselect',
             bodyTmpl: 'Bss_CustomerToSubUser/grid/cells/multiselect',
-            hasSelected: ko.observable(false),
+            hasSelected: false,
             exports: {
-                rows: 'customer_form.areas.assign_to_company_account.assign_to_company_account.company_account_id:params.listCompanyAccounts'
-            },
-            listens: {
-                params: 'whenParamsWereUpdate'
+                rows: 'customer_form.areas.assign_to_company_account.' +
+                    'assign_to_company_account.company_account_id:params.listCompanyAccounts'
             }
-        },
-
-        whenParamsWereUpdate: function (value) {
-            console.log(value);
         },
 
         /**
@@ -51,6 +45,8 @@ define([
         initObservable: function () {
             this._super();
 
+            this.observe('hasSelected');
+
             this.selected.subscribe(this.whenSelectedChange, this);
             CompanyAccount.data.subscribe(this.whenCompanyAccountUpdate, this);
 
@@ -69,9 +65,9 @@ define([
                 this.selected([]);
             }
 
-            if (companyAccData !== null && this.selected().length === 0) {
+            if (companyAccData !== null) {
                 this.selected([companyAccData['entity_id']]);
-                visibility = true;
+                visibility = companyAccData['entity_id'];
             }
 
             this.hasSelected(visibility);

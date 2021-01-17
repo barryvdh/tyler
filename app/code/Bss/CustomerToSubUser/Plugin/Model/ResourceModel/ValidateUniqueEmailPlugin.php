@@ -1,11 +1,12 @@
 <?php
 declare(strict_types=1);
 
-namespace Bss\CustomerToSubUser\Plugin\ResourceModel;
+namespace Bss\CustomerToSubUser\Plugin\Model\ResourceModel;
 
 use Magento\Customer\Model\CustomerFactory;
 use Magento\Customer\Model\ResourceModel\Customer as CustomerResource;
 use Magento\Framework\Exception\AlreadyExistsException;
+use function GuzzleHttp\debug_resource;
 
 /**
  * Class ValidateUniqueEmailPlugin
@@ -15,27 +16,37 @@ class ValidateUniqueEmailPlugin
     /**
      * @var \Magento\Framework\App\ResourceConnection
      */
-    protected \Magento\Framework\App\ResourceConnection $resource;
+    protected $resource;
 
     /**
      * @var CustomerResource
      */
-    private CustomerResource $customerResource;
+    private $customerResource;
 
     /**
      * @var CustomerFactory
      */
-    private CustomerFactory $customerFactory;
+    private $customerFactory;
 
     /**
      * @var \Psr\Log\LoggerInterface
      */
-    private \Psr\Log\LoggerInterface $logger;
+    private $logger;
 
     /**
      * @var \Magento\Framework\App\RequestInterface
      */
-    private \Magento\Framework\App\RequestInterface $request;
+    private $request;
+
+    /**
+     * @var \Magento\Backend\Model\Session
+     */
+    private $backendSession;
+
+    /**
+     * @var \Bss\CustomerToSubUser\Model\CompanyAccountManagement
+     */
+    private $companyAccountManagement;
 
     // @codingStandardsIgnoreLine
     public function __construct(
@@ -43,13 +54,17 @@ class ValidateUniqueEmailPlugin
         \Magento\Framework\App\RequestInterface $request,
         \Magento\Framework\App\ResourceConnection $resource,
         CustomerResource $customerResource,
-        CustomerFactory $customerFactory
+        CustomerFactory $customerFactory,
+        \Magento\Backend\Model\Session $backendSession,
+        \Bss\CustomerToSubUser\Model\CompanyAccountManagement $companyAccountManagement
     ) {
         $this->logger = $logger;
         $this->request = $request;
         $this->resource = $resource;
         $this->customerResource = $customerResource;
         $this->customerFactory = $customerFactory;
+        $this->backendSession = $backendSession;
+        $this->companyAccountManagement = $companyAccountManagement;
     }
 
     /**
@@ -75,7 +90,21 @@ class ValidateUniqueEmailPlugin
         $assignAsSubUser = $this->request->getParam('assign_to_company_account');
         $currentCustomerId = $this->request->getParam('customer')['entity_id'] ?? null;
 
-        if ($assignAsSubUser && $currentCustomerId) {
+        // Load the customer that was assign to be sub-user
+        if (!$currentCustomerId) {
+            $customer = $this->customerFactory->create();
+            $this->customerResource->load($customer, $customerId);
+
+            $this->customerResource->loadByEmail($customer, $email);
+            $currentCustomerId = $customer->getId();
+        }
+        if (!$subId) {
+            if ($requestSubId = $assignAsSubUser['sub_id']) {
+                $subId = $requestSubId;
+            }
+        }
+
+        if ($currentCustomerId) {
             /** @var \Magento\Customer\Model\Customer $customer */
             $customer = $this->customerFactory->create();
 
@@ -96,7 +125,8 @@ class ValidateUniqueEmailPlugin
             )->join(
                 $customerTableName,
                 $subUserTableName
-                . '.customer_id = ' . $customerTableName . '.entity_id'
+                . '.customer_id = ' . $customerTableName . '.entity_id',
+                []
             )
                 ->where('sub_email = :sub_email');
 
@@ -145,6 +175,7 @@ class ValidateUniqueEmailPlugin
      * @param string $customerEmail
      * @param int $websiteId
      * @return mixed
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function aroundValidateUniqueCustomer(
         \Bss\CompanyAccount\Model\ResourceModel\Customer $subject,
@@ -153,10 +184,19 @@ class ValidateUniqueEmailPlugin
         $websiteId
     ) {
         $assignAsSubUser = $this->request->getParam('assign_to_company_account');
-        $currentCustomerId = $this->request->getParam('customer')['entity_id'] ?? null;
+        $subId = $assignAsSubUser['sub_id'] ?? null;
 
-        dd($currentCustomerId, $assignAsSubUser);
-        if ($assignAsSubUser && $currentCustomerId && $assignAsSubUser['company_account_id']) {
+        $companyAccount = $this->companyAccountManagement->getCompanyAccountBySubEmail(
+            $customerEmail,
+            $websiteId
+        );
+
+        if ($subUser = $companyAccount->getSubUser()) {
+            $subId = $subUser->getSubUserId();
+        }
+
+        // dump(['customer' => $this->request->getParams()]);
+        if ($subId) {
             /** Begin validate unique email compatible with our module */
             $connection = $this->resource->getConnection();
 
@@ -165,7 +205,7 @@ class ValidateUniqueEmailPlugin
 
             $customerBind = [
                 'sub_email' => $customerEmail,
-                'customerId' => $currentCustomerId
+                'sub_id' => $subId
             ];
             $subUserTableName = $this->resource->getTableName('bss_sub_user');
             $customerTableName = $this->resource->getTableName('customer_entity');
@@ -176,17 +216,16 @@ class ValidateUniqueEmailPlugin
                 ['sub_id']
             )->join(
                 ['customer' => $customerTableName],
-                'sub_user.customer_id = customer.entity_id'
+                'sub_user.customer_id = customer.entity_id',
+                []
             )
                 ->where('sub_email = :sub_email')
-                ->where('customer.entity_id != :customerId');
+                ->where('sub_user.sub_id != :sub_id');
 
             if ($customer->getSharingConfig()->isWebsiteScope()) {
                 $subUserSelect->where('website_id = :website_id');
                 $customerBind['website_id'] = $websiteId;
             }
-
-            vadu_log($subUserSelect->__toString());
 
             return $connection->fetchOne($subUserSelect, $customerBind);
         }

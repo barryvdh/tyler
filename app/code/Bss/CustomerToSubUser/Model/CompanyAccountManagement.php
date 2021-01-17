@@ -4,24 +4,26 @@ declare(strict_types=1);
 namespace Bss\CustomerToSubUser\Model;
 
 use Bss\CompanyAccount\Api\Data\SubUserInterface;
-use Bss\CustomerToSubUser\Api\CompanyRoleManagementInterface;
+use Bss\CustomerToSubUser\Api\CompanyAccountManagementInterface;
 use Bss\CompanyAccount\Api\Data\SubRoleInterface;
 use Bss\CompanyAccount\Api\SubUserManagementInterface;
 
 /**
  * Class CompanyRoleManagement - Manage company roles
+ *
+ * `@SuppressWarnings(PHPMD.CouplingBetweenObjects)`
  */
-class CompanyRoleManagement implements CompanyRoleManagementInterface
+class CompanyAccountManagement implements CompanyAccountManagementInterface
 {
     /**
      * @var \Bss\CompanyAccount\Api\Data\SubUserInterfaceFactory
      */
-    protected \Bss\CompanyAccount\Api\Data\SubUserInterfaceFactory $subUserInterfaceFactory;
+    private $subUserInterfaceFactory;
 
     /**
      * @var \Magento\Customer\Api\Data\CustomerInterfaceFactory
      */
-    protected \Magento\Customer\Api\Data\CustomerInterfaceFactory $customerInterfaceFactory;
+    private $customerInterfaceFactory;
 
     /**
      * @var CompanyAccountResponseFactory
@@ -63,7 +65,20 @@ class CompanyRoleManagement implements CompanyRoleManagementInterface
      */
     private $filterGroupBuilder;
 
-    // @codingStandardsIgnoreLine
+    /**
+     * @param \Psr\Log\LoggerInterface $logger
+     * @param \Magento\Framework\Api\SearchCriteriaBuilder $searchBuilder
+     * @param \Magento\Customer\Api\CustomerRepositoryInterface $customerRepository
+     * @param \Bss\CompanyAccount\Api\SubRoleRepositoryInterface $roleRepository
+     * @param \Magento\Framework\Api\FilterBuilder $filterBuilder
+     * @param \Magento\Framework\Api\Search\FilterGroupBuilder $filterGroupBuilder
+     * @param SubUserManagementInterface $subUserManagement
+     * @param CompanyAccountResponseFactory $companyAccountResponseFactory
+     * @param \Bss\CompanyAccount\Api\Data\SubUserInterfaceFactory $subUserInterfaceFactory
+     * @param \Magento\Customer\Api\Data\CustomerInterfaceFactory $customerInterfaceFactory
+     *
+     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
+     */
     public function __construct(
         \Psr\Log\LoggerInterface $logger,
         \Magento\Framework\Api\SearchCriteriaBuilder $searchBuilder,

@@ -3,12 +3,14 @@ declare(strict_types=1);
 
 namespace Bss\CustomerToSubUser\Observer;
 
-use Bss\CompanyAccount\Api\Data\SubUserInterface as SubUser;
 use Bss\CustomerToSubUser\Model\SubUserConverter;
 use Magento\Framework\Event\Observer;
+use Magento\Framework\Message\ManagerInterface;
 
 /**
- * Class AssignAsSubUser
+ * Class AssignAsSubUser - Assign saved customer as sub-user if be set
+ *
+ * @SuppressWarnings(PHPMD.CookieAndSessionMisuse)
  */
 class AssignAsSubUserObserver implements \Magento\Framework\Event\ObserverInterface
 {
@@ -35,7 +37,12 @@ class AssignAsSubUserObserver implements \Magento\Framework\Event\ObserverInterf
     /**
      * @var SubUserConverter
      */
-    protected SubUserConverter $subUserConverter;
+    private $subUserConverter;
+
+    /**
+     * @var ManagerInterface
+     */
+    private $messageManager;
 
     // @codingStandardsIgnoreLine
     public function __construct(
@@ -43,13 +50,15 @@ class AssignAsSubUserObserver implements \Magento\Framework\Event\ObserverInterf
         \Magento\Framework\App\RequestInterface $request,
         \Magento\Framework\App\RequestFactory $requestFactory,
         \Bss\CompanyAccount\Helper\SubUserHelper $subUserHelper,
-        SubUserConverter $subUserConverter
+        SubUserConverter $subUserConverter,
+        ManagerInterface $messageManager
     ) {
         $this->logger = $logger;
         $this->request = $request;
         $this->requestFactory = $requestFactory;
         $this->subUserHelper = $subUserHelper;
         $this->subUserConverter = $subUserConverter;
+        $this->messageManager = $messageManager;
     }
 
     /**
@@ -62,38 +71,33 @@ class AssignAsSubUserObserver implements \Magento\Framework\Event\ObserverInterf
             $savedCustomer = $observer->getData("customer_data_object");
             $assignToSubUserParams = $this->request->getPostValue("assign_to_company_account");
 
-            if (!$assignToSubUserParams['company_account_id']) {
-                return $this;
-            }
-
             if ($savedCustomer && $assignToSubUserParams) {
-                $this->subUserConverter->convertToSubUser(
+                $customerParams = $this->request->getParam('customer');
+                $customerParams['entity_id'] = $savedCustomer->getId();
+                $this->request->setParams(['customer' => $customerParams]);
+
+                $subUser = $this->subUserConverter->convertToSubUser(
                     $savedCustomer,
                     $assignToSubUserParams['company_account_id'],
-                    $assignToSubUserParams['company_account_roles']
+                    $assignToSubUserParams['role_id'] ?? ""
                 );
-                return $this;
-                $companyAccountId = $assignToSubUserParams['company_account_id'];
-                $createSubUserRequest = $this->requestFactory->create();
 
-                $assignToSubUserParams = [
-                    SubUser::NAME => $this->getCustomerFullName($savedCustomer),
-                    SubUser::ROLE_ID => $assignToSubUserParams['company_account_roles'],
-                    SubUser::STATUS => self::SUB_USER_ENABLE,
-                    SubUser::EMAIL => $savedCustomer->getEmail()
-                ];
-                $createSubUserRequest->setParams($assignToSubUserParams);
-                $emailErrorMsg = "";
-                $message = $this->subUserHelper->createSubUser(
-                    $createSubUserRequest,
-                    $companyAccountId,
-                    $emailErrorMsg
-                );
+                if ($subUser) {
+                    $assignToSubUserParams['sub_id'] = $subUser->getSubUserId();
+
+                    $this->request->setParams(
+                        [
+                            'assign_to_company_account' => $assignToSubUserParams
+                        ]
+                    );
+                }
+                return $this;
             }
         } catch (\Exception $e) {
             $this->logger->critical($e);
+            $this->messageManager->addErrorMessage(
+                __("Something went wrong while convert to sub-user. Please review the log!")
+            );
         }
     }
-
-
 }

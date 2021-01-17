@@ -5,6 +5,7 @@ define([
 
     return {
         data: ko.observable(null),
-        roleUser: ko.observable(null)
+        roleUser: ko.observable(null),
+        roleId: ko.observable(null)
     };
 });

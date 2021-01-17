@@ -6,7 +6,7 @@ namespace Bss\CustomerToSubUser\Api;
 /**
  * Interface CompanyRoleManagement
  */
-interface CompanyRoleManagementInterface
+interface CompanyAccountManagementInterface
 {
     /**
      * Get list roles by company account

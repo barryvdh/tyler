@@ -7,7 +7,7 @@
         </resources>
     </route>
     <route method="GET" url="/V1/company-account/company-account/:email/:websiteId">
-        <service class="Bss\CustomerToSubUser\Api\CompanyRoleManagementInterface" method="getCompanyAccountBySubEmail"/>
+        <service class="Bss\CustomerToSubUser\Api\CompanyAccountManagementInterface" method="getCompanyAccountBySubEmail"/>
         <resources>
             <resource ref="anonymous"/>
         </resources>

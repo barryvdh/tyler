@@ -1,31 +1,17 @@
 define([
-    'jquery',
-    'ko',
+    'underscore',
     'Magento_Ui/js/form/element/select',
-    'Bss_CustomerToSubUser/js/model/company-account',
-    'Bss_CustomerToSubUser/js/service/RESTfulService'
-], function ($, ko, Select, CompanyAccount, service) {
+    'Bss_CustomerToSubUser/js/model/company-account'
+], function (_, Select, CompanyAccount) {
     'use strict';
 
     return Select.extend({
         defaults: {
             elementTmpl: 'Bss_CustomerToSubUser/form/element/company-roles',
             wasAssigned: false,
-            listens: {
-                'params.selectedRole': 'whenRoleUpdate'
+            validation: {
+                'required-entry': false
             }
-        },
-
-        /**
-         * Invokes initialize method of parent class,
-         * contains initialization logic
-         */
-        initialize: function () {
-            this._super();
-
-            this.whenSelectCompanyAccount(null);
-
-            return this;
         },
 
         /**
@@ -39,8 +25,70 @@ define([
             this.observe('wasAssigned');
 
             CompanyAccount.data.subscribe(this.whenSelectCompanyAccount, this);
+            CompanyAccount.roleId.subscribe(this.whenRoleForceSelected, this);
+            this.wasAssigned.subscribe(function (wasAssigned) {
+                this.validation['required-entry'] = wasAssigned;
+                this.additionalClasses._required(wasAssigned);
+
+                this.error('');
+            }, this);
 
             return this;
+        },
+
+        /**
+         * Force selected a role by id
+         *
+         * @param {Number|null} roleId
+         */
+        whenRoleForceSelected: function (roleId) {
+            console.log('subscriber: role updated');
+            this._selectRole(roleId);
+        },
+
+        /**
+         * Select role option
+         *
+         * @param {Number|undefined} roleId
+         * @private
+         */
+        _selectRole: function (roleId) {
+            var roleUser = CompanyAccount.roleUser(),
+                companyAccount = CompanyAccount.data();
+
+            try {
+                if (companyAccount && roleUser &&
+                    roleUser['entity_id'] == companyAccount['entity_id'] // eslint-disable-line eqeqeq
+                ) {
+                    roleId = roleUser['role_id'];
+                }
+            } catch (e) {
+                console.error(e);
+            }
+            this.value(roleId);
+        },
+
+        /**
+         * Filters 'initialOptions' property by 'field' and 'value' passed,
+         * calls 'setOptions' passing the result to it
+         *
+         * @param {*} value
+         * @param {String} field
+         */
+        filter: function (value, field) {
+            var source = this.initialOptions,
+                result;
+
+            field = field || this.filterBy.field;
+
+            result = _.filter(source, function (item) {
+                // eslint-disable-next-line eqeqeq
+                return item[field] == value || item.value === '' || item[field] === 'admin';
+            });
+
+            this.setOptions(result);
+            this._selectRole();
+            console.log('filter roles: value-' + value + '; ' + ', init value: ' + this.value());
         },
 
         /**
@@ -49,36 +97,7 @@ define([
          * @param {Object|null} data
          */
         whenSelectCompanyAccount: function (data) {
-            var visible = false,
-                request,
-                options = [];
-
-            if (data && data.hasOwnProperty('entity_id')) {
-                try {
-                    request = service.getRolesByCompanyAccountId(data['entity_id'], data['website_id']);
-                    request.done(function (res) {
-                        options = res.map(function (item) {
-                            return {
-                                label: item['role_name'],
-                                value: item['role_id']
-                            };
-                        });
-
-                        this.options(options);
-                        this.value(
-                            CompanyAccount.roleUser() ?
-                                CompanyAccount.roleUser()['entity_id'] === CompanyAccount.data()['entity_id'] ?
-                                    CompanyAccount.roleUser()['role_id'] : null : null
-                        );
-                    }.bind(this));
-                } catch (e) {
-                    console.error(e);
-                }
-
-                visible = true;
-            }
-
-            this.wasAssigned(visible);
+            this.wasAssigned(Boolean(data && data.hasOwnProperty('entity_id')));
         }
     });
 });

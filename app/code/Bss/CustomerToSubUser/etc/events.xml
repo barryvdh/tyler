@@ -4,4 +4,8 @@
         <observer name="bss_customer_to_sub_user"
                   instance="Bss\CustomerToSubUser\Observer\AssignAsSubUserObserver"/>
     </event>
+
+    <event name="controller_action_predispatch">
+        <observer name="check_sub_user_visible_middleware" instance="Bss\CustomerToSubUser\Observer\TheSubUserStillAssignToCurrent"/>
+    </event>
 </config>
