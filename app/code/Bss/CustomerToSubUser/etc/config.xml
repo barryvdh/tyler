@@ -3,9 +3,7 @@
     <default>
         <bss_company_account>
             <email>
-                <convert_customer_to_sub_user>
-                    bss_company_account_email_convert_customer_to_sub_user
-                </convert_customer_to_sub_user>
+                <convert_customer_to_sub_user>bss_company_account_email_convert_customer_to_sub_user</convert_customer_to_sub_user>
             </email>
         </bss_company_account>
     </default>
