@@ -1,10 +1,10 @@
 <form xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Ui:etc/ui_configuration.xsd">
-    <fieldset name="order_restriction" class="">
+    <fieldset name="order_restriction" class="Bss\OrderRestriction\Ui\Component\Customer\Form\OrderRestrictionFieldset">
         <settings>
             <label translate="true">Order Restriction</label>
         </settings>
 
-        <field name="limit_qty_per_order">
+        <field name="qty_per_order" formElement="input">
             <settings>
                 <label translate="true">Limit Quantity per Order</label>
                 <dataType>number</dataType>
@@ -14,9 +14,9 @@
             </settings>
         </field>
 
-        <field name="limit_order_per_month">
+        <field name="orders_per_month" formElement="input">
             <settings>
-                <label translate="true">Limit Order per Month</label>
+                <label translate="true">Limit Orders per Month</label>
                 <dataType>number</dataType>
                 <validation>
                     <rule name="validate-number" xsi:type="boolean">true</rule>
