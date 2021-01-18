@@ -18,7 +18,12 @@
 
 namespace Bss\BrandRepresentative\Model;
 
+use Exception;
+use Magento\Framework\App\Area;
+use Magento\Framework\DataObject;
 use Magento\Framework\Mail\Template\TransportBuilder;
+use Magento\Store\Model\Store;
+use Psr\Log\LoggerInterface;
 
 /**
  * Class ReportSend
@@ -32,12 +37,66 @@ class ReportSend
     protected $transportBuilder;
 
     /**
+     * @var LoggerInterface
+     */
+    protected $logger;
+
+    /**
      * ReportSend constructor.
      * @param TransportBuilder $transportBuilder
+     * @param LoggerInterface $logger
      */
     public function __construct(
-        TransportBuilder $transportBuilder
+        TransportBuilder $transportBuilder,
+        LoggerInterface $logger
     ) {
         $this->transportBuilder = $transportBuilder;
+        $this->logger = $logger;
+    }
+
+    /**
+     * Convert RAW report collection to email report data
+     *
+     * @param array $collectionData
+     * @return array
+     */
+    public function prepareSendData(array $collectionData = []): array
+    {
+        $data = [];
+        if (!empty($collectionData)) {
+            return $data;
+        }
+        return [];
+    }
+
+    /**
+     * Process Send email to brand representative.
+     *
+     * @param string $to
+     * @param array $data
+     */
+    public function sendMail(string $to, array $data = []): void
+    {
+        $report = [
+            'report_date' => date("j F Y", strtotime('-1 day')),
+            'orders_count' => rand(1, 10),
+            'order_items_count' => rand(1, 10),
+            'avg_items' => rand(1, 10)
+        ];
+        try {
+            $postObject = new DataObject();
+            $postObject->setData($report);
+
+            $transport = $this->transportBuilder
+                ->setTemplateIdentifier('daily_status_template')
+                ->setTemplateOptions(['area' => Area::AREA_FRONTEND, 'store' => Store::DEFAULT_STORE_ID])
+                ->setTemplateVars(['data' => $postObject])
+                ->setFrom(['name' => 'Robot','email' => 'robot@server.com'])
+                ->addTo(['fred@server.com', 'otherguy@server.com'])
+                ->getTransport();
+            $transport->sendMessage();
+        } catch (Exception $e) {
+
+        }
     }
 }

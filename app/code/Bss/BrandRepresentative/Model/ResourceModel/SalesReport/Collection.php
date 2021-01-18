@@ -16,7 +16,7 @@
  * @license    http://bsscommerce.com/Bss-Commerce-License.txt
  */
 
-namespace Bss\BrandRepresentative\Model\ResourceModel\Post;
+namespace Bss\BrandRepresentative\Model\ResourceModel\SalesReport;
 
 use Bss\BrandRepresentative\Model\SalesReport;
 use Bss\BrandRepresentative\Model\ResourceModel\SalesReport as SalesReportResourceModel;
