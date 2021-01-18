@@ -18,10 +18,12 @@
 
 namespace Bss\BrandRepresentative\Model;
 
+use Bss\BrandRepresentative\Helper\Data;
+use Exception;
 use Magento\Catalog\Model\Product;
 use Magento\Sales\Model\Order;
 use Magento\Sales\Model\Order\Item;
-use Bss\BrandRepresentative\Helper\Data;
+use Psr\Log\LoggerInterface;
 
 /**
  * Class ReportProcessor
@@ -40,16 +42,24 @@ class ReportProcessor
     protected $helper;
 
     /**
+     * @var LoggerInterface
+     */
+    protected $logger;
+
+    /**
      * ReportProcessor constructor.
      * @param SalesReportFactory $report
      * @param Data $helper
+     * @param LoggerInterface $logger
      */
     public function __construct(
         SalesReportFactory $report,
-        Data $helper
+        Data $helper,
+        LoggerInterface $logger
     ) {
         $this->report = $report;
         $this->helper = $helper;
+        $this->logger = $logger;
     }
 
     /**
@@ -60,9 +70,8 @@ class ReportProcessor
      */
     public function processSaveReport(Order $order): array
     {
-        $returnStatus = [
-            'status' => false,
-            'message' => ''
+        $returnData = [
+            'success' => false
         ];
         if ($order !== null && $order->getId()) {
             $orderId = $order->getId();
@@ -83,19 +92,44 @@ class ReportProcessor
                 $newReport->setOrderedQty($item->getQtyOrdered());
                 $newReport->setOrderedTime($order->getCreatedAt());
                 $newReport->setCustomerName($order->getCustomerName());
-                if ($order->getBillingAddress()) {
-                    $newReport->setAddress($order->getBillingAddress()->getStreet());
-                }
+                $province = '';
                 if ($order->getShippingAddress()) {
-                    $newReport->setAddress2($order->getShippingAddress()->getStreet());
-                    $newReport->setCity($order->getShippingAddress()->getCountryId());
-                    $newReport->setProvince($order->getShippingAddress()->getRegionId());
+                    $shippingAddress = $order->getShippingAddress()->getStreet();
+                    if ($shippingAddress) {
+                        $newReport->setAddress(implode(',', $shippingAddress));
+                    }
                 }
-                $email = $this->helper->extractRepresentativeEmail($product);
+                if ($order->getBillingAddress()) {
+                    $billingAddress = $order->getBillingAddress()->getStreet();
+                    if ($billingAddress) {
+                        $newReport->setCity($order->getBillingAddress()->getCity());
+                        $province = $order->getBillingAddress()->getRegionId();
+                        $newReport->setAddress(implode(',', $billingAddress));
+                    }
+
+                }
+                $email = $this->helper->extractRepresentativeEmail(
+                    $product,
+                    $province
+                );
+
+                $newReport->setRepresentativeEmail($email);
 
                 $newReport->setSentStatus(SalesReport::SENT_STATUS_NOT_SEND);
-            }
 
+                try {
+                    $newReport->save();
+                    $returnData = [
+                        'success' => true
+                    ];
+                } catch (Exception $e) {
+                    $this->logger->critical($e->getMessage());
+                    $returnData = [
+                        'success' => false
+                    ];
+                }
+            }
         }
+        return $returnData;
     }
 }

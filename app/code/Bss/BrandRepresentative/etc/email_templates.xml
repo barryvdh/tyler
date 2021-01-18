@@ -18,9 +18,9 @@
  */
 -->
 
-<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-        xsi:noNamespaceSchemaLocation="urn:magento:framework:Event/etc/events.xsd">
-    <event name="sales_order_place_after">
-        <observer name="bss_sales_report_save" instance="Bss\BrandRepresentative\Observer\Sales\Order\Report" />
-    </event>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Email:etc/email_templates.xsd">
+    <template id="bss_daily_sale_report"
+              label="Daily Sales Report"
+              file="bss_daily_sale_report_template.html" type="html"
+              module="Bss_BrandRepresentative" area="frontend"/>
 </config>

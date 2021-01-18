@@ -1,0 +1,51 @@
+<!--
+/**
+ * BSS Commerce Co.
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the EULA
+ * that is bundled with this package in the file LICENSE.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://bsscommerce.com/Bss-Commerce-License.txt
+ *
+ * @category   BSS
+ * @package    Bss_BrandRepresentative
+ * @author     Extension Team
+ * @copyright  Copyright (c) 2021 BSS Commerce Co. ( http://bsscommerce.com )
+ * @license    http://bsscommerce.com/Bss-Commerce-License.txt
+ */
+-->
+
+<!--@subject {{trans "Greeting from %store_name! Here is your daily sales report!" store_name=$store.frontend_name}} @-->
+{{template config_path="design/email/header_template"}}
+<table>
+    <tr class="email-intro">
+        <td>
+            <div class="new-report-header"></div>
+            <p>
+                {{trans 'This email is to let you know that one or more retailers have ordered your items yesterday. But relax! We will handle everything from here and no further action is needed from you. The details of the order are below for your records.If you have any questions, simply reply to this email!'}}
+            </p>
+        </td>
+    </tr>
+    <tr class="email-intro-header">
+        <td>
+            <p class="email-increament-id"><span>{{trans "Report for brand: "}}</span>#{{var increment_id}}</p>
+        </td>
+    </tr>
+    <tr class="email-information">
+        <td>
+            {{depend quote.getCustomerNote()}}
+            <table class="message-info">
+                <tr>
+                    <td>
+                        {{var quote.getCustomerNote()|escape|nl2br}}
+                    </td>
+                </tr>
+            </table>
+            {{/depend}}
+            {{layout handle="quote_extension_email_items" quote=$quote area="frontend"}}
+        </td>
+    </tr>
+</table>
+{{template config_path="design/email/footer_template"}}

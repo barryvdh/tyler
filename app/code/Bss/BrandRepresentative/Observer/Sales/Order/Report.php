@@ -23,6 +23,7 @@ use Bss\BrandRepresentative\Model\ReportProcessor;
 use Magento\Framework\Event\Observer;
 use Magento\Framework\Event\ObserverInterface;
 use Psr\Log\LoggerInterface;
+use Magento\Framework\Message\ManagerInterface;
 
 /**
  * Class Report
@@ -47,28 +48,41 @@ class Report implements ObserverInterface
     protected $reportProcessor;
 
     /**
+     * @var ManagerInterface
+     */
+    protected $messageManager;
+
+    /**
      * Report constructor.
      * @param LoggerInterface $logger
      * @param Data $helper
      * @param ReportProcessor $reportProcessor
+     * @param ManagerInterface $messageManager
      */
     public function __construct(
         LoggerInterface $logger,
         Data $helper,
-        ReportProcessor $reportProcessor
+        ReportProcessor $reportProcessor,
+        ManagerInterface $messageManager
     ) {
         $this->logger = $logger;
         $this->helper = $helper;
         $this->reportProcessor = $reportProcessor;
+        $this->messageManager = $messageManager;
     }
 
     /**
      * @param Observer $observer
-     * @return $this|void
+     * @return bool[]|false|false[]
      */
     public function execute(Observer $observer)
     {
         $order = $observer->getData('order');
-        $saveStatus = $this->reportProcessor->processSaveReport($order->getData());
+        $saveStatus = $this->reportProcessor->processSaveReport($order);
+        if ($saveStatus && $saveStatus['success'] === true) {
+            return $saveStatus;
+        }
+        $this->messageManager->addErrorMessage(__('Unable to save report. Please check log for more details.'));
+        return false;
     }
 }

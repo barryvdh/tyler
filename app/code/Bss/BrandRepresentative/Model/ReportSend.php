@@ -1,5 +1,4 @@
-<?xml version="1.0"?>
-<!--
+<?php
 /**
  * BSS Commerce Co.
  *
@@ -16,11 +15,29 @@
  * @copyright  Copyright (c) 2021 BSS Commerce Co. ( http://bsscommerce.com )
  * @license    http://bsscommerce.com/Bss-Commerce-License.txt
  */
--->
 
-<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-        xsi:noNamespaceSchemaLocation="urn:magento:framework:Event/etc/events.xsd">
-    <event name="checkout_onepage_controller_success_action">
-        <observer name="bss_sales_report_save_after_success" instance="Bss\BrandRepresentative\Observer\Sales\Order\Report" />
-    </event>
-</config>
+namespace Bss\BrandRepresentative\Model;
+
+use Magento\Framework\Mail\Template\TransportBuilder;
+
+/**
+ * Class ReportSend
+ * Bss\BrandRepresentative\Model
+ */
+class ReportSend
+{
+    /**
+     * @var TransportBuilder
+     */
+    protected $transportBuilder;
+
+    /**
+     * ReportSend constructor.
+     * @param TransportBuilder $transportBuilder
+     */
+    public function __construct(
+        TransportBuilder $transportBuilder
+    ) {
+        $this->transportBuilder = $transportBuilder;
+    }
+}
