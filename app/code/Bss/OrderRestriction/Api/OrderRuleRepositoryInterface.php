@@ -11,13 +11,22 @@ use Bss\OrderRestriction\Exception\CouldNotLoadException;
 interface OrderRuleRepositoryInterface
 {
     /**
+     * Get by id
+     *
+     * @param int $id
+     * @return Data\OrderRuleInterface
+     * @throws CouldNotLoadException
+     */
+    public function get($id);
+
+    /**
      * Get by customer id
      *
      * @param int $customerId
      * @return Data\OrderRuleInterface
      * @throws CouldNotLoadException
      */
-    public function get($customerId);
+    public function getByCustomerId($customerId);
 
     /**
      * Save the object

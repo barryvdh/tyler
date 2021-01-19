@@ -25,7 +25,7 @@ class OrderRule extends AbstractModel implements OrderRuleInterface
      */
     public function getId()
     {
-        return $this->getData(self::CUSTOMER_ID);
+        return $this->getData(self::ID);
     }
 
     /**
@@ -33,7 +33,7 @@ class OrderRule extends AbstractModel implements OrderRuleInterface
      */
     public function setId($value)
     {
-        return $this->setData(self::CUSTOMER_ID, $value);
+        return $this->setData(self::ID, $value);
     }
 
     /**

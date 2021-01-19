@@ -4,6 +4,13 @@
             <label translate="true">Order Restriction</label>
         </settings>
 
+        <field name="id" formElement="hidden">
+            <settings>
+                <dataType>text</dataType>
+                <dataScope>entity_id</dataScope>
+            </settings>
+        </field>
+
         <field name="qty_per_order" formElement="input">
             <settings>
                 <label translate="true">Limit Quantity per Order</label>

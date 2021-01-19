@@ -46,7 +46,7 @@ class DataProviderWithDefaultAddresses
     ) {
         foreach ($loadedData as &$customerData) {
             try {
-                $orderRule = $this->orderRuleRepository->get($customerData['customer']['entity_id']);
+                $orderRule = $this->orderRuleRepository->getByCustomerId($customerData['customer']['entity_id']);
             } catch (CouldNotLoadException $e) {
                 continue;
             } catch (\Exception $e) {

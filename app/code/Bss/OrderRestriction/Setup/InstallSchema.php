@@ -25,13 +25,24 @@ class InstallSchema implements \Magento\Framework\Setup\InstallSchemaInterface
         $table = $installer->getConnection()
             ->newTable($installer->getTable(OrderRuleResource::TABLE))
             ->addColumn(
+                OrderRule::ID,
+                Table::TYPE_INTEGER,
+                null,
+                [
+                    'identity' => true,
+                    'unsigned' => true,
+                    'nullable' => false,
+                    'primary' => true
+                ],
+                "ID"
+            )
+            ->addColumn(
                 OrderRule::CUSTOMER_ID,
                 Table::TYPE_INTEGER,
                 null,
                 [
                     'unsigned' => true,
-                    'nullable' => false,
-                    'primary' => true
+                    'nullable' => false
                 ],
                 "Related Customer"
             )->addColumn(

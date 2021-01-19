@@ -8,6 +8,7 @@ namespace Bss\OrderRestriction\Api\Data;
  */
 interface OrderRuleInterface
 {
+    const ID = 'entity_id';
     const CUSTOMER_ID = 'customer_id';
     const QTY_PER_ORDER = 'qty_per_order';
     const ORDERS_PER_MONTH = 'orders_per_month';

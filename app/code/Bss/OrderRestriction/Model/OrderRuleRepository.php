@@ -3,8 +3,8 @@ declare(strict_types=1);
 
 namespace Bss\OrderRestriction\Model;
 
+use Bss\OrderRestriction\Api\Data\OrderRuleInterface;
 use Bss\OrderRestriction\Api\OrderRuleRepositoryInterface;
-use Bss\OrderRestriction\Model\OrderRuleFactory;
 use Bss\OrderRestriction\Model\ResourceModel\OrderRule as OrderRuleResource;
 use Bss\OrderRestriction\Exception\CouldNotLoadException;
 use Magento\Framework\Exception\CouldNotSaveException;
@@ -20,7 +20,7 @@ class OrderRuleRepository implements OrderRuleRepositoryInterface
     private $logger;
 
     /**
-     * @var \Bss\OrderRestriction\Model\OrderRuleFactory
+     * @var OrderRuleFactory
      */
     private $orderRuleFactory;
 
@@ -42,20 +42,43 @@ class OrderRuleRepository implements OrderRuleRepositoryInterface
     /**
      * @inheritDoc
      */
-    public function get($customerId)
+    public function get($id)
     {
+        return $this->getByField($id);
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function getByCustomerId($customerId)
+    {
+        return $this->getByField($customerId, OrderRuleInterface::CUSTOMER_ID);
+    }
+
+    /**
+     * Load object
+     *
+     * @param string $value
+     * @param string $field
+     * @return OrderRule
+     */
+    private function getByField($value, $field = null)
+    {
+        $orderRule = $this->orderRuleFactory->create();
         try {
-            $orderRule = $this->orderRuleFactory->create();
-            $this->orderRuleResource->load($orderRule, $customerId);
+            $this->orderRuleResource->load($orderRule, $value, $field);
 
             return $orderRule;
         } catch (\Exception $e) {
             $this->logger->critical($e);
-            throw new CouldNotLoadException(__("Could not get the customer order rule data. Please review the log!"));
+            return $orderRule;
+            // throw new CouldNotLoadException
+            // (__("Could not get the customer order rule data. Please review the log!"));
         }
     }
-
     /**
+     * Save the order rule
+     *
      * @param \Bss\OrderRestriction\Api\Data\OrderRuleInterface $orderRule
      * @return bool
      * @throws CouldNotSaveException

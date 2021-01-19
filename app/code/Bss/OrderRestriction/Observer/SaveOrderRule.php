@@ -45,15 +45,25 @@ class SaveOrderRule implements \Magento\Framework\Event\ObserverInterface
         try {
             $orderRuleRequest = $this->request->getParam('order_restriction');
 
-            if ($orderRuleRequest &&
-                $orderRuleRequest['qty_per_order'] &&
-                $orderRuleRequest['orders_per_month']
-            ) {
+            if ($orderRuleRequest) {
+                array_walk(
+                    $orderRuleRequest,
+                    function (&$param) {
+                        if ($param == "") {
+                            $param = null;
+                        }
+                    }
+                );
+                $orderRule = $this->orderRuleRepository->get($orderRuleRequest["entity_id"]);
+
+                if ($orderRule->getOrdersPerMonth() == $orderRuleRequest['orders_per_month'] &&
+                    $orderRule->getQtyPerOrder() == $orderRuleRequest['qty_per_order']
+                ) {
+                    return $this;
+                }
+
                 $customerId = $this->request->getParam('customer')['entity_id'];
-                $orderRule = $this->orderRuleRepository->get($customerId);
-
                 $orderRule->setCustomerId($customerId);
-
                 $orderRule->setOrdersPerMonth($orderRuleRequest['orders_per_month']);
                 $orderRule->setQtyPerOrder($orderRuleRequest['qty_per_order']);
 
