@@ -40,6 +40,8 @@ define([
         whenListCompanyAccountsCome: function (accounts) {
             if (accounts.length > 0) {
                 this.initData();
+            } else {
+                this.isNoCompanyAccountData(true);
             }
         },
 
