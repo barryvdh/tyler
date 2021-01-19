@@ -3,3 +3,7 @@
 "Limit Orders per Month","Limit Orders per Month"
 "Could not get the customer order rule data. Please review the log!","Could not get the customer order rule data. Please review the log!"
 "Something went wrong! Please review the log!","Something went wrong! Please review the log!"
+"You have reached your order limit (%1) this month.","You have reached your order limit (%1) this month."
+"Your order can only order %1 item at a time.","Your order can only order %1 item at a time."
+"Number Quantity","Number Quantity"
+"30 Days Order Chart","30 Days Order Chart"

@@ -30,5 +30,14 @@
                 </validation>
             </settings>
         </field>
+
+        <field name="sales_order_report"
+               formElement="input"
+               component="Bss_OrderRestriction/js/view/customer-sales-order-report">
+            <settings>
+                <elementTmpl>Bss_OrderRestriction/customer-sales-order-report</elementTmpl>
+                <label translate="true">30 Days Order Chart</label>
+            </settings>
+        </field>
     </fieldset>
 </form>

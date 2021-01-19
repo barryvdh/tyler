@@ -6,4 +6,10 @@
                 type="Bss\OrderRestriction\Plugin\Checkout\Helper\Data"
                 sortOrder="30" />
     </type>
+
+    <type name="Magento\Multishipping\Helper\Data">
+        <plugin name="check_customer_order_rule"
+                type="Bss\OrderRestriction\Plugin\Multishipping\Helper\Data"
+                sortOrder="30"/>
+    </type>
 </config>

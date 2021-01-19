@@ -7,7 +7,7 @@ use Bss\OrderRestriction\Api\OrderRuleRepositoryInterface;
 use Magento\Framework\Event\Observer;
 
 /**
- * Save the order rule if the request contains
+ * Save the order rule if the request contains, after save customer in admin
  */
 class SaveOrderRule implements \Magento\Framework\Event\ObserverInterface
 {
@@ -46,6 +46,7 @@ class SaveOrderRule implements \Magento\Framework\Event\ObserverInterface
             $orderRuleRequest = $this->request->getParam('order_restriction');
 
             if ($orderRuleRequest) {
+                // If not set value then put is NULL in DB
                 array_walk(
                     $orderRuleRequest,
                     function (&$param) {
