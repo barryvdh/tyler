@@ -134,7 +134,7 @@ class SubUserConverter
                 $customer->getWebsiteId()
             )->getSubUser();
 
-            if (!$companyAccountId) {
+            if (!$companyAccountId && $subUser->getSubUserId()) {
                 $this->companyEmailHelper->sendRemoveNotificationMailToSubUser(
                     null,
                     $subUser
