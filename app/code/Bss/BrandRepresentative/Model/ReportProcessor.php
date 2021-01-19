@@ -104,6 +104,7 @@ class ReportProcessor
                     if ($billingAddress) {
                         $newReport->setCity($order->getBillingAddress()->getCity());
                         $province = $order->getBillingAddress()->getRegionId();
+                        $newReport->setProvince($province);
                         $newReport->setAddress(implode(',', $billingAddress));
                     }
 

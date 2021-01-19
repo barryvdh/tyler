@@ -108,7 +108,7 @@ class Data extends AbstractHelper
                         if (isset($emailData['bss_province']) &&
                             in_array((string)$regionId, $emailData['bss_province'], true)
                         ) {
-                            $emailList[] = explode(',', $emailData['bss_email']);
+                            $emailList[$categoryId] = explode(',', $emailData['bss_email']);
                         }
                     }
                 }

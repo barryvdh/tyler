@@ -21,10 +21,11 @@ namespace Bss\BrandRepresentative\Cron\Admin;
 use Bss\BrandRepresentative\Model\ReportSend;
 use Bss\BrandRepresentative\Model\ResourceModel\SalesReport\CollectionFactory;
 use Exception;
-use Magento\Framework\App\Area;
 use Magento\Framework\Stdlib\DateTime\DateTime;
-use Psr\Log\LoggerInterface;
 use Magento\Store\Model\App\Emulation;
+use Magento\Store\Model\StoreManagerInterface;
+use Psr\Log\LoggerInterface;
+use Magento\Framework\App\Area;
 
 /**
  * Class SalesRepProvinces
@@ -59,25 +60,33 @@ class SalesRepProvinces
     protected $emulation;
 
     /**
+     * @var StoreManagerInterface
+     */
+    protected $storeManager;
+
+    /**
      * SalesRepProvinces constructor.
      * @param ReportSend $reportSend
      * @param CollectionFactory $bssReportCollectionFactory
      * @param DateTime $dateTime
      * @param LoggerInterface $logger
      * @param Emulation $emulation
+     * @param StoreManagerInterface $storeManager
      */
     public function __construct(
         ReportSend $reportSend,
         CollectionFactory $bssReportCollectionFactory,
         DateTime $dateTime,
         LoggerInterface $logger,
-        Emulation $emulation
+        Emulation $emulation,
+        StoreManagerInterface $storeManager
     ) {
         $this->bssReportSend = $reportSend;
         $this->bssReportCollectionFactory = $bssReportCollectionFactory;
         $this->dateTime = $dateTime;
         $this->logger = $logger;
         $this->emulation = $emulation;
+        $this->storeManager = $storeManager;
     }
 
     /**
@@ -86,18 +95,20 @@ class SalesRepProvinces
     public function execute(): void
     {
         //Start frontend area emulation
-        $this->emulation->startEnvironmentEmulation(1, Area::AREA_FRONTEND, true);
         try {
-            /* @var $reportCollection CollectionFactory */
-            $reportCollection = $this->bssReportCollectionFactory->create();
-            if ($reportCollection->getSize() > 0) {
-                $this->logger->critical($this->dateTime->gmtDate('Y-m-d H:i:s'));
-                $reportData = $this->bssReportSend->prepareSendData($reportCollection->getData());
-                $this->logger->critical(implode(',', $reportData));
+            if ($this->storeManager->getDefaultStoreView()) {
+//                $this->emulation->startEnvironmentEmulation(
+//                    $this->storeManager->getDefaultStoreView()->getId(),
+//                    Area::AREA_FRONTEND,
+//                    true
+//                );
+                $this->bssReportSend->processToSendEmail();
+//                $this->emulation->stopEnvironmentEmulation();
+            } else {
+                $this->logger->critical(__("Could not start emulation! No email was sent!"));
             }
         } catch (Exception $e) {
             $this->logger->critical($e->getMessage());
         }
-        $this->emulation->stopEnvironmentEmulation();
     }
 }

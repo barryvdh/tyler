@@ -30,21 +30,12 @@
     </tr>
     <tr class="email-intro-header">
         <td>
-            <p class="email-increament-id"><span>{{trans "Report for brand: "}}</span>#{{var increment_id}}</p>
+            <p class="email-report-time"><span>{{trans "Report was send at: "}}</span>{{var data.report_time}}</p>
         </td>
     </tr>
     <tr class="email-information">
         <td>
-            {{depend quote.getCustomerNote()}}
-            <table class="message-info">
-                <tr>
-                    <td>
-                        {{var quote.getCustomerNote()|escape|nl2br}}
-                    </td>
-                </tr>
-            </table>
-            {{/depend}}
-            {{layout handle="quote_extension_email_items" quote=$quote area="frontend"}}
+            {{layout handle="bss_sales_report_email_items" report=$data.report area="frontend"}}
         </td>
     </tr>
 </table>
