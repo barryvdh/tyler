@@ -119,15 +119,6 @@ class InstallSchema implements InstallSchemaInterface
                     'nullable' => true
                 ],
                 'Address'
-            )
-            ->addColumn(
-                'address_2',
-                Table::TYPE_TEXT,
-                128,
-                [
-                    'nullable' => true
-                ],
-                'Secondary Address'
             )->addColumn(
                 'city',
                 Table::TYPE_TEXT,
