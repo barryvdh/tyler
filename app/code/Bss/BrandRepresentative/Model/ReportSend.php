@@ -27,6 +27,7 @@ use Magento\Framework\Serialize\Serializer\Json;
 use Magento\Framework\Stdlib\DateTime\DateTime;
 use Magento\Store\Model\Store;
 use Psr\Log\LoggerInterface;
+use Magento\Directory\Model\RegionFactory;
 
 /**
  * Class ReportSend
@@ -60,25 +61,33 @@ class ReportSend
     protected $dateTime;
 
     /**
+     * @var RegionFactory
+     */
+    protected $regionFactory;
+
+    /**
      * ReportSend constructor.
      * @param TransportBuilder $transportBuilder
      * @param LoggerInterface $logger
      * @param CollectionFactory $collectionFactory
      * @param Json $json
      * @param DateTime $date
+     * @param RegionFactory $regionFactory
      */
     public function __construct(
         TransportBuilder $transportBuilder,
         LoggerInterface $logger,
         CollectionFactory $collectionFactory,
         Json $json,
-        DateTime $date
+        DateTime $date,
+        RegionFactory $regionFactory
     ) {
         $this->transportBuilder = $transportBuilder;
         $this->logger = $logger;
         $this->reportCollectionFactory = $collectionFactory;
         $this->json = $json;
         $this->dateTime = $date;
+        $this->regionFactory = $regionFactory;
     }
 
     /**
@@ -193,6 +202,11 @@ class ReportSend
                 if (isset($rowData['representative_email']) &&
                     $this->emailMatch($email, $rowData['representative_email'])
                 ) {
+                    $province = $this->regionFactory->create()->load((int)$rowData['province']);
+                    $provinceName = '';
+                    if ($province) {
+                        $provinceName = $province->getName();
+                    }
                     $data['report'][] = [
                         'order_id' => $rowData['order_id'],
                         'product_sku' => $rowData['product_sku'],
@@ -202,7 +216,7 @@ class ReportSend
                         'ordered_time' => $rowData['ordered_time'],
                         'address' => $rowData['address'],
                         'city' => $rowData['city'],
-                        'province' => $rowData['province'],
+                        'province' => $provinceName,
                     ];
                 }
             }

@@ -20,6 +20,7 @@
 
 <?php $report = $block->getReport(); ?>
 <?php if ($report): ?>
+<div class="report-listing-wrapper">
     <table class="email-items">
         <thead>
             <tr>
@@ -47,6 +48,9 @@
                 <th class="row-city">
                     <?= /* @escapeNotVerified */  $block->escapeHtml(__('City')) ?>
                 </th>
+                <th class="row-province">
+                    <?= /* @escapeNotVerified */  $block->escapeHtml(__('Province')) ?>
+                </th>
             </tr>
         </thead>
         <tbody>
@@ -61,6 +65,7 @@
             <?php endforeach; ?>
         </tbody>
     </table>
+</div>
 <?php else: ?>
 <p>Empty Report! Please contact us for more information!</p>
 <?php endif; ?>
