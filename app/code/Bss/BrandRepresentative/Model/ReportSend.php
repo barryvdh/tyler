@@ -20,14 +20,16 @@ namespace Bss\BrandRepresentative\Model;
 
 use Bss\BrandRepresentative\Model\ResourceModel\SalesReport\CollectionFactory;
 use Exception;
+use Magento\Catalog\Api\CategoryRepositoryInterface;
+use Magento\Directory\Model\RegionFactory;
 use Magento\Framework\App\Area;
 use Magento\Framework\DataObject;
+use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Mail\Template\TransportBuilder;
 use Magento\Framework\Serialize\Serializer\Json;
 use Magento\Framework\Stdlib\DateTime\DateTime;
 use Magento\Store\Model\Store;
 use Psr\Log\LoggerInterface;
-use Magento\Directory\Model\RegionFactory;
 
 /**
  * Class ReportSend
@@ -66,6 +68,11 @@ class ReportSend
     protected $regionFactory;
 
     /**
+     * @var CategoryRepositoryInterface
+     */
+    protected $categoryRepositoryInterface;
+
+    /**
      * ReportSend constructor.
      * @param TransportBuilder $transportBuilder
      * @param LoggerInterface $logger
@@ -73,6 +80,7 @@ class ReportSend
      * @param Json $json
      * @param DateTime $date
      * @param RegionFactory $regionFactory
+     * @param CategoryRepositoryInterface $CategoryRepositoryInterface
      */
     public function __construct(
         TransportBuilder $transportBuilder,
@@ -80,7 +88,8 @@ class ReportSend
         CollectionFactory $collectionFactory,
         Json $json,
         DateTime $date,
-        RegionFactory $regionFactory
+        RegionFactory $regionFactory,
+        CategoryRepositoryInterface $CategoryRepositoryInterface
     ) {
         $this->transportBuilder = $transportBuilder;
         $this->logger = $logger;
@@ -88,6 +97,7 @@ class ReportSend
         $this->json = $json;
         $this->dateTime = $date;
         $this->regionFactory = $regionFactory;
+        $this->categoryRepositoryInterface = $CategoryRepositoryInterface;
     }
 
     /**
@@ -96,7 +106,7 @@ class ReportSend
     public function processToSendEmail(): void
     {
         $collectionData = $this->getReportCollectionData();
-        if ($collectionData && is_array($collectionData)) {
+        if (!empty($collectionData) && is_array($collectionData)) {
             $brandEmails = $this->gatherBrandEmails($collectionData);
             $this->prepareSendData($brandEmails, $collectionData);
         } else {
@@ -117,8 +127,8 @@ class ReportSend
             foreach ($brandEmails as $email) {
                 $email = preg_replace('/\s+/', '', $email);
                 //Debug Section, comment if production mode -------
-                $this->logger->log(100, print_r($email, true));
-                $this->logger->log(100, print_r($this->prepareEmailData($email, $collectionData), true));
+                //$this->logger->log(100, print_r($email, true));
+                //$this->logger->log(100, print_r($this->prepareEmailData($email, $collectionData), true));
                 //End debug section ------
                 $this->sendMail($email, $this->prepareEmailData($email, $collectionData));
             }
@@ -144,7 +154,12 @@ class ReportSend
                 ->setTemplateIdentifier('bss_daily_sale_report')
                 ->setTemplateOptions(['area' => Area::AREA_FRONTEND, 'store' => Store::DEFAULT_STORE_ID])
                 ->setTemplateVars(['data' => $postObject])
-                ->setFrom(['name' => 'Admin','email' => 'one2onesales@gmail.com'])
+                ->setFrom(
+                    [
+                        'name' => 'Admin',
+                        'email' => 'one2onesales@gmail.com'
+                    ]
+                )
                 ->addTo($to)
                 ->getTransport();
             $transport->sendMessage();
@@ -160,6 +175,9 @@ class ReportSend
     {
         $collectionData = [];
         $collection = $this->reportCollectionFactory->create();
+        //Filter previous day only;
+        $reportDay = $this->dateTime->gmtDate('y-m-d', strtotime("yesterday"));
+        $collection->addFieldToFilter('ordered_time', $reportDay);
         if ($collection->getSize() > 0) {
             $collectionData = $collection->getData();
         }
@@ -202,21 +220,26 @@ class ReportSend
                 if (isset($rowData['representative_email']) &&
                     $this->emailMatch($email, $rowData['representative_email'])
                 ) {
-                    $province = $this->regionFactory->create()->load((int)$rowData['province']);
-                    $provinceName = '';
-                    if ($province) {
-                        $provinceName = $province->getName();
+                    $brandName = '';
+                    try {
+                        $brand = $this->categoryRepositoryInterface->get($rowData['brand']);
+                        $brandName = $brand->getName();
+                    } catch (NoSuchEntityException $exception) {
+                        $this->logger->critical(__('Brand Not Found, ID: ') . $rowData['brand']);
                     }
+
                     $data['report'][] = [
                         'order_id' => $rowData['order_id'],
                         'product_sku' => $rowData['product_sku'],
                         'product_name' => $rowData['product_name'],
+                        'brand' => $brandName,
                         'product_type' => $rowData['product_type'],
                         'ordered_qty' => $rowData['ordered_qty'],
                         'ordered_time' => $rowData['ordered_time'],
+                        'customer_name' => $rowData['customer_name'],
                         'address' => $rowData['address'],
                         'city' => $rowData['city'],
-                        'province' => $provinceName,
+                        'province' => $rowData['province'],
                     ];
                 }
             }
