@@ -21,16 +21,5 @@ define([
     'use strict';
 
     return Select.extend({
-        /**
-         * Defines if value has changed.
-         *
-         * @returns {Boolean}
-         */
-        hasChanged: function () {
-            let hasChanged = this._super();
-            if (hasChanged) {
-
-            }
-        },
     });
 });

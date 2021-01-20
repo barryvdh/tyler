@@ -1,4 +1,4 @@
-<?xml version="1.0"?>
+<?xml version="1.0" ?>
 <!--
 /**
  * BSS Commerce Co.
@@ -17,11 +17,12 @@
  * @license    http://bsscommerce.com/Bss-Commerce-License.txt
  */
 -->
+
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-        xsi:noNamespaceSchemaLocation="urn:magento:framework:Module/etc/module.xsd">
-    <module name="Bss_BrandRepresentative" setup_version="1.0.0" >
-        <sequence name="Magento_Sales" />
-        <sequence name="Magento_Checkout" />
-        <sequence name="Magento_Catalog" />
-    </module>
+        xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Cron:etc/crontab.xsd">
+    <group id="default">
+        <job instance="Bss\BrandRepresentative\Cron\Admin\SalesRepProvinces" method="execute" name="bss_sales_rep_province_email">
+            <schedule>* * * * *</schedule>
+        </job>
+    </group>
 </config>

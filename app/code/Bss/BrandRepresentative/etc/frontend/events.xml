@@ -17,11 +17,10 @@
  * @license    http://bsscommerce.com/Bss-Commerce-License.txt
  */
 -->
+
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-        xsi:noNamespaceSchemaLocation="urn:magento:framework:Module/etc/module.xsd">
-    <module name="Bss_BrandRepresentative" setup_version="1.0.0" >
-        <sequence name="Magento_Sales" />
-        <sequence name="Magento_Checkout" />
-        <sequence name="Magento_Catalog" />
-    </module>
+        xsi:noNamespaceSchemaLocation="urn:magento:framework:Event/etc/events.xsd">
+    <event name="checkout_onepage_controller_success_action">
+        <observer name="bss_sales_report_save_after_success" instance="Bss\BrandRepresentative\Observer\Sales\Order\Report" />
+    </event>
 </config>

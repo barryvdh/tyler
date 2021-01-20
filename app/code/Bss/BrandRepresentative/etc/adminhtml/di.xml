@@ -23,4 +23,8 @@
         <plugin name="bss-category-data-provider-after-load"
                 type="Bss\BrandRepresentative\Plugin\Model\Category\DataProvider" sortOrder="10"/>
     </type>
+    <type name="Magento\Catalog\Controller\Adminhtml\Category\Save">
+        <plugin name="bss-category-data-provider-after-save"
+                type="Bss\BrandRepresentative\Plugin\Controller\Adminhtml\Category\Save" sortOrder="10"/>
+    </type>
 </config>

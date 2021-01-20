@@ -22,16 +22,6 @@ define([
     'use strict';
 
     return multiselect.extend({
-        //
-        /**
-         * @inheritdoc
-         */
-        hasChanged: function () {
-           if (this.indexedOptions) {
 
-           } else {
-
-           }
-        },
     });
 });
