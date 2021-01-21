@@ -22,7 +22,7 @@ define([
         initialize: function () {
             this._super();
 
-            this._chartInitialize();
+            // this._chartInitialize();
 
             return this;
         },
@@ -38,6 +38,20 @@ define([
             this.observe('orderRemain');
 
             return this;
+        },
+
+        /**
+         * Get report text
+         *
+         * @returns {*}
+         */
+        getReportLabel: function () {
+            return ko.pureComputed(function () {
+                var used = this.orderRemain().used,
+                    total = this.orderRemain().total;
+
+                return used + '/' + total + ' ' + $t('order limit remainings');
+            }, this);
         },
 
         /**

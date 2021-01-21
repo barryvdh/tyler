@@ -100,8 +100,9 @@ class DataProviderWithDefaultAddresses
                     $remain = $orderRule->getOrdersPerMonth() - $usedOrder;
                 }
                 $customerData['order_restriction']['order_remain'] = [
-                    $usedOrder,
-                    $remain
+                    'total' => $orderRule->getOrdersPerMonth(),
+                    'used' => $usedOrder,
+                    'remain' => $remain
                 ];
             }
         }
