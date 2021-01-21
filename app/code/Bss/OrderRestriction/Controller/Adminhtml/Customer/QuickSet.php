@@ -14,6 +14,11 @@ use Magento\Framework\App\Action\HttpPostActionInterface;
 class QuickSet extends Action implements HttpPostActionInterface
 {
     /**
+     * Authorization for manage order restriction
+     */
+    const ADMIN_RESOURCE = "Bss_OrderRestriction::manage";
+
+    /**
      * @var \Psr\Log\LoggerInterface
      */
     private $logger;
@@ -47,6 +52,13 @@ class QuickSet extends Action implements HttpPostActionInterface
     public function execute()
     {
         $jsonResult = $this->resultJsonFactory->create();
+
+        if (!$this->_authorization->isAllowed(self::ADMIN_RESOURCE)) {
+            return $jsonResult->setData([
+                'message' => __("You haven't no permission to this action."),
+                'success' => false
+            ]);
+        }
         $success = false;
         $msg = "";
 
@@ -87,6 +99,9 @@ class QuickSet extends Action implements HttpPostActionInterface
             }
         } catch (\Exception $e) {
             $this->logger->critical($e);
+        }
+
+        if (!$success) {
             $msg = __("Something went wrong! Please review the log!");
         }
 
@@ -94,5 +109,15 @@ class QuickSet extends Action implements HttpPostActionInterface
             'success' => $success,
             'message' => $msg
         ]);
+    }
+
+    /**
+     * Return true for manual check
+     *
+     * @return bool
+     */
+    public function _isAllowed()
+    {
+        return true;
     }
 }

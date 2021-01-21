@@ -9,7 +9,6 @@ define([
 
     return Modal.extend({
         defaults: {
-            saveUrl: 'admin/order_restriction/customer/quickSet',
             responseData: null,
             links: {
                 selectedCustomers: 'customer_listing.customer_listing.customer_columns.ids:selected'
@@ -72,8 +71,12 @@ define([
          */
         actionSave: function () {
             var postData, self = this;
+            this.valid = 1;
 
             this.elems().forEach(this.validate, this);
+            if (!this.valid) {
+                return;
+            }
             postData = this._getFormData();
             $('body').trigger('processStart');
             $.ajax({
@@ -82,7 +85,7 @@ define([
                 data: postData,
                 dataType: 'json'
             }).done(function (response) {
-                if (!response.error) {
+                if (response.success) {
                     self.responseData(response);
                     self.closeModal();
                 } else {

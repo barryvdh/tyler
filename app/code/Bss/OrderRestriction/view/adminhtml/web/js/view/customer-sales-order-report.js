@@ -3,7 +3,8 @@ define([
     'jquery',
     'Magento_Ui/js/form/element/abstract',
     'chartJs',
-    'mage/translate'
+    'mage/translate',
+    'domReady!'
 ], function (ko, $, SalesOrderReport, Chart, $t) {
     'use strict';
 
@@ -49,6 +50,10 @@ define([
             return ko.pureComputed(function () {
                 var used = this.orderRemain().used,
                     total = this.orderRemain().total;
+
+                if (total === null) {
+                    return $t('Current users haven\'t an order rule applied')
+                }
 
                 return used + '/' + total + ' ' + $t('order limit remainings');
             }, this);

@@ -39,6 +39,7 @@
            component="Bss_OrderRestriction/js/view/quick-set-order-restriction-modal">
         <argument name="data" xsi:type="array">
             <item name="config" xsi:type="array">
+                <item name="saveUrl" xsi:type="url" path="order_restriction/customer/quickSet"/>
                 <item name="options" xsi:type="array">
                     <item name="buttons" xsi:type="array">
                         <item name="0" xsi:type="array">
@@ -75,7 +76,7 @@
 
             <field name="qty_per_order" formElement="input">
                 <settings>
-                    <label translate="true">Qty order per month</label>
+                    <label translate="true">Limit Quantity per Order</label>
                     <dataType>number</dataType>
                     <validation>
                         <rule name="validate-number" xsi:type="boolean">true</rule>

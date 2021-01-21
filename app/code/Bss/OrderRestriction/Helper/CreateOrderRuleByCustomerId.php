@@ -75,7 +75,11 @@ class CreateOrderRuleByCustomerId
                         }
                     }
                 );
-                $orderRule = $this->orderRuleRepository->get($requestData["entity_id"] ?? null);
+                if (isset($requestData["entity_id"])) {
+                    $orderRule = $this->orderRuleRepository->get($requestData["entity_id"]);
+                } else {
+                    $orderRule = $this->orderRuleRepository->getByCustomerId($customerId);
+                }
 
                 if ($orderRule->getOrdersPerMonth() != $requestData['orders_per_month'] ||
                     $orderRule->getQtyPerOrder() != $requestData['qty_per_order']

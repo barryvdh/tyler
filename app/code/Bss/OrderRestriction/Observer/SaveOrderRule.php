@@ -26,7 +26,13 @@ class SaveOrderRule implements \Magento\Framework\Event\ObserverInterface
      */
     private $createOrderRuleByCustomerId;
 
-    // @codingStandardsIgnoreLine
+    /**
+     * SaveOrderRule constructor.
+     *
+     * @param \Psr\Log\LoggerInterface $logger
+     * @param \Magento\Framework\App\RequestInterface $request
+     * @param CreateOrderRuleByCustomerId $createOrderRuleByCustomerId
+     */
     public function __construct(
         \Psr\Log\LoggerInterface $logger,
         \Magento\Framework\App\RequestInterface $request,

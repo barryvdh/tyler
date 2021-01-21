@@ -13,7 +13,11 @@ class SalesOrder
      */
     private $resource;
 
-    // @codingStandardsIgnoreLine
+    /**
+     * SalesOrder constructor.
+     *
+     * @param \Magento\Framework\App\ResourceConnection $resource
+     */
     public function __construct(
         \Magento\Framework\App\ResourceConnection $resource
     ) {
