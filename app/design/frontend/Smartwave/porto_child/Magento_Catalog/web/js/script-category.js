@@ -2,9 +2,9 @@ require([
     'jquery'
 ], function ($) {
 	 // Configure/customize these variables.
-    var showChar = 100;  // How many characters are shown by default
+    var showChar = 90;  // How many characters are shown by default
     var ellipsestext = "...";
-    var moretext = "Show more >";
+    var moretext = "Show more ";
     var lesstext = "Show less";
     
 
