@@ -74,6 +74,14 @@ class InstallSchema implements InstallSchemaInterface
                 ],
                 'Order Id'
             )->addColumn(
+                'product_id',
+                Table::TYPE_INTEGER,
+                null,
+                [
+                    'nullable' => false
+                ],
+                'Product Id'
+            )->addColumn(
                 'product_sku',
                 Table::TYPE_TEXT,
                 128,
@@ -97,6 +105,14 @@ class InstallSchema implements InstallSchemaInterface
                     'nullable' => true
                 ],
                 'Product Type'
+            )->addColumn(
+                'brand',
+                Table::TYPE_TEXT,
+                128,
+                [
+                    'nullable' => true
+                ],
+                'Brand'
             )->addColumn(
                 'ordered_qty',
                 Table::TYPE_DECIMAL,

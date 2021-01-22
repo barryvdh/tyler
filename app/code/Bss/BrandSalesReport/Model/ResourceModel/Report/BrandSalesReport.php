@@ -177,9 +177,9 @@ class BrandSalesReport extends AbstractReport
                         'product_id'         => $info['product_id'],
                         'product_sku'        => $info['product_sku'],
                         'product_name'       => $info['product_name'],
-                        'product_brand'      => $info['product_brand'],
-                        'product_brand_email'=> $info['product_brand_email'],
-                        'qty_ordered'        => $info['qty_ordered']
+                        'product_brand'      => $info['brand'],
+                        'product_brand_email'=> $info['representative_email'],
+                        'qty_ordered'        => $info['ordered_qty']
                     ];
                 }
             }
