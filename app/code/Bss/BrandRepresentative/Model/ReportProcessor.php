@@ -81,11 +81,13 @@ class ReportProcessor
                 /* @var SalesReport $newReport*/
                 $newReport = $this->report->create();
                 $newReport->setOrderId($orderId);
+                $newReport->setStoreId($order->getStoreId());
                 /* @var Product $product */
                 $product = $item->getProduct();
                 if (!$product) {
                     continue;
                 }
+
                 $newReport->setProductSku($product->getSku());
                 $newReport->setProductName($product->getName());
                 $newReport->setProductType($product->getTypeId());
