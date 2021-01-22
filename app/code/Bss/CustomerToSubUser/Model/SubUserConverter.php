@@ -27,6 +27,16 @@ class SubUserConverter
     const CONVERT_EVENT_AFTER_SAVE_SUB_USER = 'bss_convert_after_save_sub_user';
 
     /**
+     * List attribute is not update from company account to subuser
+     *
+     * @var string[]
+     */
+    private $exceptAttributes = [
+        'b2b_normal_customer_group',
+        'bss_is_company_account'
+    ];
+
+    /**
      * @var LoggerInterface
      */
     private $logger;
@@ -122,6 +132,7 @@ class SubUserConverter
      * @param int $companyAccountRole
      *
      * @return SubUser|false
+     * @throws \Exception
      */
     public function convertToSubUser(
         $customer,
@@ -129,10 +140,15 @@ class SubUserConverter
         $companyAccountRole
     ) {
         try {
-            $subUser = $this->companyAccManagement->getCompanyAccountBySubEmail(
+            $companyAccountData = $this->companyAccManagement->getCompanyAccountBySubEmail(
                 $customer->getEmail(),
                 $customer->getWebsiteId()
-            )->getSubUser();
+            );
+
+            $companyAccount = $companyAccountData->getCompanyCustomer()->__toArray();
+            dd($companyAccount);
+
+            $subUser = $companyAccountData->getSubUser();
 
             if (!$companyAccountId && $subUser->getSubUserId()) {
                 $this->companyEmailHelper->sendRemoveNotificationMailToSubUser(

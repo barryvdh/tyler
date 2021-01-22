@@ -1,0 +1,12 @@
+<?php
+/** @var \Bss\CustomerToSubUser\Block\Customer\Account\Edit $block*/
+?>
+<script type="text/x-magento-init">
+    {
+        "form.form-edit-account": {
+            "Bss_CustomerToSubUser/js/disable-edit-account": {
+                "isSubUser": <?= $block->isSubUser() ?>
+            }
+        }
+    }
+</script>
