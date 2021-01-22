@@ -90,6 +90,14 @@ class InstallSchema implements InstallSchemaInterface
                 ],
                 'Product Type'
             )->addColumn(
+                'brand',
+                Table::TYPE_TEXT,
+                128,
+                [
+                    'nullable' => true
+                ],
+                'Brand'
+            )->addColumn(
                 'ordered_qty',
                 Table::TYPE_DECIMAL,
                 '20,2',

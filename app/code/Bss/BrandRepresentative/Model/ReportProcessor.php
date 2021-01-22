@@ -21,6 +21,7 @@ namespace Bss\BrandRepresentative\Model;
 use Bss\BrandRepresentative\Helper\Data;
 use Exception;
 use Magento\Catalog\Model\Product;
+use Magento\Framework\Stdlib\DateTime\DateTime;
 use Magento\Sales\Model\Order;
 use Magento\Sales\Model\Order\Item;
 use Psr\Log\LoggerInterface;
@@ -47,19 +48,27 @@ class ReportProcessor
     protected $logger;
 
     /**
+     * @var DateTime
+     */
+    protected $dateTime;
+
+    /**
      * ReportProcessor constructor.
      * @param SalesReportFactory $report
      * @param Data $helper
      * @param LoggerInterface $logger
+     * @param DateTime $dateTime
      */
     public function __construct(
         SalesReportFactory $report,
         Data $helper,
-        LoggerInterface $logger
+        LoggerInterface $logger,
+        DateTime $dateTime
     ) {
         $this->report = $report;
         $this->helper = $helper;
         $this->logger = $logger;
+        $this->dateTime = $dateTime;
     }
 
     /**
@@ -86,11 +95,18 @@ class ReportProcessor
                 if (!$product) {
                     continue;
                 }
+                $productType = $product->getTypeId();
+                if ($productType === 'downloadable' ||
+                    $productType === 'virtual'
+                ) {
+                    continue;
+                }
                 $newReport->setProductSku($product->getSku());
                 $newReport->setProductName($product->getName());
                 $newReport->setProductType($product->getTypeId());
+                $newReport->setBrand(implode(',', $product->getCategoryIds()));
                 $newReport->setOrderedQty($item->getQtyOrdered());
-                $newReport->setOrderedTime($order->getCreatedAt());
+                $newReport->setOrderedTime($this->dateTime->gmtDate('y-m-d', $order->getCreatedAt()));
                 $newReport->setCustomerName($order->getCustomerName());
                 $province = '';
                 if ($order->getShippingAddress()) {
@@ -103,15 +119,15 @@ class ReportProcessor
                     $billingAddress = $order->getBillingAddress()->getStreet();
                     if ($billingAddress) {
                         $newReport->setCity($order->getBillingAddress()->getCity());
-                        $province = $order->getBillingAddress()->getRegionId();
+                        $province = $order->getBillingAddress()->getRegion();
                         $newReport->setProvince($province);
                         $newReport->setAddress(implode(',', $billingAddress));
                     }
-
                 }
+                $provinceId = $order->getBillingAddress()->getRegionId();
                 $email = $this->helper->extractRepresentativeEmail(
                     $product,
-                    $province
+                    $provinceId
                 );
 
                 $newReport->setRepresentativeEmail($email);

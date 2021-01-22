@@ -22,7 +22,7 @@
         xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Cron:etc/crontab.xsd">
     <group id="default">
         <job instance="Bss\BrandRepresentative\Cron\Admin\SalesRepProvinces" method="execute" name="bss_sales_rep_province_email">
-            <schedule>* * * * *</schedule>
+            <schedule>0 9 * * *</schedule>
         </job>
     </group>
 </config>
