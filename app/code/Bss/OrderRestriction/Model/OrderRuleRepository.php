@@ -6,7 +6,6 @@ namespace Bss\OrderRestriction\Model;
 use Bss\OrderRestriction\Api\Data\OrderRuleInterface;
 use Bss\OrderRestriction\Api\OrderRuleRepositoryInterface;
 use Bss\OrderRestriction\Model\ResourceModel\OrderRule as OrderRuleResource;
-use Bss\OrderRestriction\Exception\CouldNotLoadException;
 use Magento\Framework\Exception\CouldNotSaveException;
 
 /**
@@ -72,7 +71,7 @@ class OrderRuleRepository implements OrderRuleRepositoryInterface
         } catch (\Exception $e) {
             $this->logger->critical($e);
             return $orderRule;
-            // throw new CouldNotLoadException
+            // throw new \Bss\OrderRestriction\Exception\CouldNotLoadException
             // (__("Could not get the customer order rule data. Please review the log!"));
         }
     }

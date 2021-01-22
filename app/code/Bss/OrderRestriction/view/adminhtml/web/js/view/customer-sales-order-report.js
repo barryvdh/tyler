@@ -3,7 +3,8 @@ define([
     'jquery',
     'Magento_Ui/js/form/element/abstract',
     'chartJs',
-    'mage/translate'
+    'mage/translate',
+    'domReady!'
 ], function (ko, $, SalesOrderReport, Chart, $t) {
     'use strict';
 
@@ -22,7 +23,7 @@ define([
         initialize: function () {
             this._super();
 
-            this._chartInitialize();
+            // this._chartInitialize();
 
             return this;
         },
@@ -38,6 +39,24 @@ define([
             this.observe('orderRemain');
 
             return this;
+        },
+
+        /**
+         * Get report text
+         *
+         * @returns {*}
+         */
+        getReportLabel: function () {
+            return ko.pureComputed(function () {
+                var used = this.orderRemain().used,
+                    total = this.orderRemain().total;
+
+                if (total === null) {
+                    return $t('Current users haven\'t an order rule applied')
+                }
+
+                return used + '/' + total + ' ' + $t('order limit remainings');
+            }, this);
         },
 
         /**

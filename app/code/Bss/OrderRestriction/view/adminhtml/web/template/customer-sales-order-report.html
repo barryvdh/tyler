@@ -1,5 +1,13 @@
-<p style="text-align: center; font-size: x-large; font-weight: 500;">Number of order has used and remain</p>
-<canvas id="remain_orders" data-bind="doughnutChart: {}" />
+<span class="admin__field-value"
+      data-bind="
+        text: getReportLabel(),
+        attr: {
+            name: inputName,
+            id: uid
+    }"/>
 
-<p style="text-align: center; font-size: x-large; font-weight: 500;">The orders was placed in current month</p>
-<canvas id="orders_chart" data-bind="barChart: {}" />
+<!--<p style="text-align: center; font-size: x-large; font-weight: 500;">Number of order has used and remain</p>-->
+<!--<canvas id="remain_orders" data-bind="doughnutChart: {}" />-->
+
+<!--<p style="text-align: center; font-size: x-large; font-weight: 500;">The orders was placed in current month</p>-->
+<!--<canvas id="orders_chart" data-bind="barChart: {}" />-->

@@ -47,14 +47,29 @@ class OrderRuleValidation
      */
     private $date;
 
-    // @codingStandardsIgnoreLine
+    /**
+     * @var ConfigProvider
+     */
+    private $configProvider;
+    /**
+     * OrderRuleValidation constructor.
+     *
+     * @param OrderRuleRepositoryInterface $orderRuleRepository
+     * @param CustomerSession $customerSession
+     * @param CheckoutSession $checkoutSession
+     * @param OrderRepositoryInterface $orderRepository
+     * @param \Magento\Framework\Api\SearchCriteriaBuilder $searchCriteriaBuilder
+     * @param \Magento\Framework\Stdlib\DateTime\DateTime $date
+     * @param ConfigProvider $configProvider
+     */
     public function __construct(
         OrderRuleRepositoryInterface $orderRuleRepository,
         CustomerSession $customerSession,
         CheckoutSession $checkoutSession,
         OrderRepositoryInterface $orderRepository,
         \Magento\Framework\Api\SearchCriteriaBuilder $searchCriteriaBuilder,
-        \Magento\Framework\Stdlib\DateTime\DateTime $date
+        \Magento\Framework\Stdlib\DateTime\DateTime $date,
+        ConfigProvider $configProvider
     ) {
         $this->orderRuleRepository = $orderRuleRepository;
         $this->customerSession = $customerSession;
@@ -62,17 +77,25 @@ class OrderRuleValidation
         $this->orderRepository = $orderRepository;
         $this->searchCriteriaBuilder = $searchCriteriaBuilder;
         $this->date = $date;
+        $this->configProvider = $configProvider;
     }
 
     /**
      * Validate current customer can place order
      *
      * @param int|null $customerId
+     * @param int $newQty - for validate from add qty to cart or update cart
+     * @param int|null $itemId - update specific item - need to calculation
+     * @param bool $isUpdateAll - update all qty of items in cart
      *
      * @return array - List error msg, empty is can place order
      */
-    public function canPlaceOrder($customerId = null)
+    public function canPlaceOrder($customerId = null, $newQty = 0, $itemId = null, $isUpdateAll = false)
     {
+        if (!$this->configProvider->isEnabled()) {
+            return [];
+        }
+
         if (!$customerId) {
             $customerId = $this->customerSession->getCustomerId();
         }
@@ -92,9 +115,31 @@ class OrderRuleValidation
             }
 
             $quote = $this->checkoutSession->getQuote();
+            $remainQty = $quote->getItemsSummaryQty() + $newQty;
 
-            if ($orderRule->getQtyPerOrder() < $quote->getItemsSummaryQty()) {
-                $restrictMsg[] = __("Your order can only order %1 item at a time.", $orderRule->getQtyPerOrder());
+            if ($itemId) {
+                $remainQty = 0;
+
+                // Get the sump qty of other item except updated item id
+                foreach ($quote->getItems() as $item) {
+                    if ($item->getItemId() != $itemId) {
+                        $remainQty += $item->getQty();
+                    }
+                }
+
+                // Plus to new updated qty
+                $remainQty += $newQty;
+            }
+
+            if ($isUpdateAll) {
+                $remainQty = $newQty;
+            }
+            if ($orderRule->getQtyPerOrder() < $remainQty) {
+                $restrictMsg[] = __(
+                    "You have reached maximum quantity allowed (%1) for this order" .
+                    ". Please checkout before purchasing more",
+                    $orderRule->getQtyPerOrder()
+                );
             }
 
             if ($orderRule->getOrdersPerMonth() <= $this->getOrderCount($customerId)) {
@@ -105,7 +150,7 @@ class OrderRuleValidation
             }
 
             return $restrictMsg;
-        } catch (\Execption $e) {
+        } catch (\Exception $e) {
             return [];
         }
     }
