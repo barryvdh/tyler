@@ -71,6 +71,13 @@ class AssignAsSubUserObserver implements \Magento\Framework\Event\ObserverInterf
             $savedCustomer = $observer->getData("customer_data_object");
             $assignToSubUserParams = $this->request->getPostValue("assign_to_company_account");
 
+            if (!$assignToSubUserParams['sub_id'] &&
+                !$assignToSubUserParams['company_account_id'] &&
+                !$assignToSubUserParams['role_id']
+            ) {
+                return $this;
+            }
+
             if ($savedCustomer && $assignToSubUserParams) {
                 $customerParams = $this->request->getParam('customer');
                 $customerParams['entity_id'] = $savedCustomer->getId();
