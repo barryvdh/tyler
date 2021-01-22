@@ -475,9 +475,7 @@
                 text-align: right;
                 top: 50%;
                 position: relative;
-                transform: translateY(-50%);
-                -ms-transform: translateY(-50%);
-                -webkit-transform: translateY(-50%);
+                .lib-bs-transform-effect (translateY(-50%));
                 max-width: 92%;
                 padding: 50px;
                 box-sizing: border-box;
@@ -517,6 +515,11 @@
 //  ---------------------------------------------
 
 .media-width(@extremum, @break) when (@extremum = 'max') and (@break = @screen__m) {
+    .footer-middle {
+        .block {
+            margin-top: 25px;
+        }
+    }
     .block-for-branch {
         background-position: right !important;
         padding:80px 0;
@@ -630,6 +633,19 @@
     }
     .customer-menu .header.links a {
         color: #777 !important;
+    }
+    .page-header {
+        .navigation {
+            .level0 {
+                &.parent {
+                    > a {
+                      &:after {
+                          line-height: 45px!important;
+                      }
+                    }
+                }
+            }
+        }
     }
     
     .sticky-logo {
