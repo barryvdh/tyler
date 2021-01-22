@@ -1,0 +1,27 @@
+<?php
+/** @var \Bss\OrderRestriction\Block\Customer\Account\OrderRestrictionInfo $block */
+/** @var \Magento\Framework\Escaper $escaper */
+?>
+<?php if ($orderRule = $block->getOrderRule()) :?>
+<div class="block block-dashboard-info">
+    <div class="block-title"><strong><?= $escaper->escapeHtml(__('Order Restriction')) ?></strong></div>
+    <div class="block-content">
+        <div class="box box-information">
+            <strong class="box-title">
+                <span><?= $escaper->escapeHtml(__('Rule Information')) ?></span>
+            </strong>
+            <div class="box-content">
+                <?= $escaper->escapeHtml(__("Limit Quantity per Order")) ?>: <?= $escaper->escapeHtml($orderRule->getQtyPerOrder()) ?><br />
+                <?= $escaper->escapeHtml(__("Limit Orders per Month")) ?>: <?= $escaper->escapeHtml($orderRule->getOrdersPerMonth()) ?><br />
+                <?= $escaper->escapeHtml(__("Report")) ?>:
+                <?=
+                    $escaper->escapeHtml($block->getCustomerOrderCount()) . "/"
+                    . $escaper->escapeHtml($orderRule->getOrdersPerMonth()) . " "
+                    . $escaper->escapeHtml(__("order limit remainings"));
+                ?><br />
+            </div>
+        </div>
+        <?= $block->getChildHtml('additional_blocks'); ?>
+    </div>
+</div>
+<?php endif; ?>
