@@ -108,13 +108,17 @@ class Collection extends AbstractCollection
                 $this->_selectedColumns = $this->getAggregatedColumns();
             } else {
                 $this->_selectedColumns = [
-                    'period' => sprintf('MAX(%s)', $connection->getDateFormatSql('period', '%Y-%m-%d')),
+                    'period' => sprintf(
+                        'MAX(%s)',
+                        $connection->getDateFormatSql('period', '%Y-%m-%d')
+                    ),
                     $this->getOrderedField() => 'SUM(' . $this->getOrderedField() . ')',
-                    'product_id' => 'product_id',
-                    'product_sku' => 'MAX(product_sku)',
-                    'product_name' => 'MAX(product_name)',
-                    'product_brand' => 'MAX(product_brand)',
-                    'product_brand_email' => 'MAX(product_brand_email)'
+                    'order_id'              => 'order_id',
+                    'product_id'            => 'product_id',
+                    'product_sku'           => 'MAX(product_sku)',
+                    'product_name'          => 'MAX(product_name)',
+                    'product_brand'         => 'MAX(product_brand)',
+                    'product_brand_email'   => 'MAX(product_brand_email)'
                 ];
                 if ('year' == $this->_period) {
                     $this->_selectedColumns['period'] = $connection->getDateFormatSql('period', '%Y');

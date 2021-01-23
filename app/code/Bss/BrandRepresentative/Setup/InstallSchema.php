@@ -45,7 +45,7 @@ class InstallSchema implements InstallSchemaInterface
         $installer->startSetup();
 
         $table = $installer->getConnection()
-            ->newTable($installer->getTable('bss_sales_report'))
+            ->newTable($installer->getTable('bss_brandsales_report'))
             ->addColumn(
                 'id',
                 Table::TYPE_INTEGER,
@@ -70,6 +70,7 @@ class InstallSchema implements InstallSchemaInterface
                 Table::TYPE_INTEGER,
                 null,
                 [
+                    'unsigned' => true,
                     'nullable' => false
                 ],
                 'Order Id'
@@ -176,7 +177,30 @@ class InstallSchema implements InstallSchemaInterface
                     'nullable' => true
                 ],
                 'Send Status'
-            )->setComment('Order Table');
+            )->addIndex(
+                $installer->getIdxName(
+                    'bss_brandsales_report',
+                    ['store_id']
+                ),
+                ['store_id']
+            )->addIndex(
+                $installer->getIdxName(
+                    'bss_brandsales_report',
+                    ['order_id']
+                ),
+                ['store_id']
+            )->addForeignKey(
+                $installer->getFkName(
+                    $installer->getTable('bss_brandsales_report'),
+                    'order_id',
+                    $installer->getTable('sales_order'),
+                    'entity_id'
+                ),
+                'order_id',
+                $installer->getTable('sales_order'),
+                'entity_id',
+                Table::ACTION_CASCADE
+            )->setComment('Bss Brand Order Report Table');
         $installer->getConnection()->createTable($table);
 
         $installer->endSetup();

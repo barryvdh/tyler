@@ -20,11 +20,14 @@ namespace Bss\BrandRepresentative\Model;
 
 use Bss\BrandRepresentative\Helper\Data;
 use Exception;
+use Magento\Catalog\Model\Category;
 use Magento\Catalog\Model\Product;
 use Magento\Framework\Stdlib\DateTime\DateTime;
 use Magento\Sales\Model\Order;
 use Magento\Sales\Model\Order\Item;
 use Psr\Log\LoggerInterface;
+use Magento\Catalog\Api\CategoryRepositoryInterface;
+
 
 /**
  * Class ReportProcessor
@@ -53,22 +56,30 @@ class ReportProcessor
     protected $dateTime;
 
     /**
+     * @var CategoryRepositoryInterface
+     */
+    protected $categoryRepository;
+
+    /**
      * ReportProcessor constructor.
      * @param SalesReportFactory $report
      * @param Data $helper
      * @param LoggerInterface $logger
      * @param DateTime $dateTime
+     * @param CategoryRepositoryInterface $categoryRepository
      */
     public function __construct(
         SalesReportFactory $report,
         Data $helper,
         LoggerInterface $logger,
-        DateTime $dateTime
+        DateTime $dateTime,
+        CategoryRepositoryInterface $categoryRepository
     ) {
         $this->report = $report;
         $this->helper = $helper;
         $this->logger = $logger;
         $this->dateTime = $dateTime;
+        $this->categoryRepository = $categoryRepository;
     }
 
     /**
@@ -76,6 +87,7 @@ class ReportProcessor
      *
      * @param Order $order
      * @return array
+     * @suppressWarnings(PHPMD.CyclomaticComplexity)
      */
     public function processSaveReport(Order $order): array
     {
@@ -98,6 +110,7 @@ class ReportProcessor
                     continue;
                 }
 
+                //Ignore Report for downloadable and virtual product
                 $productType = $product->getTypeId();
                 if ($productType === 'downloadable' ||
                     $productType === 'virtual'
@@ -109,7 +122,6 @@ class ReportProcessor
                 $newReport->setProductId($product->getId());
                 $newReport->setProductName($product->getName());
                 $newReport->setProductType($product->getTypeId());
-                $newReport->setBrand(implode(',', $product->getCategoryIds()));
                 $newReport->setOrderedQty($item->getQtyOrdered());
                 $newReport->setOrderedTime($this->dateTime->gmtDate('y-m-d', $order->getCreatedAt()));
                 $newReport->setCustomerName($order->getCustomerName());
@@ -139,6 +151,9 @@ class ReportProcessor
                 $newReport->setSentStatus(SalesReport::SENT_STATUS_NOT_SEND);
 
                 try {
+                    /* @var Category $brand */
+                    $brand = $this->categoryRepository->get(implode(',', $product->getCategoryIds()));
+                    $newReport->setBrand($brand->getName());
                     $newReport->save();
                     $returnData = [
                         'success' => true

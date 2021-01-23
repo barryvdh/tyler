@@ -29,6 +29,7 @@ use Magento\Framework\Stdlib\DateTime\TimezoneInterface;
 use Magento\Reports\Model\FlagFactory;
 use Magento\Sales\Model\ResourceModel\Report\AbstractReport;
 use Psr\Log\LoggerInterface;
+use Zend_Db_Expr;
 
 /**
  * Class BrandSalesReport
@@ -54,6 +55,11 @@ class BrandSalesReport extends AbstractReport
      * @var CollectionFactory
      */
     protected $bssReportCollectionFactory;
+
+    /**
+     * @var LoggerInterface
+     */
+    protected $logger;
 
     /**
      * @param Context $context
@@ -89,9 +95,9 @@ class BrandSalesReport extends AbstractReport
             $dateTime,
             $connectionName
         );
-
         $this->resource = $resource;
         $this->timezone = $timezone;
+        $this->logger = $logger;
         $this->bssReportCollectionFactory = $bssReportCollectionFactory;
     }
 
@@ -135,6 +141,7 @@ class BrandSalesReport extends AbstractReport
             $collection = [
                 [
                     'period'       => date('Y-m-d'),
+                    'order_id'     => 1,
                     'store_id'     => 1,
                     'product_id'   => 1,
                     'product_sku'  => 'SKU01',
@@ -145,6 +152,7 @@ class BrandSalesReport extends AbstractReport
                 ],
                 [
                     'period'       => date('Y-m-d', strtotime("+1 days")),
+                    'order_id'     => 2,
                     'store_id'     => 1,
                     'product_id'   => 1,
                     'product_sku'  => 'SKU01',
@@ -155,6 +163,7 @@ class BrandSalesReport extends AbstractReport
                 ],
                 [
                     'period'       => date('Y-m-d', strtotime("+1 months")),
+                    'order_id'     => 3,
                     'store_id'     => 1,
                     'product_id'   => 1,
                     'product_sku'  => 'SKU01',
@@ -173,6 +182,7 @@ class BrandSalesReport extends AbstractReport
                 foreach ($collection as $info) {
                     $insertBatches[] = [
                         'period'             => $info['ordered_time'],
+                        'order_id'           => $info['order_id'],
                         'store_id'           => $info['store_id'],
                         'product_id'         => $info['product_id'],
                         'product_sku'        => $info['product_sku'],
@@ -185,6 +195,7 @@ class BrandSalesReport extends AbstractReport
             }
 
             $tableName = $this->resource->getTableName(self::AGGREGATION_DAILY);
+            //Break down array to prevent large data query, heap size excess
             foreach (array_chunk($insertBatches, 100) as $batch) {
                 $connection->insertMultiple($tableName, $batch);
             }
@@ -206,12 +217,17 @@ class BrandSalesReport extends AbstractReport
 
             $this->_setFlagData(Flag::REPORT_BRANDSALESREPORT_FLAG_CODE);
         } catch (Exception $e) {
-            throw $e;
+            //If exception, truncate all report table
+            $this->truncateTable();
+            $this->logger->critical(__('Could not save report to aggregate table!. Error was: ') . $e->getMessage());
         }
 
         return $this;
     }
 
+    /**
+     * Clean old data before update new data
+     */
     public function truncateTable()
     {
         $tables = [
@@ -226,6 +242,14 @@ class BrandSalesReport extends AbstractReport
         }
     }
 
+    /**
+     * @param $connection
+     * @param $type
+     * @param $column
+     * @param $mainTable
+     * @param $aggregationTable
+     * @return $this
+     */
     public function updateReportMonthlyYearly($connection, $type, $column, $mainTable, $aggregationTable)
     {
         $periodSubSelect = $connection->select();
@@ -259,7 +283,7 @@ class BrandSalesReport extends AbstractReport
         }
 
         $cols = array_keys($columns);
-        $cols['total_qty'] = new \Zend_Db_Expr('SUM(t.' . $column . ')');
+        $cols['total_qty'] = new Zend_Db_Expr('SUM(t.' . $column . ')');
         $periodSubSelect->from(
             ['t' => $mainTable],
             $cols
@@ -272,8 +296,8 @@ class BrandSalesReport extends AbstractReport
         $cols = $columns;
         $cols[$column] = 't.total_qty';
 
-        $cols['prevStoreId'] = new \Zend_Db_Expr('(@prevStoreId := t.`store_id`)');
-        $cols['prevPeriod'] = new \Zend_Db_Expr("(@prevPeriod := {$periodCol})");
+        $cols['prevStoreId'] = new Zend_Db_Expr('(@prevStoreId := t.`store_id`)');
+        $cols['prevPeriod'] = new Zend_Db_Expr("(@prevPeriod := {$periodCol})");
         $ratingSubSelect->from($periodSubSelect, $cols);
 
         $cols = $columns;

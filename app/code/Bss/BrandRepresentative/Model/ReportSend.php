@@ -220,19 +220,19 @@ class ReportSend
                 if (isset($rowData['representative_email']) &&
                     $this->emailMatch($email, $rowData['representative_email'])
                 ) {
-                    $brandName = '';
-                    try {
-                        $brand = $this->categoryRepositoryInterface->get($rowData['brand']);
-                        $brandName = $brand->getName();
-                    } catch (NoSuchEntityException $exception) {
-                        $this->logger->critical(__('Brand Not Found, ID: ') . $rowData['brand']);
-                    }
+//                    $brandName = '';
+//                    try {
+//                        $brand = $this->categoryRepositoryInterface->get($rowData['brand']);
+//                        $brandName = $brand->getName();
+//                    } catch (NoSuchEntityException $exception) {
+//                        $this->logger->critical(__('Brand Not Found, ID: ') . $rowData['brand']);
+//                    }
 
                     $data['report'][] = [
                         'order_id' => $rowData['order_id'],
                         'product_sku' => $rowData['product_sku'],
                         'product_name' => $rowData['product_name'],
-                        'brand' => $brandName,
+                        'brand' => $rowData['brand'],
                         'product_type' => $rowData['product_type'],
                         'ordered_qty' => $rowData['ordered_qty'],
                         'ordered_time' => $rowData['ordered_time'],

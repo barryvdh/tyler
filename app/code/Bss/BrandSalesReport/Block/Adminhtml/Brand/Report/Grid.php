@@ -75,6 +75,18 @@ class Grid extends AbstractGrid
         );
 
         $this->addColumn(
+            'order_id',
+            [
+                'header' => __('Order ID'),
+                'index' => 'order_id',
+                'type' => 'string',
+                'sortable' => false,
+                'header_css_class' => 'col-order-id',
+                'column_css_class' => 'col-order-id'
+            ]
+        );
+
+        $this->addColumn(
             'product_sku',
             [
                 'header' => __('SKU'),

@@ -92,6 +92,15 @@ class InstallSchema implements InstallSchemaInterface
                     [],
                     'Period'
                 )->addColumn(
+                    'order_id',
+                    Table::TYPE_INTEGER,
+                    null,
+                    [
+                        'unsigned' => true,
+                        'nullable' => false
+                    ],
+                    'Order Id'
+                )->addColumn(
                     'store_id',
                     Table::TYPE_SMALLINT,
                     null,
@@ -136,19 +145,27 @@ class InstallSchema implements InstallSchemaInterface
                 )->addIndex(
                     $installer->getIdxName(
                         $tbl,
-                        ['period', 'store_id', 'product_id'],
+                        ['period', 'order_id', 'store_id', 'product_id'],
                         AdapterInterface::INDEX_TYPE_UNIQUE
                     ),
-                    ['period', 'store_id', 'product_id'],
+                    ['period', 'order_id', 'store_id', 'product_id'],
                     ['type' => AdapterInterface::INDEX_TYPE_UNIQUE]
                 )->addIndex(
                     $installer->getIdxName($tbl, ['store_id']),
                     ['store_id']
                 )->addIndex(
+                    $installer->getIdxName($tbl, ['order_id']),
+                    ['order_id']
+                )->addIndex(
                     $installer->getIdxName($tbl, ['product_id']),
                     ['product_id']
                 )->addForeignKey(
-                    $installer->getFkName($tbl, 'store_id', 'store', 'store_id'),
+                    $installer->getFkName(
+                        $tbl,
+                        'store_id',
+                        'store',
+                        'store_id'
+                    ),
                     'store_id',
                     $installer->getTable('store'),
                     'store_id',
@@ -162,6 +179,5 @@ class InstallSchema implements InstallSchemaInterface
         } catch (Exception $e) {
             $this->logger->critical('Something went wrong while creating aggregate table!' . $e->getMessage());
         }
-
     }
 }
