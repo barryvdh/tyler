@@ -1,6 +1,6 @@
 define([
     'Magento_Ui/js/form/element/single-checkbox',
-    'Bss_CustomerToSubUser/js/action/is-company-account-field'
+    'Bss_CustomerToSubUser/js/action/custom-form-field'
 ], function (Switcher, CustomerInformationFormFieldsAction) {
     'use strict';
 

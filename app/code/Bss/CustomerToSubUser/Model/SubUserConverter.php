@@ -145,9 +145,6 @@ class SubUserConverter
                 $customer->getWebsiteId()
             );
 
-            $companyAccount = $companyAccountData->getCompanyCustomer()->__toArray();
-            dd($companyAccount);
-
             $subUser = $companyAccountData->getSubUser();
 
             if (!$companyAccountId && $subUser->getSubUserId()) {

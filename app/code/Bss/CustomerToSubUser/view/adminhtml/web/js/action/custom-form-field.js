@@ -1,8 +1,11 @@
 define([
     'underscore',
     'ko',
-    'uiRegistry'
-], function (_, ko, uiRegistry) {
+    'uiRegistry',
+    'Bss_CustomerToSubUser/js/model/customer-protected-form-field',
+    'Bss_CustomerToSubUser/js/model/company-account',
+    'moment'
+], function (_, ko, uiRegistry, protectedFields, CompanyAccount, moment) {
     'use strict';
 
     return {
@@ -42,44 +45,87 @@ define([
             var isCompanyAccountSwitcherComponent = uiRegistry.get(this.options.isCompanyAccountAttributeSelector),
                 fieldsForToggle,
                 fieldValidationIndex,
-                tmpValidation;
+                tmpValidation,
+                requiredCss;
 
             fieldsForToggle = this._getCustomerInformationFieldForToggle();
 
             _.each(fieldsForToggle, function (item) {
                 try {
+                    if (disable === true && item.disabled() === true) {
+                        return;
+                    }
                     // eslint-disable-next-line eqeqeq
                     if (disable === true && item.disabled() != disable) {
                         this.options.customerInformationComponentsToggled.push(item);
-                        this.options.toggledComponentsValidation.push({index: item.index, validation: item.validation});
+                        // this.options.toggledComponentsValidation.push(
+                        //     {
+                        //         index: item.index,
+                        //         validation: item.validation,
+                        //         required: item.additionalClasses._required()
+                        //     }
+                        // );
                     }
 
                     item.disabled(disable);
 
-                    fieldValidationIndex = this.options.toggledComponentsValidation.map(function(component) {
-                        return component.index;
-                    }).indexOf(item.index);
+                    // fieldValidationIndex = this.options.toggledComponentsValidation
+                    //     .findIndex(function (component) {
+                    //         return component.index === item.index;
+                    //     });
 
-                    tmpValidation = {};
-                    if (fieldValidationIndex != -1) {
-                        tmpValidation = this.options.toggledComponentsValidation[fieldValidationIndex].validation;
-                    }
-                    item.validation = tmpValidation;
-                    this.options.toggledComponentsValidation.splice(fieldValidationIndex, 1);
+                    //tmpValidation = {};
+                    //requiredCss = false;
 
-                    item.additionalClasses._required(!disable);
+                    // if (fieldValidationIndex !== -1 && disable === false) {
+                    //     tmpValidation = this.options.toggledComponentsValidation[fieldValidationIndex].validation;
+                    //     requiredCss = this.options.toggledComponentsValidation[fieldValidationIndex].required;
+                    // }
+
+                    // console.log(requiredCss);
+                    // item.validation = tmpValidation;
+                    // item.additionalClasses._required(requiredCss);
+                    // this.options.toggledComponentsValidation.splice(fieldValidationIndex, 1);
+
+                    this._setCustomAttributeValuesFromCompanyAccount(item);
                 } catch (e) {
                     console.error(e);
                 }
             }.bind(this));
-
-            console.log(this.options.customerInformationComponentsToggled);
-            console.log(this.options.toggledComponentsValidation);
             // if (isCompanyAccountSwitcherComponent) {
             //     console.log('change state of component: ' + disable);
             //     isCompanyAccountSwitcherComponent.disabled(disable);
             //     isCompanyAccountSwitcherComponent.value('0');
             // }
+        },
+
+        _setCustomAttributeValuesFromCompanyAccount: function (item) {
+            var companyAccountCustomAttributes = CompanyAccount.data() ?
+                CompanyAccount.data()['custom_attributes'] :
+                undefined,
+                attributeField,
+                value;
+
+            if (companyAccountCustomAttributes) {
+                attributeField = companyAccountCustomAttributes.find(function (attribute) {
+                    return item.index === attribute['attribute_code'];
+                });
+
+                if (attributeField && !protectedFields.getNoneCopyFields().includes(attributeField['attribute_code'])) {
+                    // item.initialValue = attributeField.value;
+                    value = attributeField.value;
+
+                    if (item.formElement === 'date') {
+                        value = moment(attributeField.value).format(item.outputDateFormat);
+                    }
+                    // item.initialValue = value;
+                    item.value(value);
+                }
+            } else {
+                item.value('0');
+            }
+
+            console.log(item.value());
         },
 
         /**
@@ -133,8 +179,8 @@ define([
                     return;// continue
                 }
 
-                if (!this.options.protectedFields.includes(element.index)
-                    && ko.isObservable(element.disabled)
+                if (!protectedFields.getProtectedFields().includes(element.index) &&
+                    ko.isObservable(element.disabled)
                 ) {
                     this.options.customerInformationComponentsForToggle.push(element);
                 }

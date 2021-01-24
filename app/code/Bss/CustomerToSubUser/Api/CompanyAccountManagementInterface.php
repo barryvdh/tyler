@@ -25,5 +25,13 @@ interface CompanyAccountManagementInterface
      * @return \Bss\CustomerToSubUser\Api\Data\CompanyAccountResponseInterface
      */
     public function getCompanyAccountBySubEmail(string $email, $websiteId):
-    \Bss\CustomerToSubUser\Model\CompanyAccountResponse;
+    \Bss\CustomerToSubUser\Api\Data\CompanyAccountResponseInterface;
+
+    /**
+     * Get list custom attribute by customer id
+     *
+     * @param int $customerId
+     * @return \Magento\Framework\Api\AttributeValue[]
+     */
+    public function getCustomerCustomAttributes($customerId);
 }

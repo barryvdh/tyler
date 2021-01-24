@@ -1,13 +1,21 @@
 define([
     'Bss_CustomerToSubUser/js/model/customer-protected-form-field',
-    'Bss_CustomerToSubUser/js/action/is-company-account-field'
-], function (protectedFields, CustomerFormFieldsAction) {
+    'Bss_CustomerToSubUser/js/action/custom-form-field',
+    'moment'
+], function (
+    protectedFields,
+    CustomerFormFieldsAction,
+    moment
+) {
     'use strict';
 
     var disabledCustomAttributeMixin = {
         defaults: {
+            providerDataPath: '${ $.provider }:data.assign_to_company_account.',
             imports: {
-                isSubUser: '${ $.provider }:data.assign_to_company_account.sub_id'
+                isSubUser: '${ $.provider }:data.assign_to_company_account.is_sub_user',
+                companyAccountCustomAttributes:
+                    '${ $.provider }:data.assign_to_company_account.company_account_custom_attributes'
             }
         },
 
@@ -16,19 +24,39 @@ define([
          * contains disabled the component if the the current customer is sub-user
          */
         initialize: function () {
-            var disabledComponent;
+            var attributeField;
 
             this._super();
 
-            if (this.index == 'ca_test_dropdown' || this.index == 'is_company_account') {
-                console.log(this.isSubUser);
+            if (this.companyAccountCustomAttributes) {
+                attributeField = this.companyAccountCustomAttributes.find(function (attribute) {
+                    return this.index === attribute['attribute_code'];
+                }.bind(this));
             }
-            if (this.isSubUser && !protectedFields.fields.includes(this.index)) {
+
+            if (attributeField && !protectedFields.getNoneCopyFields().includes(attributeField['attribute_code'])
+            ) {
+                this.links.value = this.providerDataPath + attributeField['attribute_code'];
+                // value = attributeField.value;
+                //
+                // if (this.formElement === 'date') {
+                //     value = moment(attributeField.value).format(this.outputDateFormat);
+                // }
+                // this.initialValue = value;
+                this.initLinks();
+            }
+
+            if (this.isSubUser && !protectedFields.getProtectedFields().includes(this.index)) {
                 this.disabled(Boolean(this.isSubUser));
-                CustomerFormFieldsAction.addToggledComponentsValidation({index: this.index, validation: this.validation});
-                this.validation = {};
-                this.value('');
-                this.additionalClasses._required(false);
+                // CustomerFormFieldsAction.addToggledComponentsValidation(
+                //     {
+                //         index: this.index,
+                //         validation: this.validation,
+                //         required: this.additionalClasses._required()
+                //     }
+                // );
+                //this.validation = {};
+                //this.additionalClasses._required(false);
             }
 
             return this;
