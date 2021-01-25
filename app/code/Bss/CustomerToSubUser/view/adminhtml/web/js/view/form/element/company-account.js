@@ -4,7 +4,7 @@ define([
     'Magento_Ui/js/form/element/abstract',
     'Bss_CustomerToSubUser/js/model/company-account',
     'Bss_CustomerToSubUser/js/service/RESTfulService',
-    'Bss_CustomerToSubUser/js/action/is-company-account-field'
+    'Bss_CustomerToSubUser/js/action/custom-form-field'
 ], function (
     _,
     ko,
@@ -142,9 +142,16 @@ define([
                 tmpCompanyData = {};
 
             if (data) {
-                tmpCompanyData = data;
                 companyIdData = Number(data['entity_id']);
+                service.getCompanyAccountAttributes(companyIdData).done(function (attributes) {
+                    data['custom_attributes'] = attributes;
+                });
+                tmpCompanyData = data;
             }
+
+            // if (companyIdData) {
+            //     this.loadCustomAttributes(companyIdData);
+            // }
 
             this.companyAccount(tmpCompanyData);
             this.wasAssigned(Boolean(companyIdData));
@@ -184,6 +191,28 @@ define([
             }
 
             return null;
+        },
+
+        /**
+         * Load and set customer attribute for specific customer id
+         *
+         * @param {Number} entityId
+         */
+        loadCustomAttributes: function (entityId) {
+            try {
+                if (this.params.listCompanyAccounts) {
+                    this.params.listCompanyAccounts = this.params.listCompanyAccounts.map(function (customer) {
+                        //eslint-disable-next-line eqeqeq
+                        if (customer[customer['id_field_name']] == entityId && !customer['custom_attributes']) {
+
+                        }
+
+                        return customer;
+                    });
+                }
+            } catch (e) {
+                console.error(e);
+            }
         },
 
         /**

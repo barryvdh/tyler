@@ -166,4 +166,19 @@ class CompanyAccountManagement implements CompanyAccountManagementInterface
 
         return $result;
     }
+
+    /**
+     * @inheritDoc
+     */
+    public function getCustomerCustomAttributes($customerId)
+    {
+        try {
+            $customer = $this->customerRepository->getById($customerId);
+
+            return $customer->getCustomAttributes();
+        } catch (\Exception $e) {
+            $this->logger->critical($e);
+            return false;
+        }
+    }
 }
