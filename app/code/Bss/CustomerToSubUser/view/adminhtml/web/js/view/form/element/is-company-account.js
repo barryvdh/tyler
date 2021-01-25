@@ -1,6 +1,7 @@
 define([
-    'Magento_Ui/js/form/element/single-checkbox'
-], function (Switcher) {
+    'Magento_Ui/js/form/element/single-checkbox',
+    'Bss_CustomerToSubUser/js/action/custom-form-field'
+], function (Switcher, CustomerInformationFormFieldsAction) {
     'use strict';
 
     return Switcher.extend({
@@ -17,10 +18,12 @@ define([
         initialize: function () {
             this._super();
 
-            if (this.isSubUser) {
-                this.disabled(Boolean(this.isSubUser));
-                this.value('0');
-            }
+            // if (this.isSubUser) {
+            //     console.log(Boolean(this.isSubUser));
+            //     CustomerInformationFormFieldsAction.toggle(Boolean(this.isSubUser));
+            //     // this.disabled(Boolean(this.isSubUser));
+            //     // this.value('0');
+            // }
 
             return this;
         }
