@@ -71,9 +71,3 @@ atlassian*
 .bash_history
 .composer/*
 .config/*
-app/Helper/*
-app/etc/config_.php
-app/etc/config__.php
-app/etc/env_.php
-composer.json
-composer.lock
