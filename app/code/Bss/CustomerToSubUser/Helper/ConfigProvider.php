@@ -17,7 +17,11 @@ class ConfigProvider
      */
     protected $scopeConfig;
 
-    // @codingStandardsIgnoreLine
+    /**
+     * ConfigProvider constructor.
+     *
+     * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
+     */
     public function __construct(
         \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
     ) {

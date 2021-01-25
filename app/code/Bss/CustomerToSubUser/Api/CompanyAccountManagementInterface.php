@@ -9,15 +9,6 @@ namespace Bss\CustomerToSubUser\Api;
 interface CompanyAccountManagementInterface
 {
     /**
-     * Get list roles by company account
-     *
-     * @param string|int $emailOrId
-     * @param int $websiteId
-     * @return \Bss\CompanyAccount\Api\Data\SubRoleInterface[]
-     */
-    public function getListByCompanyAccount($emailOrId, int $websiteId): array;
-
-    /**
      * Get Company account
      *
      * @param string $email

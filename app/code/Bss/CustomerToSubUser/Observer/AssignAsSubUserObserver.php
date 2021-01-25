@@ -44,7 +44,16 @@ class AssignAsSubUserObserver implements \Magento\Framework\Event\ObserverInterf
      */
     private $messageManager;
 
-    // @codingStandardsIgnoreLine
+    /**
+     * AssignAsSubUserObserver constructor.
+     *
+     * @param \Psr\Log\LoggerInterface $logger
+     * @param \Magento\Framework\App\RequestInterface $request
+     * @param \Magento\Framework\App\RequestFactory $requestFactory
+     * @param \Bss\CompanyAccount\Helper\SubUserHelper $subUserHelper
+     * @param SubUserConverter $subUserConverter
+     * @param ManagerInterface $messageManager
+     */
     public function __construct(
         \Psr\Log\LoggerInterface $logger,
         \Magento\Framework\App\RequestInterface $request,
@@ -99,6 +108,7 @@ class AssignAsSubUserObserver implements \Magento\Framework\Event\ObserverInterf
                         ]
                     );
                 }
+
                 return $this;
             }
         } catch (\Exception $e) {
@@ -107,5 +117,7 @@ class AssignAsSubUserObserver implements \Magento\Framework\Event\ObserverInterf
                 __("Something went wrong while convert to sub-user. Please review the log!")
             );
         }
+
+        return $this;
     }
 }

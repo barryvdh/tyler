@@ -11,12 +11,12 @@ define([
             form.removeAttr('action');
 
             // disabled form input
-            $(form).find('input').each(function (index, e) {
+            $(form).find('input,select').each(function (index, e) {
                 $(e).prop('disabled', true);
             });
 
             // remove submit button
             $(form).find('[type=submit]').remove();
         }
-    }
+    };
 });

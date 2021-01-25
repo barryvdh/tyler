@@ -24,7 +24,8 @@ define([
          * contains disabled the component if the the current customer is sub-user
          */
         initialize: function () {
-            var attributeField;
+            var attributeField,
+                value;
 
             this._super();
 
@@ -37,26 +38,17 @@ define([
             if (attributeField && !protectedFields.getNoneCopyFields().includes(attributeField['attribute_code'])
             ) {
                 this.links.value = this.providerDataPath + attributeField['attribute_code'];
-                // value = attributeField.value;
-                //
-                // if (this.formElement === 'date') {
-                //     value = moment(attributeField.value).format(this.outputDateFormat);
-                // }
-                // this.initialValue = value;
+                value = attributeField.value;
+
+                if (this.formElement === 'date') {
+                    value = moment(attributeField.value).format(this.outputDateFormat);
+                }
+                this.initialValue = value;
                 this.initLinks();
             }
 
             if (this.isSubUser && !protectedFields.getProtectedFields().includes(this.index)) {
                 this.disabled(Boolean(this.isSubUser));
-                // CustomerFormFieldsAction.addToggledComponentsValidation(
-                //     {
-                //         index: this.index,
-                //         validation: this.validation,
-                //         required: this.additionalClasses._required()
-                //     }
-                // );
-                //this.validation = {};
-                //this.additionalClasses._required(false);
             }
 
             return this;
