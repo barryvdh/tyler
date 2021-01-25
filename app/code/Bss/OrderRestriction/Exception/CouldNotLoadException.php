@@ -7,5 +7,4 @@ use Magento\Framework\Exception\LocalizedException;
 
 class CouldNotLoadException extends LocalizedException
 {
-
 }

@@ -48,6 +48,8 @@ class QuickSet extends Action implements HttpPostActionInterface
 
     /**
      * @inheritDoc
+     *
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     public function execute()
     {

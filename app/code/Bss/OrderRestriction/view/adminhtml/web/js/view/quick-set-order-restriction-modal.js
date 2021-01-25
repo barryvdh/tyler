@@ -15,9 +15,15 @@ define([
             }
         },
 
+        /**
+         * Initializes observable properties.
+         *
+         * @returns {Modal}
+         */
         initObservable: function () {
             this._super();
             this.observe('responseData');
+
             return this;
         },
 
@@ -71,9 +77,11 @@ define([
          */
         actionSave: function () {
             var postData, self = this;
+
             this.valid = 1;
 
             this.elems().forEach(this.validate, this);
+
             if (!this.valid) {
                 return;
             }

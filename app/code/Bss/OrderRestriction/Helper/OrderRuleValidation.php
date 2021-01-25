@@ -89,9 +89,16 @@ class OrderRuleValidation
      * @param bool $isUpdateAll - update all qty of items in cart
      *
      * @return array - List error msg, empty is can place order
+     *
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
-    public function canPlaceOrder($customerId = null, $newQty = 0, $itemId = null, $isUpdateAll = false)
-    {
+    public function canPlaceOrder(
+        $customerId = null,
+        $newQty = 0,
+        $itemId = null,
+        $isUpdateAll = false
+    ) {
         if (!$this->configProvider->isEnabled()) {
             return [];
         }

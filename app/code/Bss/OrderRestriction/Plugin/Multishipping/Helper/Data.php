@@ -31,7 +31,13 @@ class Data
      */
     private $orderRuleValidation;
 
-    // @codingStandardsIgnoreLine
+    /**
+     * Data constructor.
+     *
+     * @param \Psr\Log\LoggerInterface $logger
+     * @param CustomerSession $customerSession
+     * @param OrderRuleValidation $orderRuleValidation
+     */
     public function __construct(
         \Psr\Log\LoggerInterface $logger,
         CustomerSession $customerSession,

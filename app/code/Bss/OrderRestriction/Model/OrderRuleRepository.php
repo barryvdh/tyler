@@ -28,7 +28,13 @@ class OrderRuleRepository implements OrderRuleRepositoryInterface
      */
     private $orderRuleResource;
 
-    // @codingStandardsIgnoreLine
+    /**
+     * OrderRuleRepository constructor.
+     *
+     * @param \Psr\Log\LoggerInterface $logger
+     * @param OrderRuleFactory $orderRuleFactory
+     * @param OrderRuleResource $orderRuleResource
+     */
     public function __construct(
         \Psr\Log\LoggerInterface $logger,
         OrderRuleFactory $orderRuleFactory,

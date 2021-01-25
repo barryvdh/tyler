@@ -52,7 +52,7 @@ define([
                     total = this.orderRemain().total;
 
                 if (total === null) {
-                    return $t('Current users haven\'t an order rule applied')
+                    return $t('Current users haven\'t an order rule applied');
                 }
 
                 return used + '/' + total + ' ' + $t('order limit remainings');
