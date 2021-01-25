@@ -1,13 +1,23 @@
 <?php
     $product_view = $this->getConfig('porto_settings/category');
     $block = $this->getLayout()->createBlock('Magento\Cms\Block\Block');
-    $_loggedin = $this->getLayout()->createBlock('Magento\Customer\Block\Account\AuthorizationLink')->isLoggedIn();
-    if( $_loggedin ) {
-        if($block) {
+    $isLoggedIn = $this->getLayout()->createBlock('Magento\Customer\Block\Account\AuthorizationLink')->isLoggedIn();
+?>
+<?php if ($isLoggedIn):
+        if ($block) {
             $block->setBlockId($product_view['side_custom_block']);
-        }
-        if($block){
             echo $block->toHtml();
         }
-    }
-    ?>
+        ?>
+<?php else: ?>
+    <div class="not-logged-in custom-block">
+        <p><?= __('You need to login for further action!') ?></p>
+        <div class="to-login action wrapper">
+            <button class="action primary" id="to-login">
+                <a href="<?= $block->getUrl('customer/account/login') ?>">
+                    <span style="color: #ffffff"><?= __('To login') ?></span>
+                </a>
+            </button>
+        </div>
+    </div>
+<?php endif; ?>
