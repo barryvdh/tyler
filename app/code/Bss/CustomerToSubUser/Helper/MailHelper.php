@@ -9,6 +9,8 @@ use Magento\Store\Model\StoreManagerInterface;
 
 /**
  * Class Email helper
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class MailHelper
 {
@@ -52,7 +54,17 @@ class MailHelper
      */
     private $customerRepository;
 
-    // @codingStandardsIgnoreLine
+    /**
+     * MailHelper constructor.
+     *
+     * @param \Psr\Log\LoggerInterface $logger
+     * @param \Magento\Framework\Translate\Inline\StateInterface $inlineTranslation
+     * @param \Magento\Framework\Mail\Template\TransportBuilder $transportBuilder
+     * @param \Bss\CompanyAccount\Helper\Data $companyAccountHelper
+     * @param ConfigProvider $configProvider
+     * @param \Bss\CompanyAccount\Helper\GetType $getType
+     * @param CustomerRepositoryInterface $customerRepository
+     */
     public function __construct(
         \Psr\Log\LoggerInterface $logger,
         \Magento\Framework\Translate\Inline\StateInterface $inlineTranslation,
@@ -93,7 +105,7 @@ class MailHelper
     /**
      * @param \Magento\Customer\Api\Data\CustomerInterface|int $customer
      * @param \Bss\CompanyAccount\Api\Data\SubUserInterface $subUser
-     * @throws \Magento\Framework\Exception\NoSuchEntityException
+     * @throws \Magento\Framework\Exception\NoSuchEntityException|CannotSendEmail
      */
     public function sendConvertCustomerToSubUserWelcomeEmail($customer, $subUser)
     {

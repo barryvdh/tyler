@@ -67,7 +67,6 @@ define([
                     companyAccountData = this._getRowData(companyAccountResponse['company_customer'].id);
 
                     if (companyAccountData) {
-                        console.log('company account update in side (init data): ' + this.value());
                         CompanyAccount.data(companyAccountData);
                         CompanyAccount.roleUser(
                             {
@@ -110,7 +109,6 @@ define([
         whenChangeWebsite: function (id) {
             // eslint-disable-next-line eqeqeq
             if (CompanyAccount.data() && CompanyAccount.data()['website_id'] != id) {
-                console.log('company account update in side (website change): ' + this.value());
                 CompanyAccount.data(null);
             }
         },
@@ -127,7 +125,11 @@ define([
                 companyAccountData = this._getRowData(value);
             }
 
-            console.log('company account update in side (value change): ' + this.value());
+            if (CompanyAccount.data() &&
+                CompanyAccount.data()['entity_id'] === companyAccountData['entity_id']
+            ) {
+                return this;
+            }
             CompanyAccount.data(companyAccountData);
             this._setRole();
         },
@@ -145,24 +147,23 @@ define([
                 companyIdData = Number(data['entity_id']);
                 service.getCompanyAccountAttributes(companyIdData).done(function (attributes) {
                     data['custom_attributes'] = attributes;
-                });
-                tmpCompanyData = data;
+                    // Force ensure that the is company account attribute is '0'
+                    // if the current customer was assigned as company account
+                    isCompanyAccountField.toggle(Boolean(companyIdData));
+                    tmpCompanyData = data;
+                    this.companyAccount(tmpCompanyData);
+                }.bind(this));
+            } else {
+                this.companyAccount(tmpCompanyData);
+                // Force ensure that the is company account attribute is '0'
+                // if the current customer was assigned as company account
+                isCompanyAccountField.toggle(Boolean(companyIdData));
             }
 
-            // if (companyIdData) {
-            //     this.loadCustomAttributes(companyIdData);
-            // }
-
-            this.companyAccount(tmpCompanyData);
             this.wasAssigned(Boolean(companyIdData));
             this.isNoCompanyAccountData(!companyIdData);
 
-            console.log('Subscriber: company account update in side listener: ' + this.value());
             this.value(companyIdData);
-
-            // Force ensure that the is company account attribute is '0'
-            // if the current customer was assigned as company account
-            isCompanyAccountField.toggle(Boolean(companyIdData));
 
             return this;
         },
@@ -191,28 +192,6 @@ define([
             }
 
             return null;
-        },
-
-        /**
-         * Load and set customer attribute for specific customer id
-         *
-         * @param {Number} entityId
-         */
-        loadCustomAttributes: function (entityId) {
-            try {
-                if (this.params.listCompanyAccounts) {
-                    this.params.listCompanyAccounts = this.params.listCompanyAccounts.map(function (customer) {
-                        //eslint-disable-next-line eqeqeq
-                        if (customer[customer['id_field_name']] == entityId && !customer['custom_attributes']) {
-
-                        }
-
-                        return customer;
-                    });
-                }
-            } catch (e) {
-                console.error(e);
-            }
         },
 
         /**

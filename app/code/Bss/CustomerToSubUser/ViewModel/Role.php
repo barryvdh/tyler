@@ -20,7 +20,12 @@ class Role implements \Magento\Framework\Data\OptionSourceInterface
      */
     private $roleRepository;
 
-    // @codingStandardsIgnoreLine
+    /**
+     * Role constructor.
+     *
+     * @param \Magento\Framework\Api\SearchCriteriaBuilder $searchBuilder
+     * @param SubRoleRepository $roleRepository
+     */
     public function __construct(
         \Magento\Framework\Api\SearchCriteriaBuilder $searchBuilder,
         SubRoleRepository $roleRepository

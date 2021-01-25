@@ -16,6 +16,11 @@ class CompanyAccountAssignedInfoPlugin
     const ASSIGN_FIELD_DATA = "assign_to_company_account";
 
     /**
+     * @var \Psr\Log\LoggerInterface
+     */
+    private $logger;
+
+    /**
      * @var CustomerRepositoryInterface
      */
     private $customerRepository;
@@ -25,17 +30,25 @@ class CompanyAccountAssignedInfoPlugin
      */
     private $subUserManagement;
 
-    // @codingStandardsIgnoreLine
+    /**
+     * CompanyAccountAssignedInfoPlugin constructor.
+     *
+     * @param \Psr\Log\LoggerInterface $logger
+     * @param SubUserManagementInterface $subUserManagement
+     * @param CustomerRepositoryInterface $customerRepository
+     */
     public function __construct(
+        \Psr\Log\LoggerInterface $logger,
         SubUserManagementInterface $subUserManagement,
         CustomerRepositoryInterface $customerRepository
     ) {
+        $this->logger = $logger;
         $this->subUserManagement = $subUserManagement;
         $this->customerRepository = $customerRepository;
     }
 
     /**
-     * Add company account information
+     * Add company account information for admin customer form
      *
      * @param BePlugged $subject
      * @param array $loadedData
@@ -66,11 +79,9 @@ class CompanyAccountAssignedInfoPlugin
     }
 
     /**
-     * Get and mapping company account custom attributes
+     * Get and mapping company account custom attributes and assign to return data
      *
      * @param array $customerData
-     * @throws \Magento\Framework\Exception\LocalizedException
-     * @throws \Magento\Framework\Exception\NoSuchEntityException
      */
     private function mappingCompanyAccountCustomAttributes(&$customerData)
     {
@@ -89,6 +100,7 @@ class CompanyAccountAssignedInfoPlugin
             $customerData['company_account_custom_attributes'] = $customerAttributes;
 
         } catch (\Exception $e) {
+            $this->logger->critical($e);
         }
     }
 }

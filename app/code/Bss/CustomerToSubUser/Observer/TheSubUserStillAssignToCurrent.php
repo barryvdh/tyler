@@ -32,7 +32,14 @@ class TheSubUserStillAssignToCurrent implements \Magento\Framework\Event\Observe
      */
     private $companyAccountManagement;
 
-    // @codingStandardsIgnoreLine
+    /**
+     * TheSubUserStillAssignToCurrent constructor.
+     *
+     * @param \Magento\Customer\Model\Session $customerSession
+     * @param \Bss\CompanyAccount\Helper\Data $companyAccountHelper
+     * @param \Bss\CompanyAccount\Api\SubUserRepositoryInterface $subUserRepository
+     * @param \Bss\CustomerToSubUser\Model\CompanyAccountManagement $companyAccountManagement
+     */
     public function __construct(
         \Magento\Customer\Model\Session $customerSession,
         \Bss\CompanyAccount\Helper\Data $companyAccountHelper,

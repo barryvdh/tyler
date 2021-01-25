@@ -13,7 +13,11 @@ class Customer
      */
     private $resource;
 
-    // @codingStandardsIgnoreLine
+    /**
+     * Customer constructor.
+     *
+     * @param \Magento\Framework\App\ResourceConnection $resource
+     */
     public function __construct(
         \Magento\Framework\App\ResourceConnection $resource
     ) {

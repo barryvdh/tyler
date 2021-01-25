@@ -27,16 +27,6 @@ class SubUserConverter
     const CONVERT_EVENT_AFTER_SAVE_SUB_USER = 'bss_convert_after_save_sub_user';
 
     /**
-     * List attribute is not update from company account to subuser
-     *
-     * @var string[]
-     */
-    private $exceptAttributes = [
-        'b2b_normal_customer_group',
-        'bss_is_company_account'
-    ];
-
-    /**
      * @var LoggerInterface
      */
     private $logger;
