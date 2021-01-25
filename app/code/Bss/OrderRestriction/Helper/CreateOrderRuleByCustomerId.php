@@ -30,7 +30,14 @@ class CreateOrderRuleByCustomerId
      */
     private $companyAccountManagement;
 
-    // @codingStandardsIgnoreLine
+    /**
+     * CreateOrderRuleByCustomerId constructor.
+     *
+     * @param \Psr\Log\LoggerInterface $logger
+     * @param OrderRuleRepositoryInterface $orderRuleRepository
+     * @param \Magento\Customer\Api\CustomerRepositoryInterface $customerRepository
+     * @param \Bss\CustomerToSubUser\Model\CompanyAccountManagement $companyAccountManagement
+     */
     public function __construct(
         \Psr\Log\LoggerInterface $logger,
         OrderRuleRepositoryInterface $orderRuleRepository,

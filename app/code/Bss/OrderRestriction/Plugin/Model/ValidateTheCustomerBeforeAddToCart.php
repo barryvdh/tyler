@@ -77,6 +77,9 @@ class ValidateTheCustomerBeforeAddToCart
      * @param $subject
      * @param callable $proceed
      * @return callable|\Magento\Framework\Controller\Result\Json|\Magento\Framework\Controller\Result\Redirect
+     *
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     public function aroundExecute(
         $subject,

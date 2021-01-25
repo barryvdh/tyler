@@ -111,55 +111,18 @@ class DataProviderWithDefaultAddresses
                 $customerData['order_restriction'] = $orderRule->getData();
             }
 
-            $ordersReport = $this->getOrdersReportData($customerData['customer']['entity_id']);
-
-            if ($ordersReport) {
-                $customerData['order_restriction']['sales_order_report'] = $ordersReport;
-
-                $usedOrder = $this->orderRuleValidation->getOrderCount($customerData['customer']['entity_id']);
-                $remain = 0;
-                if ($usedOrder < $orderRule->getOrdersPerMonth()) {
-                    $remain = $orderRule->getOrdersPerMonth() - $usedOrder;
-                }
-                $customerData['order_restriction']['order_remain'] = [
-                    'total' => $orderRule->getOrdersPerMonth(),
-                    'used' => $usedOrder,
-                    'remain' => $remain
-                ];
+            $usedOrder = $this->orderRuleValidation->getOrderCount($customerData['customer']['entity_id']);
+            $remain = 0;
+            if ($usedOrder < $orderRule->getOrdersPerMonth()) {
+                $remain = $orderRule->getOrdersPerMonth() - $usedOrder;
             }
-        }
-
-        return $loadedData;
-    }
-
-    /**
-     * Get orders report data and format it
-     *
-     * @param int $customerId
-     * @return array
-     */
-    private function getOrdersReportData($customerId)
-    {
-        $data = [];
-        $dates = $this->dateRetriever->getByPeriod('1m');
-        // First day of current month
-        $firstDay = $this->date->gmtDate('Y-m-01');
-        // Last day
-        $lastDay = $this->date->gmtDate('Y-m-t');
-        $salesOrderData = $this->salesOrderResource->getCustomerOrderSummary(
-            $customerId,
-            $firstDay,
-            $lastDay
-        );
-
-        foreach ($dates as $date) {
-            $keyData = array_search($date, array_column($salesOrderData, 'created_at'));
-            $data[] = [
-                "x" => $date,
-                "y" => $keyData ? $salesOrderData[$keyData]['quantity'] : 0
+            $customerData['order_restriction']['order_remain'] = [
+                'total' => $orderRule->getOrdersPerMonth(),
+                'used' => $usedOrder,
+                'remain' => $remain
             ];
         }
 
-        return $data;
+        return $loadedData;
     }
 }

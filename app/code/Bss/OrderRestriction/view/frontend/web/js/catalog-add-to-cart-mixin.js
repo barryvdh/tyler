@@ -7,8 +7,7 @@ define([
     var changeAddToCartButtonTextAdded = {
         options: {
             addToCartButtonTextAddedFailed: $t('Not allowed'),
-            fallbackAddedText: null,
-            confirmMessage: "Please, confirm modal closing."
+            fallbackAddedText: null
         },
 
         /**
@@ -23,7 +22,7 @@ define([
         },
 
         /**
-         * Bind to listen the add to cart event for check if this action be restrict
+         * EN: Bind to listen the add to cart event for check if this action be restrict
          *
          * @private
          */
