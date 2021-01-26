@@ -6,7 +6,8 @@ define([
     'use strict';
 
     var getRolesByCompanyAccountIdApiPath = 'company-account/roles/company/:emailOrId/website/:websiteId',
-        getCompanyAccountBySubEmail = 'company-account/company-account/:email/:websiteId';
+        getCompanyAccountBySubEmail = 'company-account/company-account/:email/:websiteId',
+        getCompanyAccountCustomAttributes = 'company-account/custom-attributes/:customerId';
 
     return {
         method: 'rest',
@@ -45,6 +46,23 @@ define([
                 {
                     email: email,
                     websiteId: websiteId
+                }
+            );
+
+            return storage.get(serviceUrl);
+        },
+
+        /**
+         * Get company account custom attributes
+         *
+         * @param {Number} id
+         * @returns {Array|Boolean}
+         */
+        getCompanyAccountAttributes: function (id) {
+            var serviceUrl = this.getUrl(
+                getCompanyAccountCustomAttributes,
+                {
+                    customerId: id
                 }
             );
 

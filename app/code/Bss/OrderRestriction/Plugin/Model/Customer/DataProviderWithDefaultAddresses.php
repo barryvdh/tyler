@@ -5,6 +5,7 @@ namespace Bss\OrderRestriction\Plugin\Model\Customer;
 
 use Bss\OrderRestriction\Api\OrderRuleRepositoryInterface;
 use Bss\OrderRestriction\Exception\CouldNotLoadException;
+use Bss\OrderRestriction\Helper\ConfigProvider;
 use Bss\OrderRestriction\Model\ResourceModel\SalesOrder;
 use Magento\Backend\Model\Dashboard\Chart\Date;
 use Magento\Customer\Model\Customer\DataProviderWithDefaultAddresses as BePlugged;
@@ -45,14 +46,30 @@ class DataProviderWithDefaultAddresses
      */
     private $orderRuleValidation;
 
-    // @codingStandardsIgnoreLine
+    /**
+     * @var ConfigProvider
+     */
+    private $configProvider;
+
+    /**
+     * DataProviderWithDefaultAddresses constructor.
+     *
+     * @param OrderRuleRepositoryInterface $orderRuleRepository
+     * @param \Psr\Log\LoggerInterface $logger
+     * @param Date $dateRetriever
+     * @param SalesOrder $salesOrderResource
+     * @param \Magento\Framework\Stdlib\DateTime\DateTime $date
+     * @param OrderRuleValidation $orderRuleValidation
+     * @param ConfigProvider $configProvider
+     */
     public function __construct(
         OrderRuleRepositoryInterface $orderRuleRepository,
         \Psr\Log\LoggerInterface $logger,
         Date $dateRetriever,
         SalesOrder $salesOrderResource,
         \Magento\Framework\Stdlib\DateTime\DateTime $date,
-        OrderRuleValidation $orderRuleValidation
+        OrderRuleValidation $orderRuleValidation,
+        ConfigProvider $configProvider
     ) {
 
         $this->orderRuleRepository = $orderRuleRepository;
@@ -61,6 +78,7 @@ class DataProviderWithDefaultAddresses
         $this->salesOrderResource = $salesOrderResource;
         $this->date = $date;
         $this->orderRuleValidation = $orderRuleValidation;
+        $this->configProvider = $configProvider;
     }
     /**
      * Get the order restriction info
@@ -75,6 +93,10 @@ class DataProviderWithDefaultAddresses
         BePlugged $subject,
         $loadedData
     ) {
+        if (!$this->configProvider->isEnabled()) {
+            return $loadedData;
+        }
+
         foreach ($loadedData as &$customerData) {
             try {
                 $orderRule = $this->orderRuleRepository->getByCustomerId($customerData['customer']['entity_id']);
@@ -89,54 +111,18 @@ class DataProviderWithDefaultAddresses
                 $customerData['order_restriction'] = $orderRule->getData();
             }
 
-            $ordersReport = $this->getOrdersReportData($customerData['customer']['entity_id']);
-
-            if ($ordersReport) {
-                $customerData['order_restriction']['sales_order_report'] = $ordersReport;
-
-                $usedOrder = $this->orderRuleValidation->getOrderCount($customerData['customer']['entity_id']);
-                $remain = 0;
-                if ($usedOrder < $orderRule->getOrdersPerMonth()) {
-                    $remain = $orderRule->getOrdersPerMonth() - $usedOrder;
-                }
-                $customerData['order_restriction']['order_remain'] = [
-                    $usedOrder,
-                    $remain
-                ];
+            $usedOrder = $this->orderRuleValidation->getOrderCount($customerData['customer']['entity_id']);
+            $remain = 0;
+            if ($usedOrder < $orderRule->getOrdersPerMonth()) {
+                $remain = $orderRule->getOrdersPerMonth() - $usedOrder;
             }
-        }
-
-        return $loadedData;
-    }
-
-    /**
-     * Get orders report data and format it
-     *
-     * @param int $customerId
-     * @return array
-     */
-    private function getOrdersReportData($customerId)
-    {
-        $data = [];
-        $dates = $this->dateRetriever->getByPeriod('1m');
-        // First day of current month
-        $firstDay = $this->date->gmtDate('Y-m-01');
-        // Last day
-        $lastDay = $this->date->gmtDate('Y-m-t');
-        $salesOrderData = $this->salesOrderResource->getCustomerOrderSummary(
-            $customerId,
-            $firstDay,
-            $lastDay
-        );
-
-        foreach ($dates as $date) {
-            $keyData = array_search($date, array_column($salesOrderData, 'created_at'));
-            $data[] = [
-                "x" => $date,
-                "y" => $keyData ? $salesOrderData[$keyData]['quantity'] : 0
+            $customerData['order_restriction']['order_remain'] = [
+                'total' => $orderRule->getOrdersPerMonth(),
+                'used' => $usedOrder,
+                'remain' => $remain
             ];
         }
 
-        return $data;
+        return $loadedData;
     }
 }

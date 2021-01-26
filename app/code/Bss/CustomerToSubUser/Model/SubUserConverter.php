@@ -122,6 +122,7 @@ class SubUserConverter
      * @param int $companyAccountRole
      *
      * @return SubUser|false
+     * @throws \Exception
      */
     public function convertToSubUser(
         $customer,
@@ -129,10 +130,12 @@ class SubUserConverter
         $companyAccountRole
     ) {
         try {
-            $subUser = $this->companyAccManagement->getCompanyAccountBySubEmail(
+            $companyAccountData = $this->companyAccManagement->getCompanyAccountBySubEmail(
                 $customer->getEmail(),
                 $customer->getWebsiteId()
-            )->getSubUser();
+            );
+
+            $subUser = $companyAccountData->getSubUser();
 
             if (!$companyAccountId && $subUser->getSubUserId()) {
                 $this->companyEmailHelper->sendRemoveNotificationMailToSubUser(

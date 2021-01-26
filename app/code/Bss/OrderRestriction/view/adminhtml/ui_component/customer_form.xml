@@ -36,7 +36,7 @@
                component="Bss_OrderRestriction/js/view/customer-sales-order-report">
             <settings>
                 <elementTmpl>Bss_OrderRestriction/customer-sales-order-report</elementTmpl>
-                <label translate="true">30 Days Order Chart</label>
+                <label translate="true">Report</label>
             </settings>
         </field>
     </fieldset>

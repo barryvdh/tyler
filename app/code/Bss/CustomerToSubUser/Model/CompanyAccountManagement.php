@@ -11,7 +11,7 @@ use Bss\CompanyAccount\Api\SubUserManagementInterface;
 /**
  * Class CompanyRoleManagement - Manage company roles
  *
- * `@SuppressWarnings(PHPMD.CouplingBetweenObjects)`
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class CompanyAccountManagement implements CompanyAccountManagementInterface
 {
@@ -106,40 +106,6 @@ class CompanyAccountManagement implements CompanyAccountManagementInterface
     /**
      * @inheritDoc
      */
-    public function getListByCompanyAccount($emailOrId, int $websiteId): array
-    {
-        try {
-            if (filter_var($emailOrId, FILTER_VALIDATE_EMAIL)) {
-                $emailOrId = $this->customerRepository->get($emailOrId, $websiteId)->getId();
-            }
-
-            $filterByCompanyAccountId = $this->filterBuilder
-                ->setField(SubRoleInterface::CUSTOMER_ID)
-                ->setValue($emailOrId)
-                ->setConditionType('eq')
-                ->create();
-
-            $adminRoleFilter = $this->filterBuilder
-                ->setField(SubRoleInterface::CUSTOMER_ID)
-                ->setConditionType('null')
-                ->create();
-            $filterGroups = $this->filterGroupBuilder
-                ->addFilter($filterByCompanyAccountId)
-                ->addFilter($adminRoleFilter)
-                ->create();
-
-            $this->searchBuilder->setFilterGroups([$filterGroups]);
-            $searchResult = $this->roleRepository->getList($this->searchBuilder->create());
-
-            return $searchResult->getItems();
-        } catch (\Exception $e) {
-            $this->logger->critical($e);
-        }
-    }
-
-    /**
-     * @inheritDoc
-     */
     public function getCompanyAccountBySubEmail(string $email, $websiteId):
     \Bss\CustomerToSubUser\Model\CompanyAccountResponse
     {
@@ -165,5 +131,20 @@ class CompanyAccountManagement implements CompanyAccountManagementInterface
         }
 
         return $result;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function getCustomerCustomAttributes($customerId)
+    {
+        try {
+            $customer = $this->customerRepository->getById($customerId);
+
+            return $customer->getCustomAttributes();
+        } catch (\Exception $e) {
+            $this->logger->critical($e);
+            return false;
+        }
     }
 }

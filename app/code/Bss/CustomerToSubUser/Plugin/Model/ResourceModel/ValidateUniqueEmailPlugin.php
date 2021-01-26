@@ -6,10 +6,11 @@ namespace Bss\CustomerToSubUser\Plugin\Model\ResourceModel;
 use Magento\Customer\Model\CustomerFactory;
 use Magento\Customer\Model\ResourceModel\Customer as CustomerResource;
 use Magento\Framework\Exception\AlreadyExistsException;
-use function GuzzleHttp\debug_resource;
 
 /**
  * Class ValidateUniqueEmailPlugin
+ *
+ * @SuppressWarnings(PHPMD.CookieAndSessionMisuse)
  */
 class ValidateUniqueEmailPlugin
 {
@@ -48,7 +49,17 @@ class ValidateUniqueEmailPlugin
      */
     private $companyAccountManagement;
 
-    // @codingStandardsIgnoreLine
+    /**
+     * ValidateUniqueEmailPlugin constructor.
+     *
+     * @param \Psr\Log\LoggerInterface $logger
+     * @param \Magento\Framework\App\RequestInterface $request
+     * @param \Magento\Framework\App\ResourceConnection $resource
+     * @param CustomerResource $customerResource
+     * @param CustomerFactory $customerFactory
+     * @param \Magento\Backend\Model\Session $backendSession
+     * @param \Bss\CustomerToSubUser\Model\CompanyAccountManagement $companyAccountManagement
+     */
     public function __construct(
         \Psr\Log\LoggerInterface $logger,
         \Magento\Framework\App\RequestInterface $request,
@@ -78,7 +89,7 @@ class ValidateUniqueEmailPlugin
      * @param string $email
      * @param int $subId
      * @return ValidateUniqueEmailPlugin
-     * @throws AlreadyExistsException
+     * @throws AlreadyExistsException|\Magento\Framework\Exception\LocalizedException
      */
     public function aroundValidateUniqueSubEmail(
         \Bss\CompanyAccount\Model\ResourceModel\SubUser $subject,

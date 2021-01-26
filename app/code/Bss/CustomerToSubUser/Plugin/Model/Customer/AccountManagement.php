@@ -58,7 +58,18 @@ class AccountManagement
      */
     private $customerRepository;
 
-    // @codingStandardsIgnoreLine
+    /**
+     * AccountManagement constructor.
+     *
+     * @param CompanyAccountManagement $companyAccManagement
+     * @param \Psr\Log\LoggerInterface $logger
+     * @param CustomerSession $session
+     * @param StoreManagerInterface $storeManager
+     * @param \Bss\CustomerToSubUser\Model\ResourceModel\Customer $customerResource
+     * @param SubUserRepositoryInterface $subUserRepository
+     * @param GetCustomerByToken $getByToken
+     * @param CustomerRepositoryInterface $customerRepository
+     */
     public function __construct(
         CompanyAccountManagement $companyAccManagement,
         \Psr\Log\LoggerInterface $logger,
@@ -96,10 +107,15 @@ class AccountManagement
         $resetToken,
         $newPassword
     ) {
-        if (!$email) {
-            $customer = $this->getByToken->execute($resetToken);
-        } else {
-            $customer = $this->customerRepository->get($email);
+        try {
+            if (!$email) {
+                $customer = $this->getByToken->execute($resetToken);
+            } else {
+                $customer = $this->customerRepository->get($email);
+            }
+        } catch (\Exception $e) {
+            $this->logger->critical($e);
+            $customer = null;
         }
 
         $this->session->setNeedResetPwdCustomer($customer);
@@ -113,8 +129,6 @@ class AccountManagement
      * @param BePlugged $subject
      * @param bool $result
      * @return mixed
-     * @throws \Magento\Framework\Exception\AlreadyExistsException
-     * @throws \Magento\Framework\Exception\LocalizedException
      *
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */

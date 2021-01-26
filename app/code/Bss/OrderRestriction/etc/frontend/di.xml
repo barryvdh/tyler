@@ -12,4 +12,47 @@
                 type="Bss\OrderRestriction\Plugin\Multishipping\Helper\Data"
                 sortOrder="30"/>
     </type>
+
+    <!-- Add to cart restriction -->
+    <type name="Magento\Checkout\Controller\Cart\Add">
+        <plugin name="validate_customer_before_add_to_cart"
+                type="Bss\OrderRestriction\Plugin\Model\ValidateTheCustomerBeforeAddToCart"
+                sortOrder="30" />
+    </type>
+
+    <type name="Magento\Wishlist\Controller\Index\Cart">
+        <plugin name="validate_customer_before_add_to_cart"
+                type="Bss\OrderRestriction\Plugin\Model\ValidateTheCustomerBeforeAddToCart"
+                sortOrder="30" />
+    </type>
+
+    <type name="Magento\Wishlist\Controller\Index\Allcart">
+        <plugin name="validate_customer_before_add_to_cart"
+                type="Bss\OrderRestriction\Plugin\Model\ValidateTheCustomerBeforeAddToCart"
+                sortOrder="30" />
+    </type>
+
+    <type name="Magento\Checkout\Controller\Cart\UpdateItemQty">
+        <plugin name="validate_customer_before_add_to_cart"
+                type="Bss\OrderRestriction\Plugin\Model\ValidateTheCustomerBeforeAddToCart"
+                sortOrder="30" />
+    </type>
+    <type name="Magento\Checkout\Controller\Cart\UpdateItemOptions">
+        <plugin name="validate_customer_before_add_to_cart"
+                type="Bss\OrderRestriction\Plugin\Model\ValidateTheCustomerBeforeAddToCart"
+                sortOrder="30" />
+    </type>
+    <type name="Magento\Checkout\Controller\Cart\UpdatePost">
+        <plugin name="validate_customer_before_add_to_cart"
+                type="Bss\OrderRestriction\Plugin\Model\ValidateTheCustomerBeforeAddToCart"
+                sortOrder="30" />
+    </type>
+
+    <type name="Magento\Checkout\Controller\Sidebar\UpdateItemQty">
+        <plugin name="validate_customer_before_add_to_cart"
+                type="Bss\OrderRestriction\Plugin\Model\ValidateTheCustomerBeforeAddToCart"
+                sortOrder="30" />
+    </type>
+
+
 </config>

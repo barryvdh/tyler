@@ -9,15 +9,6 @@ namespace Bss\CustomerToSubUser\Api;
 interface CompanyAccountManagementInterface
 {
     /**
-     * Get list roles by company account
-     *
-     * @param string|int $emailOrId
-     * @param int $websiteId
-     * @return \Bss\CompanyAccount\Api\Data\SubRoleInterface[]
-     */
-    public function getListByCompanyAccount($emailOrId, int $websiteId): array;
-
-    /**
      * Get Company account
      *
      * @param string $email
@@ -25,5 +16,13 @@ interface CompanyAccountManagementInterface
      * @return \Bss\CustomerToSubUser\Api\Data\CompanyAccountResponseInterface
      */
     public function getCompanyAccountBySubEmail(string $email, $websiteId):
-    \Bss\CustomerToSubUser\Model\CompanyAccountResponse;
+    \Bss\CustomerToSubUser\Api\Data\CompanyAccountResponseInterface;
+
+    /**
+     * Get list custom attribute by customer id
+     *
+     * @param int $customerId
+     * @return \Magento\Framework\Api\AttributeValue[]
+     */
+    public function getCustomerCustomAttributes($customerId);
 }

@@ -13,8 +13,7 @@
     "require": {
         "magento/composer-root-update-plugin": "~1.0",
         "magento/product-community-edition": "2.4.0",
-        "magepal/magento2-gmailsmtpapp": "^2.8",
-        "symfony/var-dumper": "^5.2"
+        "magepal/magento2-gmailsmtpapp": "^2.8"
     },
     "require-dev": {
         "allure-framework/allure-phpunit": "~1.2.0",
@@ -48,8 +47,7 @@
             ]
         },
         "files": [
-            "app/etc/NonComposerComponentRegistration.php",
-            "app/Helper/Helper.php"
+            "app/etc/NonComposerComponentRegistration.php"
         ],
         "exclude-from-classmap": [
             "**/dev/**",

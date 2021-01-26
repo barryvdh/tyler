@@ -42,7 +42,6 @@ define([
          * @param {Number|null} roleId
          */
         whenRoleForceSelected: function (roleId) {
-            console.log('subscriber: role updated');
             this._selectRole(roleId);
         },
 
@@ -88,7 +87,6 @@ define([
 
             this.setOptions(result);
             this._selectRole();
-            console.log('filter roles: value-' + value + '; ' + ', init value: ' + this.value());
         },
 
         /**

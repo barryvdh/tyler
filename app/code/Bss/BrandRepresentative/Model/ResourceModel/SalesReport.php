@@ -30,6 +30,6 @@ class SalesReport extends AbstractDb
      */
     protected function _construct()
     {
-        $this->_init('bss_sales_report', 'id');
+        $this->_init('bss_brandsales_report', 'id');
     }
 }

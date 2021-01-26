@@ -3,7 +3,7 @@ declare(strict_types=1);
 
 namespace Bss\OrderRestriction\Observer;
 
-use Bss\OrderRestriction\Api\OrderRuleRepositoryInterface;
+use Bss\OrderRestriction\Helper\CreateOrderRuleByCustomerId;
 use Magento\Framework\Event\Observer;
 
 /**
@@ -22,19 +22,25 @@ class SaveOrderRule implements \Magento\Framework\Event\ObserverInterface
     private $request;
 
     /**
-     * @var OrderRuleRepositoryInterface
+     * @var CreateOrderRuleByCustomerId
      */
-    private $orderRuleRepository;
+    private $createOrderRuleByCustomerId;
 
-    // @codingStandardsIgnoreLine
+    /**
+     * SaveOrderRule constructor.
+     *
+     * @param \Psr\Log\LoggerInterface $logger
+     * @param \Magento\Framework\App\RequestInterface $request
+     * @param CreateOrderRuleByCustomerId $createOrderRuleByCustomerId
+     */
     public function __construct(
         \Psr\Log\LoggerInterface $logger,
         \Magento\Framework\App\RequestInterface $request,
-        OrderRuleRepositoryInterface $orderRuleRepository
+        CreateOrderRuleByCustomerId $createOrderRuleByCustomerId
     ) {
         $this->logger = $logger;
         $this->request = $request;
-        $this->orderRuleRepository = $orderRuleRepository;
+        $this->createOrderRuleByCustomerId = $createOrderRuleByCustomerId;
     }
 
     /**
@@ -43,33 +49,10 @@ class SaveOrderRule implements \Magento\Framework\Event\ObserverInterface
     public function execute(Observer $observer)
     {
         try {
-            $orderRuleRequest = $this->request->getParam('order_restriction');
-
-            if ($orderRuleRequest) {
-                // If not set value then put is NULL in DB
-                array_walk(
-                    $orderRuleRequest,
-                    function (&$param) {
-                        if ($param == "") {
-                            $param = null;
-                        }
-                    }
-                );
-                $orderRule = $this->orderRuleRepository->get($orderRuleRequest["entity_id"]);
-
-                if ($orderRule->getOrdersPerMonth() == $orderRuleRequest['orders_per_month'] &&
-                    $orderRule->getQtyPerOrder() == $orderRuleRequest['qty_per_order']
-                ) {
-                    return $this;
-                }
-
-                $customerId = $this->request->getParam('customer')['entity_id'];
-                $orderRule->setCustomerId($customerId);
-                $orderRule->setOrdersPerMonth($orderRuleRequest['orders_per_month']);
-                $orderRule->setQtyPerOrder($orderRuleRequest['qty_per_order']);
-
-                $this->orderRuleRepository->save($orderRule);
-            }
+            $this->createOrderRuleByCustomerId->execute(
+                $this->request->getParam('customer')['entity_id'],
+                $this->request->getParam('order_restriction')
+            );
         } catch (\Exception $e) {
             $this->logger->critical($e);
         }
