@@ -66,4 +66,26 @@
             </settings>
         </insertListing>
     </fieldset>
+
+    <fieldset name="address">
+        <insertListing name="customer_address_listing">
+            <settings>
+                <exports>
+                    <link name="company_account_id">${ $.externalProvider }:params.company_account_id</link>
+                </exports>
+                <imports>
+                    <link name="company_account_id">${ $.provider }:data.assign_to_company_account.company_account_id</link>
+                </imports>
+            </settings>
+        </insertListing>
+        <modal name="customer_address_update_modal">
+            <insertForm name="update_customer_address_form_loader" component="Bss_CustomerToSubUser/js/view/form/address/insert-form">
+                <settings>
+                    <imports>
+                        <link name="companyAccountId">${ $.provider }:data.assign_to_company_account.company_account_id</link>
+                    </imports>
+                </settings>
+            </insertForm>
+        </modal>
+    </fieldset>
 </form>

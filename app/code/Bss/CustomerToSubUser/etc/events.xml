@@ -8,4 +8,9 @@
     <event name="controller_action_predispatch">
         <observer name="check_sub_user_visible_middleware" instance="Bss\CustomerToSubUser\Observer\TheSubUserStillAssignToCurrent"/>
     </event>
+
+    <event name="customer_delete_after">
+        <observer name="remove_sub_user_customer"
+                  instance="Bss\CustomerToSubUser\Observer\AssignAsSubUserObserver"/>
+    </event>
 </config>

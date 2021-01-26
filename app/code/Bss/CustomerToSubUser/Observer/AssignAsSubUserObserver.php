@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace Bss\CustomerToSubUser\Observer;
 
+use Bss\CustomerToSubUser\Model\ResourceModel\SubUser as SubUserResource;
 use Bss\CustomerToSubUser\Model\SubUserConverter;
 use Magento\Framework\Event\Observer;
 use Magento\Framework\Message\ManagerInterface;
@@ -45,6 +46,21 @@ class AssignAsSubUserObserver implements \Magento\Framework\Event\ObserverInterf
     private $messageManager;
 
     /**
+     * @var \Bss\CompanyAccount\Api\SubUserRepositoryInterface
+     */
+    private $subUserRepository;
+
+    /**
+     * @var \Magento\Framework\Api\SearchCriteriaBuilder
+     */
+    private $criteriaBuilder;
+
+    /**
+     * @var SubUserResource
+     */
+    private $subUserResource;
+
+    /**
      * AssignAsSubUserObserver constructor.
      *
      * @param \Psr\Log\LoggerInterface $logger
@@ -53,6 +69,9 @@ class AssignAsSubUserObserver implements \Magento\Framework\Event\ObserverInterf
      * @param \Bss\CompanyAccount\Helper\SubUserHelper $subUserHelper
      * @param SubUserConverter $subUserConverter
      * @param ManagerInterface $messageManager
+     * @param \Bss\CompanyAccount\Api\SubUserRepositoryInterface $subUserRepository
+     * @param \Magento\Framework\Api\SearchCriteriaBuilder $criteriaBuilder
+     * @param SubUserResource $subUserResource
      */
     public function __construct(
         \Psr\Log\LoggerInterface $logger,
@@ -60,7 +79,10 @@ class AssignAsSubUserObserver implements \Magento\Framework\Event\ObserverInterf
         \Magento\Framework\App\RequestFactory $requestFactory,
         \Bss\CompanyAccount\Helper\SubUserHelper $subUserHelper,
         SubUserConverter $subUserConverter,
-        ManagerInterface $messageManager
+        ManagerInterface $messageManager,
+        \Bss\CompanyAccount\Api\SubUserRepositoryInterface $subUserRepository,
+        \Magento\Framework\Api\SearchCriteriaBuilder $criteriaBuilder,
+        SubUserResource $subUserResource
     ) {
         $this->logger = $logger;
         $this->request = $request;
@@ -68,16 +90,37 @@ class AssignAsSubUserObserver implements \Magento\Framework\Event\ObserverInterf
         $this->subUserHelper = $subUserHelper;
         $this->subUserConverter = $subUserConverter;
         $this->messageManager = $messageManager;
+        $this->subUserRepository = $subUserRepository;
+        $this->criteriaBuilder = $criteriaBuilder;
+        $this->subUserResource = $subUserResource;
     }
 
     /**
      * @inheritDoc
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     public function execute(Observer $observer)
     {
         try {
             /** @var \Magento\Customer\Api\Data\CustomerInterface $savedCustomer */
             $savedCustomer = $observer->getData("customer_data_object");
+
+            /** @var \Magento\Customer\Model\Customer $deletedCustomer */
+            if ($deletedCustomer = $observer->getData('data_object')) {
+                if ($deletedCustomer->isDeleted()) {
+                    $subUser = $this->subUserResource->getSubUserByEmailAndWebsiteId(
+                        $deletedCustomer->getEmail(),
+                        $deletedCustomer->getWebsiteId()
+                    );
+
+                    if ($subUser->getId()) {
+                        $this->subUserRepository->delete($subUser);
+
+                        return $this;
+                    }
+                }
+            }
+
             $assignToSubUserParams = $this->request->getPostValue("assign_to_company_account");
 
             if ($assignToSubUserParams &&

@@ -6,8 +6,6 @@ namespace Bss\CustomerToSubUser\Model;
 use Bss\CompanyAccount\Api\Data\SubUserInterface as SubUser;
 use Bss\CompanyAccount\Api\SubUserRepositoryInterface;
 use Bss\CustomerToSubUser\Helper\MailHelper;
-use Magento\Customer\Api\CustomerRepositoryInterface;
-use Magento\Framework\Exception\NoSuchEntityException;
 use Psr\Log\LoggerInterface;
 use Magento\Framework\Event\ManagerInterface as EventManager;
 
@@ -78,21 +76,6 @@ class SubUserConverter
     private $companyEmailHelper;
 
     /**
-     * @var CustomerRepositoryInterface
-     */
-    private $customerRepository;
-
-    /**
-     * @var \Magento\Customer\Api\AddressRepositoryInterface
-     */
-    private $addressRepository;
-
-    /**
-     * @var \Magento\Customer\Api\Data\AddressExtensionInterfaceFactory
-     */
-    private $extensionInterfaceFactory;
-
-    /**
      * @param LoggerInterface $logger
      * @param ResourceModel\Customer $customerResource
      * @param \Bss\CompanyAccount\Api\Data\SubUserInterfaceFactory $subUserFactory
@@ -103,9 +86,6 @@ class SubUserConverter
      * @param \Bss\CompanyAccount\Helper\SubUserHelper $subUserHelper
      * @param MailHelper $mailHelper
      * @param \Bss\CompanyAccount\Helper\EmailHelper $companyEmailHelper
-     * @param CustomerRepositoryInterface $customerRepository
-     * @param \Magento\Customer\Api\AddressRepositoryInterface $addressRepository
-     * @param \Magento\Customer\Api\Data\AddressExtensionInterfaceFactory $extensionInterfaceFactory
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -118,10 +98,7 @@ class SubUserConverter
         \Magento\Framework\App\RequestInterface $request,
         \Bss\CompanyAccount\Helper\SubUserHelper $subUserHelper,
         MailHelper $mailHelper,
-        \Bss\CompanyAccount\Helper\EmailHelper $companyEmailHelper,
-        CustomerRepositoryInterface $customerRepository,
-        \Magento\Customer\Api\AddressRepositoryInterface $addressRepository,
-        \Magento\Customer\Api\Data\AddressExtensionInterfaceFactory $extensionInterfaceFactory
+        \Bss\CompanyAccount\Helper\EmailHelper $companyEmailHelper
     ) {
         $this->logger = $logger;
         $this->customerResource = $customerResource;
@@ -133,9 +110,6 @@ class SubUserConverter
         $this->subUserHelper = $subUserHelper;
         $this->mailHelper = $mailHelper;
         $this->companyEmailHelper = $companyEmailHelper;
-        $this->customerRepository = $customerRepository;
-        $this->addressRepository = $addressRepository;
-        $this->extensionInterfaceFactory = $extensionInterfaceFactory;
     }
 
     /**
@@ -147,6 +121,8 @@ class SubUserConverter
      *
      * @return SubUser|false
      * @throws \Exception
+     *
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     public function convertToSubUser(
         $customer,
@@ -158,8 +134,6 @@ class SubUserConverter
                 $customer->getEmail(),
                 $customer->getWebsiteId()
             );
-
-            $companyAccount = $companyAccountData->getCompanyCustomer();
             $subUser = $companyAccountData->getSubUser();
 
             if (!$companyAccountId && $subUser->getSubUserId()) {
@@ -167,17 +141,12 @@ class SubUserConverter
                     null,
                     $subUser
                 );
-
                 $this->subUserRepository->deleteById($subUser->getSubUserId());
+
                 return false;
             }
 
-            if (!$companyAccount->getId()) {
-                $companyAccount = $this->customerRepository->getById($companyAccountId);
-            }
-
             $needSendMail = $this->isNeedSendMail($subUser, $companyAccountId);
-
             $subUserData = $subUser->getData();
 
             if ($companyAccountRole != "") {
@@ -207,7 +176,6 @@ class SubUserConverter
             }
 
             $this->subUserRepository->save($subUser);
-            $this->cloneCompanyAccountAddress($companyAccount, $customer);
 
             if ($needSendMail) {
                 $this->mailHelper->sendConvertCustomerToSubUserWelcomeEmail(
@@ -227,39 +195,6 @@ class SubUserConverter
         } catch (\Exception $e) {
             throw $e;
         }
-    }
-
-    /**
-     * Clone company account address to sub-user
-     *
-     * @param \Magento\Customer\Api\Data\CustomerInterface $customer
-     * @param \Magento\Customer\Api\Data\CustomerInterface $customerSubUser
-     */
-    private function cloneCompanyAccountAddress($customer, $customerSubUser)
-    {
-//        foreach ($customerSubUser->getAddresses() as $address) {
-//            dd($address->getExtensionAttributes());
-//        }
-//        if ($customer->getId()) {
-//            try {
-//                foreach ($customer->getAddresses() as $address) {
-//                    $parentAddressId = $address->getId();
-//                    $address->setId(null);
-//                    $address->setCustomerId($customerSubUser->getId());
-//                    $extensionAttributes = $address->getExtensionAttributes();
-//
-//                    if (!$extensionAttributes) {
-//                        $extensionAttributes = $this->extensionInterfaceFactory->create();
-//                    }
-//                    $extensionAttributes->setParentAddressId($parentAddressId);
-//                    $address->setExtensionAttributes($extensionAttributes);
-//
-//                    $this->addressRepository->save($address);
-//                }
-//            } catch (\Exception $e) {
-//                $this->logger->critical($e);
-//            }
-//        }
     }
 
     /**
