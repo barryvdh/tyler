@@ -68,13 +68,14 @@
     .btn-one-one {
         color:@color-white !important;
         background: #fcb43b;
-        font-size: 12px;
+        font-size: 18px;
         letter-spacing: 1px;
         text-transform: uppercase;
-        padding: 5px 14px;
-        height: 35px;
+        padding: 11px 16px;
+        height: 46px;
         box-sizing: border-box;
-        line-height: 25px;
+        line-height: 24px;
+        font-weight: 500;
     }
     .nomal-foot {
         font-size:16px;
@@ -87,9 +88,8 @@
     }
     .text-des {
         margin: 0;
-        font-size: 16px;
-        font-weight: bold;
-        line-height: 20px;
+        font-size: 22px;
+        line-height: 30px;
         color: #2e3b4f;
     }
     body {
@@ -423,6 +423,9 @@
             }
         }
     }
+    .title-nomal {
+        font-size:40px;
+    }
     .cms-porto_home_18 {
         .page-main {
             max-width: 100%;
@@ -431,15 +434,20 @@
     }
     .banner-content-6 {
         &.banner-content-one {
-            padding: 160px 0 560px;
+            padding: 70px 0 560px;
+            .text-content {
+                text-align: center;
+                .text-des-banner {
+                    margin: 0 auto 40px;
+                    max-width: 850px;
+                }
+            }
             .title-banner {
-                font-size:36px;
+                font-size:40px;
                 letter-spacing: 0;
                 font-weight:bold;
-            }
-            .text-des-banner {
-                max-width: 330px;
-                margin-bottom:30px;
+                margin: 0 0 25px;
+                line-height:40px;
             }
         }
     }
@@ -453,18 +461,13 @@
         }
     }
     .block-for-branch {
-        padding: 160px 0 150px;
+        padding: 130px 0 164px;
         background-size: cover!important;
-        background-position: left!important;
+        background-position: center!important;
         .content-right {
-            text-align: right;
-            max-width: 475px;
-            float: right;
-            .title-nomal {
-                font-size:60px;
-            }
+            text-align: center;
             .text-des {
-                margin-bottom: 60px;
+                margin-bottom: 50px;
             }
         }
     }
@@ -472,25 +475,22 @@
         .bg-deton {
             background:#DBE9E7;
             .content-deton {
-                text-align: right;
+                text-align: left;
                 top: 50%;
                 position: relative;
                 transform: translateY(-50%);
                 -ms-transform: translateY(-50%);
                 -webkit-transform: translateY(-50%);
-                max-width: 92%;
-                padding: 50px;
+                padding: 50px 30px;
                 box-sizing: border-box;
-                .des-custom {
-                    font-size:16px;
-                    font-family: @font-family__bothambook;
-                    color: #2F3C4F;
-                    padding-bottom: 30px;
-                }
                 h4 {
-                    font-size: 30px;
+                    font-size: 35px;
                     font-weight: bold;
                     color: #2F3C4F;
+                    margin: 7px 0 18px;
+                }
+                .browe {
+                    margin-top: 40px;
                 }
                 .btn-brow {
                     background: #2F3C4F;
@@ -524,13 +524,18 @@
     .banner-content-6 {
         &.banner-content-one {
             padding: 25px 0 560px;
+            .title-banner {
+                font-size: 30px;
+                line-height: 30px;
+                margin: 14px 0 25px;
+            }
         }
     }
     .custom-item {
         .bg-deton {
             .content-deton {
                 max-width: 100%;
-                padding: 15px;
+                padding: 50px 15px;
             }
         }
     }
@@ -631,7 +636,26 @@
     .customer-menu .header.links a {
         color: #777 !important;
     }
-    
+    .cms-index-index {
+        .page-header {
+            &.type5 {
+                &.header-newskin {
+                    position: relative!important;
+                }
+            }
+        }
+    }
+    .page-header {
+        &.type5 {
+            &.header-newskin {
+                .header {
+                  &.content {
+                      padding: 18px 0px!important;
+                  }
+                }
+            }
+        }
+    }
     .sticky-logo {
         float: left;
     
@@ -653,7 +677,7 @@
         }
         .col-md-4,
         .col-md-8 {
-            padding:0;
+            padding: 0 4px 0 0;
         }
     }
     .page-wrapper {
@@ -1101,29 +1125,30 @@
             }
         }
     }
-    .banner-content-6{
-        &.banner-content-one {
-            padding: 260px 0 700px;
-        }
-    }
-    .custom-item {
-        .bg-deton {
-            .content-deton {
-                max-width: 850px;
-            }
-        }
-    }
 }
 .media-width(@extremum, @break) when (@extremum = 'min') and (@break = @screen__xxl) {
     .banner-content-6 {
        &.banner-content-one {
-           padding: 260px 0 900px;
+           padding: 130px 0 840px;
+           .title-banner {
+               font-size:60px;
+               line-height: 65px;
+           }
        }
+    }
+    .text-des {
+        font-size:30px;
+    }
+    .title-nomal {
+        font-size: 60px;
     }
     .custom-item {
         .bg-deton {
             .content-deton {
-                padding: 0;
+                padding: 50px 160px 50px 190px;
+                h4 {
+                    font-size:50px;
+                }
             }
         }
     }
