@@ -6,7 +6,6 @@ namespace Bss\CustomerToSubUser\Model;
 use Bss\CompanyAccount\Api\Data\SubUserInterface as SubUser;
 use Bss\CompanyAccount\Api\SubUserRepositoryInterface;
 use Bss\CustomerToSubUser\Helper\MailHelper;
-use Magento\Framework\Exception\NoSuchEntityException;
 use Psr\Log\LoggerInterface;
 use Magento\Framework\Event\ManagerInterface as EventManager;
 
@@ -87,7 +86,6 @@ class SubUserConverter
      * @param \Bss\CompanyAccount\Helper\SubUserHelper $subUserHelper
      * @param MailHelper $mailHelper
      * @param \Bss\CompanyAccount\Helper\EmailHelper $companyEmailHelper
-     *
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -123,6 +121,8 @@ class SubUserConverter
      *
      * @return SubUser|false
      * @throws \Exception
+     *
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     public function convertToSubUser(
         $customer,
@@ -134,7 +134,6 @@ class SubUserConverter
                 $customer->getEmail(),
                 $customer->getWebsiteId()
             );
-
             $subUser = $companyAccountData->getSubUser();
 
             if (!$companyAccountId && $subUser->getSubUserId()) {
@@ -142,13 +141,12 @@ class SubUserConverter
                     null,
                     $subUser
                 );
-
                 $this->subUserRepository->deleteById($subUser->getSubUserId());
+
                 return false;
             }
 
             $needSendMail = $this->isNeedSendMail($subUser, $companyAccountId);
-
             $subUserData = $subUser->getData();
 
             if ($companyAccountRole != "") {
