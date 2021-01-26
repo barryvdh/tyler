@@ -461,7 +461,7 @@
         }
     }
     .block-for-branch {
-        padding: 130px 0 164px;
+        padding: 100px 0 140px;
         background-size: cover!important;
         background-position: center!important;
         .content-right {
@@ -504,9 +504,19 @@
             }
         }
         .col-md-4 {
+            background-size: cover;
+            background-repeat: no-repeat;
+            &:before {
+                content: "";
+                display: inline-block;
+                width: 5px;
+                height: 100%;
+                position: absolute;
+                right: 0;
+                background: #DBE9E7;
+            }
             img {
-                width:100%;
-                height:100%;
+                display: none;
             }
         }
     }
@@ -517,13 +527,26 @@
 //  ---------------------------------------------
 
 .media-width(@extremum, @break) when (@extremum = 'max') and (@break = @screen__m) {
+    .text-des {
+        font-size: 16px;
+        line-height: 22px;
+    }
+    .title-nomal {
+        font-size:30px;
+    }
+    .btn-one-one {
+        font-size:15px;
+    }
     .block-for-branch {
         background-position: right !important;
         padding:80px 0;
     }
+    .bg-banner-home {
+        background: #e5e5e3!important;
+    }
     .banner-content-6 {
         &.banner-content-one {
-            padding: 25px 0 560px;
+            padding: 70px 15px;
             .title-banner {
                 font-size: 30px;
                 line-height: 30px;
@@ -536,6 +559,15 @@
             .content-deton {
                 max-width: 100%;
                 padding: 50px 15px;
+                h4 {
+                    font-size: 25px;
+                }
+            }
+        }
+        .col-md-4 {
+            img {
+                display:block;
+                width:100%;
             }
         }
     }
@@ -1127,6 +1159,9 @@
     }
 }
 .media-width(@extremum, @break) when (@extremum = 'min') and (@break = @screen__xxl) {
+    .block-for-branch {
+        padding: 130px 0 164px;
+    }
     .banner-content-6 {
        &.banner-content-one {
            padding: 130px 0 840px;
@@ -1145,7 +1180,7 @@
     .custom-item {
         .bg-deton {
             .content-deton {
-                padding: 50px 160px 50px 190px;
+                padding: 107px 160px 100px 190px;
                 h4 {
                     font-size:50px;
                 }
