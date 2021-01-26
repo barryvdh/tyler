@@ -1,7 +1,8 @@
 <?php
     $product_view = $this->getConfig('porto_settings/category');
     $block = $this->getLayout()->createBlock('Magento\Cms\Block\Block');
-    $isLoggedIn = $this->getLayout()->createBlock('Magento\Customer\Block\Account\AuthorizationLink')->isLoggedIn();
+    $isLoggedIn = $this->getLayout()
+        ->createBlock('Magento\Customer\Block\Account\AuthorizationLink')->isLoggedIn();
 ?>
 <?php if ($isLoggedIn):
         if ($block) {
