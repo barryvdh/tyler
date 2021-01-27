@@ -1,5 +1,4 @@
-<?xml version="1.0"?>
-<!--
+<?php
 /**
  * BSS Commerce Co.
  *
@@ -16,13 +15,24 @@
  * @copyright  Copyright (c) 2021 BSS Commerce Co. ( http://bsscommerce.com )
  * @license    http://bsscommerce.com/Bss-Commerce-License.txt
  */
--->
-<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-        xsi:noNamespaceSchemaLocation="urn:magento:framework:Module/etc/module.xsd">
-    <module name="Bss_BrandRepresentative" setup_version="1.0.0" >
-        <sequence name="Magento_Sales" />
-        <sequence name="Magento_Checkout" />
-        <sequence name="Magento_Catalog" />
-        <sequence name="Magento_Widget" />
-    </module>
-</config>
+
+namespace Bss\BrandRepresentative\Observer\Catalog;
+
+use Magento\Framework\Event\Observer;
+use Magento\Framework\Event\ObserverInterface;
+
+/**
+ * Class CategorySaveAfter
+ * Event that trigger after category save to save addition brand email data
+ */
+class CategorySaveAfter implements ObserverInterface
+{
+    /**
+     * @param Observer $observer
+     * @return void
+     */
+    public function execute(Observer $observer): void
+    {
+
+    }
+}
