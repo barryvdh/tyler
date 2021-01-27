@@ -178,7 +178,8 @@ class BrandList extends Template implements BlockInterface
     {
         try {
             $categoryIds = $this->getCategoryIds();
-            $categoryCollection = $this->categoryCollectionFactory->create();
+            $categoryCollection = $this->categoryCollectionFactory->create()
+                ->setStore($this->_storeManager->getStore());
             if (!empty($categoryIds)) {
                 $ids = explode(',', $categoryIds);
                 $categoryCollection->addAttributeToFilter('entity_id', ['in' => $ids]);
