@@ -1,0 +1,53 @@
+<?php
+/**
+ * BSS Commerce Co.
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the EULA
+ * that is bundled with this package in the file LICENSE.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://bsscommerce.com/Bss-Commerce-License.txt
+ *
+ * @category   BSS
+ * @package    Bss_BrandRepresentative
+ * @author     Extension Team
+ * @copyright  Copyright (c) 2021 BSS Commerce Co. ( http://bsscommerce.com )
+ * @license    http://bsscommerce.com/Bss-Commerce-License.txt
+ */
+use Bss\BrandRepresentative\Block\Brand\Widget\BrandList;
+
+/**
+ * @var $block BrandList
+ */
+?>
+
+<div class="brands-list-all">
+    <div class="content-featured-brand">
+        <div class="container">
+            <h4 class="title-nomal"><?= $block->getTitle()?></h4>
+            <div class="products wrapper grid columns5 products-grid">
+                <ol class="filterproducts products list items product-items">
+                    <?php $categories = $block->getFeaturesCategory(); ?>
+                    <?php foreach ($categories as $category): ?>
+                        <li class="item product product-item">
+                            <div class="product-item-info type1" data-container="product-grid">
+                                <div class="product photo product-item-photo">
+                                    <a href=<?= $category->getUrl() ?> tabindex="-1">
+                                        <?php if ($category->getImageUrl()): ?>
+                                            <?php $imageResize = $block->getResize($category->getImage());?>
+                                            <img class="product-image-photo default_image porto-lazyload" data-src="<?= $block->escapeUrl($imageResize) ?>" alt="<?= $category->getName(); ?>" />
+                                        <?php else: ?>
+                                            <img class="product-image-photo default_image porto-lazyload" data-src="<?= $block->escapeUrl($block->getPlaceHolderImage()) ?>" alt="<?= $category->getName(); ?>" />
+                                        <?php endif; ?>
+                                        <span><?php echo $category->getName(); ?></span>
+                                    </a>
+                                </div>
+                            </div>
+                        </li>
+                    <?php endforeach; ?>
+                </ol>
+            </div>
+        </div>
+    </div>
+</div>

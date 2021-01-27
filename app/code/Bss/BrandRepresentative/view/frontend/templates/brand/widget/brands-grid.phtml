@@ -1,0 +1,68 @@
+<?php
+/**
+ * BSS Commerce Co.
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the EULA
+ * that is bundled with this package in the file LICENSE.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://bsscommerce.com/Bss-Commerce-License.txt
+ *
+ * @category   BSS
+ * @package    Bss_BrandRepresentative
+ * @author     Extension Team
+ * @copyright  Copyright (c) 2021 BSS Commerce Co. ( http://bsscommerce.com )
+ * @license    http://bsscommerce.com/Bss-Commerce-License.txt
+ */
+use Bss\BrandRepresentative\Block\Brand\Widget\BrandList;
+
+/**
+ * @var $block BrandList
+ */
+?>
+
+<div class="content-list">
+    <div class="container">
+        <div id="layer-product-list" class="list-brands">
+            <h4 class="title-nomal"><?= $block->getTitle()?></h4>
+            <div class="toolbar toolbar-products" data-mage-init="{&quot;productListToolbarForm&quot;:{&quot;mode&quot;:&quot;product_list_mode&quot;,&quot;direction&quot;:&quot;product_list_dir&quot;,&quot;order&quot;:&quot;product_list_order&quot;,&quot;limit&quot;:&quot;product_list_limit&quot;,&quot;modeDefault&quot;:&quot;grid&quot;,&quot;directionDefault&quot;:&quot;asc&quot;,&quot;orderDefault&quot;:&quot;position&quot;,&quot;limitDefault&quot;:12,&quot;url&quot;:&quot;http:\/\/devm2php74.tk\/one2oneretail-hue\/default\/redecan\/sell-sheets.html&quot;,&quot;formKey&quot;:&quot;63RHzmrMwCTyGFw9&quot;,&quot;post&quot;:false}}">
+                <div class="toolbar-sorter sorter">
+                    <label class="sorter-label" for="sorter">Sort By</label>
+                    <select id="sorter" data-role="sorter" class="sorter-options">
+                        <option value="name">
+                            Brand Name            </option>
+                        <option value="price">
+                            Most Viewed            </option>
+                    </select>
+                    <a title="Set Descending Direction" href="#" class="action sorter-action sort-asc" data-role="direction-switcher" data-value="desc">
+                        <span>Set Descending Direction</span>
+                    </a>
+                </div>
+            </div>
+            <div class="products wrapper grid columns5 products-grid">
+                <ol class="filterproducts products list items product-items">
+                    <?php $categories = $block->getFeaturesCategory(); ?>
+                    <?php foreach ($categories as $category): ?>
+                        <li class="item product product-item">
+                            <div class="product-item-info type1" data-container="product-grid">
+                                <div class="product photo product-item-photo">
+                                    <a href=<?= $category->getUrl() ?> tabindex="-1">
+                                        <?php if ($category->getImageUrl()): ?>
+                                            <?php $imageResize = $block->getResize($category->getImage());?>
+                                            <img class="product-image-photo default_image porto-lazyload" data-src="<?= $block->escapeUrl($imageResize) ?>" alt="<?= $category->getName(); ?>" />
+                                        <?php else: ?>
+                                            <img class="product-image-photo default_image porto-lazyload" data-src="<?= $block->escapeUrl($block->getPlaceHolderImage()) ?>" alt="<?= $category->getName(); ?>" />
+                                        <?php endif; ?>
+                                        <span><?php echo $category->getName(); ?></span>
+                                    </a>
+                                </div>
+                            </div>
+                        </li>
+                    <?php endforeach; ?>
+                </ol>
+            </div>
+        </div>
+    </div>
+</div>
+<?= $block->getToolbarHtml() ?>
