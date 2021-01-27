@@ -106,12 +106,21 @@ class DataProvider
         $newData = [];
         foreach ($data as $id => $categoryData) {
             $startLevel = 1;
+            $categoryData['use_company_configuration'] = self::IS_USE_COMPANY_CATEGORY_CONFIG;
+            $requestId = $categoryData['entity_id'] ?? $this->request->getParam('parent');
 
+            // Is add category action
             if (!isset($categoryData['entity_id'])) {
+                if ($this->request->getParam('parent')) {
+                    $startLevel = 2;
+                }
+            }
+
+            if (!$requestId) {
                 continue;
             }
-            $brandRepresentativeEmailData = $this->getBrandRepresentativeEmailDataRecursive($categoryData['entity_id'], $startLevel);
-            $categoryData['use_company_configuration'] = self::IS_USE_COMPANY_CATEGORY_CONFIG;
+
+            $brandRepresentativeEmailData = $this->getBrandRepresentativeEmailDataRecursive($requestId, $startLevel);
 
             if ($brandRepresentativeEmailData) {
                 if ($brandRepresentativeEmailData['bss_brand_representative_email']) {
