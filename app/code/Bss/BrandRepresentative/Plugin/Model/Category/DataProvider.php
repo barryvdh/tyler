@@ -106,6 +106,10 @@ class DataProvider
         $newData = [];
         foreach ($data as $id => $categoryData) {
             $startLevel = 1;
+
+            if (!isset($categoryData['entity_id'])) {
+                continue;
+            }
             $brandRepresentativeEmailData = $this->getBrandRepresentativeEmailDataRecursive($categoryData['entity_id'], $startLevel);
             $categoryData['use_company_configuration'] = self::IS_USE_COMPANY_CATEGORY_CONFIG;
 
