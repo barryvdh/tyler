@@ -11,14 +11,13 @@
         }
         ?>
 <?php else: ?>
-    <div class="not-logged-in custom-block">
-        <p><?= __('You need to login for further action!') ?></p>
+    <div class="not-logged-in content-sche btn-content">
+        <p class="text-login"><?= __('You need to login for further action!') ?></p>
         <div class="to-login action wrapper">
-            <button class="action primary" id="to-login">
-                <a href="<?= $block->getUrl('customer/account/login') ?>">
-                    <span style="color: #ffffff"><?= __('To login') ?></span>
-                </a>
-            </button>
+            <a class="btn-sidebar sche" href="<?= $block->getUrl('customer/account/login') ?>">
+                <?= __('To login') ?>
+            </a>
+            
         </div>
     </div>
 <?php endif; ?>

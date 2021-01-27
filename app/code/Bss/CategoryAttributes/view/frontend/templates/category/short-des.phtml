@@ -1,18 +1,40 @@
+<?php
+/**
+ * BSS Commerce Co.
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the EULA
+ * that is bundled with this package in the file LICENSE.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://bsscommerce.com/Bss-Commerce-License.txt
+ *
+ * @category   BSS
+ * @package    Bss_CategoryAttributes
+ * @author     Extension Team
+ * @copyright  Copyright (c) 2017-2018 BSS Commerce Co. ( http://bsscommerce.com )
+ * @license    http://bsscommerce.com/Bss-Commerce-License.txt
+ */
+/**@var Bss\CategoryAttributes\ViewModel\Output $viewModel*/
+$viewModel = $block->getData('view_model');
+?>
 <div class="category-top">
-	<div class="row">
-		<div class="col-md-3"><?php echo $block->getChildHtml('category.image');?></div>
-		<div class="col-md-9 col-right">
-			<div class="name-category">
-				<h2 class="title-category title-nomal">
-					<?php if ($_categoryname = $block->getCurrentCategory()->getName()): ?>
-					   	<?php echo $this->helper('Magento\Catalog\Helper\Output')->categoryAttribute($block->getCurrentCategory(), $_categoryname, 'name') ?>
-					<?php endif; ?>
+	<div class="container">
+		<div class="row">
+			<div class="col-md-3"><?php echo $block->getChildHtml('category.image');?></div>
+			<div class="col-md-9 col-right">
+				<div class="name-category">
+					<h2 class="title-category title-nomal">
+						<?php if ($_categoryname = $block->getCurrentCategory()->getName()): ?>
+						   	<?= $viewModel->getCatalogOutputHelper()->categoryAttribute($block->getCurrentCategory(), $_categoryname, 'name');?>
+						<?php endif; ?>
 
-				</h2>
+					</h2>
+				</div>
+				<?php if ($_description = $block->getCurrentCategory()->getShortDescription()): ?>
+				   	<?= $viewModel->getCatalogOutputHelper()->categoryAttribute($block->getCurrentCategory(), $_description, 'short_description');?>
+				<?php endif; ?>
 			</div>
-			<?php if ($_description = $block->getCurrentCategory()->getShortDescription()): ?>
-			   	<?php echo $this->helper('Magento\Catalog\Helper\Output')->categoryAttribute($block->getCurrentCategory(), $_description, 'short_description') ?>
-			<?php endif; ?>
 		</div>
 	</div>
 </div>

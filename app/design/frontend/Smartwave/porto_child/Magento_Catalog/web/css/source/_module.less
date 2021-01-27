@@ -32,16 +32,17 @@
         #maincontent {
             max-width: 100%;
             padding: 0;
+            background: linear-gradient(to left, #f4f4f5 30%, #fff 70%);
         }
         .category-top {
             position: relative;
-            margin-bottom: 70px;
+            margin-bottom: 40px;
             .category-image {
                 width: 250px;
                 border: 2px solid #ebe9e9;
                 position: absolute;
                 top: -110px;
-                right: -7px;
+                right: 2px;
                 background: #fff;
                 height: 250px;
                 .image {
@@ -51,7 +52,7 @@
                 }
             }
             .col-right {
-                padding-left:25px;
+                padding-left:30px;
             }
         }
         .des-detail {
@@ -84,16 +85,18 @@
                     display:none;
                 }
             }
+            .more,
+            .text-login {
+                font-size:16px;
+                font-family: @font-family__bothambook;
+                color: #2F3C4F;
+            }
             .category-description {
                 color: #2F3C4F;
-                padding-bottom: 60px;
+                padding-bottom: 20px;
                 h3 {
                     font-size: 18px;
                     font-weight: bold;
-                }
-                .more {
-                    font-size:21px;
-                    font-family: @font-family__bothambook;
                 }
                 .morelink {
                     text-transform: uppercase;
@@ -129,10 +132,10 @@
                 }
             }
             .btn-content {
-                padding: 40px 0;
-                border-bottom: 2px solid #ebe9e9;
+                padding: 25px 0;
+                border-bottom: 1px solid #abb0b8;
                 &.content-sche {
-                    border-top: 2px solid #ebe9e9;
+                    border-top: 1px solid #abb0b8;
                 }
             }
             .sche {
@@ -149,18 +152,18 @@
         &.page-layout-2columns-left {
             .column {
                 &.main {
-                    margin-left: 22px;
-                    width: calc(~'75% - 22px');
+                    margin-left: 30px;
+                    width: calc(~'75% - 30px');
                     background: #f4f4f5;
-                    padding: 15px 35px 80px!important;
+                    padding: 32px 0px 80px 35px!important;
                     .products-grid {
-                        margin-top:25px;
+                        margin-top: 37px;
                     }
                 }
             }
         }
         .product-item-photo {
-            border: 2px solid #d5d8dc;
+            border: 2px solid #ebe9e9;
             background: #fff;
         }
         .products-grid {
@@ -177,9 +180,8 @@
                         .product {
                             &.name {
                                 a {
-                                    font-size: 22px;
+                                    font-size: 20px;
                                     color: #2F3C4F;
-                                    font-family: @font-family__bothambook;
                                 }
                             }
                         }
@@ -907,6 +909,11 @@
         .product.media {
             .lib-vendor-prefix-order(-1);
         }
+        #maincontent {
+            .columns {
+                max-width:720px;
+            }
+        }
     }
     .catalog-category-view {
         &.page-layout-2columns-left {
@@ -930,7 +937,7 @@
             }
         }
         .title-category {
-            font-size: 30px;
+            font-size: 40px;
             margin: 0;
         }
         .des-detail {
@@ -978,6 +985,12 @@
             }
             &.sidebar-main {
                 padding: 30px 15px;
+            }
+        }
+        #maincontent {
+            .columns {
+                max-width: 720px;
+                margin:0 auto;
             }
         }
         .category-top {
@@ -1681,55 +1694,62 @@ body.catalog-product-compare-index {
         }
     }
     .catalog-category-view {
+        #maincontent {
+            .columns {
+                max-width:960px;
+                margin:0 auto;
+            }
+        }
         .category-top {
             .category-image {
-                width: 250px;
-                height: 250px;
+                width: 97%;
+                height: 230px;
                 .image {
                     position: absolute;
                 }
             }
         }
         .title-category {
-            font-size: 30px;
+            font-size: 40px;
             margin: 35px 0 5px;
         }
         .des-detail {
-            font-size:22px;
-        }
-        .products-grid {
-            .product-item {
-                .product-item-info {
-                  &.type1 {
-                      .product {
-                         &.name {
-                             a {
-                                 font-size:22px;
-                             }
-                         }
-                      }
-                  }
-                }
-            }
+            font-size:24px;
         }
         .btn-sidebar {
-            padding: 10px 15px;
-            width: 170px;
+            padding: 12px 15px;
+            width: 192px;
             font-size: 16px;
             font-weight: 500;
         }
     }
 }
+.media-width(@extremum, @break) when (@extremum = 'min') and (@break = @screen__xl) {
+    .catalog-category-view {
+        #maincontent {
+            .columns {
+                max-width: 1140px;
+                margin: 0 auto;
+            }
+        }
+        .category-top {
+            margin-bottom: 77px;
+            .category-image {
+                height: 270px;
+                right:-7px;
+            }
+            .col-right {
+                padding-left:35px;
+            }
+        }
+
+    }
+}
 .media-width(@extremum, @break) when (@extremum = 'min') and (@break = @screen__xxl) {
     .catalog-category-view {
         .sidebar {
-            .category-description {
-                .more {
-                    font-size: 21px;
-                }
-            }
             &.sidebar-main {
-                padding: 40px;
+                padding: 40px 35px;
             }
         }
     }
