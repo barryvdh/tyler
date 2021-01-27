@@ -34,7 +34,7 @@
                     <comment><![CDATA[Version 1.0.0]]></comment>
                 </field>
                 <field id="attributes" translate="label" type="multiselect" sortOrder="22" showInDefault="1" showInWebsite="1" showInStore="1">
-                    <label><![CDATA[Show Additional Attributes]]></label>
+                    <label><![CDATA[Hide Additional Attributes]]></label>
                     <source_model>Bss\HideProductField\Model\Config\Source\Attributes</source_model>
                     <comment><![CDATA[Choose attributes which can't display in backend product page.]]></comment>
                     <can_be_empty>1</can_be_empty>
