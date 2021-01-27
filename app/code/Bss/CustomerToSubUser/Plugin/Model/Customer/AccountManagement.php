@@ -164,4 +164,34 @@ class AccountManagement
 
         return $result;
     }
+
+    /**
+     * If the current customer is sub-customer then get and return the company account id
+     *
+     * @param BePlugged $subject
+     * @param int $customerId
+     * @return array
+     *
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     */
+    public function beforeGetDefaultBillingAddress(
+        BePlugged $subject,
+        $customerId
+    ) {
+        try {
+            $customer = $this->customerRepository->getById($customerId);
+            $companyAccount = $this->companyAccManagement->getCompanyAccountBySubEmail(
+                $customer->getEmail(),
+                $customer->getWebsiteId()
+            );
+
+            if ($companyAccountId = $companyAccount->getCompanyCustomer()->getId()) {
+                return [$companyAccountId];
+            }
+        } catch (\Exception $e) {
+            $this->logger->critical($e);
+        }
+
+        return [$customerId];
+    }
 }
