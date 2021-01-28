@@ -48,6 +48,8 @@ use Magento\Catalog\Model\ResourceModel\Category\CollectionFactory;
  */
 class BrandList extends Template implements BlockInterface
 {
+    const BRAND_CATEGORY = 3;
+
     /**
      * @var StoreManagerInterface
      */
@@ -172,14 +174,22 @@ class BrandList extends Template implements BlockInterface
     }
 
     /**
-     * @return array
+     * @return array|\Magento\Catalog\Model\ResourceModel\Category\Collection
      */
     public function getFeaturesCategory()
     {
         try {
             $categoryIds = $this->getCategoryIds();
+            /** @var \Magento\Catalog\Model\ResourceModel\Category\Collection $categoryCollection */
             $categoryCollection = $this->categoryCollectionFactory->create()
                 ->setStore($this->_storeManager->getStore());
+            $categoryCollection->addAttributeToFilter([
+                [
+                    'attribute' => 'level',
+                    'gteq' => self::BRAND_CATEGORY
+                ]
+            ]);
+
             if (!empty($categoryIds)) {
                 $ids = explode(',', $categoryIds);
                 $categoryCollection->addAttributeToFilter('entity_id', ['in' => $ids]);
@@ -187,6 +197,10 @@ class BrandList extends Template implements BlockInterface
             } else {
                 $categoryCollection->setPageSize($this->getCategoryToDisplay());
             }
+
+            // Temp
+            $categoryCollection->setPageSize(3);
+
             return $categoryCollection;
         } catch (NoSuchEntityException $e) {
             $this->_logger->critical($e->getMessage());
