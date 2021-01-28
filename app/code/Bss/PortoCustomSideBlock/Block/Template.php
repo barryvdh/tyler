@@ -18,7 +18,7 @@
 namespace Bss\PortoCustomSideBlock\Block;
 
 use Magento\Backend\Block\Template\Context;
-use Magento\Customer\Model\Session;
+use Magento\Customer\Model\SessionFactory;
 use Magento\Framework\Registry;
 
 /**
@@ -42,7 +42,7 @@ class Template extends \Smartwave\Porto\Block\Template
     public function __construct(
         Context $context,
         Registry $coreRegistry,
-        Session $customerSession,
+        SessionFactory $customerSession,
         array $data = []
     ) {
         $this->customerSession = $customerSession;
@@ -54,6 +54,6 @@ class Template extends \Smartwave\Porto\Block\Template
      */
     public function customerIsLoggedIn(): bool
     {
-        return $this->customerSession->isLoggedIn();
+        return $this->customerSession->create()->isLoggedIn();
     }
 }
