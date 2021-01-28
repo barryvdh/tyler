@@ -26,6 +26,13 @@
         display: block;
     }
     .catalog-category-view {
+        .products-grid {
+            + .toolbar {
+                &.toolbar-products {
+                    border-top:0;
+                }
+            }
+        }
         .breadcrumbs {
             display:none;
         }
@@ -937,7 +944,7 @@
             }
         }
         .title-category {
-            font-size: 40px;
+            font-size: 35px;
             margin: 0;
         }
         .des-detail {
