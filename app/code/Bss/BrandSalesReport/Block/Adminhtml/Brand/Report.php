@@ -35,7 +35,7 @@ class Report extends Container
     {
         $this->_blockGroup = 'Bss_BrandSalesReport';
         $this->_controller = 'adminhtml_brand_report';
-        $this->_headerText = __('Brand Sales Report');
+        $this->_headerText = __('Brand Sales Rep Report');
         parent::_construct();
 
         $this->buttonList->remove('add');

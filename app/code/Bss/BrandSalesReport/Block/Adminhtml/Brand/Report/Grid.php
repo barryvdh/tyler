@@ -62,7 +62,7 @@ class Grid extends AbstractGrid
         $this->addColumn(
             'period',
             [
-                'header' => __('Interval'),
+                'header' => __('Period'),
                 'index' => 'period',
                 'sortable' => false,
                 'period_type' => $this->getPeriodType(),
