@@ -945,6 +945,46 @@
             margin-top:30px;
         }
     }
+    //Home
+    .product-item {
+        &:hover {
+            .product-item-info.type1 {
+                .product-item-photo {
+                    box-shadow: none!important;
+                }
+            }
+        }
+    }
+    .featured-brands-home {
+        .title-nomal {
+            font-size: 30px;
+            text-align: center;
+            margin-bottom: 50px;
+        }
+        .toolbar {
+            .sorter {
+                display:none;
+            }
+        }
+        .content-featured-brand {
+            background: @color-white;
+        }
+        .photo {
+            background: #f0f0f0;
+        }
+        .brands-list-all {
+            .photo {
+                border:0;
+            }
+        }
+        .content-list {
+            padding: 58px 0 65px;
+        }
+    }
+    .bnt-featured {
+        text-align: center;
+        margin-bottom: 150px;
+    }
 }
 
 //
@@ -1007,6 +1047,12 @@
         .title-nomal {
             font-size: 18px;
             margin: 0 0 15px;
+        }
+    }
+    .featured-brands-home {
+        .title-nomal {
+            font-size: 25px;
+            margin-bottom: 20px;
         }
     }
 }
