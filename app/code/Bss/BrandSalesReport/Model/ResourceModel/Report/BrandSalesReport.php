@@ -30,6 +30,7 @@ use Magento\Reports\Model\FlagFactory;
 use Magento\Sales\Model\ResourceModel\Report\AbstractReport;
 use Psr\Log\LoggerInterface;
 use Zend_Db_Expr;
+use Magento\Framework\Serialize\Serializer\Json;
 
 /**
  * Class BrandSalesReport
@@ -62,6 +63,11 @@ class BrandSalesReport extends AbstractReport
     protected $logger;
 
     /**
+     * @var Json
+     */
+    protected $json;
+
+    /**
      * @param Context $context
      * @param LoggerInterface $logger
      * @param TimezoneInterface $localeDate
@@ -71,6 +77,7 @@ class BrandSalesReport extends AbstractReport
      * @param ResourceConnection $resource
      * @param TimezoneInterface $timezone
      * @param CollectionFactory $bssReportCollectionFactory
+     * @param Json $json
      * @param null $connectionName
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
@@ -84,6 +91,7 @@ class BrandSalesReport extends AbstractReport
         ResourceConnection $resource,
         TimezoneInterface $timezone,
         CollectionFactory $bssReportCollectionFactory,
+        Json $json,
         $connectionName = null
     ) {
         parent::__construct(
@@ -99,6 +107,7 @@ class BrandSalesReport extends AbstractReport
         $this->timezone = $timezone;
         $this->logger = $logger;
         $this->bssReportCollectionFactory = $bssReportCollectionFactory;
+        $this->json = $json;
     }
 
     /**
@@ -188,7 +197,7 @@ class BrandSalesReport extends AbstractReport
                         'product_sku'        => $info['product_sku'],
                         'product_name'       => $info['product_name'],
                         'product_brand'      => $info['brand'],
-                        'product_brand_email'=> $info['representative_email'],
+                        'product_brand_email'=> $this->convertEmailToSimpleString($info['representative_email']),
                         'qty_ordered'        => $info['ordered_qty']
                     ];
                 }
@@ -223,6 +232,25 @@ class BrandSalesReport extends AbstractReport
         }
 
         return $this;
+    }
+
+    /**
+     * @param string $emailSerialized
+     * @return string
+     */
+    public function convertEmailToSimpleString(string $emailSerialized): string
+    {
+        $allEmailBrand = [];
+        $arraySimplified = $this->json->unserialize($emailSerialized);
+        if (!empty($arraySimplified)) {
+            foreach ($arraySimplified as $emailPerBrand) {
+                foreach ($emailPerBrand as $email) {
+                    $allEmailBrand[] = $email;
+                }
+            }
+            return implode(',', $allEmailBrand);
+        }
+        return '';
     }
 
     /**
