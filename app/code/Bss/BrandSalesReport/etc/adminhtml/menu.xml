@@ -22,7 +22,7 @@
         xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Backend:etc/menu.xsd">
     <menu>
         <add id="Bss_BrandSalesReport::report_brandsalesreport"
-            title="Brand Sales Report"
+            title="Brand Sales Rep Report"
             module="Bss_BrandSalesReport"
             sortOrder="30"
             parent="Magento_Reports::report_salesroot"
