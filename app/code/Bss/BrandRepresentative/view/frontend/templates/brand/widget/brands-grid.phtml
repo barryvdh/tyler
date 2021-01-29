@@ -15,7 +15,7 @@
  * @copyright  Copyright (c) 2021 BSS Commerce Co. ( http://bsscommerce.com )
  * @license    http://bsscommerce.com/Bss-Commerce-License.txt
  */
-use Bss\BrandRepresentative\Block\Brand\Widget\BrandList;
+use Bss\BrandRepresentative\Block\Brand\Pages\BrandList;
 
 /**
  * @var $block BrandList
@@ -25,24 +25,13 @@ use Bss\BrandRepresentative\Block\Brand\Widget\BrandList;
 
 <div class="content-list">
     <div class="container">
-        <div id="layer-product-list" class="list-brands">
+        <div id="layer-brand-list" class="list-brands" data-mage-init='{"Bss_BrandRepresentative/js/scroll-to-brand-list":{}}'>
             <h4 class="title-nomal"><?= $block->getTitle()?></h4>
-            <div class="toolbar toolbar-products" data-mage-init="{&quot;productListToolbarForm&quot;:{&quot;mode&quot;:&quot;product_list_mode&quot;,&quot;direction&quot;:&quot;product_list_dir&quot;,&quot;order&quot;:&quot;product_list_order&quot;,&quot;limit&quot;:&quot;product_list_limit&quot;,&quot;modeDefault&quot;:&quot;grid&quot;,&quot;directionDefault&quot;:&quot;asc&quot;,&quot;orderDefault&quot;:&quot;position&quot;,&quot;limitDefault&quot;:12,&quot;url&quot;:&quot;http:\/\/devm2php74.tk\/one2oneretail-hue\/default\/redecan\/sell-sheets.html&quot;,&quot;formKey&quot;:&quot;63RHzmrMwCTyGFw9&quot;,&quot;post&quot;:false}}">
-                <div class="toolbar-sorter sorter">
-                    <label class="sorter-label" for="sorter"><?= __("Sort By") ?></label>
-                    <select id="sorter" data-role="sorter" class="sorter-options">
-                        <option value="name"><?= __("Brand Name") ?></option>
-                        <option value="most_viewed"><?= __("Most Viewed") ?></option>
-                    </select>
-                    <a title="Set Descending Direction" href="#" class="action sorter-action sort-asc" data-role="direction-switcher" data-value="desc">
-                        <span>Set Descending Direction</span>
-                    </a>
-                </div>
-            </div>
+            <?= $block->getToolbarHtml() ?>
             <div class="products wrapper grid columns5 products-grid">
                 <ol class="filterproducts products list items product-items">
-                    <?php $categories = $block->getFeaturesCategory(); ?>
-                    <?php foreach ($categories as $category): ?>
+                    <?php $categories = $block->getCategories(); ?>
+                    <?php foreach ($categories->getItems() as $category): ?>
                         <li class="item product product-item">
                             <div class="product-item-info type1" data-container="product-grid">
                                 <div class="product photo product-item-photo">
@@ -61,53 +50,7 @@ use Bss\BrandRepresentative\Block\Brand\Widget\BrandList;
                     <?php endforeach; ?>
                 </ol>
             </div>
-            <div class="toolbar toolbar-products">
-                <style>
-                    .pagination li.pagination-item {
-                        padding-left: 10px;
-                        padding-right: 10px;
-                        padding-top: 3px;
-                        padding-bottom: 3px;
-                        border: 1px solid #f8f8f8;
-                        margin-left: 5px;
-                        margin-bottom: 0;
-                    }
-                    .pagination li.pagination-item:hover {
-                        cursor: pointer;
-                        background: #f7e1b5;
-                        transition: background .25s ease-out;
-                    }
-                </style>
-                <div class="toolbar-sorter pagination">
-                    <ul class="pagination-container" style="display: flex;list-style: none;">
-                        <li class="pagination-item">1</li>
-                        <li class="pagination-item">2</li>
-                        <li class="pagination-item">3</li>
-                    </ul>
-                </div>
-            </div>
+            <?= $block->getToolbarHtml() ?>
         </div>
     </div>
 </div>
-<script type="text/x-magento-init">
-    {
-        ".list-brands": {
-            "Magento_Ui/js/core/app": {
-                "components": {
-                    "brand_list": {
-                        "component": "Bss_BrandRepresentative/js/view/brand-list",
-                        "children": {
-                            "brand_sorter": {
-                                "component": "Bss_BrandRepresentative/js/view/brand-sorter"
-                            },
-                            "brand_pagination": {
-                                "component": "Bss_BrandRepresentative/js/view/brand-pagination"
-                            }
-                        }
-                    }
-                }
-            }
-        }
-    }
-</script>
-<?= $block->getToolbarHtml() ?>

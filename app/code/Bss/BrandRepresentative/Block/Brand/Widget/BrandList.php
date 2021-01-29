@@ -49,6 +49,7 @@ use Magento\Catalog\Model\ResourceModel\Category\CollectionFactory;
 class BrandList extends Template implements BlockInterface
 {
     const BRAND_CATEGORY = 3;
+    const ALL_BRAND_PAGE_SIZE = 20;
 
     /**
      * @var StoreManagerInterface
@@ -101,7 +102,6 @@ class BrandList extends Template implements BlockInterface
     protected $categoryCollectionFactory;
 
     //Default page size value
-    public const PAGE_FEATURE_SIZE = 10;
     public const PAGE_DEFAULT_FEATURE_TITLE = 'Featured Brands';
 
     /**
@@ -193,13 +193,8 @@ class BrandList extends Template implements BlockInterface
             if (!empty($categoryIds)) {
                 $ids = explode(',', $categoryIds);
                 $categoryCollection->addAttributeToFilter('entity_id', ['in' => $ids]);
-                $categoryCollection->setPageSize(self::PAGE_FEATURE_SIZE);
-            } else {
-                $categoryCollection->setPageSize($this->getCategoryToDisplay());
             }
-
-            // Temp
-            $categoryCollection->setPageSize(3);
+            $categoryCollection->setPageSize($this->getPageSize());
 
             return $categoryCollection;
         } catch (NoSuchEntityException $e) {
@@ -249,21 +244,9 @@ class BrandList extends Template implements BlockInterface
             }
         } catch (Exception $e) {
             $this->_logger->critical($e->getMessage());
-            return false;
         }
-    }
 
-    /**
-     * Retrieve how many category should be displayed
-     *
-     * @return int
-     */
-    public function getCategoryToDisplay()
-    {
-        if (!$this->hasData('page_size')) {
-            $this->setData('page_size', self::PAGE_SIZE);
-        }
-        return $this->getData('page_size');
+        return false;
     }
 
     /**
@@ -273,7 +256,7 @@ class BrandList extends Template implements BlockInterface
      */
     public function getCategoryIds()
     {
-        $conditions = $this->getData('conditions') ?: $this->getData('conditions_encoded');
+        $conditions = $this->getData('conditions') ?: $this->getData('conditions_encoded') ?? [];
 
         if ($conditions) {
             $conditions = $this->conditionsHelper->decode($conditions);
@@ -298,16 +281,27 @@ class BrandList extends Template implements BlockInterface
         $this->pager = $this->getLayout()->createBlock(
             Pager::class,
             'widget.brands.list.pager'
-        )->setCollection($this->getCategory());
+        )->setCollection($this->getFeaturesCategory());
         $this->pager->setUseContainer(true)
                     ->setShowAmounts(true)
                     ->setShowPerPage(true)
                     ->setPageVarName($this->getData('page_var_name'))
-                    ->setLimit((int)$this->getCategoryToDisplay())
-                    ->setTotalLimit($this->getCategory()->getSize());
+                    ->setLimit((int)$this->getPageSize())
+                    ->setTotalLimit($this->getFeaturesCategory()->getSize());
         if ($this->pager instanceof AbstractBlock) {
             return $this->pager->toHtml();
         }
+
         return '';
+    }
+
+    /**
+     * Get widget page size
+     *
+     * @return int
+     */
+    private function getPageSize()
+    {
+        return $this->getData('page_size') ?: self::ALL_BRAND_PAGE_SIZE;
     }
 }

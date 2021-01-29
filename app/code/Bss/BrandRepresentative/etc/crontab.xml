@@ -24,5 +24,8 @@
         <job instance="Bss\BrandRepresentative\Cron\Admin\SalesRepProvinces" method="execute" name="bss_sales_rep_province_email">
             <schedule>0 9 * * *</schedule>
         </job>
+        <job instance="Bss\BrandRepresentative\Cron\ClearBrandsCmsPageCache" method="execute" name="bss_clear_brands_cms_page_cache">
+            <schedule>0 0 * * *</schedule>
+        </job>
     </group>
 </config>

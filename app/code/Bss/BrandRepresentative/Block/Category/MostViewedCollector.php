@@ -43,7 +43,7 @@ class MostViewedCollector extends \Magento\Framework\View\Element\Template
      */
     public function isBrandCategory()
     {
-        return $this->getCurrentCategory()->getLevel() == self::IS_BRAND_CATEGORY_LV;
+        return $this->getCurrentCategory()->getLevel() >= self::IS_BRAND_CATEGORY_LV;
     }
 
     /**

@@ -6,4 +6,6 @@
                 type="Bss\BrandRepresentative\Model\MostViewed"/>
     <preference for="Bss\BrandRepresentative\Api\MostViewedRepositoryInterface"
                 type="Bss\BrandRepresentative\Model\MostViewedRepository"/>
+    <preference for="Magento\Catalog\Model\ResourceModel\Category\Collection"
+                type="Bss\BrandRepresentative\Model\ResourceModel\Category\Collection"/>
 </config>
