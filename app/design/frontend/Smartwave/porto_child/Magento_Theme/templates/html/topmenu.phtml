@@ -29,13 +29,16 @@ $_menuHtml = $block->getHtml('level-top', 'submenu', $columnsLimit)
 ?>
 
 <nav class="navigation" data-action="navigation">
-    <div class="menu-brand-all">
-        <button class="drop-hover"><?= __("Brands")?></button>
-        <div class="dropdown-content">
-            <ul data-mage-init='{"menu":{"responsive":true, "expanded":true, "position":{"my":"left top","at":"left bottom"}}}'>
-                <?= /* @noEscape */ $_menuHtml?>
-                <?= $block->getChildHtml() ?>
-            </ul>
-        </div>
-    </div>
+   	<ul>
+   		<li class="ui-menu-item level0 parent">
+   			<a class="level-top level-top-new" href="#"><span><?= __("Brands")?></span></a>
+   			
+   					 <ul class="level1 submenu" data-mage-init='{"menu":{"responsive":true, "expanded":true, "position":{"my":"left top","at":"left bottom"}}}'>
+			                <?= /* @noEscape */ $_menuHtml?>
+			                <?= $block->getChildHtml() ?>
+			        </ul>
+			 
+   		</li>
+   		<?= $this->getLayout()->createBlock('Magento\Cms\Block\Block')->setBlockId('custom_menu')->toHtml(); ?>
+   	</ul>
 </nav>
