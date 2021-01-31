@@ -13,7 +13,9 @@ use Magento\Framework\UrlInterface;
 use Magento\Framework\View\Element\Template;
 
 /**
- * Class BrandList
+ * Class BrandList - brand list page
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class BrandList extends Template
 {
@@ -64,11 +66,17 @@ class BrandList extends Template
         parent::__construct($context, $data);
     }
 
+    /**
+     * Get list category by filter
+     *
+     * @return \Magento\Catalog\Model\ResourceModel\Category\Collection
+     */
     public function getCategories()
     {
         try {
             /** @var \Magento\Catalog\Model\ResourceModel\Category\Collection $categoryCollection */
-            $categoryCollection = $this->categoryCollectionFactory->create()->setStore($this->_storeManager->getStore());
+            $categoryCollection = $this->categoryCollectionFactory->create()
+                ->setStore($this->_storeManager->getStore());
             $categoryCollection
                 ->addAttributeToSelect('*')
                 ->addAttributeToFilter([
@@ -79,7 +87,9 @@ class BrandList extends Template
                 ]);
 
             if ($this->brandToolbar->getCurrentOrder() === 'most_viewed') {
-                if (!$this->brandToolbar->getCurrentDirection() || $this->brandToolbar->getCurrentDirection() === 'asc') {
+                if (!$this->brandToolbar->getCurrentDirection() ||
+                    $this->brandToolbar->getCurrentDirection() === 'asc'
+                ) {
                     $orderExpr = new \Zend_Db_Expr('traffic IS NULL desc, traffic asc');
                 } else {
                     $orderExpr = new \Zend_Db_Expr('traffic IS NULL asc, traffic desc');
@@ -88,10 +98,11 @@ class BrandList extends Template
                 $categoryCollection->getSelect()->order([
                     $orderExpr
                 ]);
-            } elseif ($this->brandToolbar->getCurrentOrder() === 'created_at') {
-                $categoryCollection->setOrder($this->brandToolbar->getCurrentOrder(), 'desc');
             } else {
-                $categoryCollection->setOrder($this->brandToolbar->getCurrentOrder(), $this->brandToolbar->getCurrentDirection());
+                $categoryCollection->setOrder(
+                    $this->brandToolbar->getCurrentOrder(),
+                    $this->brandToolbar->getCurrentDirection()
+                );
             }
 
             $categoryCollection->setCurPage($this->brandToolbar->getCurrentPage());
@@ -103,6 +114,12 @@ class BrandList extends Template
         }
     }
 
+    /**
+     * Get toolbar html
+     *
+     * @return string
+     * @throws \Magento\Framework\Exception\LocalizedException
+     */
     public function getToolbarHtml()
     {
         $toolbar = $this->getLayout()->getBlock('brand.grid.toolbar');
@@ -128,7 +145,9 @@ class BrandList extends Template
     }
 
     /**
-     * @param $imageName string
+     * Get resized category image
+     *
+     * @param string $imageName
      * @param int $width
      * @param int $height
      * @return false|string
@@ -155,6 +174,7 @@ class BrandList extends Template
         $image->open($realPath);
         $image->keepAspectRatio(true);
         $image->resize($width, $height);
+        // @codingStandardsIgnoreLine
         $dest = $targetDir . '/' . pathinfo($realPath, PATHINFO_BASENAME);
         try {
             $image->save($dest);
@@ -182,15 +202,5 @@ class BrandList extends Template
         /** @var Image $helper */
         $imagePlaceholder = $this->helperImageFactory->create();
         return $this->_assetRepo->getUrl($imagePlaceholder->getPlaceholder('small_image'));
-    }
-
-    /**
-     * Get the page size
-     *
-     * @return int
-     */
-    public function getPageSize(): int
-    {
-        return 5;
     }
 }

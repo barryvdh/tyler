@@ -2,15 +2,13 @@
 declare(strict_types=1);
 namespace Bss\BrandRepresentative\Block\Brand\Pages\BrandList;
 
-use Bss\BrandRepresentative\Model\ResourceModel\MostViewed;
-
 /**
- * Class ToolBar
+ * Class ToolBar - fix cứng limit, order for brand grid
  */
 class Toolbar extends \Magento\Catalog\Block\Product\ProductList\Toolbar
 {
     const DEFAULT_ORDER = "name";
-    const DEFAULT_LIMIT = 5;
+    const DEFAULT_LIMIT = 12;
     const DEFAULT_DIRECTION = "acs";
 
     /**
