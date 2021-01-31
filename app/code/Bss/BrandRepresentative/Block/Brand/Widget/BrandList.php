@@ -101,6 +101,7 @@ class BrandList extends \Bss\BrandRepresentative\Block\Brand\Pages\BrandList imp
             /** @var \Magento\Catalog\Model\ResourceModel\Category\Collection $categoryCollection */
             $categoryCollection = $this->categoryCollectionFactory->create()
                 ->setStore($this->_storeManager->getStore());
+            $categoryCollection->addFieldToSelect('*');
             $categoryCollection->addAttributeToFilter([
                 [
                     'attribute' => 'level',
