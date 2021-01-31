@@ -18,20 +18,81 @@
 
 namespace Bss\BrandCategoryLevel\ViewModel\Category;
 
+use Magento\Catalog\Model\Category;
+use Magento\Catalog\Model\ResourceModel\Category\Collection;
+use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\Exception\NoSuchEntityException;
+use Magento\Framework\Registry;
+use Magento\Framework\UrlInterface;
 use Magento\Framework\View\Element\Block\ArgumentInterface;
+use Magento\Store\Model\StoreManagerInterface;
 
+
+/**
+ * Class Output
+ * @package Bss\BrandCategoryLevel\ViewModel\Category
+ */
 class Output implements ArgumentInterface
 {
-	private $registy;
+    /**
+     * @var Registry
+     */
+	private $registry;
 
+    /**
+     * @var BrandList
+     */
+	protected $bssBrand;
+
+    /**
+     * @var StoreManagerInterface
+     */
+	protected $storeManager;
+
+    /**
+     * Output constructor.
+     * @param Registry $registry
+     * @param StoreManagerInterface $storeManager
+     */
     public function __construct(
-        \Magento\Framework\Registry $registy
+        Registry $registry,
+        StoreManagerInterface $storeManager
     ) {
-    	$this->registy = $registy;
+    	$this->registry = $registry;
+    	$this->storeManager = $storeManager;
     }
 
+    /**
+     * @return mixed|null
+     */
     public function getCurrentCategory()
     {
-        return $this->registy->registry('current_category');
+        return $this->registry->registry('current_category');
+    }
+
+    /**
+     * Fetch all child Categories
+     *
+     * @return array|Category[]|Collection
+     * @throws LocalizedException
+     */
+    public function getChildCategories()
+    {
+        /* @var Category $currentCategory*/
+        $currentCategory = $this->getCurrentCategory();
+        if ($currentCategory) {
+            return $currentCategory->getChildrenCategories()
+                ->addAttributeToSelect('image');
+        }
+        return [];
+    }
+
+    /**
+     * @return string
+     * @throws NoSuchEntityException
+     */
+    public function prepareBaseUrl(): string
+    {
+        return $this->storeManager->getStore()->getBaseUrl(UrlInterface::URL_TYPE_WEB);
     }
 }

@@ -313,7 +313,6 @@ return [
         'Mageplaza_AjaxLayer' => 1,
         'Mageplaza_LayeredNavigation' => 1,
         'Mageplaza_Search' => 1,
-        'Mageplaza_Smtp' => 1,
         'PayPal_Braintree' => 1,
         'PayPal_BraintreeGraphQl' => 1,
         'Smartwave_Core' => 1,

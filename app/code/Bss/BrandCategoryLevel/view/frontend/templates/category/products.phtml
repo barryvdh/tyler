@@ -15,193 +15,52 @@
 * @copyright  Copyright (c) 2021 BSS Commerce Co. ( http://bsscommerce.com )
  * @license    http://bsscommerce.com/Bss-Commerce-License.txt
  */
+
+use Magento\Catalog\Block\Category\View;
+use Magento\Catalog\Model\Category;
+
 ?>
 <?php
 /**
  * Category view template
  *
- * @var $block \Magento\Catalog\Block\Category\View
+ * @var $block View
  */
 
 $currentCategory = $block->getViewModel()->getCurrentCategory();
 $levelCategory = $currentCategory->getLevel();
-if($levelCategory < 4):?>
-    <div class="toolbar toolbar-products">
-        <div class="toolbar-sorter sorter">
-            <label class="sorter-label" for="sorter">Sort By</label>
-            <select id="sorter" data-role="sorter" class="sorter-options">
-                <option value="position" selected="selected">Position</option>
-                <option value="name">Product Name</option>
-                <option value="price">Price</option>
-            </select>
-            <a title="Set Descending Direction" href="#" class="action sorter-action sort-asc" data-role="direction-switcher" data-value="desc">
-                <span>Set Descending Direction</span>
-            </a>
-        </div>
-        <div class="modes">
-            <strong class="modes-label" id="modes-label">View as</strong>
-            <strong title="Grid" class="modes-mode active mode-grid" data-value="grid">
-                <span>Grid</span>
-            </strong>
-            <a class="modes-mode mode-list" title="List" href="#" data-role="mode-switcher" data-value="list" id="mode-list" aria-labelledby="modes-label mode-list">
-                <span>List</span>
-            </a>
-        </div>
-        <p class="toolbar-amount" id="toolbar-amount">
-            <span class="toolbar-number">3</span> Items
-        </p>
-        <div class="field limiter">
-            <label class="label" for="limiter">
-                <span>Show</span>
-            </label>
-            <div class="control">
-                <select id="limiter" data-role="limiter" class="limiter-options">
-                    <option value="12" selected="selected">12</option>
-                    <option value="24">24</option>
-                    <option value="36">36</option>
-                </select>
-            </div>
-            <span class="limiter-text">per page</span>
-        </div>
-    </div>
-    <div class="products wrapper grid columns3 products-grid   ">
-        <ol class="filterproducts products list items product-items ">
-            <li class="item product product-item">
-                <div class="product-item-info type1" data-container="product-grid">
-                    <div class="product photo product-item-photo">
-                        <a href="http://devm2php74.tk/one2oneretail-hue/default/redecan-sell-sheet.html" tabindex="-1">
-                            <img class="product-image-photo default_image porto-lazyload" data-src="http://devm2php74.tk/one2oneretail-hue/pub/media/catalog/category/brand-2.jpg" alt="">
-                        </a>
-                    </div>
-                    <div class="product details product-item-details">
-                        <strong class="product name product-item-name">
-                            <a class="product-item-link" href="http://devm2php74.tk/one2oneretail-hue/default/redecan-sell-sheet.html">
-                                Redecan Sell Sheet
+$childCategories = $block->getViewModel()->getChildCategories();
+if ($levelCategory < 4): ?>
+    <?php if (!empty($childCategories)): ?>
+        <h2><?=__("Brand's Categories")?></h2>
+        <div class="products wrapper grid columns3 products-grid   ">
+            <ol class="filterproducts products list items product-items ">
+                <?php /* @var Category $category*/?>
+                <?php foreach ($childCategories as $category): ?>
+                <li class="item product product-item">
+                    <div class="product-item-info type1" data-container="product-grid">
+                        <div class="product photo product-item-photo">
+                            <a href="<?= $block->escapeUrl($category->getUrl()) ?>" tabindex="-1">
+                                <img class="product-image-photo default_image"
+                                     src="<?= $block->escapeUrl(rtrim($block->getViewModel()->prepareBaseUrl(), '/') . ($category->getImageUrl())) ?>"
+                                     alt="<?= $category->getName()?>">
                             </a>
-                        </strong>
+                        </div>
+                        <div class="product details product-item-details">
+                            <strong class="product name product-item-name">
+                                <a class="product-item-link" href="<?= $block->escapeUrl($category->getUrl()) ?>">
+                                    <span><?= __($category->getName()) ?></span>
+                                </a>
+                            </strong>
+                        </div>
                     </div>
-                </div>
-            </li>
-            <li class="item product product-item">
-                <div class="product-item-info type1" data-container="product-grid">
-                    <div class="product photo product-item-photo">
-                        <a href="http://devm2php74.tk/one2oneretail-hue/default/digital-download-test.html" tabindex="-1">
-                            <img class="product-image-photo default_image porto-lazyload" data-src="http://devm2php74.tk/one2oneretail-hue/pub/media/catalog/category/brand-2.jpg"  alt="">
-                        </a>
-                    </div>
-                    <div class="product details product-item-details">
-                        <strong class="product name product-item-name">
-                            <a class="product-item-link" href="http://devm2php74.tk/one2oneretail-hue/default/redecan-sell-sheet.html">
-                                Redecan Sell Sheet
-                            </a>
-                        </strong>
-                    </div>
-                </div>
-            </li>
-            <li class="item product product-item">
-                <div class="product-item-info type1" data-container="product-grid">
-                    <div class="product photo product-item-photo">
-                        <a href="http://devm2php74.tk/one2oneretail-hue/default/test-3.html" tabindex="-1">
-                            <img class="product-image-photo default_image porto-lazyload" data-src="http://devm2php74.tk/one2oneretail-hue/pub/media/catalog/category/brand-2.jpg" alt="">
-                        </a>
-                    </div>
-                    <div class="product details product-item-details">
-                        <strong class="product name product-item-name">
-                            <a class="product-item-link" href="http://devm2php74.tk/one2oneretail-hue/default/redecan-sell-sheet.html">
-                                Redecan Sell Sheet
-                            </a>
-                        </strong>
-                    </div>
-                </div>
-            </li>
-            <li class="item product product-item">
-                <div class="product-item-info type1" data-container="product-grid">
-                    <div class="product photo product-item-photo">
-                        <a href="http://devm2php74.tk/one2oneretail-hue/default/test-3.html" tabindex="-1">
-                            <img class="product-image-photo default_image porto-lazyload" data-src="http://devm2php74.tk/one2oneretail-hue/pub/media/catalog/category/brand-2.jpg" alt="">
-                        </a>
-                    </div>
-                    <div class="product details product-item-details">
-                        <strong class="product name product-item-name">
-                            <a class="product-item-link" href="http://devm2php74.tk/one2oneretail-hue/default/redecan-sell-sheet.html">
-                                Redecan Sell Sheet
-                            </a>
-                        </strong>
-                    </div>
-                </div>
-            </li>
-            <li class="item product product-item">
-                <div class="product-item-info type1" data-container="product-grid">
-                    <div class="product photo product-item-photo">
-                        <a href="http://devm2php74.tk/one2oneretail-hue/default/test-3.html" tabindex="-1">
-                            <img class="product-image-photo default_image porto-lazyload" data-src="http://devm2php74.tk/one2oneretail-hue/pub/media/catalog/category/brand-2.jpg" alt="">
-                        </a>
-                    </div>
-                    <div class="product details product-item-details">
-                        <strong class="product name product-item-name">
-                            <a class="product-item-link" href="http://devm2php74.tk/one2oneretail-hue/default/redecan-sell-sheet.html">
-                                Redecan Sell Sheet
-                            </a>
-                        </strong>
-                    </div>
-                </div>
-            </li>
-            <li class="item product product-item">
-                <div class="product-item-info type1" data-container="product-grid">
-                    <div class="product photo product-item-photo">
-                        <a href="http://devm2php74.tk/one2oneretail-hue/default/test-3.html" tabindex="-1">
-                            <img class="product-image-photo default_image porto-lazyload" data-src="http://devm2php74.tk/one2oneretail-hue/pub/media/catalog/category/brand-2.jpg" alt="">
-                        </a>
-                    </div>
-                    <div class="product details product-item-details">
-                        <strong class="product name product-item-name">
-                            <a class="product-item-link" href="http://devm2php74.tk/one2oneretail-hue/default/redecan-sell-sheet.html">
-                                Redecan Sell Sheet
-                            </a>
-                        </strong>
-                    </div>
-                </div>
-            </li>
-        </ol>
-    </div>
-    <div class="toolbar toolbar-products">
-        <div class="toolbar-sorter sorter">
-            <label class="sorter-label" for="sorter">Sort By</label>
-            <select id="sorter" data-role="sorter" class="sorter-options">
-                <option value="position" selected="selected">Position</option>
-                <option value="name">Product Name</option>
-                <option value="price">Price</option>
-            </select>
-            <a title="Set Descending Direction" href="#" class="action sorter-action sort-asc" data-role="direction-switcher" data-value="desc">
-                <span>Set Descending Direction</span>
-            </a>
+                </li>
+                <?php endforeach; ?>
+            </ol>
         </div>
-        <div class="modes">
-            <strong class="modes-label" id="modes-label">View as</strong>
-            <strong title="Grid" class="modes-mode active mode-grid" data-value="grid">
-                <span>Grid</span>
-            </strong>
-            <a class="modes-mode mode-list" title="List" href="#" data-role="mode-switcher" data-value="list" id="mode-list" aria-labelledby="modes-label mode-list">
-                <span>List</span>
-            </a>
-        </div>
-        <p class="toolbar-amount" id="toolbar-amount"><span class="toolbar-number">3</span> Items</p>
-        <div class="field limiter">
-            <label class="label" for="limiter">
-                <span>Show</span>
-            </label>
-            <div class="control">
-                <select id="limiter" data-role="limiter" class="limiter-options">
-                    <option value="12" selected="selected">12</option>
-                    <option value="24">24</option>
-                    <option value="36">36</option>
-                </select>
-            </div>
-            <span class="limiter-text">per page</span>
-        </div>
-    </div>
+    <?php endif; ?>
 <?php else: ?>
-	<?php if (!$block->isContentMode() || $block->isMixedMode()) :?>
+	<?php if (!$block->isContentMode() || $block->isMixedMode()): ?>
 	    <?= $block->getProductListHtml() ?>
 	<?php endif; ?>
 <?php endif; ?>
