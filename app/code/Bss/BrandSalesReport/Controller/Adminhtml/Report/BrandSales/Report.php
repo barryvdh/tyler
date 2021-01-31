@@ -39,10 +39,10 @@ class Report extends Sales
         $this->_initAction()->_setActiveMenu(
             'Bss_BrandSalesReport::report_brand_report'
         )->_addBreadcrumb(
-            __('Brand Sales Report'),
-            __('Brand Sales Report')
+            __('Brand Sales Rep Report'),
+            __('Brand Sales Rep Report')
         );
-        $this->_view->getPage()->getConfig()->getTitle()->prepend(__('Brand Sales Report'));
+        $this->_view->getPage()->getConfig()->getTitle()->prepend(__('Brand Sales Rep Report'));
 
         $gridBlock = $this->_view->getLayout()
             ->getBlock('adminhtml_brand_report.grid');

@@ -1,5 +1,4 @@
-<?xml version="1.0"?>
-<!--
+<?php
 /**
  * BSS Commerce Co.
  *
@@ -16,11 +15,24 @@
  * @copyright  Copyright (c) 2021 BSS Commerce Co. ( http://bsscommerce.com )
  * @license    http://bsscommerce.com/Bss-Commerce-License.txt
  */
--->
-<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-        xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
-    <type name="Magento\Catalog\Model\Category\DataProvider">
-        <plugin name="bss-category-data-provider-after-load"
-                type="Bss\BrandRepresentative\Plugin\Model\Category\DataProvider" sortOrder="10"/>
-    </type>
-</config>
+
+namespace Bss\BrandRepresentative\Observer\Catalog;
+
+use Magento\Framework\Event\Observer;
+use Magento\Framework\Event\ObserverInterface;
+
+/**
+ * Class CategorySaveAfter
+ * Event that trigger after category save to save addition brand email data
+ */
+class CategorySaveAfter implements ObserverInterface
+{
+    /**
+     * @param Observer $observer
+     * @return void
+     */
+    public function execute(Observer $observer): void
+    {
+
+    }
+}

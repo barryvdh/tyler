@@ -1,5 +1,4 @@
-<?xml version="1.0"?>
-<!--
+<?php
 /**
  * BSS Commerce Co.
  *
@@ -11,16 +10,13 @@
  * http://bsscommerce.com/Bss-Commerce-License.txt
  *
  * @category   BSS
- * @package    Bss_BrandRepresentative
+ * @package    Bss_HideProductField
  * @author     Extension Team
  * @copyright  Copyright (c) 2021 BSS Commerce Co. ( http://bsscommerce.com )
  * @license    http://bsscommerce.com/Bss-Commerce-License.txt
  */
--->
-<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-        xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
-    <type name="Magento\Catalog\Model\Category\DataProvider">
-        <plugin name="bss-category-data-provider-after-load"
-                type="Bss\BrandRepresentative\Plugin\Model\Category\DataProvider" sortOrder="10"/>
-    </type>
-</config>
+\Magento\Framework\Component\ComponentRegistrar::register(
+    \Magento\Framework\Component\ComponentRegistrar::MODULE,
+    'Bss_HideProductField',
+    __DIR__
+);
