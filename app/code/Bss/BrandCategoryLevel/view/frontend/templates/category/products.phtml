@@ -42,7 +42,7 @@ if ($levelCategory < 4): ?>
                         <div class="product photo product-item-photo">
                             <a href="<?= $block->escapeUrl($category->getUrl()) ?>" tabindex="-1">
                                 <img class="product-image-photo default_image"
-                                     src="<?= $block->escapeUrl(rtrim($block->getViewModel()->prepareBaseUrl(), '/') . ($category->getImageUrl())) ?>"
+                                     src="<?= $block->escapeUrl($block->getViewModel()->prepareCategoryImageUrl($category->getImageUrl())) ?>"
                                      alt="<?= $category->getName()?>">
                             </a>
                         </div>

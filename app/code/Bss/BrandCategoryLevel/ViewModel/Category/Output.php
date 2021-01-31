@@ -95,4 +95,30 @@ class Output implements ArgumentInterface
     {
         return $this->storeManager->getStore()->getBaseUrl(UrlInterface::URL_TYPE_WEB);
     }
+
+    /**
+     * @param string $configPath
+     * @return mixed
+     * @throws NoSuchEntityException
+     */
+    public function getConfig(string $configPath)
+    {
+        return $this->storeManager->getStore()->getConfig($configPath);
+    }
+
+    /**
+     * @param string $imageUrl
+     * @return string
+     * @throws NoSuchEntityException
+     */
+    public function prepareCategoryImageUrl(string $imageUrl): string
+    {
+        $mediaUrl = $this ->storeManager->getStore()->getBaseUrl(UrlInterface::URL_TYPE_MEDIA );
+        if (!$imageUrl) {
+            return  $mediaUrl . 'catalog/product/placeholder/' .
+                $this->getConfig('catalog/placeholder/image_placeholder');
+        } else {
+            return rtrim($this->prepareBaseUrl()) . $imageUrl;
+        }
+    }
 }
