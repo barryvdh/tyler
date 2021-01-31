@@ -1,18 +1,18 @@
 <?php
 /**
-* BSS Commerce Co.
+ * BSS Commerce Co.
  *
  * NOTICE OF LICENSE
-*
+ *
  * This source file is subject to the EULA
-* that is bundled with this package in the file LICENSE.txt.
+ * that is bundled with this package in the file LICENSE.txt.
  * It is also available through the world-wide-web at this URL:
  * http://bsscommerce.com/Bss-Commerce-License.txt
  *
  * @category   BSS
-* @package    Bss_BrandCategoryLevel
-* @author     Extension Team
-* @copyright  Copyright (c) 2021 BSS Commerce Co. ( http://bsscommerce.com )
+ * @package    Bss_BrandCategoryLevel
+ * @author     Extension Team
+ * @copyright  Copyright (c) 2021 BSS Commerce Co. ( http://bsscommerce.com )
  * @license    http://bsscommerce.com/Bss-Commerce-License.txt
  */
 
@@ -37,31 +37,43 @@ if ($levelCategory < 4): ?>
             <ol class="filterproducts products list items product-items ">
                 <?php /* @var Category $category*/?>
                 <?php foreach ($childCategories as $category): ?>
-                <li class="item product product-item">
-                    <div class="product-item-info type1" data-container="product-grid">
-                        <div class="product photo product-item-photo">
-                            <a href="<?= $block->escapeUrl($category->getUrl()) ?>" tabindex="-1">
-                                <img class="product-image-photo default_image"
-                                     src="<?= $block->escapeUrl($block->getViewModel()->prepareCategoryImageUrl($category->getImageUrl())) ?>"
-                                     alt="<?= $category->getName()?>">
-                            </a>
-                        </div>
-                        <div class="product details product-item-details">
-                            <strong class="product name product-item-name">
-                                <a class="product-item-link" href="<?= $block->escapeUrl($category->getUrl()) ?>">
-                                    <span><?= __($category->getName()) ?></span>
+                    <li class="item product product-item">
+                        <div class="product-item-info type1" data-container="product-grid">
+                            <div class="product photo product-item-photo">
+                                <a href="<?= $block->escapeUrl($category->getUrl()) ?>" tabindex="-1">
+                                    <?php
+                                    $outputHelper = $this->helper('Magento\Catalog\Helper\Output');
+                                    $_imgHtml   = '';
+                                    if ($_imgUrl = $category->getImageUrl()) {
+                                        $_imgHtml = '<img src="' . $block->escapeUrl($_imgUrl) . '" />';
+                                        $_imgHtml = $outputHelper->categoryAttribute($category, $_imgHtml, 'image');
+                                        /* @escapeNotVerified */ echo $_imgHtml;
+                                    } else {
+                                        $_imgUrl = $block->getViewModel()->preparePlaceholder();
+                                        $_imgHtml = '<img src="' . $block->escapeUrl($_imgUrl) . '" />';
+                                        $_imgHtml = $outputHelper->categoryAttribute($category, $_imgHtml, 'image');
+                                        /* @escapeNotVerified */ echo $_imgHtml;
+
+                                    }
+                                    ?>
                                 </a>
-                            </strong>
+                            </div>
+                            <div class="product details product-item-details">
+                                <strong class="product name product-item-name">
+                                    <a class="product-item-link" href="<?= $block->escapeUrl($category->getUrl()) ?>">
+                                        <span><?= __($category->getName()) ?></span>
+                                    </a>
+                                </strong>
+                            </div>
                         </div>
-                    </div>
-                </li>
+                    </li>
                 <?php endforeach; ?>
             </ol>
         </div>
     <?php endif; ?>
 <?php else: ?>
-	<?php if (!$block->isContentMode() || $block->isMixedMode()): ?>
-	    <?= $block->getProductListHtml() ?>
-	<?php endif; ?>
+    <?php if (!$block->isContentMode() || $block->isMixedMode()): ?>
+        <?= $block->getProductListHtml() ?>
+    <?php endif; ?>
 <?php endif; ?>
 

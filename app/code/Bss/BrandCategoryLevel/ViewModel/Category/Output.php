@@ -37,17 +37,17 @@ class Output implements ArgumentInterface
     /**
      * @var Registry
      */
-	private $registry;
+    private $registry;
 
     /**
      * @var BrandList
      */
-	protected $bssBrand;
+    protected $bssBrand;
 
     /**
      * @var StoreManagerInterface
      */
-	protected $storeManager;
+    protected $storeManager;
 
     /**
      * Output constructor.
@@ -58,8 +58,8 @@ class Output implements ArgumentInterface
         Registry $registry,
         StoreManagerInterface $storeManager
     ) {
-    	$this->registry = $registry;
-    	$this->storeManager = $storeManager;
+        $this->registry = $registry;
+        $this->storeManager = $storeManager;
     }
 
     /**
@@ -107,18 +107,13 @@ class Output implements ArgumentInterface
     }
 
     /**
-     * @param string $imageUrl
      * @return string
      * @throws NoSuchEntityException
      */
-    public function prepareCategoryImageUrl(string $imageUrl): string
+    public function preparePlaceholder(): string
     {
         $mediaUrl = $this ->storeManager->getStore()->getBaseUrl(UrlInterface::URL_TYPE_MEDIA );
-        if (!$imageUrl) {
-            return  $mediaUrl . 'catalog/product/placeholder/' .
-                $this->getConfig('catalog/placeholder/image_placeholder');
-        } else {
-            return rtrim($this->prepareBaseUrl()) . $imageUrl;
-        }
+        return $mediaUrl . 'catalog/product/placeholder/' .
+            $this->getConfig('catalog/placeholder/image_placeholder');
     }
 }
