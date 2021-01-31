@@ -107,6 +107,7 @@ class DataProvider
         foreach ($data as $id => $categoryData) {
             $startLevel = 1;
             $categoryData['use_company_configuration'] = self::IS_USE_COMPANY_CATEGORY_CONFIG;
+            $categoryData['bss_brand_representative_email'] = [];
             $requestId = $categoryData['entity_id'] ?? $this->request->getParam('parent');
 
             // Is add category action

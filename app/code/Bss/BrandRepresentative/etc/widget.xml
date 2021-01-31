@@ -42,9 +42,6 @@
                     <option name="featured-grid" value="brand/widget/featured-grid.phtml" selected="true">
                         <label translate="true">Featured Brands Grid Template</label>
                     </option>
-                    <option name="brand-grid" value="brand/widget/brands-grid.phtml" selected="true">
-                        <label translate="true">Brands Grid Template</label>
-                    </option>
                 </options>
             </parameter>
         </parameters>

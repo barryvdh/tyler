@@ -1,0 +1,11 @@
+<?xml version="1.0"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
+
+    <preference for="Bss\BrandRepresentative\Api\Data\MostViewedInterface"
+                type="Bss\BrandRepresentative\Model\MostViewed"/>
+    <preference for="Bss\BrandRepresentative\Api\MostViewedRepositoryInterface"
+                type="Bss\BrandRepresentative\Model\MostViewedRepository"/>
+    <preference for="Magento\Catalog\Model\ResourceModel\Category\Collection"
+                type="Bss\BrandRepresentative\Model\ResourceModel\Category\Collection"/>
+</config>

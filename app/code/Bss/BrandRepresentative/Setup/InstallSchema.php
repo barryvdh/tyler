@@ -21,6 +21,8 @@ use Magento\Framework\DB\Ddl\Table;
 use Magento\Framework\Setup\InstallSchemaInterface;
 use Magento\Framework\Setup\ModuleContextInterface;
 use Magento\Framework\Setup\SchemaSetupInterface;
+use Bss\BrandRepresentative\Model\ResourceModel\MostViewed as MostViewedResource;
+use Bss\BrandRepresentative\Api\Data\MostViewedInterface as MostViewed;
 use Zend_Db_Exception;
 
 /**
@@ -203,6 +205,62 @@ class InstallSchema implements InstallSchemaInterface
             )->setComment('Bss Brand Order Report Table');
         $installer->getConnection()->createTable($table);
 
+        $this->createMostViewCategoryTbl($setup);
         $installer->endSetup();
+    }
+
+    /**
+     * Create most viewed category table
+     *
+     * @param SchemaSetupInterface $setup
+     * @throws Zend_Db_Exception
+     */
+    private function createMostViewCategoryTbl(SchemaSetupInterface $setup)
+    {
+        $installer = $setup;
+        $table = $installer->getConnection()
+            ->newTable($installer->getTable(MostViewedResource::TABLE))
+            ->addColumn(
+                MostViewed::ID,
+                Table::TYPE_INTEGER,
+                null,
+                [
+                    'unsigned' => true,
+                    'identity' => true,
+                    'nullable' => false,
+                    'primary' => true
+                ],
+                'Most viewed item id'
+            )->addColumn(
+                MostViewed::CATEGORY_ID,
+                Table::TYPE_INTEGER,
+                null,
+                [
+                    'unsigned' => true,
+                    'nullable' => false
+                ],
+                'The Category (Brand) Id'
+            )->addColumn(
+                MostViewed::TRAFFIC,
+                Table::TYPE_BIGINT,
+                null,
+                [
+                    'unsigned' => true,
+                    'default' => 0
+                ],
+                'Traffic value - to help us know which brands are most interested in'
+            )->addForeignKey(
+                $installer->getFkName(
+                    MostViewedResource::TABLE,
+                    MostViewed::CATEGORY_ID,
+                    'catalog_category_entity',
+                    'entity_id'
+                ),
+                MostViewed::CATEGORY_ID,
+                $installer->getTable('catalog_category_entity'),
+                'entity_id',
+                Table::ACTION_CASCADE
+            )->setComment('Bss Most Viewed Brands Table');
+        $installer->getConnection()->createTable($table);
     }
 }
