@@ -98,6 +98,11 @@ class BrandList extends Template
                 $categoryCollection->getSelect()->order([
                     $orderExpr
                 ]);
+            } elseif ($this->brandToolbar->getCurrentOrder() == "created_at") {
+                $categoryCollection->setOrder(
+                    $this->brandToolbar->getCurrentOrder(),
+                    "desc"
+                );
             } else {
                 $categoryCollection->setOrder(
                     $this->brandToolbar->getCurrentOrder(),
