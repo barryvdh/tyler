@@ -165,7 +165,7 @@ class InstallSchema implements InstallSchemaInterface
             )->addColumn(
                 'representative_email',
                 Table::TYPE_TEXT,
-                128,
+                null,
                 [
                     'nullable' => true
                 ],

@@ -17,10 +17,9 @@
  */
 namespace Bss\BrandRepresentative\Plugin\Model\Category;
 
-use Magento\Catalog\Api\CategoryRepositoryInterface;
 use Magento\Framework\App\RequestInterface;
-use Magento\Framework\Module\Manager as ModuleManager;
-use Magento\Framework\Serialize\Serializer\Json;
+use Bss\BrandRepresentative\Helper\BrandRepresentativeEmailDataRecursiveResolver;
+
 /**
  * Class DataProvider
  *
@@ -38,20 +37,9 @@ class DataProvider
     protected $meta = [];
 
     /**
-     * @var ModuleManager
-     * @since 101.0.0
-     */
-    protected $moduleManager;
-
-    /**
      * @var RequestInterface
      */
     protected $request;
-
-    /**
-     * @var Json
-     */
-    protected $json;
 
     /**
      * @var \Psr\Log\LoggerInterface
@@ -59,31 +47,25 @@ class DataProvider
     private $logger;
 
     /**
-     * @var CategoryRepositoryInterface
+     * @var BrandRepresentativeEmailDataRecursiveResolver
      */
-    private $categoryRepository;
+    private $brandRepresentativeEmailDataResolver;
 
     /**
      * DataProvider constructor.
      *
      * @param \Psr\Log\LoggerInterface $logger
-     * @param ModuleManager $moduleManager
      * @param RequestInterface $request
-     * @param Json $Json
-     * @param CategoryRepositoryInterface $categoryRepository
+     * @param BrandRepresentativeEmailDataRecursiveResolver $brandRepresentativeEmailDataResolver
      */
     public function __construct(
         \Psr\Log\LoggerInterface $logger,
-        ModuleManager $moduleManager,
         RequestInterface $request,
-        Json $Json,
-        CategoryRepositoryInterface $categoryRepository
+        BrandRepresentativeEmailDataRecursiveResolver $brandRepresentativeEmailDataResolver
     ) {
         $this->logger = $logger;
-        $this->moduleManager = $moduleManager;
         $this->request = $request;
-        $this->json = $Json;
-        $this->categoryRepository = $categoryRepository;
+        $this->brandRepresentativeEmailDataResolver = $brandRepresentativeEmailDataResolver;
     }
 
     /**
@@ -101,6 +83,12 @@ class DataProvider
         return $meta;
     }
 
+    /**
+     * Prepare brand representative email data
+     *
+     * @param array $data
+     * @return array
+     */
     public function prepareBssData($data)
     {
         $newData = [];
@@ -121,11 +109,13 @@ class DataProvider
                 continue;
             }
 
-            $brandRepresentativeEmailData = $this->getBrandRepresentativeEmailDataRecursive($requestId, $startLevel);
+            $brandRepresentativeEmailData = $this->brandRepresentativeEmailDataResolver
+                ->execute($requestId, $startLevel);
 
             if ($brandRepresentativeEmailData) {
                 if ($brandRepresentativeEmailData['bss_brand_representative_email']) {
-                    $categoryData['bss_brand_representative_email'] = $brandRepresentativeEmailData['bss_brand_representative_email'];
+                    $categoryData['bss_brand_representative_email'] =
+                        $brandRepresentativeEmailData['bss_brand_representative_email'];
                 }
 
                 if ($brandRepresentativeEmailData['level'] == 1) {
@@ -140,46 +130,8 @@ class DataProvider
     }
 
     /**
-     * Get brand representative email data recursive
+     * Add brand representative email data to category form data
      *
-     * @param int $categoryId
-     * @param int $level
-     * @return array|false
-     */
-    private function getBrandRepresentativeEmailDataRecursive($categoryId, $level)
-    {
-        try {
-            /** @var \Magento\Catalog\Model\Category $category */
-            $category = $this->categoryRepository->get($categoryId);
-            $brandRepresentativeRawData = $category->getData('bss_brand_representative_email');
-
-            if ($brandRepresentativeRawData) {
-                $brandRepresentativeEmailData = $this->json->unserialize($brandRepresentativeRawData);
-
-                if (isset($brandRepresentativeEmailData['use_company_configuration']) &&
-                    $brandRepresentativeEmailData['use_company_configuration'] == self::IS_CUSTOMIZE_PER_BRAND_CONFIG
-                ) {
-                    unset($brandRepresentativeEmailData['use_company_configuration']);
-                    return [
-                        'bss_brand_representative_email' => $brandRepresentativeEmailData,
-                        'level' => $level
-                    ];
-                }
-            }
-
-            if (!$category->getParentId()) {
-                return false;
-            }
-
-            return $this->getBrandRepresentativeEmailDataRecursive($category->getParentId(), ++$level);
-        } catch (\Exception $e) {
-            $this->logger->critical($e);
-        }
-
-        return false;
-    }
-
-    /**
      * @param \Magento\Catalog\Model\Category\DataProvider $subject
      * @param array $result
      * @return mixed

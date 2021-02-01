@@ -56,24 +56,33 @@ class Data extends AbstractHelper
     protected $logger;
 
     /**
+     * @var BrandRepresentativeEmailDataRecursiveResolver
+     */
+    private $brandRepresentativeEmailDataResolver;
+
+    /**
      * Data constructor.
+     *
      * @param Context $context
      * @param CategoryRepositoryInterface $categoryRepository
      * @param StoreManagerInterface $storeManager
      * @param Json $json
      * @param LoggerInterface $logger
+     * @param BrandRepresentativeEmailDataRecursiveResolver $brandRepresentativeEmailDataResolver
      */
     public function __construct(
         Context $context,
         CategoryRepositoryInterface $categoryRepository,
         StoreManagerInterface $storeManager,
         Json $json,
-        LoggerInterface $logger
+        LoggerInterface $logger,
+        BrandRepresentativeEmailDataRecursiveResolver $brandRepresentativeEmailDataResolver
     ) {
         $this->categoryRepository = $categoryRepository;
         $this->storeManager = $storeManager;
         $this->json = $json;
         $this->logger = $logger;
+        $this->brandRepresentativeEmailDataResolver = $brandRepresentativeEmailDataResolver;
         parent::__construct($context);
     }
 
@@ -101,10 +110,12 @@ class Data extends AbstractHelper
             /* @var Category $category */
             try {
                 $category = $this->categoryRepository->get($categoryId, $currentStoreId);
-                $categoryData = $category->getData();
-                if (isset($categoryData['bss_brand_representative_email'])) {
-                    $categoryDataEmail = $this->json->unserialize($categoryData['bss_brand_representative_email']);
-                    foreach ($categoryDataEmail as $emailData) {
+                $brandRepresentativeEmailData = $this->brandRepresentativeEmailDataResolver->execute(
+                    $category->getId(),
+                    1
+                );
+                if ($brandRepresentativeEmailData) {
+                    foreach ($brandRepresentativeEmailData['bss_brand_representative_email'] as $emailData) {
                         if (isset($emailData['bss_province']) &&
                             in_array((string)$regionId, $emailData['bss_province'], true)
                         ) {
