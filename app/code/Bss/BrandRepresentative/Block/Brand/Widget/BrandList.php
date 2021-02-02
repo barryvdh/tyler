@@ -37,7 +37,7 @@ use Bss\BrandRepresentative\Block\Brand\Pages\BrandList\Toolbar;
 class BrandList extends \Bss\BrandRepresentative\Block\Brand\Pages\BrandList implements BlockInterface
 {
     const BRAND_CATEGORY = 3;
-    const ALL_BRAND_PAGE_SIZE = 20;
+    const DEFAULT_FEATURE_BRANDS_LIMIT = 10;
 
     /**
      * @var Conditions

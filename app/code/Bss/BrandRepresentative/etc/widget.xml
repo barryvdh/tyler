@@ -46,4 +46,15 @@
             </parameter>
         </parameters>
     </widget>
+    <widget id="cms_static_block">
+        <parameters>
+            <parameter name="template" xsi:type="select">
+                <options>
+                    <option name="bss_feature_brands" value="Bss_BrandRepresentative::brand/widget/static_block/feature-brands-block.phtml">
+                        <label translate="true">Bss Feature Brands Template</label>
+                    </option>
+                </options>
+            </parameter>
+        </parameters>
+    </widget>
 </widgets>
