@@ -26,6 +26,7 @@ use Magento\Framework\Registry;
 use Magento\Framework\UrlInterface;
 use Magento\Framework\View\Element\Block\ArgumentInterface;
 use Magento\Store\Model\StoreManagerInterface;
+use Magento\Catalog\Helper\Output as OutputHelper;
 
 
 /**
@@ -50,16 +51,24 @@ class Output implements ArgumentInterface
     protected $storeManager;
 
     /**
+     * @var OutputHelper
+     */
+    protected $output;
+
+    /**
      * Output constructor.
      * @param Registry $registry
      * @param StoreManagerInterface $storeManager
+     * @param OutputHelper $output
      */
     public function __construct(
         Registry $registry,
-        StoreManagerInterface $storeManager
+        StoreManagerInterface $storeManager,
+        OutputHelper $output
     ) {
         $this->registry = $registry;
         $this->storeManager = $storeManager;
+        $this->output = $output;
     }
 
     /**
@@ -112,8 +121,16 @@ class Output implements ArgumentInterface
      */
     public function preparePlaceholder(): string
     {
-        $mediaUrl = $this ->storeManager->getStore()->getBaseUrl(UrlInterface::URL_TYPE_MEDIA );
+        $mediaUrl = $this->storeManager->getStore()->getBaseUrl(UrlInterface::URL_TYPE_MEDIA);
         return $mediaUrl . 'catalog/product/placeholder/' .
             $this->getConfig('catalog/placeholder/image_placeholder');
+    }
+
+    /**
+     * @return OutputHelper
+     */
+    public function getCatalogOutputHelper(): OutputHelper
+    {
+        return $this->output;
     }
 }

@@ -42,10 +42,11 @@ if ($levelCategory < 4): ?>
                             <div class="product photo product-item-photo">
                                 <a href="<?= $block->escapeUrl($category->getUrl()) ?>" tabindex="-1">
                                     <?php
-                                    $outputHelper = $this->helper('Magento\Catalog\Helper\Output');
+                                    $outputHelper = $block->getViewModel()->getCatalogOutputHelper();
+                                    $baseUrl = rtrim($block->getViewModel()->prepareBaseUrl(), '/');
                                     $_imgHtml   = '';
                                     if ($_imgUrl = $category->getImageUrl()) {
-                                        $_imgHtml = '<img src="' . $block->escapeUrl($_imgUrl) . '" />';
+                                        $_imgHtml = '<img src="' . $block->escapeUrl($baseUrl . $_imgUrl) . '" />';
                                         $_imgHtml = $outputHelper->categoryAttribute($category, $_imgHtml, 'image');
                                         /* @escapeNotVerified */ echo $_imgHtml;
                                     } else {
