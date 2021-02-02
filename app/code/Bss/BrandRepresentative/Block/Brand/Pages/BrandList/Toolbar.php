@@ -8,7 +8,7 @@ namespace Bss\BrandRepresentative\Block\Brand\Pages\BrandList;
 class Toolbar extends \Magento\Catalog\Block\Product\ProductList\Toolbar
 {
     const DEFAULT_ORDER = "name";
-    const DEFAULT_LIMIT = 12;
+    const DEFAULT_LIMIT = 15;
     const DEFAULT_DIRECTION = "acs";
 
     /**
