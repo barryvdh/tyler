@@ -105,7 +105,7 @@ class BrandList extends \Bss\BrandRepresentative\Block\Brand\Pages\BrandList imp
             $categoryCollection->addAttributeToFilter([
                 [
                     'attribute' => 'level',
-                    'gteq' => self::BRAND_CATEGORY
+                    'eq' => self::BRAND_CATEGORY
                 ]
             ]);
 

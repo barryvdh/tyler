@@ -82,7 +82,7 @@ class BrandList extends Template
                 ->addAttributeToFilter([
                     [
                         'attribute' => 'level',
-                        'gteq' => self::BRAND_CATEGORY_LEVEL_IDENTIFIER
+                        'eq' => self::BRAND_CATEGORY_LEVEL_IDENTIFIER
                     ]
                 ]);
 
