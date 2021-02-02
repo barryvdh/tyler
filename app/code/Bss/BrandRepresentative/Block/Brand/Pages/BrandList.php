@@ -87,14 +87,7 @@ class BrandList extends Template
                 ]);
 
             if ($this->brandToolbar->getCurrentOrder() === 'most_viewed') {
-                if (!$this->brandToolbar->getCurrentDirection() ||
-                    $this->brandToolbar->getCurrentDirection() === 'asc'
-                ) {
-                    $orderExpr = new \Zend_Db_Expr('traffic IS NULL desc, traffic asc');
-                } else {
-                    $orderExpr = new \Zend_Db_Expr('traffic IS NULL asc, traffic desc');
-                }
-
+                $orderExpr = new \Zend_Db_Expr('traffic IS NULL asc, traffic desc');
                 $categoryCollection->getSelect()->order([
                     $orderExpr
                 ]);
