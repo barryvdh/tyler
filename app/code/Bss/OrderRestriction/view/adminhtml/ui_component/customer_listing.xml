@@ -86,7 +86,7 @@
 
             <field name="orders_per_month" formElement="input">
                 <settings>
-                    <label translate="true">Limit Orders per Month</label>
+                    <label translate="true">Limit Quantity per Month</label>
                     <dataType>number</dataType>
                     <validation>
                         <rule name="validate-number" xsi:type="boolean">true</rule>

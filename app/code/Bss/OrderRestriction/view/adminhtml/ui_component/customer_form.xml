@@ -23,7 +23,7 @@
 
         <field name="orders_per_month" formElement="input">
             <settings>
-                <label translate="true">Limit Orders per Month</label>
+                <label translate="true">Limit Quantity per Month</label>
                 <dataType>number</dataType>
                 <validation>
                     <rule name="validate-number" xsi:type="boolean">true</rule>
@@ -36,7 +36,7 @@
                component="Bss_OrderRestriction/js/view/customer-sales-order-report">
             <settings>
                 <elementTmpl>Bss_OrderRestriction/customer-sales-order-report</elementTmpl>
-                <label translate="true">Report</label>
+                <label />
             </settings>
         </field>
     </fieldset>

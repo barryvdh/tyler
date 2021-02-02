@@ -12,8 +12,7 @@
             </strong>
             <div class="box-content">
                 <?= $escaper->escapeHtml(__("Limit Quantity per Order")) ?>: <?= $escaper->escapeHtml($orderRule->getQtyPerOrder()) ?><br />
-                <?= $escaper->escapeHtml(__("Limit Orders per Month")) ?>: <?= $escaper->escapeHtml($orderRule->getOrdersPerMonth()) ?><br />
-                <?= $escaper->escapeHtml(__("Report")) ?>:
+                <?= $escaper->escapeHtml(__("Limit Quantity per Month")) ?>: <?= $escaper->escapeHtml($orderRule->getOrdersPerMonth()) ?><br />
                 <?=
                     $escaper->escapeHtml($block->getCustomerOrderCount()) . "/"
                     . $escaper->escapeHtml($orderRule->getOrdersPerMonth()) . " "

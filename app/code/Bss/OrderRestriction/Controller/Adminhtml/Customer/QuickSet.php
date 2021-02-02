@@ -33,7 +33,14 @@ class QuickSet extends Action implements HttpPostActionInterface
      */
     private $resultJsonFactory;
 
-    // @codingStandardsIgnoreLine
+    /**
+     * QuickSet constructor.
+     *
+     * @param \Psr\Log\LoggerInterface $logger
+     * @param Context $context
+     * @param CreateOrderRuleByCustomerId $createOrderRuleByCustomerId
+     * @param \Magento\Framework\Controller\Result\JsonFactory $resultJsonFactory
+     */
     public function __construct(
         \Psr\Log\LoggerInterface $logger,
         Context $context,

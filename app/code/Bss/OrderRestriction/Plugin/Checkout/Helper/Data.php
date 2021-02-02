@@ -18,6 +18,15 @@ use Magento\Framework\Message\ManagerInterface;
 class Data
 {
     /**
+     * @var string[]
+     */
+    private $allowedDisplayedNoticeControllers = [
+        "multishipping_checkout_index",
+        "checkout_index_index",
+        "checkout_cart_index"
+    ];
+
+    /**
      * @var \Psr\Log\LoggerInterface
      */
     private $logger;
@@ -38,23 +47,31 @@ class Data
     private $orderRuleValidation;
 
     /**
+     * @var \Magento\Framework\App\RequestInterface
+     */
+    private $request;
+
+    /**
      * Data constructor.
      *
      * @param \Psr\Log\LoggerInterface $logger
      * @param CustomerSession $customerSession
      * @param ManagerInterface $messageManager
      * @param OrderRuleValidation $orderRuleValidation
+     * @param \Magento\Framework\App\RequestInterface $request
      */
     public function __construct(
         \Psr\Log\LoggerInterface $logger,
         CustomerSession $customerSession,
         ManagerInterface $messageManager,
-        OrderRuleValidation $orderRuleValidation
+        OrderRuleValidation $orderRuleValidation,
+        \Magento\Framework\App\RequestInterface $request
     ) {
         $this->logger = $logger;
         $this->customerSesison = $customerSession;
         $this->messageManager = $messageManager;
         $this->orderRuleValidation = $orderRuleValidation;
+        $this->request = $request;
     }
 
     /**
@@ -74,7 +91,7 @@ class Data
                 $customerId = $this->customerSesison->getCustomerId();
                 $validationResult = $this->orderRuleValidation->canPlaceOrder($customerId);
 
-                if ($validationResult) {
+                if ($validationResult && $this->isAllowedShowNoticeController()) {
                     $this->messageManager->getMessages(true);
                     $this->messageManager->addErrorMessage(implode(", ", $validationResult));
                 }
@@ -85,5 +102,21 @@ class Data
             $this->logger->critical($e);
         }
         return $result;
+    }
+
+    /**
+     * Get allowed page to show notice whenever check the "can checkout order" status
+     *
+     * (Not include add to cart action)
+     *
+     * @return bool
+     */
+    private function isAllowedShowNoticeController(): bool
+    {
+        $fullAction = $this->request->getModuleName() . "_" .
+            $this->request->getControllerName() . "_" .
+            $this->request->getActionName();
+
+        return in_array($fullAction, $this->allowedDisplayedNoticeControllers);
     }
 }
