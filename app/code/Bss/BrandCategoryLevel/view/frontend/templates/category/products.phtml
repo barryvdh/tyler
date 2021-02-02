@@ -74,6 +74,7 @@ if ($levelCategory < 4): ?>
     <?php endif; ?>
 <?php else: ?>
     <?php if (!$block->isContentMode() || $block->isMixedMode()): ?>
+        <h2><?=__($currentCategory->getOriginalName())?></h2>
         <?= $block->getProductListHtml() ?>
     <?php endif; ?>
 <?php endif; ?>
