@@ -39,48 +39,48 @@ class OrderRule extends AbstractModel implements OrderRuleInterface
     /**
      * @inheritDoc
      */
-    public function getCustomerId()
+    public function getProductId()
     {
-        return $this->getData(self::CUSTOMER_ID);
+        return $this->getData(self::PRODUCT_ID);
     }
 
     /**
      * @inheritDoc
      */
-    public function setCustomerId($value)
+    public function setProductId($value)
     {
-        return $this->setData(self::CUSTOMER_ID, $value);
+        return $this->setData(self::PRODUCT_ID, $value);
     }
 
     /**
      * @inheritDoc
      */
-    public function getQtyPerOrder()
+    public function getSaleQtyPerMonth()
     {
-        return $this->getData(self::QTY_PER_ORDER);
+        return $this->getData(self::SALE_QTY_PER_MONTH);
     }
 
     /**
      * @inheritDoc
      */
-    public function setQtyPerOrder($val)
+    public function setSaleQtyPerMonth($val)
     {
-        return $this->setData(self::QTY_PER_ORDER, $val);
+        return $this->setData(self::SALE_QTY_PER_MONTH, $val);
     }
 
     /**
      * @inheritDoc
      */
-    public function getOrdersPerMonth()
+    public function getUseConfig()
     {
-        return $this->getData(self::ORDERS_PER_MONTH);
+        return $this->getData(self::USE_CONFIG);
     }
 
     /**
      * @inheritDoc
      */
-    public function setOrdersPerMonth($val)
+    public function setUseConfig($val)
     {
-        return $this->setData(self::ORDERS_PER_MONTH, $val);
+        return $this->setData(self::USE_CONFIG, $val);
     }
 }
