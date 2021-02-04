@@ -75,6 +75,10 @@ class HideField extends AbstractModifier
     {
         $isEnable = $this->helper->isEnable();
         $amastyRole = $this->coreRegistry->registry('current_amrolepermissions_rule');
+        if (!$amastyRole) {
+            return $meta;
+        }
+        $amastyRoleData = $amastyRole->getData();
         $roleId = $amastyRole->getId();
         $hideAttributes = $this->helper->getAdditionalAttributeConfig();
         $params = $this->request->getParams();
@@ -99,15 +103,20 @@ class HideField extends AbstractModifier
                                 $meta[$name]['children']['container_' . $attribute]['children']
                                 [$attribute]['arguments']['data']['config']['visible'] = 0;
                             }
-                            
+
                         }
                     }
-                    
+
                     try {
                         /* Custom container set */
                         $meta[$name]['children']['container_custom_block']['arguments']['data']['config']['visible'] = 0;
                         $meta[$name]['children']['container_custom_block_2']['arguments']['data']['config']['visible'] = 0;
-                        $meta[$name]['children']['container_category_ids']['arguments']['data']['config']['visible'] = 0;
+
+                        /* Don't hide Categories if Amasty Role allow*/
+                        if (!isset($amastyRoleData['categories']) && !empty($amastyRoleData['categories'])) {
+                            $meta[$name]['children']['container_category_ids']['arguments']['data']['config']['visible'] = 0;
+                        }
+
 
                         /* Attribute set */
                         $meta[$name]['children']['attribute_set_id']['arguments']['data']['config']['visible'] = 0;
@@ -117,7 +126,7 @@ class HideField extends AbstractModifier
 
                         /* Set default price attribute is 0 */
                         $meta[$name]['children']['container_price']['children']['price']['arguments']['data']['config']['default'] = 0;
-                        
+
                         /* Stock and qty */
                         $meta[$name]['children']['quantity_and_stock_status_qty']['arguments']['data']['config']['visible'] = 0;
                         unset($meta[$name]['children']['container_quantity_and_stock_status']['children']['quantity_and_stock_status']['arguments']['data']['config']['imports']);
@@ -139,7 +148,7 @@ class HideField extends AbstractModifier
                 foreach ($sections as $section) {
                     $meta = $this->processSection($meta, $section);
                 }
-                
+
             }
         }
         return $meta;
