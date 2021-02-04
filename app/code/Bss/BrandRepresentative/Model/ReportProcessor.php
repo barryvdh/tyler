@@ -22,12 +22,11 @@ use Bss\BrandRepresentative\Helper\Data;
 use Exception;
 use Magento\Catalog\Model\Category;
 use Magento\Catalog\Model\Product;
-use Magento\Framework\Stdlib\DateTime\DateTime;
 use Magento\Sales\Model\Order;
 use Magento\Sales\Model\Order\Item;
 use Psr\Log\LoggerInterface;
 use Magento\Catalog\Api\CategoryRepositoryInterface;
-
+use Magento\Framework\Stdlib\DateTime\TimezoneInterface;
 
 /**
  * Class ReportProcessor
@@ -51,35 +50,36 @@ class ReportProcessor
     protected $logger;
 
     /**
-     * @var DateTime
-     */
-    protected $dateTime;
-
-    /**
      * @var CategoryRepositoryInterface
      */
     protected $categoryRepository;
 
     /**
+     * @var TimezoneInterface
+     */
+    private $localeDate;
+
+    /**
      * ReportProcessor constructor.
+     *
      * @param SalesReportFactory $report
      * @param Data $helper
      * @param LoggerInterface $logger
-     * @param DateTime $dateTime
      * @param CategoryRepositoryInterface $categoryRepository
+     * @param TimezoneInterface $localeDate
      */
     public function __construct(
         SalesReportFactory $report,
         Data $helper,
         LoggerInterface $logger,
-        DateTime $dateTime,
-        CategoryRepositoryInterface $categoryRepository
+        CategoryRepositoryInterface $categoryRepository,
+        TimezoneInterface $localeDate
     ) {
         $this->report = $report;
         $this->helper = $helper;
         $this->logger = $logger;
-        $this->dateTime = $dateTime;
         $this->categoryRepository = $categoryRepository;
+        $this->localeDate = $localeDate;
     }
 
     /**
@@ -123,7 +123,8 @@ class ReportProcessor
                 $newReport->setProductName($product->getName());
                 $newReport->setProductType($product->getTypeId());
                 $newReport->setOrderedQty($item->getQtyOrdered());
-                $newReport->setOrderedTime($this->dateTime->gmtDate('y-m-d', $order->getCreatedAt()));
+                $orderDate = $this->localeDate->scopeDate($order->getStore(), $order->getCreatedAt())->format("Y-m-d");
+                $newReport->setOrderedTime($orderDate);
                 $newReport->setCustomerName($order->getCustomerName());
                 if ($order->getShippingAddress()) {
                     $shippingAddress = $order->getShippingAddress()->getStreet();
