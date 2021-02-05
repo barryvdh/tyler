@@ -12,6 +12,7 @@ use Magento\Store\Model\ScopeInterface;
 class ConfigProvider
 {
     const SALE_QTY_PER_MONTH_CONFIG_XML_PATH = "cataloginventory/item_options/sale_qty_per_month";
+    const ORDER_RESTRICTION_ENABLED_XML_PATH = "bss_order_restriction/general/enable";
 
     /**
      * @var ScopeConfigInterface
@@ -27,6 +28,21 @@ class ConfigProvider
         ScopeConfigInterface $scopeConfig
     ) {
         $this->scopeConfig = $scopeConfig;
+    }
+
+    /**
+     * Is module enabled
+     *
+     * @param null|int $storeId
+     * @return bool
+     */
+    public function isEnabled($storeId = null)
+    {
+        return $this->scopeConfig->isSetFlag(
+            self::ORDER_RESTRICTION_ENABLED_XML_PATH,
+            ScopeInterface::SCOPE_STORES,
+            $storeId
+        );
     }
 
     /**

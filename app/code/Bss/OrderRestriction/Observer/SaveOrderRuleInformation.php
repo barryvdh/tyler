@@ -49,11 +49,16 @@ class SaveOrderRuleInformation implements ObserverInterface
             $stockData = $product->getData("stock_data");
 
             if (isset($stockData["sale_qty_per_month"])) {
+                if ($stockData["sale_qty_per_month"] == "") {
+                    $stockData["sale_qty_per_month"] = null;
+                }
+
                 $orderRuleData = [
                     "product_id" => $product->getId(),
                     "sale_qty_per_month" => $stockData["sale_qty_per_month"],
                     "use_config_sale_qty_per_month" => $stockData["use_config_sale_qty_per_month"] ?? 1
                 ];
+
                 $this->orderRuleRepository->save($orderRuleData);
             }
         } catch (\Exception $e) {
