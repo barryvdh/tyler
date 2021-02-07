@@ -15,7 +15,7 @@ use Magento\Framework\Message\ManagerInterface;
  *
  * @SuppressWarnings(PHPMD.CookieAndSessionMisuse)
  */
-class Data
+class Data extends \Bss\OrderRestriction\Plugin\AbstractGetProductDataInQuote
 {
     /**
      * @var string[]
@@ -27,24 +27,9 @@ class Data
     ];
 
     /**
-     * @var \Psr\Log\LoggerInterface
-     */
-    private $logger;
-
-    /**
-     * @var CustomerSession
-     */
-    private $customerSesison;
-
-    /**
      * @var ManagerInterface
      */
     private $messageManager;
-
-    /**
-     * @var AvailableToAddCart
-     */
-    private $orderRuleValidation;
 
     /**
      * @var \Magento\Framework\App\RequestInterface
@@ -67,10 +52,12 @@ class Data
         AvailableToAddCart $orderRuleValidation,
         \Magento\Framework\App\RequestInterface $request
     ) {
-        $this->logger = $logger;
-        $this->customerSesison = $customerSession;
+        parent::__construct(
+            $logger,
+            $customerSession,
+            $orderRuleValidation
+        );
         $this->messageManager = $messageManager;
-        $this->orderRuleValidation = $orderRuleValidation;
         $this->request = $request;
     }
 
@@ -87,42 +74,20 @@ class Data
         $result
     ) {
         try {
-            if ($this->customerSesison->isLoggedIn()) {
-                $productData = $this->getProductData($subject);
-                $validationResult = $this->orderRuleValidation->getNotAllowedProductsToAdd($productData);
+            if ($this->customerSession->isLoggedIn()) {
+                $productData = $this->getProductData($subject->getQuote());
+                $canAddProduct = $this->orderRuleValidation->canAddProductToCart($productData);
 
-                if ($validationResult && $this->isAllowedShowNoticeController()) {
-                    $this->orderRuleValidation->getRestrictionMessages($validationResult);
+                if (!$canAddProduct && $this->isAllowedShowNoticeController()) {
+                    $this->orderRuleValidation->getRestrictionMessages();
                 }
 
-                return empty($validationResult);
+                return $canAddProduct;
             }
         } catch (\Exception $e) {
             $this->logger->critical($e);
         }
         return $result;
-    }
-
-    /**
-     * Get cart product data
-     *
-     * @param BePlugged $subject
-     * @return array
-     */
-    private function getProductData($subject)
-    {
-        $productData = [];
-        $quote = $subject->getQuote();
-        foreach ($quote->getAllItems() as $item) {
-            $productDataItem = [
-                "product_id" => $item->getProductId(),
-                "qty" => $item->getQty()
-            ];
-
-            $productData[] = $productDataItem;
-        }
-
-        return $productData;
     }
 
     /**

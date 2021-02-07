@@ -22,7 +22,7 @@ abstract class AbstractDb
     /**
      * OrderedProduct constructor.
      *
-     * @param LoggerInterface $logger
+     * @param \Psr\Log\LoggerInterface $logger
      * @param \Magento\Framework\App\ResourceConnection $resource
      */
     public function __construct(

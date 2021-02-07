@@ -8,6 +8,7 @@ use Magento\Framework\Data\ValueSourceInterface;
 
 /**
  * Class OrderRuleConfiguration
+ * Get default config value for sale allowed product
  */
 class OrderRuleConfiguration implements ValueSourceInterface
 {

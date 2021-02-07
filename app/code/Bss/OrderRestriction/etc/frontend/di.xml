@@ -18,13 +18,31 @@
                 type="Bss\OrderRestriction\Plugin\Model\ValidateTheCustomerBeforeAddToCart"
                 sortOrder="30" />
     </type>
+    <!-- Wishlist to cart -->
     <type name="Magento\Wishlist\Controller\Index\Cart">
         <plugin name="validate_customer_before_add_to_cart"
                 type="Bss\OrderRestriction\Plugin\Model\ValidateTheCustomerBeforeAddToCart"
                 sortOrder="30" />
     </type>
-    <!-- Update mini cart -->
+    <type name="Magento\Wishlist\Controller\Index\Allcart">
+        <plugin name="validate_customer_before_add_to_cart"
+                type="Bss\OrderRestriction\Plugin\Model\ValidateTheCustomerBeforeAddToCart"
+                sortOrder="30" />
+    </type>
+    <!-- Update items qty in cart page -->
+    <type name="Magento\Checkout\Controller\Cart\UpdatePost">
+        <plugin name="validate_customer_before_add_to_cart"
+                type="Bss\OrderRestriction\Plugin\Model\ValidateTheCustomerBeforeAddToCart"
+                sortOrder="30" />
+    </type>
+    <!-- Update in mini cart -->
     <type name="Magento\Checkout\Controller\Sidebar\UpdateItemQty">
+        <plugin name="validate_customer_before_add_to_cart"
+                type="Bss\OrderRestriction\Plugin\Model\ValidateTheCustomerBeforeAddToCart"
+                sortOrder="30" />
+    </type>
+    <!-- Update item page -->
+    <type name="Magento\Checkout\Controller\Cart\UpdateItemOptions">
         <plugin name="validate_customer_before_add_to_cart"
                 type="Bss\OrderRestriction\Plugin\Model\ValidateTheCustomerBeforeAddToCart"
                 sortOrder="30" />

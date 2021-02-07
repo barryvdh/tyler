@@ -60,6 +60,11 @@ class AvailableToAddCart
     private $messageManager;
 
     /**
+     * @var array
+     */
+    private $notAllowedProducts;
+
+    /**
      * AvailableToAddCart constructor.
      *
      * @param \Psr\Log\LoggerInterface $logger
@@ -107,11 +112,11 @@ class AvailableToAddCart
      * Check the available add to cart of product
      *
      * @param array $productDataIds - ["product_id" => 1, "qty" => 1, "type" => "simple"]
-     * @param bool $isAddToCart
      * @return array
      * @throws LocalizedException
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
-    public function getNotAllowedProductsToAdd($productDataIds, $isAddToCart = false)
+    public function getNotAllowedProductsToAdd($productDataIds): array
     {
         if (!$this->customerSession->isLoggedIn()) {
             return [];
@@ -138,12 +143,12 @@ class AvailableToAddCart
             $productOrderRule = $this->orderRuleRepository->getByProductId($productData["product_id"]);
             $allowedSaleQty = $productOrderRule->getSaleQtyPerMonth();
 
-            if ($allowedSaleQty == null || $allowedSaleQty == "") {
+            if (!isset($productData["product_id"]) ||
+                !$productData["product_id"] ||
+                $allowedSaleQty == null ||
+                $allowedSaleQty == ""
+            ) {
                 continue;
-            }
-
-            if ($isAddToCart) {
-                $allowedSaleQty++;
             }
 
             $totalOrderedQty = $this->orderedProductResource->getTotalOrderedQty(
@@ -152,28 +157,28 @@ class AvailableToAddCart
                 $filterDate
             );
 
-            if (((int) $totalOrderedQty + $productData["qty"]) >= $allowedSaleQty) {
+            if (((int) $totalOrderedQty + $productData["qty"]) > $allowedSaleQty) {
                 $product = $this->productRepository->getById($productData["product_id"]);
                 $notAllowedProducts[$productData["product_id"]] = $product->getName();
             }
         }
+        $this->notAllowedProducts = $notAllowedProducts;
 
-        return $notAllowedProducts;
+        return $this->notAllowedProducts;
     }
 
     /**
      * Get restriction message
-     *
-     * @param array $notAllowedProducts
-     * @return string
      */
-    public function getRestrictionMessages($notAllowedProducts)
+    public function getRestrictionMessages()
     {
-        return $this->messageManager->addErrorMessage(
-            __(
-                "[%1] products that reached the order limit this month.",
-                implode(", ", $notAllowedProducts)
-            )
-        );
+        if ($this->notAllowedProducts) {
+            $this->messageManager->addErrorMessage(
+                __(
+                    "[%1] products that reached the order limit this month.",
+                    implode(", ", $this->notAllowedProducts)
+                )
+            );
+        }
     }
 }

@@ -11,7 +11,7 @@ define([
         defaults: {
             responseData: null,
             links: {
-                selectedCustomers: 'customer_listing.customer_listing.customer_columns.ids:selected'
+                selectedProducts: 'product_listing.product_listing.product_columns.ids:selected'
             }
         },
 
@@ -39,7 +39,7 @@ define([
             return {
                 'form_key': window.FORM_KEY,
                 'order_restriction': data,
-                'selected_customers': this.selectedCustomers
+                'selected_products': this.selectedProducts
             };
         },
 

@@ -50,13 +50,6 @@ class OrderedProduct extends AbstractDb
                 ]
             );
 
-            vadu_log(
-                [
-                    "query" => $select->assemble(),
-                    "product_id" => $productId,
-                    "total_qty" => $connection->fetchOne($select)
-                ]
-            );
             return $connection->fetchOne($select);
         } catch (\Exception $e) {
             $this->logger->critical($e);
