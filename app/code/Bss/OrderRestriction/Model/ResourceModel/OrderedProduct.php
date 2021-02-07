@@ -46,7 +46,7 @@ class OrderedProduct extends AbstractDb
                 ));
             $select->columns(
                 [
-                    "total_qty" => new \Zend_Db_Expr("SUM(qty_ordered)")
+                    "total_qty" => new \Zend_Db_Expr("SUM(qty_shipped)")
                 ]
             );
 
