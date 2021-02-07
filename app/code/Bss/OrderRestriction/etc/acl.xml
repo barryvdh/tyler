@@ -6,7 +6,6 @@
                 <resource id="Magento_Customer::customer">
                     <resource id="Bss_OrderRestriction::order_restriction" title="Order Restriction" translate="true">
                         <resource id="Bss_OrderRestriction::config_section" title="Bss Order Restriction Config" translate="true" />
-                        <resource id="Bss_OrderRestriction::manage" title="Manage Order Restriction" translate="true" />
                     </resource>
                 </resource>
             </resource>

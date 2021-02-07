@@ -21,5 +21,14 @@
                 </field>
             </group>
         </section>
+        <section id="cataloginventory">
+            <group id="item_options">
+                <field id="sale_qty_per_month" translate="label comment" sortOrder="2" showInDefault="1" canRestore="1">
+                    <label>Limit Product Quantity Per Month</label>
+                    <validate>validate-number</validate>
+                    <comment>Leave blank for unlimited quantities per month.</comment>
+                </field>
+            </group>
+        </section>
     </system>
 </config>

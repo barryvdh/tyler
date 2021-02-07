@@ -4,57 +4,72 @@ declare(strict_types=1);
 namespace Bss\OrderRestriction\Api\Data;
 
 /**
- * Class OrderRuleInterface
+ * Interface OrderRuleInterface
  */
 interface OrderRuleInterface
 {
-    const ID = 'entity_id';
-    const CUSTOMER_ID = 'customer_id';
-    const QTY_PER_ORDER = 'qty_per_order';
-    const ORDERS_PER_MONTH = 'orders_per_month';
+    const ID = "entity_id";
+    const PRODUCT_ID = "product_id";
+    const SALE_QTY_PER_MONTH = "sale_qty_per_month";
+    const USE_CONFIG = "use_config_sale_qty_per_month";
 
     /**
-     * Get customer who be restrict
+     * Get order rule item id
      *
      * @return int
      */
-    public function getCustomerId();
+    public function getId();
 
     /**
-     * Set customer id
-     *
-     * @param int $value
-     * @return $this
-     */
-    public function setCustomerId($value);
-
-    /**
-     * Get the number of qty customer place order
-     *
-     * @return int
-     */
-    public function getQtyPerOrder();
-
-    /**
-     * Set the number of qty customer place order
+     * Set order rule item id
      *
      * @param int $val
      * @return $this
      */
-    public function setQtyPerOrder($val);
+    public function setId($val);
 
     /**
-     * Get the number of orders that customer can order/month
+     * Get related product id
      *
      * @return int
      */
-    public function getOrdersPerMonth();
+    public function getProductId();
 
     /**
-     * Set the number of orders customer can order/month
+     * Set product id
      *
      * @param int $val
      * @return $this
      */
-    public function setOrdersPerMonth($val);
+    public function setProductId($val);
+
+    /**
+     * Retrieve the number of products allowed to order in a month
+     *
+     * @return int
+     */
+    public function getSaleQtyPerMonth();
+
+    /**
+     * Set the number of products allowed to order in a month
+     *
+     * @param int $val
+     * @return $this
+     */
+    public function setSaleQtyPerMonth($val);
+
+    /**
+     * Is use config setting
+     *
+     * @return int
+     */
+    public function getUseConfig();
+
+    /**
+     * Set is use config
+     *
+     * @param int $val
+     * @return $this
+     */
+    public function setUseConfig($val);
 }

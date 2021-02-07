@@ -37,7 +37,7 @@ class InstallSchema implements \Magento\Framework\Setup\InstallSchemaInterface
                 "ID"
             )
             ->addColumn(
-                OrderRule::CUSTOMER_ID,
+                OrderRule::PRODUCT_ID,
                 Table::TYPE_INTEGER,
                 null,
                 [
@@ -46,32 +46,32 @@ class InstallSchema implements \Magento\Framework\Setup\InstallSchemaInterface
                 ],
                 "Related Customer"
             )->addColumn(
-                OrderRule::QTY_PER_ORDER,
+                OrderRule::SALE_QTY_PER_MONTH,
                 Table::TYPE_INTEGER,
                 null,
                 [
                     'nullable' => true,
                     'unsigned' => true
                 ],
-                "The qty/order"
+                "The allowed qty/month"
             )->addColumn(
-                OrderRule::ORDERS_PER_MONTH,
-                Table::TYPE_INTEGER,
+                OrderRule::USE_CONFIG,
+                Table::TYPE_SMALLINT,
                 null,
                 [
                     'nullable' => true,
                     'unsigned' => true
                 ],
-                "Number of order/month"
+                "Is use the config setting"
             )->addForeignKey(
                 $installer->getFkName(
                     OrderRuleResource::TABLE,
-                    OrderRule::CUSTOMER_ID,
-                    'customer_entity',
+                    OrderRule::PRODUCT_ID,
+                    'catalog_product_entity',
                     'entity_id'
                 ),
-                OrderRule::CUSTOMER_ID,
-                $installer->getTable('customer_entity'),
+                OrderRule::PRODUCT_ID,
+                $installer->getTable('catalog_product_entity'),
                 'entity_id',
                 Table::ACTION_CASCADE
             )->setComment("The Order Restriction Table");

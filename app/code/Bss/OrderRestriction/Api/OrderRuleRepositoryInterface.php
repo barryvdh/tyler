@@ -3,36 +3,29 @@ declare(strict_types=1);
 
 namespace Bss\OrderRestriction\Api;
 
-use Bss\OrderRestriction\Exception\CouldNotLoadException;
+use Magento\Framework\Exception\CouldNotSaveException;
+use Magento\Framework\Exception\InputException;
 
 /**
- * Order rule repository
+ * Class OrderRuleRepositoryInterface
  */
 interface OrderRuleRepositoryInterface
 {
     /**
-     * Get by id
+     * Get order rule by product id
      *
-     * @param int $id
+     * @param int $productId
      * @return Data\OrderRuleInterface
-     * @throws CouldNotLoadException
      */
-    public function get($id);
+    public function getByProductId($productId);
 
     /**
-     * Get by customer id
+     * Save the order rule
      *
-     * @param int $customerId
-     * @return Data\OrderRuleInterface
-     * @throws CouldNotLoadException
-     */
-    public function getByCustomerId($customerId);
-
-    /**
-     * Save the object
-     *
-     * @param Data\OrderRuleInterface $orderRule
+     * @param Data\OrderRuleInterface|array $orderRule
      * @return bool
+     * @throws CouldNotSaveException
+     * @throws InputException
      */
     public function save($orderRule);
 }

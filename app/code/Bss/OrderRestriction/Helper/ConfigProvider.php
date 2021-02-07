@@ -11,7 +11,8 @@ use Magento\Store\Model\ScopeInterface;
  */
 class ConfigProvider
 {
-    const ENABLE_CONFIG_XML_PATH = "bss_order_restriction/general/enable";
+    const SALE_QTY_PER_MONTH_CONFIG_XML_PATH = "cataloginventory/item_options/sale_qty_per_month";
+    const ORDER_RESTRICTION_ENABLED_XML_PATH = "bss_order_restriction/general/enable";
 
     /**
      * @var ScopeConfigInterface
@@ -32,15 +33,30 @@ class ConfigProvider
     /**
      * Is module enabled
      *
-     * @param int||null $storeId
+     * @param null|int $storeId
      * @return bool
      */
     public function isEnabled($storeId = null)
     {
         return $this->scopeConfig->isSetFlag(
-            self::ENABLE_CONFIG_XML_PATH,
+            self::ORDER_RESTRICTION_ENABLED_XML_PATH,
             ScopeInterface::SCOPE_STORES,
             $storeId
+        );
+    }
+
+    /**
+     * Get default sale Qty per month value
+     *
+     * @param int $store
+     * @return int|null
+     */
+    public function getDefaultSaleQtyValue($store = null)
+    {
+        return $this->scopeConfig->getValue(
+            self::SALE_QTY_PER_MONTH_CONFIG_XML_PATH,
+            ScopeInterface::SCOPE_STORES,
+            $store
         );
     }
 }

@@ -3,7 +3,7 @@ declare(strict_types=1);
 
 namespace Bss\OrderRestriction\Plugin\Checkout\Helper;
 
-use Bss\OrderRestriction\Helper\OrderRuleValidation;
+use Bss\OrderRestriction\Helper\AvailableToAddCart;
 use Magento\Checkout\Helper\Data as BePlugged;
 use Magento\Customer\Model\Session as CustomerSession;
 use Magento\Framework\Message\ManagerInterface;
@@ -15,7 +15,7 @@ use Magento\Framework\Message\ManagerInterface;
  *
  * @SuppressWarnings(PHPMD.CookieAndSessionMisuse)
  */
-class Data
+class Data extends \Bss\OrderRestriction\Plugin\AbstractGetProductDataInQuote
 {
     /**
      * @var string[]
@@ -27,24 +27,9 @@ class Data
     ];
 
     /**
-     * @var \Psr\Log\LoggerInterface
-     */
-    private $logger;
-
-    /**
-     * @var CustomerSession
-     */
-    private $customerSesison;
-
-    /**
      * @var ManagerInterface
      */
     private $messageManager;
-
-    /**
-     * @var OrderRuleValidation
-     */
-    private $orderRuleValidation;
 
     /**
      * @var \Magento\Framework\App\RequestInterface
@@ -57,20 +42,22 @@ class Data
      * @param \Psr\Log\LoggerInterface $logger
      * @param CustomerSession $customerSession
      * @param ManagerInterface $messageManager
-     * @param OrderRuleValidation $orderRuleValidation
+     * @param AvailableToAddCart $orderRuleValidation
      * @param \Magento\Framework\App\RequestInterface $request
      */
     public function __construct(
         \Psr\Log\LoggerInterface $logger,
         CustomerSession $customerSession,
         ManagerInterface $messageManager,
-        OrderRuleValidation $orderRuleValidation,
+        AvailableToAddCart $orderRuleValidation,
         \Magento\Framework\App\RequestInterface $request
     ) {
-        $this->logger = $logger;
-        $this->customerSesison = $customerSession;
+        parent::__construct(
+            $logger,
+            $customerSession,
+            $orderRuleValidation
+        );
         $this->messageManager = $messageManager;
-        $this->orderRuleValidation = $orderRuleValidation;
         $this->request = $request;
     }
 
@@ -87,16 +74,15 @@ class Data
         $result
     ) {
         try {
-            if ($this->customerSesison->isLoggedIn()) {
-                $customerId = $this->customerSesison->getCustomerId();
-                $validationResult = $this->orderRuleValidation->canPlaceOrder($customerId);
+            if ($this->customerSession->isLoggedIn()) {
+                $productData = $this->getProductData($subject->getQuote());
+                $canAddProduct = $this->orderRuleValidation->canAddProductToCart($productData);
 
-                if ($validationResult && $this->isAllowedShowNoticeController()) {
-                    $this->messageManager->getMessages(true);
-                    $this->messageManager->addErrorMessage(implode(", ", $validationResult));
+                if (!$canAddProduct && $this->isAllowedShowNoticeController()) {
+                    $this->orderRuleValidation->getRestrictionMessages();
                 }
 
-                return empty($validationResult);
+                return $canAddProduct;
             }
         } catch (\Exception $e) {
             $this->logger->critical($e);

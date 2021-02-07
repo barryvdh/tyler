@@ -10,10 +10,10 @@
                 <settings>
                     <callback>
                         <target>openModal</target>
-                        <provider>customer_listing.customer_listing.quick_set_order_restriction_modal</provider>
+                        <provider>product_listing.product_listing.quick_set_order_restriction_modal</provider>
                     </callback>
                     <type>multiple_update_form</type>
-                    <label translate="true">Quick set Order Limitation</label>
+                    <label translate="true">Quick set allowed qty per month</label>
                 </settings>
             </action>
         </massaction>
@@ -39,7 +39,7 @@
            component="Bss_OrderRestriction/js/view/quick-set-order-restriction-modal">
         <argument name="data" xsi:type="array">
             <item name="config" xsi:type="array">
-                <item name="saveUrl" xsi:type="url" path="order_restriction/customer/quickSet"/>
+                <item name="saveUrl" xsi:type="url" path="order_restriction/product/quickSet"/>
                 <item name="options" xsi:type="array">
                     <item name="buttons" xsi:type="array">
                         <item name="0" xsi:type="array">
@@ -65,7 +65,7 @@
                 <option
                     name="title"
                     translate="true"
-                    xsi:type="string">Quick set Order Limitation for multiple Customer</option>
+                    xsi:type="string">Quick set allowed qty per month for products</option>
             </options>
         </settings>
 
@@ -74,19 +74,9 @@
                 <label />
             </settings>
 
-            <field name="qty_per_order" formElement="input">
+            <field name="sale_allowed_per_month" formElement="input">
                 <settings>
-                    <label translate="true">Limit Quantity per Order</label>
-                    <dataType>number</dataType>
-                    <validation>
-                        <rule name="validate-number" xsi:type="boolean">true</rule>
-                    </validation>
-                </settings>
-            </field>
-
-            <field name="orders_per_month" formElement="input">
-                <settings>
-                    <label translate="true">Limit Quantity per Month</label>
+                    <label translate="true">Limit qty</label>
                     <dataType>number</dataType>
                     <validation>
                         <rule name="validate-number" xsi:type="boolean">true</rule>

@@ -1,22 +1,30 @@
 <?php
 declare(strict_types=1);
 
-namespace Bss\OrderRestriction\Controller\Adminhtml\Customer;
+namespace Bss\OrderRestriction\Controller\Adminhtml\Product;
 
-use Bss\OrderRestriction\Helper\CreateOrderRuleByCustomerId;
-use Magento\Backend\App\Action;
-use Magento\Backend\App\Action\Context;
+use Bss\OrderRestriction\Api\OrderRuleRepositoryInterface;
 use Magento\Framework\App\Action\HttpPostActionInterface;
 
 /**
  * Quick set order restriction multiple customer
  */
-class QuickSet extends Action implements HttpPostActionInterface
+class QuickSet implements HttpPostActionInterface
 {
     /**
      * Authorization for manage order restriction
      */
-    const ADMIN_RESOURCE = "Bss_OrderRestriction::manage";
+    const ADMIN_RESOURCE = "Magento_Catalog::catalog";
+
+    /**
+     * @var \Magento\Framework\App\RequestInterface
+     */
+    private $request;
+
+    /**
+     * @var \Magento\Framework\AuthorizationInterface
+     */
+    private $authorization;
 
     /**
      * @var \Psr\Log\LoggerInterface
@@ -24,9 +32,9 @@ class QuickSet extends Action implements HttpPostActionInterface
     private $logger;
 
     /**
-     * @var CreateOrderRuleByCustomerId
+     * @var OrderRuleRepositoryInterface
      */
-    private $createOrderRuleByCustomerId;
+    private $orderRuleRepository;
 
     /**
      * @var \Magento\Framework\Controller\Result\JsonFactory
@@ -36,21 +44,24 @@ class QuickSet extends Action implements HttpPostActionInterface
     /**
      * QuickSet constructor.
      *
+     * @param \Magento\Framework\App\RequestInterface $request
+     * @param \Magento\Framework\AuthorizationInterface $authorization
      * @param \Psr\Log\LoggerInterface $logger
-     * @param Context $context
-     * @param CreateOrderRuleByCustomerId $createOrderRuleByCustomerId
+     * @param OrderRuleRepositoryInterface $orderRuleRepository
      * @param \Magento\Framework\Controller\Result\JsonFactory $resultJsonFactory
      */
     public function __construct(
+        \Magento\Framework\App\RequestInterface $request,
+        \Magento\Framework\AuthorizationInterface $authorization,
         \Psr\Log\LoggerInterface $logger,
-        Context $context,
-        CreateOrderRuleByCustomerId $createOrderRuleByCustomerId,
+        OrderRuleRepositoryInterface $orderRuleRepository,
         \Magento\Framework\Controller\Result\JsonFactory $resultJsonFactory
     ) {
+        $this->request = $request;
+        $this->authorization = $authorization;
         $this->logger = $logger;
-        $this->createOrderRuleByCustomerId = $createOrderRuleByCustomerId;
+        $this->orderRuleRepository = $orderRuleRepository;
         $this->resultJsonFactory = $resultJsonFactory;
-        parent::__construct($context);
     }
 
     /**
@@ -62,7 +73,7 @@ class QuickSet extends Action implements HttpPostActionInterface
     {
         $jsonResult = $this->resultJsonFactory->create();
 
-        if (!$this->_authorization->isAllowed(self::ADMIN_RESOURCE)) {
+        if (!$this->authorization->isAllowed(self::ADMIN_RESOURCE)) {
             return $jsonResult->setData([
                 'message' => __("You haven't no permission to this action."),
                 'success' => false
@@ -72,18 +83,15 @@ class QuickSet extends Action implements HttpPostActionInterface
         $msg = "";
 
         try {
-            $selectedCustomers = $this->getRequest()->getParam('selected_customers');
+            $selectedProducts = $this->request->getParam('selected_products');
             $successCount = 0;
             $noneUpdated = [];
 
-            if ($selectedCustomers) {
-                $requestData = $this->getRequest()->getParam('order_restriction');
+            if ($selectedProducts) {
+                $requestData = $this->request->getParam('order_restriction');
 
-                foreach ($selectedCustomers as $customerId) {
-                    $result = $this->createOrderRuleByCustomerId->execute(
-                        $customerId,
-                        $requestData
-                    );
+                foreach ($selectedProducts as $productId) {
+                    $result = $this->createOrderRule($productId, $requestData);
                     if (!is_bool($result)) {
                         $noneUpdated[] = $result;
                     }
@@ -102,7 +110,7 @@ class QuickSet extends Action implements HttpPostActionInterface
             if ($noneUpdated) {
                 $success = true;
                 $msg .= __(
-                    "Customers %1 are not allowed to update because they are sub-accounts",
+                    "Products %1 are not be updated. Please review the log.",
                     implode(", ", $noneUpdated)
                 );
             }
@@ -118,6 +126,34 @@ class QuickSet extends Action implements HttpPostActionInterface
             'success' => $success,
             'message' => $msg
         ]);
+    }
+
+    /**
+     * Create order rule by product id and provided request data
+     *
+     * @param int $productId
+     * @param array $requestField
+     * @return bool
+     */
+    private function createOrderRule($productId, $requestField)
+    {
+        try {
+            if (!isset($requestField["sale_allowed_per_month"]) ||
+                $requestField["sale_allowed_per_month"] == ""
+            ) {
+                $requestField["sale_allowed_per_month"] = null;
+            }
+            $orderRuleData = [
+                "product_id" => $productId,
+                "sale_qty_per_month" => $requestField["sale_allowed_per_month"],
+                "use_config_sale_qty_per_month" => 0
+            ];
+
+            return $this->orderRuleRepository->save($orderRuleData);
+        } catch (\Exception $e) {
+            $this->logger->critical($e);
+            return $productId;
+        }
     }
 
     /**
