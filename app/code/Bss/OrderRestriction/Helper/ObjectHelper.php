@@ -4,7 +4,6 @@ declare(strict_types=1);
 namespace Bss\OrderRestriction\Helper;
 
 use Bss\OrderRestriction\Model\ResourceModel\BundleProduct;
-use Bss\OrderRestriction\Model\ResourceModel\WishlistItem as WishlistItemResource;
 use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Checkout\Model\Session as CheckoutSession;
 use Magento\ConfigurableProduct\Model\Product\Type\Configurable;
@@ -38,11 +37,6 @@ class ObjectHelper
     private $configurableType;
 
     /**
-     * @var WishlistItemResource
-     */
-    private $wishlistResource;
-
-    /**
      * @var CheckoutSession
      */
     private $checkoutSession;
@@ -59,7 +53,6 @@ class ObjectHelper
      * @param BundleProduct $bundleProductResource
      * @param ProductRepositoryInterface $productRepository
      * @param Configurable $configurableType
-     * @param WishlistItemResource $wishlistResource
      * @param CheckoutSession $checkoutSession
      * @param SerializerInterface $serializer
      */
@@ -68,7 +61,6 @@ class ObjectHelper
         BundleProduct $bundleProductResource,
         ProductRepositoryInterface $productRepository,
         Configurable $configurableType,
-        WishlistItemResource $wishlistResource,
         CheckoutSession $checkoutSession,
         SerializerInterface $serializer
     ) {
@@ -76,7 +68,6 @@ class ObjectHelper
         $this->bundleProductResource = $bundleProductResource;
         $this->productRepository = $productRepository;
         $this->configurableType = $configurableType;
-        $this->wishlistResource = $wishlistResource;
         $this->checkoutSession = $checkoutSession;
         $this->serializer = $serializer;
     }
@@ -99,16 +90,6 @@ class ObjectHelper
     public function getCheckoutSession()
     {
         return $this->checkoutSession;
-    }
-
-    /**
-     * Get wishlist item resource
-     *
-     * @return WishlistItemResource
-     */
-    public function getWishListItemResource()
-    {
-        return $this->wishlistResource;
     }
 
     /**
