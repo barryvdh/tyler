@@ -65,6 +65,11 @@ class AvailableToAddCart
     private $notAllowedProducts;
 
     /**
+     * @var ConfigProvider
+     */
+    private $configProvider;
+
+    /**
      * AvailableToAddCart constructor.
      *
      * @param \Psr\Log\LoggerInterface $logger
@@ -75,6 +80,7 @@ class AvailableToAddCart
      * @param OrderedProduct $orderedProductResource
      * @param OrderRuleRepositoryInterface $orderRuleRepository
      * @param ManagerInterface $messageManager
+     * @param ConfigProvider $configProvider
      */
     public function __construct(
         \Psr\Log\LoggerInterface $logger,
@@ -84,7 +90,8 @@ class AvailableToAddCart
         ProductRepositoryInterface $productRepository,
         OrderedProduct $orderedProductResource,
         OrderRuleRepositoryInterface $orderRuleRepository,
-        ManagerInterface $messageManager
+        ManagerInterface $messageManager,
+        ConfigProvider $configProvider
     ) {
         $this->logger = $logger;
         $this->customerSession = $customerSession;
@@ -94,6 +101,7 @@ class AvailableToAddCart
         $this->orderedProductResource = $orderedProductResource;
         $this->orderRuleRepository = $orderRuleRepository;
         $this->messageManager = $messageManager;
+        $this->configProvider = $configProvider;
     }
 
     /**
@@ -118,7 +126,9 @@ class AvailableToAddCart
      */
     public function getNotAllowedProductsToAdd($productDataIds): array
     {
-        if (!$this->customerSession->isLoggedIn()) {
+        if (!$this->customerSession->isLoggedIn() ||
+            !$this->configProvider->isEnabled()
+        ) {
             return [];
         }
 

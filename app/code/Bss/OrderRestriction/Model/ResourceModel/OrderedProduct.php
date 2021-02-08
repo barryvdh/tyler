@@ -3,12 +3,35 @@ declare(strict_types=1);
 
 namespace Bss\OrderRestriction\Model\ResourceModel;
 
+use Bss\OrderRestriction\Helper\ConfigProvider;
+
 /**
  * Class OrderedProduct
  * Get total ordered product qty by customer
  */
 class OrderedProduct extends AbstractDb
 {
+    /**
+     * @var ConfigProvider
+     */
+    private $configProvider;
+
+    /**
+     * OrderedProduct constructor.
+     *
+     * @param ConfigProvider $configProvider
+     * @param \Psr\Log\LoggerInterface $logger
+     * @param \Magento\Framework\App\ResourceConnection $resource
+     */
+    public function __construct(
+        ConfigProvider $configProvider,
+        \Psr\Log\LoggerInterface $logger,
+        \Magento\Framework\App\ResourceConnection $resource
+    ) {
+        $this->configProvider = $configProvider;
+        parent::__construct($logger, $resource);
+    }
+
     /**
      * Get total ordered product qty by customer
      *
@@ -46,7 +69,7 @@ class OrderedProduct extends AbstractDb
                 ));
             $select->columns(
                 [
-                    "total_qty" => new \Zend_Db_Expr("SUM(qty_shipped)")
+                    "total_qty" => new \Zend_Db_Expr(sprintf("SUM(%s)", $this->getTotalQtyField()))
                 ]
             );
 
@@ -55,5 +78,19 @@ class OrderedProduct extends AbstractDb
             $this->logger->critical($e);
             return false;
         }
+    }
+
+    /**
+     * Get total order qty field to calculate
+     *
+     * @return string
+     */
+    private function getTotalQtyField()
+    {
+        if ($this->configProvider->isDecreaseStockWhenOrderPlaced()) {
+            return "qty_ordered";
+        }
+
+        return "qty_shipped";
     }
 }
