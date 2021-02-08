@@ -169,7 +169,8 @@ class AvailableToAddCart
 
             if (((int) $totalOrderedQty + $productData["qty"]) > $allowedSaleQty) {
                 $product = $this->productRepository->getById($productData["product_id"]);
-                $notAllowedProducts[$productData["product_id"]] = $product->getName();
+                $notAllowedProducts[$productData["product_id"]] = $product->getName() . " "
+                    . __("(Maximum %1 accepted)", $allowedSaleQty);
             }
         }
         $this->notAllowedProducts = $notAllowedProducts;
@@ -185,7 +186,7 @@ class AvailableToAddCart
         if ($this->notAllowedProducts) {
             $this->messageManager->addErrorMessage(
                 __(
-                    "[%1] products that reached the order limit this month.",
+                    "You have reached the order limit per month for %1.",
                     implode(", ", $this->notAllowedProducts)
                 )
             );
