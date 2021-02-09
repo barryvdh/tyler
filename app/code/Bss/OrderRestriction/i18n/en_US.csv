@@ -1,6 +1,7 @@
 "Limit Product Quantity Per Month","Limit Product Quantity Per Month"
 "Leave blank for unlimited quantities per month.","Leave blank for unlimited quantities per month."
-"[%1] products that reached the order limit this month.","[%1] products that reached the order limit this month."
+"You have reached the order limit per month for %1.","You have reached the order limit per month for %1."
+"(Maximum %1 accepted)","(Maximum %1 accepted)"
 "Quick set allowed qty per month for products","Quick set allowed qty per month for products"
 "Quick set allowed qty per month","Quick set allowed qty per month"
 "Limit qty","Limit qty"

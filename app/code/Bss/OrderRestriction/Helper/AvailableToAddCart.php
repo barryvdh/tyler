@@ -170,7 +170,7 @@ class AvailableToAddCart
             if (((int) $totalOrderedQty + $productData["qty"]) > $allowedSaleQty) {
                 $product = $this->productRepository->getById($productData["product_id"]);
                 $notAllowedProducts[$productData["product_id"]] = $product->getName() . " "
-                    . __("(Maximum %1 accepted)", $allowedSaleQty);
+                    . __("(max %1)", $allowedSaleQty);
             }
         }
         $this->notAllowedProducts = $notAllowedProducts;
