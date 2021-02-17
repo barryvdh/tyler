@@ -15,9 +15,18 @@
  * @copyright  Copyright (c) 2017-2018 BSS Commerce Co. ( http://bsscommerce.com )
  * @license    http://bsscommerce.com/Bss-Commerce-License.txt
  */
-/**@var Bss\CategoryAttributes\ViewModel\Output $viewModel*/
+/** @var \Magento\Catalog\Block\Category\View $block */
+/** @var \Bss\CategoryAttributes\ViewModel\Category\Output $viewModel*/
+/** @var \Magento\Framework\Escaper $escaper */
+/** @var \Magento\Catalog\Model\Category $category */
 $viewModel = $block->getData('view_model');
+$category = $block->getCurrentCategory();
+$brandCover = $category->getCustomAttribute('cover_category');
 ?>
+<?php if ($brandCover): ?>
+<img src="<?= $escaper->escapeUrl($category->getImageUrl("cover_category")) ?>" alt="<?= $escaper->escapeHtml($category->getName()) ?>" />
+<?php endif; ?>
+
 <div class="category-top">
 	<div class="container">
 		<div class="row">
@@ -25,14 +34,13 @@ $viewModel = $block->getData('view_model');
 			<div class="col-md-9 col-right">
 				<div class="name-category">
 					<h2 class="title-category title-nomal">
-						<?php if ($_categoryname = $block->getCurrentCategory()->getName()): ?>
-						   	<?= $viewModel->getCatalogOutputHelper()->categoryAttribute($block->getCurrentCategory(), $_categoryname, 'name');?>
+						<?php if ($_categoryname = $category->getName()): ?>
+						   	<?= $viewModel->getCatalogOutputHelper()->categoryAttribute($category, $_categoryname, 'name');?>
 						<?php endif; ?>
-
 					</h2>
 				</div>
-				<?php if ($_description = $block->getCurrentCategory()->getShortDescription()): ?>
-				   	<?= $viewModel->getCatalogOutputHelper()->categoryAttribute($block->getCurrentCategory(), $_description, 'short_description');?>
+				<?php if ($_description = $category->getShortDescription()): ?>
+				   	<?= $viewModel->getCatalogOutputHelper()->categoryAttribute($category, $_description, 'short_description');?>
 				<?php endif; ?>
 			</div>
 		</div>

@@ -61,6 +61,19 @@ class InstallData implements InstallDataInterface
                 'is_html_allowed_on_front' => true,
                 'group' => 'General Information',
             ]
+        )->addAttribute(
+            Category::ENTITY,
+            'cover_category',
+            [
+                'type' => 'varchar',
+                'label' => 'Cover Category',
+                'input' => 'image',
+                'backend' => \Magento\Catalog\Model\Category\Attribute\Backend\Image::class,
+                'required' => false,
+                'sort_order' => 3,
+                'global' => ScopedAttributeInterface::SCOPE_STORE,
+                'group' => 'General Information'
+            ]
         );
     }
 }

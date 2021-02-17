@@ -105,6 +105,14 @@ class BrandInfo implements ObserverInterface
                         $currentCategory->setName($brandCategory->getName());
                         $currentCategory->setDescription($brandCategory->getDescription());
                         $currentCategory->setShortDescription($brandCategory->getShortDescription());
+                        $brandCover = $brandCategory->getCustomAttribute("cover_category");
+                        if ($brandCover) {
+                            $currentCategory->setCustomAttribute(
+                                "cover_category",
+                                $brandCover->getValue()
+                            );
+                            $currentCategory->setCoverCategory($brandCategory->getCoverCategory());
+                        }
                         $this->categorySession->setLastVisitedCategoryId($brandCategory->getId());
                         $this->registry->register('current_category', $brandCategory);
                     }
