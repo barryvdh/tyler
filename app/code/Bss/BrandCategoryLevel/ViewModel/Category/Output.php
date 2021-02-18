@@ -56,19 +56,36 @@ class Output implements ArgumentInterface
     protected $output;
 
     /**
+     * @var \Magento\Catalog\Model\Category\Image
+     */
+    private $categoryImage;
+
+    /**
      * Output constructor.
+     *
+     * @param Category\Image $categoryImage
      * @param Registry $registry
      * @param StoreManagerInterface $storeManager
      * @param OutputHelper $output
      */
     public function __construct(
+        \Magento\Catalog\Model\Category\Image $categoryImage,
         Registry $registry,
         StoreManagerInterface $storeManager,
         OutputHelper $output
     ) {
+        $this->categoryImage = $categoryImage;
         $this->registry = $registry;
         $this->storeManager = $storeManager;
         $this->output = $output;
+    }
+
+    /**
+     * @return Category\Image
+     */
+    public function getCategoryImage()
+    {
+        return $this->categoryImage;
     }
 
     /**

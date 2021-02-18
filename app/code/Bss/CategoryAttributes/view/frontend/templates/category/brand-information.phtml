@@ -24,7 +24,7 @@ $category = $block->getCurrentCategory();
 $brandCover = $category->getCustomAttribute('cover_category');
 ?>
 <?php if ($brandCover): ?>
-<img src="<?= $escaper->escapeUrl($category->getImageUrl("cover_category")) ?>" alt="<?= $escaper->escapeHtml($category->getName()) ?>" />
+<img src="<?= $escaper->escapeUrl($viewModel->getCategoryImage()->getUrl($category, 'cover_category')) ?>" alt="<?= $escaper->escapeHtml($category->getName()) ?>" />
 <?php endif; ?>
 
 <div class="category-top">
