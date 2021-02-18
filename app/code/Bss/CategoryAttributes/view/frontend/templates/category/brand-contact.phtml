@@ -1,0 +1,27 @@
+<?php
+/** @var \Magento\Framework\Escaper $escaper */
+/** @var \Bss\CategoryAttributes\Block\Category\BrandContact $block */
+?>
+<div class="content-sche btn-content">
+    <div class="action wrapper">
+        <a class="btn-sidebar sche" href="#"><?= $escaper->escapeHtml(__("RESCHEDULE VISIT")) ?></a>
+    </div>
+</div>
+<div class="content-sche btn-content">
+    <div class="action wrapper">
+        <a class="btn-sidebar contact" href="#"><?= $escaper->escapeHtml(__("CONTACT US")) ?></a>
+    </div>
+</div>
+
+<script type="text/javascript">
+    require([
+        'jquery',
+        'fancybox/js/jquery.fancybox'
+    ], function ($) {
+        'use strict';
+
+        $(document).ready(function () {
+            console.log('jQuery Loaded!');
+        });
+    });
+</script>

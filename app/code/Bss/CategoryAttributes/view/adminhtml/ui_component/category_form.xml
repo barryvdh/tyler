@@ -20,6 +20,36 @@
 <form xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
       xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Ui:etc/ui_configuration.xsd">
     <fieldset name="content">
+        <field name="contact_us_embedded_link"
+               formElement="textarea"
+               component="Bss_CategoryAttributes/js/view/visibility" sortOrder="10">
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="source" xsi:type="string">category</item>
+                </item>
+            </argument>
+            <settings>
+                <dataType>text</dataType>
+                <label translate="true">Contact Us Embedded Link</label>
+                <disabled>false</disabled>
+                <notice>The form link. Example: https://survey.zohopublic.com/zs/abcxyz</notice>
+            </settings>
+        </field>
+        <field name="schedule_visit_embedded_link"
+               formElement="textarea"
+               component="Bss_CategoryAttributes/js/view/visibility" sortOrder="20">
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="source" xsi:type="string">category</item>
+                </item>
+            </argument>
+            <settings>
+                <dataType>text</dataType>
+                <label translate="true">Schedule Visit Embedded Link</label>
+                <disabled>false</disabled>
+                <notice>The form link. Example: https://survey.zohopublic.com/zs/abcxyz</notice>
+            </settings>
+        </field>
         <field name="cover_category" component="Bss_CategoryAttributes/js/view/cover-category">
             <argument name="data" xsi:type="array">
                 <item name="config" xsi:type="array">
