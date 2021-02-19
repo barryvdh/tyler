@@ -20,7 +20,7 @@
 <form xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
       xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Ui:etc/ui_configuration.xsd">
     <fieldset name="content">
-        <field name="cover_category">
+        <field name="cover_category" component="Bss_CategoryAttributes/js/view/cover-category">
             <argument name="data" xsi:type="array">
                 <item name="config" xsi:type="array">
                     <item name="initialMediaGalleryOpenSubpath" xsi:type="string">catalog/category</item>

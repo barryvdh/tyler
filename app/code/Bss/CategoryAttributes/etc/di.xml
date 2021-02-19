@@ -17,4 +17,7 @@
             </argument>
         </arguments>
     </virtualType>
+
+    <preference for="Magento\Catalog\Model\Category\FileInfo"
+                type="Bss\CategoryAttributes\Model\Catalog\Category\FileInfo"/>
 </config>

@@ -43,10 +43,10 @@ if ($levelCategory < 4): ?>
                                 <a href="<?= $block->escapeUrl($category->getUrl()) ?>" tabindex="-1">
                                     <?php
                                     $outputHelper = $block->getViewModel()->getCatalogOutputHelper();
-                                    $baseUrl = rtrim($block->getViewModel()->prepareBaseUrl(), '/');
+                                    $categoryImage = $this->getViewModel()->getCategoryImage();
                                     $_imgHtml   = '';
-                                    if ($_imgUrl = $category->getImageUrl()) {
-                                        $_imgHtml = '<img src="' . $block->escapeUrl($baseUrl . $_imgUrl) . '" />';
+                                    if ($_imgUrl = $categoryImage->getUrl($category)) {
+                                        $_imgHtml = '<img src="' . $escaper->escapeUrl($_imgUrl) . '" />';
                                         $_imgHtml = $outputHelper->categoryAttribute($category, $_imgHtml, 'image');
                                         /* @escapeNotVerified */ echo $_imgHtml;
                                     } else {
