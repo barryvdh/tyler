@@ -18,6 +18,7 @@
         </arguments>
     </virtualType>
 
+    <preference for="Magento\Catalog\Model\Category\DataProvider" type="Bss\CategoryAttributes\Model\Catalog\Category\DataProvider" />
     <preference for="Magento\Catalog\Model\Category\FileInfo"
                 type="Bss\CategoryAttributes\Model\Catalog\Category\FileInfo"/>
 </config>

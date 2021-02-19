@@ -74,6 +74,32 @@ class InstallData implements InstallDataInterface
                 'global' => ScopedAttributeInterface::SCOPE_STORE,
                 'group' => 'General Information'
             ]
+        )->addAttribute(
+            Category::ENTITY,
+            'contact_us_embedded_link',
+            [
+                'type' => 'text',
+                'label' => 'Contact Us Embedded Code',
+                'input' => 'textarea',
+                'required' => false,
+                'sort_order' => 2,
+                'global' => ScopedAttributeInterface::SCOPE_STORE,
+                'is_html_allowed_on_front' => true,
+                'group' => 'Content',
+            ]
+        )->addAttribute(
+            Category::ENTITY,
+            'schedule_visit_embedded_link',
+            [
+                'type' => 'text',
+                'label' => 'Schedule Visit Embedded Code',
+                'input' => 'textarea',
+                'required' => false,
+                'sort_order' => 2,
+                'global' => ScopedAttributeInterface::SCOPE_STORE,
+                'is_html_allowed_on_front' => true,
+                'group' => 'Content',
+            ]
         );
     }
 }
