@@ -22,11 +22,12 @@
 $viewModel = $block->getData('view_model');
 $category = $block->getCurrentCategory();
 $brandCover = $category->getCustomAttribute('cover_category');
+$brandCoverPath = $viewModel->getDefaultBrandCover();
+if ($brandCover) {
+    $brandCoverPath = $viewModel->getCategoryImage()->getUrl($category, 'cover_category');
+}
 ?>
-<?php if ($brandCover): ?>
-<img src="<?= $escaper->escapeUrl($viewModel->getCategoryImage()->getUrl($category, 'cover_category')) ?>" alt="<?= $escaper->escapeHtml($category->getName()) ?>" />
-<?php endif; ?>
-
+<img src="<?= $escaper->escapeUrl($brandCoverPath) ?>" alt="<?= $escaper->escapeHtml($category->getName()) ?>" />
 <div class="category-top">
 	<div class="container">
 		<div class="row">
