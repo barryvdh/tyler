@@ -28,7 +28,7 @@ if ($brandCover) {
 }
 ?>
 <img src="<?= $escaper->escapeUrl($brandCoverPath) ?>" alt="<?= $escaper->escapeHtml($category->getName()) ?>" />
-<div class="category-top">
+<div class="category-top <?php if ($_description = $category->getShortDescription()): ?>have-des<?php endif; ?>">
 	<div class="container">
 		<div class="row">
 			<div class="col-md-3"><?php echo $block->getChildHtml('category.image');?></div>
