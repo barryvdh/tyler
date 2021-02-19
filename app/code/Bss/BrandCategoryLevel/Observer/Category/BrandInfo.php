@@ -18,6 +18,7 @@
 
 namespace Bss\BrandCategoryLevel\Observer\Category;
 
+use Bss\CategoryAttributes\Model\Config\Source\CustomAttributes;
 use Exception;
 use Magento\Catalog\Api\CategoryRepositoryInterface;
 use Magento\Catalog\Model\Category;
@@ -93,7 +94,7 @@ class BrandInfo implements ObserverInterface
     {
         /* @var Category $currentCategory */
         $currentCategory = $observer->getCategory();
-        if ($currentCategory->getLevel() >= 4) {
+        if ($currentCategory->getLevel() > self::CATEGORY_BRAND_LEVEL) {
             try {
                 $brandCategoryId = $this->findBrand($currentCategory->getParentCategories());
                 if ($brandCategoryId !== 0) {
@@ -105,20 +106,35 @@ class BrandInfo implements ObserverInterface
                         $currentCategory->setName($brandCategory->getName());
                         $currentCategory->setDescription($brandCategory->getDescription());
                         $currentCategory->setShortDescription($brandCategory->getShortDescription());
-                        $brandCover = $brandCategory->getCustomAttribute("cover_category");
-                        if ($brandCover) {
-                            $currentCategory->setCustomAttribute(
-                                "cover_category",
-                                $brandCover->getValue()
-                            );
-                            $currentCategory->setCoverCategory($brandCategory->getCoverCategory());
-                        }
+
+                        $this->setCustomAttributes($currentCategory, $brandCategory);
+
                         $this->categorySession->setLastVisitedCategoryId($brandCategory->getId());
                         $this->registry->register('current_category', $brandCategory);
                     }
                 }
             } catch (Exception $exception) {
                 $this->logger->critical($exception->getMessage());
+            }
+        }
+    }
+
+    /**
+     * Set parent custom attribute to current category
+     *
+     * @param Category $currentCategory
+     * @param Category $brandCategory
+     */
+    private function setCustomAttributes($currentCategory, $brandCategory)
+    {
+        foreach (CustomAttributes::$lists as $attribute) {
+            $brandCover = $brandCategory->getCustomAttribute($attribute);
+            if ($brandCover) {
+                $currentCategory->setCustomAttribute(
+                    $attribute,
+                    $brandCover->getValue()
+                );
+                $currentCategory->setData($attribute, $brandCategory->getData($attribute));
             }
         }
     }

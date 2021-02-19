@@ -3,6 +3,8 @@ declare(strict_types=1);
 
 namespace Bss\CategoryAttributes\Model\Catalog\Category;
 
+use Bss\CategoryAttributes\Model\Config\Source\CustomAttributes;
+
 /**
  * Class DataProvider
  * Add scope to custom attribute
@@ -17,10 +19,7 @@ class DataProvider extends \Magento\Catalog\Model\Category\DataProvider
     protected function getFieldsMap()
     {
         $parentFieldMap = parent::getFieldsMap();
-
-        array_push($parentFieldMap['content'], 'cover_category');
-        array_push($parentFieldMap['content'], 'contact_us_embedded');
-        array_push($parentFieldMap['content'], 'schedule_visit_embedded');
+        $parentFieldMap['content'] = [...$parentFieldMap['content'], ...CustomAttributes::$lists];
         return $parentFieldMap;
     }
 }

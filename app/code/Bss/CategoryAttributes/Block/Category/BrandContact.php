@@ -4,6 +4,7 @@ declare(strict_types=1);
 namespace Bss\CategoryAttributes\Block\Category;
 
 use Bss\CategoryAttributes\Helper\ConfigProvider;
+use Magento\Framework\Serialize\SerializerInterface;
 use Magento\Framework\View\Element\Template;
 
 /**
@@ -23,22 +24,53 @@ class BrandContact extends Template
     private $coreRegistry;
 
     /**
+     * @var SerializerInterface
+     */
+    private $serializer;
+
+    /**
      * BrandContact constructor.
      *
+     * @param SerializerInterface $serializer
      * @param ConfigProvider $configProvider
      * @param \Magento\Framework\Registry $coreRegistry
      * @param Template\Context $context
      * @param array $data
      */
     public function __construct(
+        SerializerInterface $serializer,
         ConfigProvider $configProvider,
         \Magento\Framework\Registry $coreRegistry,
         Template\Context $context,
         array $data = []
     ) {
+        $this->serializer = $serializer;
         $this->configProvider = $configProvider;
         $this->coreRegistry = $coreRegistry;
         parent::__construct($context, $data);
+    }
+
+    /**
+     * Get js config data
+     *
+     * @param string $attributeCode
+     * @return string
+     */
+    public function getJsConfigData(string $attributeCode): string
+    {
+        try {
+            $category = $this->getCurrentCategory();
+
+            if (!$category->getData($attributeCode)) {
+                return "{}";
+            }
+            $popupOptions = $this->getPopupOptions();
+            $popupOptions["href"] = $category->getData($attributeCode);
+
+            return $this->serializer->serialize($popupOptions);
+        } catch (\Exception $e) {
+            return "{}";
+        }
     }
 
     /**
@@ -48,7 +80,10 @@ class BrandContact extends Template
      */
     public function getPopupOptions()
     {
-        return $this->configProvider->getPopupOptions();
+        $popupOptions = $this->configProvider->getPopupOptions();
+        $popupOptions["type"] = "iframe";
+
+        return $popupOptions;
     }
 
     /**
