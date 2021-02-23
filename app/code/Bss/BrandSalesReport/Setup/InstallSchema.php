@@ -143,14 +143,6 @@ class InstallSchema implements InstallSchemaInterface
                     ['nullable' => false, 'default' => '0.0000'],
                     'Qty Ordered'
                 )->addIndex(
-                    $installer->getIdxName(
-                        $tbl,
-                        ['period', 'order_id', 'store_id', 'product_id'],
-                        AdapterInterface::INDEX_TYPE_UNIQUE
-                    ),
-                    ['period', 'order_id', 'store_id', 'product_id'],
-                    ['type' => AdapterInterface::INDEX_TYPE_UNIQUE]
-                )->addIndex(
                     $installer->getIdxName($tbl, ['store_id']),
                     ['store_id']
                 )->addIndex(

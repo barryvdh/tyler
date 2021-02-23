@@ -34,7 +34,7 @@ class Report extends Sales
      */
     public function execute()
     {
-        $this->_showLastExecutionTime(Flag::REPORT_BRANDSALESREPORT_FLAG_CODE, 'brandsales_report');
+        $this->_showLastExecutionTime(Flag::REPORT_BRANDSALESREPORT_FLAG_CODE, 'brandsalesreport');
 
         $this->_initAction()->_setActiveMenu(
             'Bss_BrandSalesReport::report_brand_report'
