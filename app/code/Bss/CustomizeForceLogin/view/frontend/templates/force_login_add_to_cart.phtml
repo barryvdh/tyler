@@ -1,0 +1,13 @@
+<?php
+/** @var \Bss\CustomizeForceLogin\Block\ForceLoginAddToCart $block */
+/** @var \Magento\Framework\Escaper $escaper */
+?>
+<script type="text/x-magento-init">
+    {
+        "body": {
+            "Bss_CustomizeForceLogin/js/remove-add-to-cart-button": {
+                "removeAddToCartBtn": "<?= $block->isRemoveAddToCartBtn() ?>"
+            }
+        }
+    }
+</script>

@@ -297,6 +297,7 @@ return [
         'Bss_CompanyAccount' => 1,
         'Bss_CustomerAttributes' => 1,
         'Bss_CustomerToSubUser' => 1,
+        'Bss_CustomizeForceLogin' => 1,
         'Bss_B2bRegistration' => 1,
         'Bss_HideProductField' => 1,
         'Bss_OrderRestriction' => 1,
