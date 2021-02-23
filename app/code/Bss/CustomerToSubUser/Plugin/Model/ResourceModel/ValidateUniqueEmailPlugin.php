@@ -110,7 +110,7 @@ class ValidateUniqueEmailPlugin
             $currentCustomerId = $customer->getId();
         }
         if (!$subId) {
-            if ($requestSubId = $assignAsSubUser['sub_id']) {
+            if ($assignAsSubUser && $requestSubId = $assignAsSubUser['sub_id']) {
                 $subId = $requestSubId;
             }
         }

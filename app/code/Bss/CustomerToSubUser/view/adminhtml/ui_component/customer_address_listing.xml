@@ -12,4 +12,13 @@
             </settings>
         </massaction>
     </listingToolbar>
+    <columns name="customer_address_columns">
+        <actionsColumn name="actions" component="Bss_CustomerToSubUser/js/view/grid/columns/actions">
+            <settings>
+                <imports>
+                    <link name="companyAccountId" active="true">customer_form.customer_form_data_source:data.assign_to_company_account.company_account_id</link>
+                </imports>
+            </settings>
+        </actionsColumn>
+    </columns>
 </listing>
