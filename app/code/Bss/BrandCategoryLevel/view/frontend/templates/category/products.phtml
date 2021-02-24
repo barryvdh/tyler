@@ -32,7 +32,6 @@ $levelCategory = $currentCategory->getLevel();
 $childCategories = $block->getViewModel()->getChildCategories();
 if ($levelCategory < 4): ?>
     <?php if (!empty($childCategories)): ?>
-        <h2><?=__("Brand's Categories")?></h2>
         <div class="products wrapper grid columns3 products-grid   ">
             <ol class="filterproducts products list items product-items ">
                 <?php /* @var Category $category*/?>

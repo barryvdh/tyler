@@ -65,6 +65,19 @@
 //  _____________________________________________
 
 & when (@media-common = true) {
+    .btn,
+    .action.primary,
+    a.action.primary,
+    .dismissButton{
+        border-radius: 20px;
+    }
+    a.action.primary,
+    a.action.primary:hover,
+    .action.primary,
+    .action.primary:hover {
+        background: #fcb43b;
+        border-color: #fcb43b;
+    }
     .btn-one-one {
         color:@color-white !important;
         background: #fcb43b;
@@ -96,6 +109,11 @@
         .lib-css(background-color, @page__background-color);
         font-family: @font-family__base;
         font-weight:500;
+    }
+    #newsletter_popup {
+        input[type="email"] {
+            border-radius: 20px;
+        }
     }
 
     //  ToDo UI: move it directly to .page-wrapper (now it doesn't appear in mediaquery cuz of size of css)
@@ -382,6 +400,7 @@
                             color: #636D7B;
                             .nomal-foot();
                             height:42px;
+                            border-radius: 20px 0 0 20px;
                             &::placeholder {
                                 color: #636D7B;
                             }
@@ -400,6 +419,7 @@
                             text-transform: uppercase;
                             font-weight: 900;
                             padding: 5px 15px;
+                            border-radius: 0 20px 20px 0;
                         }
                     }
                 }
