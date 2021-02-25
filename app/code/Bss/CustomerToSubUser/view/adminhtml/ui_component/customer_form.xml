@@ -1,4 +1,15 @@
 <form xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Ui:etc/ui_configuration.xsd">
+    <fieldset name="customer">
+        <field name="website_id">
+            <settings>
+                <exports>
+                    <link name="initialOptions" active="true">
+                        customer_form.areas.assign_to_company_account.assign_to_company_account.company_account_id:params.websiteOptions
+                    </link>
+                </exports>
+            </settings>
+        </field>
+    </fieldset>
     <fieldset name="assign_to_company_account" class="Bss\CustomerToSubUser\Ui\Component\Customer\Form\AssignToCompanyAccountFieldset">
         <settings>
             <label translate="true">Assign as Sub-user</label>

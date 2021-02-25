@@ -62,6 +62,10 @@
                         <imports>
                             <link name="disabled">category_form.category_form.bss_brand_representative.use_company_configuration:disabledBrandRepresentativeEmail</link>
                         </imports>
+                        <validation>
+                            <rule name="required-entry" xsi:type="boolean">true</rule>
+                            <rule name="validate-emails" xsi:type="boolean">true</rule>
+                        </validation>
                     </settings>
                 </field>
                 <field name="bss_country" component="Bss_BrandRepresentative/js/components/country" sortOrder="10" formElement="select">

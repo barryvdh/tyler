@@ -28,6 +28,7 @@ use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Mail\Template\TransportBuilder;
 use Magento\Framework\Serialize\Serializer\Json;
 use Magento\Framework\Stdlib\DateTime\DateTime;
+use Magento\Framework\Stdlib\DateTime\TimezoneInterface;
 use Magento\Store\Model\Store;
 use Psr\Log\LoggerInterface;
 
@@ -73,7 +74,13 @@ class ReportSend
     protected $categoryRepositoryInterface;
 
     /**
+     * @var TimezoneInterface
+     */
+    private $localeDate;
+
+    /**
      * ReportSend constructor.
+     *
      * @param TransportBuilder $transportBuilder
      * @param LoggerInterface $logger
      * @param CollectionFactory $collectionFactory
@@ -81,6 +88,7 @@ class ReportSend
      * @param DateTime $date
      * @param RegionFactory $regionFactory
      * @param CategoryRepositoryInterface $CategoryRepositoryInterface
+     * @param TimezoneInterface $localeDate
      */
     public function __construct(
         TransportBuilder $transportBuilder,
@@ -89,7 +97,8 @@ class ReportSend
         Json $json,
         DateTime $date,
         RegionFactory $regionFactory,
-        CategoryRepositoryInterface $CategoryRepositoryInterface
+        CategoryRepositoryInterface $CategoryRepositoryInterface,
+        TimezoneInterface $localeDate
     ) {
         $this->transportBuilder = $transportBuilder;
         $this->logger = $logger;
@@ -98,6 +107,7 @@ class ReportSend
         $this->dateTime = $date;
         $this->regionFactory = $regionFactory;
         $this->categoryRepositoryInterface = $CategoryRepositoryInterface;
+        $this->localeDate = $localeDate;
     }
 
     /**
@@ -178,6 +188,13 @@ class ReportSend
         //Filter previous day only;
         $reportDay = $this->dateTime->gmtDate('y-m-d', strtotime("yesterday"));
         $collection->addFieldToFilter('ordered_time', $reportDay);
+        $collection->getSelect()->joinInner(
+            [
+                'sales' => $collection->getConnection()->getTableName("sales_order")
+            ],
+            'sales.entity_id = main_table.order_id',
+            ["created_at"]
+        );
         if ($collection->getSize() > 0) {
             $collectionData = $collection->getData();
         }
@@ -215,7 +232,7 @@ class ReportSend
     {
         $data = [];
         if (is_array($collectionData)) {
-            $data['report_time'] = (string)$this->dateTime->gmtDate('H:i:s y:m:d');
+            $data['report_time'] = (string)$this->localeDate->formatDate(null, \IntlDateFormatter::MEDIUM, true);
             foreach ($collectionData as $rowData) {
                 if (isset($rowData['representative_email']) &&
                     $this->emailMatch($email, $rowData['representative_email'])
@@ -235,7 +252,7 @@ class ReportSend
                         'brand' => $rowData['brand'],
                         'product_type' => $rowData['product_type'],
                         'ordered_qty' => $rowData['ordered_qty'],
-                        'ordered_time' => $rowData['ordered_time'],
+                        'ordered_time' => $rowData['created_at'],
                         'customer_name' => $rowData['customer_name'],
                         'address' => $rowData['address'],
                         'city' => $rowData['city'],

@@ -22,6 +22,7 @@ use Bss\BrandRepresentative\Model\ResourceModel\SalesReport\CollectionFactory;
 use Bss\BrandSalesReport\Model\Flag;
 use Exception;
 use Magento\Framework\App\ResourceConnection;
+use Magento\Framework\Exception\CouldNotSaveException;
 use Magento\Framework\Model\ResourceModel\Db\Context;
 use Magento\Framework\Stdlib\DateTime\DateTime;
 use Magento\Framework\Stdlib\DateTime\Timezone\Validator;
@@ -228,7 +229,8 @@ class BrandSalesReport extends AbstractReport
         } catch (Exception $e) {
             //If exception, truncate all report table
             $this->truncateTable();
-            $this->logger->critical(__('Could not save report to aggregate table!. Error was: ') . $e->getMessage());
+            $this->logger->critical($e);
+            throw new CouldNotSaveException(__("Could not save report to aggregate table. Please review the log!"));
         }
 
         return $this;

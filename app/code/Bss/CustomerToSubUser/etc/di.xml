@@ -25,6 +25,12 @@
                 type="Bss\CustomerToSubUser\Plugin\Model\Customer\AccountManagement" sortOrder="20" />
     </type>
 
+    <type name="Bss\CompanyAccount\Model\SubUser">
+        <plugin name="sub_user_can_access_plugin"
+                type="Bss\CustomerToSubUser\Plugin\Model\SubUser"
+                sortOrder="20" />
+    </type>
+
     <preference for="Bss\CustomerToSubUser\Api\CompanyAccountManagementInterface"
                 type="Bss\CustomerToSubUser\Model\CompanyAccountManagement"/>
 </config>

@@ -219,7 +219,13 @@ define([
          */
         getWebsiteName: function () {
             return ko.pureComputed(function () {
-                if (this.companyAccount()['website_id']) {
+                var websiteId = this.companyAccount()['website_id'];
+
+                if (!websiteId) {
+                    websiteId = [this.websiteId];
+                }
+
+                if (websiteId) {
                     return this.getLabelFromOptions(
                         this.params.websiteOptions,
                         this.companyAccount()['website_id']

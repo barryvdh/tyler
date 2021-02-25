@@ -133,11 +133,6 @@
                 </editor>
                 <dataType>select</dataType>
                 <label translate="true">Web Site</label>
-                <exports>
-                    <link name="options" active="true">
-                        customer_form.areas.assign_to_company_account.assign_to_company_account.company_account_id:params.websiteOptions
-                    </link>
-                </exports>
             </settings>
         </column>
         <column name="confirmation" class="Magento\Customer\Ui\Component\Listing\Column\Confirmation" sortOrder="130">
