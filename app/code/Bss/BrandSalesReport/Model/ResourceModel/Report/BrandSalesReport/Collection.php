@@ -152,7 +152,7 @@ class Collection extends AbstractCollection
             'period <= ?',
             $to
         )->group(
-            'product_id'
+            ['product_id', 'order_id']
         )->order(
             $this->getOrderedField() . ' DESC'
         );
@@ -185,7 +185,7 @@ class Collection extends AbstractCollection
 
             //exclude removed products
             $select->where(new \Zend_Db_Expr($mainTable . '.product_id IS NOT NULL'))->group(
-                'product_id'
+                ['product_id', 'order_id']
             )->order(
                 $this->getOrderedField() . ' ' . Select::SQL_DESC
             );
@@ -204,7 +204,7 @@ class Collection extends AbstractCollection
             $select->from($mainTable, $this->_getSelectedColumns());
         }
         if (!$this->isTotals()) {
-            $select->group(['period', 'product_id']);
+            $select->group(['period', 'product_id', 'order_id']);
         }
 
         return $this;

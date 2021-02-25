@@ -119,7 +119,9 @@ class Data extends AbstractHelper
                         if (isset($emailData['bss_province']) &&
                             in_array((string)$regionId, $emailData['bss_province'], true)
                         ) {
-                            $emailList[$categoryId] = explode(',', $emailData['bss_email']);
+                            $categoryEmails = explode(',', $emailData['bss_email']);
+                            $this->uniqueEmailList($emailList, $categoryEmails);
+                            $emailList[$categoryId] = $categoryEmails;
                         }
                     }
                 }
@@ -129,5 +131,24 @@ class Data extends AbstractHelper
             }
         }
         return $this->json->serialize($emailList);
+    }
+
+    /**
+     * Remove duplicate brand email
+     *
+     * @param array $list
+     * @param array $mailData
+     */
+    protected function uniqueEmailList($list, &$mailData)
+    {
+        foreach ($mailData as $index => $email) {
+            foreach ($list as $existedEmails) {
+                foreach ($existedEmails as $existedEmail) {
+                    if ($email == $existedEmail) {
+                        unset($mailData[$index]);
+                    }
+                }
+            }
+        }
     }
 }

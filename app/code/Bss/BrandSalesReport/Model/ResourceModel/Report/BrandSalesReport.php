@@ -198,7 +198,7 @@ class BrandSalesReport extends AbstractReport
                         'product_sku'        => $info['product_sku'],
                         'product_name'       => $info['product_name'],
                         'product_brand'      => $info['brand'],
-                        'product_brand_email'=> $this->convertEmailToSimpleString($info['representative_email']),
+                        'product_brand_email'=> $info['representative_email'] ? $this->convertEmailToSimpleString($info['representative_email']) : null,
                         'qty_ordered'        => $info['ordered_qty']
                     ];
                 }
@@ -318,7 +318,7 @@ class BrandSalesReport extends AbstractReport
             ['t' => $mainTable],
             $cols
         )->group(
-            ['t.store_id', $periodCol, 't.product_id']
+            ['t.store_id', $periodCol, 't.product_id', 't.order_id']
         )->order(
             ['t.store_id', $periodCol, 'total_qty DESC']
         );
