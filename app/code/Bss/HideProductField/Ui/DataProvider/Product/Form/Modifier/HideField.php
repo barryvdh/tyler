@@ -12,13 +12,13 @@
  */
 namespace Bss\HideProductField\Ui\DataProvider\Product\Form\Modifier;
 
-use Magento\Framework\Registry;
 use Bss\HideProductField\Helper\Data;
-use Magento\Framework\App\RequestInterface;
 use Magento\Catalog\Model\Locator\LocatorInterface;
 use Magento\Catalog\Model\Product\Type as ProductType;
-use Magento\Downloadable\Model\Product\Type as DonwloadType;
 use Magento\Catalog\Ui\DataProvider\Product\Form\Modifier\AbstractModifier;
+use Magento\Downloadable\Model\Product\Type as DonwloadType;
+use Magento\Framework\App\RequestInterface;
+use Magento\Framework\Registry;
 
 /**
  * Class HideField
@@ -27,6 +27,16 @@ use Magento\Catalog\Ui\DataProvider\Product\Form\Modifier\AbstractModifier;
  */
 class HideField extends AbstractModifier
 {
+    /**
+     * @var string[]
+     */
+    private $hideAttributes;
+
+    /**
+     * @var \Psr\Log\LoggerInterface
+     */
+    private $logger;
+
     /**
      * @var LocatorInterface
      */
@@ -48,17 +58,22 @@ class HideField extends AbstractModifier
     private $request;
 
     /**
+     * HideField constructor
+     *
+     * @param \Psr\Log\LoggerInterface $logger
      * @param LocatorInterface $locator
      * @param Registry $registry
      * @param Data $helper
      * @param RequestInterface $request
      */
     public function __construct(
+        \Psr\Log\LoggerInterface $logger,
         LocatorInterface $locator,
         Registry $registry,
         Data $helper,
         RequestInterface $request
     ) {
+        $this->logger = $logger;
         $this->locator = $locator;
         $this->coreRegistry = $registry;
         $this->helper = $helper;
@@ -66,10 +81,30 @@ class HideField extends AbstractModifier
     }
 
     /**
+     * Get config hide attributes
+     *
+     * @return string[]
+     */
+    private function getHideAttributes()
+    {
+        if (!$this->hideAttributes) {
+            try {
+                $this->hideAttributes = explode(',', $this->helper->getAdditionalAttributeConfig());
+            } catch (\Exception $e) {
+                $this->hideAttributes = [];
+            }
+        }
+
+        return $this->hideAttributes;
+    }
+
+    /**
      * Modify Meta Data Adminhtml Product Form
      *
      * @param array $meta
      * @return array
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     public function modifyMeta(array $meta)
     {
@@ -80,7 +115,7 @@ class HideField extends AbstractModifier
         }
         $amastyRoleData = $amastyRole->getData();
         $roleId = $amastyRole->getId();
-        $hideAttributes = $this->helper->getAdditionalAttributeConfig();
+        $hideAttributes = $this->getHideAttributes();
         $params = $this->request->getParams();
         if ($roleId && $isEnable && $hideAttributes) {
             $product = $this->locator->getProduct();
@@ -91,53 +126,64 @@ class HideField extends AbstractModifier
             if (isset($params['type'])) {
                 $productType = $params['type'];
             }
-            $name = $this->getGeneralPanelName($meta);
+
             if ($productType == DonwloadType::TYPE_DOWNLOADABLE || $productType == ProductType::TYPE_VIRTUAL) {
-                if ($name = $this->getGeneralPanelName($meta)) {
-                    $hideAttributes = explode(',', $hideAttributes);
+                $needProcessFields = [
+                    'container_custom_block',
+                    'container_custom_block_2',
+                    'container_category_ids',
+                    'attribute_set_id',
+                    'container_price',
+                    'container_weight',
+                    'container_news_from_date'
+                ];
+                foreach ($meta as &$metaData) {
+                    $countFlag = 0;
                     if (is_array($hideAttributes) && !empty($hideAttributes)) {
                         foreach ($hideAttributes as $attribute) {
-                            if (isset($meta[$name]['children']['container_' . $attribute]['children']
+                            if ($attribute == 'price' && isset($metaData['children']['container_' . $attribute])) {
+                                $metaData['children']['container_' . $attribute]['arguments']['data']['config']['visible'] = 0;
+                                continue;
+                            }
+                            if ($attribute == "quantity_and_stock_status" && isset($metaData['children']['quantity_and_stock_status_qty'])) {
+                                unset($metaData['children']['container_quantity_and_stock_status']['children']['quantity_and_stock_status']['arguments']['data']['config']['imports']);
+                                $metaData['children']['quantity_and_stock_status_qty']['arguments']['data']['config']['visible'] = 0;
+                            }
+                            if (isset($metaData['children']['container_' . $attribute]['children']
                                 [$attribute]['arguments']['data']['config']['visible'])
                             ) {
-                                $meta[$name]['children']['container_' . $attribute]['children']
+                                $countFlag++;
+                                $metaData['children']['container_' . $attribute]['children']
                                 [$attribute]['arguments']['data']['config']['visible'] = 0;
                             }
-
                         }
                     }
+                    // If all the child element is hide, the container should be hiee to
+                    if ($countFlag == count($metaData['children'])) {
+                        $metaData['arguments']['data']['config']['visible'] = 0;
+                    }
 
-                    try {
-                        /* Custom container set */
-                        $meta[$name]['children']['container_custom_block']['arguments']['data']['config']['visible'] = 0;
-                        $meta[$name]['children']['container_custom_block_2']['arguments']['data']['config']['visible'] = 0;
-
-                        /* Don't hide Categories if Amasty Role allow*/
-                        if (!isset($amastyRoleData['categories']) && !empty($amastyRoleData['categories'])) {
-                            $meta[$name]['children']['container_category_ids']['arguments']['data']['config']['visible'] = 0;
+                    foreach ($needProcessFields as $field) {
+                        try {
+                            if (isset($metaData['children'][$field])) {
+                                switch ($field) {
+                                    case "container_category_ids":
+                                        /* Don't hide Categories if Amasty Role allow*/
+                                        if (!isset($amastyRoleData['categories']) && !empty($amastyRoleData['categories'])) {
+                                            $metaData['children'][$field]['arguments']['data']['config']['visible'] = 0;
+                                        }
+                                        break;
+                                    case "container_price":
+                                        $metaData['children']['container_price']['children']['price']['arguments']['data']['config']['default'] = 0;
+                                        break;
+                                    default:
+                                        $metaData['children'][$field]['arguments']['data']['config']['visible'] = 0;
+                                        break;
+                                }
+                            }
+                        } catch (\Exception $e) {
+                            $this->logger->critical($e);
                         }
-
-
-                        /* Attribute set */
-                        $meta[$name]['children']['attribute_set_id']['arguments']['data']['config']['visible'] = 0;
-
-                        /* Price */
-                        $meta[$name]['children']['container_price']['arguments']['data']['config']['visible'] = 0;
-
-                        /* Set default price attribute is 0 */
-                        $meta[$name]['children']['container_price']['children']['price']['arguments']['data']['config']['default'] = 0;
-
-                        /* Stock and qty */
-                        $meta[$name]['children']['quantity_and_stock_status_qty']['arguments']['data']['config']['visible'] = 0;
-                        unset($meta[$name]['children']['container_quantity_and_stock_status']['children']['quantity_and_stock_status']['arguments']['data']['config']['imports']);
-
-                        /* Weight */
-                        $meta[$name]['children']['container_weight']['arguments']['data']['config']['visible'] = 0;
-
-                        /* New from to */
-                        $meta[$name]['children']['container_news_from_date']['arguments']['data']['config']['visible'] = 0;
-                    } catch (\Exception $e) {
-
                     }
                 }
 
@@ -148,9 +194,9 @@ class HideField extends AbstractModifier
                 foreach ($sections as $section) {
                     $meta = $this->processSection($meta, $section);
                 }
-
             }
         }
+
         return $meta;
     }
 
@@ -163,7 +209,7 @@ class HideField extends AbstractModifier
      */
     private function processSection($meta, $section)
     {
-        if ($meta[$section] && isset($meta[$section])) {
+        if (isset($meta[$section]) && $meta[$section]) {
             $meta[$section]['arguments']['data']['config']['visible'] = 0;
         }
         return $meta;
@@ -177,6 +223,10 @@ class HideField extends AbstractModifier
      */
     public function modifyData(array $data)
     {
+        $productId = $this->locator->getProduct()->getId();
+        $data[$productId]["visible_fields"] = [
+            'gallery' => !in_array("gallery", $this->getHideAttributes())
+        ];
         return $data;
     }
 }

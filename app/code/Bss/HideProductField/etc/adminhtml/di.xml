@@ -23,4 +23,16 @@
             </argument>
         </arguments>
     </virtualType>
+
+    <type name="Magento\Catalog\Controller\Adminhtml\Product\Validate">
+        <plugin name="escaper_validate_hide_field"
+                type="Bss\HideProductField\Plugin\Product\EscapeValidateHideAttribute"
+                sortOrder="20" />
+    </type>
+    <type name="Magento\Catalog\Controller\Adminhtml\Product\Save">
+        <plugin name="default_qty_if_be_hide"
+                type="Bss\HideProductField\Plugin\Product\SetDefaultQuantity"
+                sortOrder="20" />
+    </type>
+    <preference for="Magento\Framework\Controller\Result\Json" type="Bss\HideProductField\Controller\Result\Json"/>
 </config>
