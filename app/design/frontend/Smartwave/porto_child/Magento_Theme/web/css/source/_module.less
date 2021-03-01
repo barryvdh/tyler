@@ -66,6 +66,7 @@
 
 & when (@media-common = true) {
     .btn,
+    button,
     .action.primary,
     a.action.primary,
     .dismissButton{
@@ -77,6 +78,26 @@
     .action.primary:hover {
         background: #fcb43b;
         border-color: #fcb43b;
+    }
+    #discount-coupon-form {
+        #coupon_code {
+            border-radius: 20px 0 0 20px;
+        }
+    }
+    .cart-discount {
+        .actions-toolbar {
+            .action.primary {
+                border-radius:0 20px 20px 0;
+            }
+        }
+    }
+    .cart-discount,
+    .paypal-review-discount {
+        .actions-toolbar {
+            .action.cancel {
+                .btn();
+            }
+        }
     }
     .btn-one-one {
         color:@color-white !important;

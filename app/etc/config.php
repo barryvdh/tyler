@@ -289,6 +289,7 @@ return [
         'Amazon_Core' => 1,
         'Amazon_Login' => 1,
         'Amazon_Payment' => 1,
+        'Bss_AdminLogoAndCopyRight' => 1,
         'Bss_ForceLogin' => 1,
         'Bss_BrandCategoryLevel' => 1,
         'Bss_BrandRepresentative' => 1,
