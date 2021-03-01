@@ -5,8 +5,8 @@ define([
     'use strict';
 
     return function (options, element) {
-        if (options.href) {
+        if (!$.isEmptyObject(options)) {
             $(element).fancybox(options);
         }
-    }
+    };
 });

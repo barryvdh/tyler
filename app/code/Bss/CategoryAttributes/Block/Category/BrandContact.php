@@ -51,6 +51,23 @@ class BrandContact extends Template
     }
 
     /**
+     * Get category form embedded code
+     *
+     * @param string $attributeCode
+     * @return string|null
+     */
+    public function getFormEmbeddedHtml(string $attributeCode)
+    {
+        $category = $this->getCurrentCategory();
+
+        if (!$category->getData($attributeCode)) {
+            return "";
+        }
+
+        return $category->getData($attributeCode);
+    }
+
+    /**
      * Get js config data
      *
      * @param string $attributeCode
@@ -65,7 +82,6 @@ class BrandContact extends Template
                 return "{}";
             }
             $popupOptions = $this->getPopupOptions();
-            $popupOptions["href"] = $category->getData($attributeCode);
 
             return $this->serializer->serialize($popupOptions);
         } catch (\Exception $e) {
@@ -81,7 +97,7 @@ class BrandContact extends Template
     public function getPopupOptions()
     {
         $popupOptions = $this->configProvider->getPopupOptions();
-        $popupOptions["type"] = "iframe";
+        $popupOptions["autoSize"] = false;
 
         return $popupOptions;
     }

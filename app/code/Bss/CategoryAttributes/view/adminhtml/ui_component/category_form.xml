@@ -30,9 +30,9 @@
             </argument>
             <settings>
                 <dataType>text</dataType>
-                <label translate="true">Contact Us Embedded Link</label>
+                <label translate="true">Contact Us Embedded code</label>
                 <disabled>false</disabled>
-                <notice>The form link. Example: https://survey.zohopublic.com/zs/abcxyz</notice>
+                <notice>The form embedded code. Example: <![CDATA[<iframe src="https://survey.zohopublic.com/zs/xfCsZy" frameborder='0' style='height:700px;width:100%;' marginwidth='0' marginheight='0' scrolling='auto'></iframe>]]></notice>
             </settings>
         </field>
         <field name="schedule_visit_embedded_link"
@@ -45,9 +45,9 @@
             </argument>
             <settings>
                 <dataType>text</dataType>
-                <label translate="true">Schedule Visit Embedded Link</label>
+                <label translate="true">Schedule Visit Embedded code</label>
                 <disabled>false</disabled>
-                <notice>The form link. Example: https://survey.zohopublic.com/zs/abcxyz</notice>
+                <notice>The form embedded code. Example: <![CDATA[<iframe src="https://survey.zohopublic.com/zs/xfCsZy" frameborder='0' style='height:700px;width:100%;' marginwidth='0' marginheight='0' scrolling='auto'></iframe>]]></notice>
             </settings>
         </field>
         <field name="cover_category" component="Bss_CategoryAttributes/js/view/cover-category">
