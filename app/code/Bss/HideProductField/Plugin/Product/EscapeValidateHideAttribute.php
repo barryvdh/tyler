@@ -55,7 +55,8 @@ class EscapeValidateHideAttribute
             $errorAttribute = $result->getData();
             if ($errorAttribute) {
                 $hideAttributes = $this->helper->getAdditionalAttributeConfig();
-                if (in_array($errorAttribute["attribute"], explode(",", $hideAttributes))) {
+                $hideAttributes = explode(",", $hideAttributes);
+                if (isset($errorAttribute["attribute"]) && in_array($errorAttribute["attribute"], $hideAttributes)) {
                     $response = new \Magento\Framework\DataObject();
                     $response->setError(false);
                     $result->setData($response);
