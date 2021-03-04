@@ -29,14 +29,16 @@ class DisableAdminNotification
      *
      * @param \Mageplaza\Core\Observer\PredispatchAdminActionControllerObserver $subject
      * @param callable $proceed
+     * @param \Magento\Framework\Event\Observer $observer
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function aroundExecute(
         \Mageplaza\Core\Observer\PredispatchAdminActionControllerObserver $subject,
-        $proceed
+        $proceed,
+        $observer
     ) {
         if ($this->moduleManager->isEnabled("Magento_AdminNotification")) {
-            $proceed();
+            $proceed($observer);
         }
     }
 }

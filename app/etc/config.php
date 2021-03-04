@@ -27,7 +27,7 @@ return [
         'Magento_BundleImportExport' => 1,
         'Magento_CacheInvalidate' => 1,
         'Magento_Customer' => 1,
-        'Magento_AdminNotification' => 0,
+        'Magento_AdminNotification' => 1,
         'Magento_Indexer' => 1,
         'Magento_Security' => 1,
         'Magento_GraphQl' => 1,

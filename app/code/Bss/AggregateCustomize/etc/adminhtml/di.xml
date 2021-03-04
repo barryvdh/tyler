@@ -5,4 +5,9 @@
                type="Bss\AggregateCustomize\Plugin\Ui\DataProvider\Product\Form\Modifier\Links"
                sortOrder="20" />
    </type>
+    <type name="Magento\AdminNotification\Controller\Adminhtml\Notification\Index">
+        <plugin name="disable_notification_feature"
+                type="Bss\AggregateCustomize\Plugin\Notification\Controller\Index"
+                sortOrder="20" />
+    </type>
 </config>
