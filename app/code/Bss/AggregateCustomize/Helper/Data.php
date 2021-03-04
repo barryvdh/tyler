@@ -31,7 +31,28 @@ class Data
      */
     public function isBrandManager()
     {
-        $role = $this->adminSession->getUser()->getRole()->getRoleName();
-        return preg_match("/(Brand Manager)/", $role) > 0;
+        $role = $this->adminSession->getUser()->getRole();
+
+        if (!$role) {
+            return false;
+        }
+        $roleName = $role->getRoleName();
+
+        return preg_match("/(Brand Manager)/", $roleName) > 0;
+    }
+
+    /**
+     * Remove template if the user is brand manager
+     *
+     * @param string $defaultTemplate
+     * @return null|string
+     */
+    public function setTemplate($defaultTemplate)
+    {
+        if (!$this->isBrandManager()) {
+            return $defaultTemplate;
+        }
+
+        return null;
     }
 }

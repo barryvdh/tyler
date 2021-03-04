@@ -58,6 +58,11 @@ class HideField extends AbstractModifier
     private $request;
 
     /**
+     * @var \Bss\AggregateCustomize\Helper\Data
+     */
+    private $aggregateCustomizeHelper;
+
+    /**
      * HideField constructor
      *
      * @param \Psr\Log\LoggerInterface $logger
@@ -65,19 +70,22 @@ class HideField extends AbstractModifier
      * @param Registry $registry
      * @param Data $helper
      * @param RequestInterface $request
+     * @param \Bss\AggregateCustomize\Helper\Data $aggregateCustomizeHelper
      */
     public function __construct(
         \Psr\Log\LoggerInterface $logger,
         LocatorInterface $locator,
         Registry $registry,
         Data $helper,
-        RequestInterface $request
+        RequestInterface $request,
+        \Bss\AggregateCustomize\Helper\Data $aggregateCustomizeHelper
     ) {
         $this->logger = $logger;
         $this->locator = $locator;
         $this->coreRegistry = $registry;
         $this->helper = $helper;
         $this->request = $request;
+        $this->aggregateCustomizeHelper = $aggregateCustomizeHelper;
     }
 
     /**
@@ -109,15 +117,16 @@ class HideField extends AbstractModifier
     public function modifyMeta(array $meta)
     {
         $isEnable = $this->helper->isEnable();
-        $amastyRole = $this->coreRegistry->registry('current_amrolepermissions_rule');
-        if (!$amastyRole) {
+        if (!$this->aggregateCustomizeHelper->isBrandManager() || !$isEnable) {
             return $meta;
         }
-        $amastyRoleData = $amastyRole->getData();
-        $roleId = $amastyRole->getId();
+        $amastyRole = $this->coreRegistry->registry('current_amrolepermissions_rule');
+        if ($amastyRole) {
+            $amastyRoleData = $amastyRole->getData();
+        }
         $hideAttributes = $this->getHideAttributes();
         $params = $this->request->getParams();
-        if ($roleId && $isEnable && $hideAttributes) {
+        if ($hideAttributes) {
             $product = $this->locator->getProduct();
             $productType = "";
             if ($product) {
@@ -169,7 +178,10 @@ class HideField extends AbstractModifier
                                 switch ($field) {
                                     case "container_category_ids":
                                         /* Don't hide Categories if Amasty Role allow*/
-                                        if (!isset($amastyRoleData['categories']) && !empty($amastyRoleData['categories'])) {
+                                        if (isset($amastyRoleData) &&
+                                            !isset($amastyRoleData['categories']) &&
+                                            !empty($amastyRoleData['categories'])
+                                        ) {
                                             $metaData['children'][$field]['arguments']['data']['config']['visible'] = 0;
                                         }
                                         break;

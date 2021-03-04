@@ -7,6 +7,7 @@ use Magento\Framework\View\Element\UiComponentInterface;
 
 /**
  * Class Columns
+ * Display specific columns for brand manager
  */
 class Columns extends \Magento\Catalog\Ui\Component\Listing\Columns
 {

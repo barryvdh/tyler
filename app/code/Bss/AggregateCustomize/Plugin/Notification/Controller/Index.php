@@ -2,6 +2,7 @@
 declare(strict_types=1);
 namespace Bss\AggregateCustomize\Plugin\Notification\Controller;
 
+use Bss\AggregateCustomize\Helper\Data;
 use Magento\Framework\Controller\Result\RedirectFactory;
 use Magento\AdminNotification\Controller\Adminhtml\Notification\Index as BePlugged;
 
@@ -14,6 +15,11 @@ use Magento\AdminNotification\Controller\Adminhtml\Notification\Index as BePlugg
 class Index
 {
     /**
+     * @var Data
+     */
+    private $helper;
+
+    /**
      * @var RedirectFactory
      */
     private $redirectFactory;
@@ -21,12 +27,15 @@ class Index
     /**
      * Index constructor.
      *
+     * @param Data $helper
      * @param RedirectFactory $redirectFactory
      */
     public function __construct(
+        Data $helper,
         RedirectFactory $redirectFactory
     ) {
         $this->redirectFactory = $redirectFactory;
+        $this->helper = $helper;
     }
 
     /**
@@ -41,6 +50,9 @@ class Index
         BePlugged $subject,
         callable $proceed
     ) {
+        if (!$this->helper->isBrandManager()) {
+            return $proceed();
+        }
         return $this->redirectFactory->create()->setPath("*/");
     }
 }
