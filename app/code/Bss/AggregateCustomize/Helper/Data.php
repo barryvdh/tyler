@@ -32,7 +32,6 @@ class Data
     public function isBrandManager()
     {
         $role = $this->adminSession->getUser()->getRole()->getRoleName();
-
-        return $role === "Brand Manager";
+        return preg_match("/(Brand Manager)/", $role) > 0;
     }
 }
