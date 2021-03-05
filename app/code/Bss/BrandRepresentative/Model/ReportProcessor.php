@@ -141,7 +141,7 @@ class ReportProcessor
                         $newReport->setAddress(implode(',', $billingAddress));
                     }
                 }
-                $provinceId = $order->getBillingAddress()->getRegionId();
+                $provinceId = $order->getShippingAddress()->getRegionId();
                 $email = $this->helper->extractRepresentativeEmail(
                     $product,
                     $provinceId

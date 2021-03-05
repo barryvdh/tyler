@@ -45,11 +45,11 @@ class SetDefaultQuantity
     public function beforeExecute(
         BePlugged $subject
     ) {
+        $postData = ($subject->getRequest()->getPostValue());
         if (in_array(
             "quantity_and_stock_status",
             explode(",", $this->helper->getAdditionalAttributeConfig())
         ) && $this->helper->isEnable()) {
-            $postData = ($subject->getRequest()->getPostValue());
             if (!$postData['product']['quantity_and_stock_status']['qty']) {
                 $postData['product']['quantity_and_stock_status']['qty'] = 1;
             }
@@ -61,9 +61,9 @@ class SetDefaultQuantity
             if (isset($postData['type_id']) && $postData['type_id'] == "downloadable") {
                 unset($postData['weight']);
             }
-            $this->authorizeSavingOf($postData['product']);
-            $subject->getRequest()->setPostValue($postData);
         }
+        $this->authorizeSavingOf($postData['product']);
+        $subject->getRequest()->setPostValue($postData);
     }
 
     /**
