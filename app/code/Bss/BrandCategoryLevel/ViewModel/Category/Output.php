@@ -30,20 +30,16 @@ use Magento\Catalog\Helper\Output as OutputHelper;
 
 
 /**
- * Class Output
- * @package Bss\BrandCategoryLevel\ViewModel\Category
+ * Class Output View model
  */
 class Output implements ArgumentInterface
 {
+    const BRAND_CATEGORY_LV = 3;
+
     /**
      * @var Registry
      */
     private $registry;
-
-    /**
-     * @var BrandList
-     */
-    protected $bssBrand;
 
     /**
      * @var StoreManagerInterface
@@ -89,7 +85,7 @@ class Output implements ArgumentInterface
     }
 
     /**
-     * @return mixed|null
+     * @return \Magento\Catalog\Model\Category|null
      */
     public function getCurrentCategory()
     {
@@ -149,5 +145,54 @@ class Output implements ArgumentInterface
     public function getCatalogOutputHelper(): OutputHelper
     {
         return $this->output;
+    }
+
+    /**
+     * Get sub brand of current category
+     *
+     * @return Category
+     * @throws LocalizedException
+     */
+    public function getSubBrandOfCurrentBrand()
+    {
+        $currentCategory = $this->getCurrentCategory();
+        if ($currentCategory->getChildrenCount() == 1) {
+            foreach ($this->getChildCategories() as $childCate) {
+                return $childCate;
+            }
+        }
+
+        return null;
+    }
+
+    /**
+     * Get template for brand category
+     *
+     * @param string $defaultTmpl
+     * @return string
+     */
+    public function getBrandTemplate($defaultTmpl)
+    {
+        if ($this->getCurrentCategory()->getLevel() != self::BRAND_CATEGORY_LV) {
+            return $defaultTmpl;
+        }
+
+        return 'Bss_BrandCategoryLevel::product/list.phtml';
+    }
+
+    /**
+     * Add brand list
+     *
+     * @param \Magento\Framework\View\Element\Template $parentBlock
+     */
+    public function addChildrenBrandBlock($parentBlock)
+    {
+        $parentBlock->addChild(
+            'sub_brand_list',
+            \Magento\Framework\View\Element\Template::class,
+            ['template' => "Bss_BrandCategoryLevel::brand/list.phtml"]
+        )
+            ->setListBrandCategories($this->getChildCategories())
+            ->setViewModel($this);
     }
 }
