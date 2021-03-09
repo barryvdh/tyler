@@ -31,7 +31,7 @@
     </type>
     <type name="Magento\Catalog\Controller\Adminhtml\Product\Save">
         <plugin name="default_qty_if_be_hide"
-                type="Bss\HideProductField\Plugin\Product\SetDefaultQuantity"
+                type="Bss\HideProductField\Plugin\Product\RemoveEditDesignAttributePermissions"
                 sortOrder="20" />
     </type>
     <preference for="Magento\Framework\Controller\Result\Json" type="Bss\HideProductField\Controller\Result\Json"/>

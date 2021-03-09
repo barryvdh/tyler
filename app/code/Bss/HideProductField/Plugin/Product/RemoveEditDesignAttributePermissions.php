@@ -2,6 +2,7 @@
 declare(strict_types=1);
 namespace Bss\HideProductField\Plugin\Product;
 
+use Bss\AggregateCustomize\Helper\Data as AggregateCustomizeHelper;
 use Bss\HideProductField\Helper\Data;
 use Magento\Catalog\Controller\Adminhtml\Product\Save as BePlugged;
 use Magento\Framework\AuthorizationInterface;
@@ -11,7 +12,7 @@ use Magento\Framework\AuthorizationInterface;
  * And escape for saving
  * @see BePlugged
  */
-class SetDefaultQuantity
+class RemoveEditDesignAttributePermissions
 {
     /**
      * @var Data
@@ -24,17 +25,25 @@ class SetDefaultQuantity
     private $authorization;
 
     /**
+     * @var AggregateCustomizeHelper
+     */
+    private $aggregateHelper;
+
+    /**
      * SetDefaultQuantity constructor.
      *
      * @param Data $helper
      * @param AuthorizationInterface $authorization
+     * @param AggregateCustomizeHelper $aggregateHelper
      */
     public function __construct(
         Data $helper,
-        AuthorizationInterface $authorization
+        AuthorizationInterface $authorization,
+        AggregateCustomizeHelper $aggregateHelper
     ) {
         $this->helper = $helper;
         $this->authorization = $authorization;
+        $this->aggregateHelper = $aggregateHelper;
     }
 
     /**
@@ -45,23 +54,7 @@ class SetDefaultQuantity
     public function beforeExecute(
         BePlugged $subject
     ) {
-        $postData = ($subject->getRequest()->getPostValue());
-        if (in_array(
-            "quantity_and_stock_status",
-            explode(",", $this->helper->getAdditionalAttributeConfig())
-        ) && $this->helper->isEnable()) {
-            if (!$postData['product']['quantity_and_stock_status']['qty']) {
-                $postData['product']['quantity_and_stock_status']['qty'] = 1;
-            }
-            if (isset($postData['product']['stock_data']['qty']) &&
-                !$postData['product']['stock_data']['qty']
-            ) {
-                $postData['product']['stock_data']['qty'] = 1;
-            }
-            if (isset($postData['type_id']) && $postData['type_id'] == "downloadable") {
-                unset($postData['weight']);
-            }
-        }
+        $postData = $subject->getRequest()->getPostValue();
         $this->authorizeSavingOf($postData['product']);
         $subject->getRequest()->setPostValue($postData);
     }
@@ -74,9 +67,21 @@ class SetDefaultQuantity
      */
     private function authorizeSavingOf(&$postData)
     {
-        if (!$this->authorization->isAllowed('Magento_Catalog::edit_product_design')) {
-            unset($postData['page_layout']);
-            unset($postData['options_container']);
+        if ($this->helper->isEnable() &&
+            $this->aggregateHelper->isBrandManager() &&
+            !$this->authorization->isAllowed('Magento_Catalog::edit_product_design')) {
+            if (in_array(
+                    "page_layout",
+                    explode(",", $this->helper->getAdditionalAttributeConfig())
+                ) ||
+                in_array(
+                    "options_container",
+                    explode(",", $this->helper->getAdditionalAttributeConfig())
+                )
+            ) {
+                unset($postData['page_layout']);
+                unset($postData['options_container']);
+            }
         }
     }
 }
