@@ -73,16 +73,10 @@ class Report implements ObserverInterface
 
     /**
      * @param Observer $observer
-     * @return bool[]|false|false[]
      */
     public function execute(Observer $observer)
     {
         $order = $observer->getData('order');
-        $saveStatus = $this->reportProcessor->processSaveReport($order);
-        if ($saveStatus && $saveStatus['success'] === true) {
-            return $saveStatus;
-        }
-        $this->messageManager->addErrorMessage(__('Unable to save report. Please check log for more details.'));
-        return false;
+        $this->reportProcessor->processSaveReport($order);
     }
 }

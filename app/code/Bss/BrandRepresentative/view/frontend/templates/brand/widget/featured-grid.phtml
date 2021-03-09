@@ -35,7 +35,7 @@ use Bss\BrandRepresentative\Block\Brand\Widget\BrandList;
                                 <div class="product photo product-item-photo">
                                     <a href=<?= $category->getUrl() ?> tabindex="-1">
                                         <?php if ($category->getImageUrl()): ?>
-                                            <?php $imageResize = $block->getResize($category->getImage());?>
+                                            <?php $imageResize = $block->getCategoryImage($category);?>
                                             <img class="product-image-photo default_image porto-lazyload" data-src="<?= $block->escapeUrl($imageResize) ?>" alt="<?= $category->getName(); ?>" />
                                         <?php else: ?>
                                             <img class="product-image-photo default_image porto-lazyload" data-src="<?= $block->escapeUrl($block->getPlaceHolderImage()) ?>" alt="<?= $category->getName(); ?>" />

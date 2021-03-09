@@ -19,10 +19,16 @@
 -->
 <page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" layout="2columns-left" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
     <body>
-    	<referenceBlock name="category.products" template="Bss_BrandCategoryLevel::category/products.phtml">
-	    	<arguments>
+        <referenceBlock name="category.products.list"
+                        class="Bss\BrandCategoryLevel\Block\Product\ListProduct">
+            <action method="setTemplate">
+                <argument name="template" xsi:type="helper" helper="Bss\BrandCategoryLevel\ViewModel\Category\Output::getBrandTemplate">
+                    <param name="default">Magento_Catalog::product/list.phtml</param>
+                </argument>
+            </action>
+            <arguments>
                 <argument name="view_model" xsi:type="object">Bss\BrandCategoryLevel\ViewModel\Category\Output</argument>
-          	</arguments>
-	    </referenceBlock>
+            </arguments>
+        </referenceBlock>
     </body>
 </page>

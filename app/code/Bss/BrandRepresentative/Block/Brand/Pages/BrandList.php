@@ -5,12 +5,12 @@ namespace Bss\BrandRepresentative\Block\Brand\Pages;
 use Bss\BrandRepresentative\Block\Brand\Pages\BrandList\Toolbar;
 use Magento\Catalog\Helper\Image;
 use Magento\Catalog\Helper\ImageFactory;
+use Magento\Catalog\Helper\Output as OutputHelper;
 use Magento\Catalog\Model\ResourceModel\Category\CollectionFactory as CategoryCollectionFactory;
-use Magento\Framework\App\Filesystem\DirectoryList;
-use Magento\Framework\Exception\FileSystemException;
-use Magento\Framework\Image\AdapterFactory;
+use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\UrlInterface;
 use Magento\Framework\View\Element\Template;
+use Magento\Store\Model\StoreManagerInterface;
 
 /**
  * Class BrandList - brand list page
@@ -20,11 +20,6 @@ use Magento\Framework\View\Element\Template;
 class BrandList extends Template
 {
     const BRAND_CATEGORY_LEVEL_IDENTIFIER = 3;
-
-    /**
-     * @var AdapterFactory
-     */
-    protected $imageFactory;
 
     /**
      * @var CategoryCollectionFactory
@@ -37,33 +32,86 @@ class BrandList extends Template
     protected $helperImageFactory;
 
     /**
+     * @var \Magento\Catalog\Model\Category\Image
+     */
+    private $categoryImage;
+
+    /**
+     * @var OutputHelper
+     */
+    private $outputHelper;
+
+    /**
      * @var Toolbar
      */
     private $brandToolbar;
 
     /**
+     * @var StoreManagerInterface
+     */
+    private $storeManager;
+
+    /**
      * BrandList constructor.
      *
      * @param ImageFactory $helperImageFactory
-     * @param AdapterFactory $adapterFactory
      * @param CategoryCollectionFactory $categoryCollectionFactory
      * @param Template\Context $context
      * @param Toolbar $brandToolbar
+     * @param \Magento\Catalog\Model\Category\Image $categoryImage
+     * @param OutputHelper $outputHelper
+     * @param StoreManagerInterface $storeManager
      * @param array $data
      */
     public function __construct(
         ImageFactory $helperImageFactory,
-        AdapterFactory $adapterFactory,
         CategoryCollectionFactory $categoryCollectionFactory,
         Template\Context $context,
         \Bss\BrandRepresentative\Block\Brand\Pages\BrandList\Toolbar $brandToolbar,
+        \Magento\Catalog\Model\Category\Image $categoryImage,
+        OutputHelper $outputHelper,
+        StoreManagerInterface $storeManager,
         array $data = []
     ) {
         $this->helperImageFactory = $helperImageFactory;
-        $this->imageFactory = $adapterFactory;
         $this->categoryCollectionFactory = $categoryCollectionFactory;
         $this->brandToolbar = $brandToolbar;
+        $this->categoryImage = $categoryImage;
+        $this->outputHelper = $outputHelper;
+        $this->storeManager = $storeManager;
         parent::__construct($context, $data);
+    }
+
+    /**
+     * Get category image
+     *
+     * @param \Magento\Catalog\Model\Category $subBrand
+     * @return string
+     * @throws \Magento\Framework\Exception\LocalizedException
+     */
+    public function getCategoryImage($subBrand)
+    {
+        if ($imgHtml = $this->categoryImage->getUrl($subBrand)) {
+            $imgHtml = $this->outputHelper->categoryAttribute($subBrand, $imgHtml, 'image');
+        } else {
+            $imgHtml = $this->preparePlaceholder();
+            $imgHtml = $this->outputHelper->categoryAttribute($subBrand, $imgHtml, 'image');
+        }
+
+        return $imgHtml;
+    }
+
+    /**
+     * Prepare placeholder for none img category
+     *
+     * @return string
+     * @throws NoSuchEntityException
+     */
+    public function preparePlaceholder(): string
+    {
+        $mediaUrl = $this->storeManager->getStore()->getBaseUrl(UrlInterface::URL_TYPE_MEDIA);
+        return $mediaUrl . 'catalog/product/placeholder/' .
+            $this->storeManager->getStore()->getConfig('catalog/placeholder/image_placeholder');
     }
 
     /**
@@ -140,54 +188,6 @@ class BrandList extends Template
         }
 
         return $toolbar->toHtml();
-    }
-
-    /**
-     * Get resized category image
-     *
-     * @param string $imageName
-     * @param int $width
-     * @param int $height
-     * @return false|string
-     * @throws FileSystemException
-     */
-    public function getResize(string $imageName, $width = 258, $height = 200)
-    {
-        $realPath = $this->directory->getAbsolutePath($imageName);
-        $directoryRead = $this->_filesystem->getDirectoryRead(DirectoryList::MEDIA);
-        $directoryWrite = $this->_filesystem->getDirectoryWrite(DirectoryList::MEDIA);
-        if (!$this->directory->isFile($realPath) || !$this->directory->isExist($realPath)) {
-            return false;
-        }
-        $targetDir = $directoryRead->getAbsolutePath('resized/' . $width . 'x' . $height);
-        $pathTargetDir = $directoryWrite->getRelativePath($targetDir);
-        if (!$this->directory->isExist($pathTargetDir)) {
-            $directoryWrite->create($pathTargetDir);
-        }
-        if (!$directoryWrite->isExist($pathTargetDir)) {
-            return false;
-        }
-
-        $image = $this->imageFactory->create();
-        $image->open($realPath);
-        $image->keepAspectRatio(true);
-        $image->resize($width, $height);
-        // @codingStandardsIgnoreLine
-        $dest = $targetDir . '/' . pathinfo($realPath, PATHINFO_BASENAME);
-        try {
-            $image->save($dest);
-            $imagePath = $directoryWrite->getRelativePath($dest);
-            if ($directoryWrite->isFile($directoryWrite->getRelativePath($dest))) {
-                return $this->_storeManager->getStore()
-                        ->getBaseUrl(
-                            UrlInterface::URL_TYPE_MEDIA
-                        ) . $imagePath;
-            }
-        } catch (\Exception $e) {
-            $this->_logger->critical($e->getMessage());
-        }
-
-        return false;
     }
 
     /**

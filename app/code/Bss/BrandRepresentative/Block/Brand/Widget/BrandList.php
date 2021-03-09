@@ -19,10 +19,11 @@
 namespace Bss\BrandRepresentative\Block\Brand\Widget;
 
 use Magento\Catalog\Helper\ImageFactory;
+use Magento\Catalog\Helper\Output as OutputHelper;
 use Magento\Framework\Exception\NoSuchEntityException;
-use Magento\Framework\Image\AdapterFactory;
 use Magento\Framework\View\Element\Template;
 use Magento\Framework\View\Element\Template\Context;
+use Magento\Store\Model\StoreManagerInterface;
 use Magento\Widget\Block\BlockInterface;
 use Magento\Widget\Helper\Conditions;
 use Magento\Catalog\Model\ResourceModel\Category\CollectionFactory;
@@ -44,6 +45,16 @@ class BrandList extends \Bss\BrandRepresentative\Block\Brand\Pages\BrandList imp
      */
     protected $conditionsHelper;
 
+    /**
+     * @var \Magento\Catalog\Model\Category\Image
+     */
+    private $categoryImage;
+
+    /**
+     * @var OutputHelper
+     */
+    private $outputHelper;
+
     //Default page size value
     public const PAGE_DEFAULT_FEATURE_TITLE = 'Featured Brands';
 
@@ -52,28 +63,36 @@ class BrandList extends \Bss\BrandRepresentative\Block\Brand\Pages\BrandList imp
      *
      * @param Conditions $conditionsHelper
      * @param ImageFactory $helperImageFactory
-     * @param AdapterFactory $adapterFactory
      * @param CollectionFactory $categoryCollectionFactory
      * @param Context $context
      * @param Toolbar $brandToolbar
+     * @param \Magento\Catalog\Model\Category\Image $categoryImage
+     * @param OutputHelper $outputHelper
+     * @param StoreManagerInterface $storeManager
      * @param array $data
      */
     public function __construct(
         Conditions $conditionsHelper,
         ImageFactory $helperImageFactory,
-        AdapterFactory $adapterFactory,
         CollectionFactory $categoryCollectionFactory,
         Template\Context $context,
         Toolbar $brandToolbar,
+        \Magento\Catalog\Model\Category\Image $categoryImage,
+        OutputHelper $outputHelper,
+        StoreManagerInterface $storeManager,
         array $data = []
     ) {
         $this->conditionsHelper = $conditionsHelper;
+        $this->categoryImage = $categoryImage;
+        $this->outputHelper = $outputHelper;
         parent::__construct(
             $helperImageFactory,
-            $adapterFactory,
             $categoryCollectionFactory,
             $context,
             $brandToolbar,
+            $categoryImage,
+            $outputHelper,
+            $storeManager,
             $data
         );
     }
