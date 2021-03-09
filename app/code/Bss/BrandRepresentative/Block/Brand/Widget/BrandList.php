@@ -18,16 +18,15 @@
 
 namespace Bss\BrandRepresentative\Block\Brand\Widget;
 
+use Bss\BrandRepresentative\Block\Brand\Pages\BrandList\Toolbar;
 use Magento\Catalog\Helper\ImageFactory;
 use Magento\Catalog\Helper\Output as OutputHelper;
-use Magento\Framework\Exception\NoSuchEntityException;
+use Magento\Catalog\Model\ResourceModel\Category\CollectionFactory;
 use Magento\Framework\View\Element\Template;
 use Magento\Framework\View\Element\Template\Context;
 use Magento\Store\Model\StoreManagerInterface;
 use Magento\Widget\Block\BlockInterface;
 use Magento\Widget\Helper\Conditions;
-use Magento\Catalog\Model\ResourceModel\Category\CollectionFactory;
-use Bss\BrandRepresentative\Block\Brand\Pages\BrandList\Toolbar;
 
 /**
  * Class BrandList
@@ -37,7 +36,6 @@ use Bss\BrandRepresentative\Block\Brand\Pages\BrandList\Toolbar;
  */
 class BrandList extends \Bss\BrandRepresentative\Block\Brand\Pages\BrandList implements BlockInterface
 {
-    const BRAND_CATEGORY = 3;
     const DEFAULT_FEATURE_BRANDS_LIMIT = 10;
 
     /**
@@ -55,7 +53,7 @@ class BrandList extends \Bss\BrandRepresentative\Block\Brand\Pages\BrandList imp
      */
     private $outputHelper;
 
-    //Default page size value
+    //Default featured widget title
     public const PAGE_DEFAULT_FEATURE_TITLE = 'Featured Brands';
 
     /**
@@ -117,28 +115,27 @@ class BrandList extends \Bss\BrandRepresentative\Block\Brand\Pages\BrandList imp
     {
         try {
             $categoryIds = $this->getCategoryIds();
-            /** @var \Magento\Catalog\Model\ResourceModel\Category\Collection $categoryCollection */
-            $categoryCollection = $this->categoryCollectionFactory->create()
-                ->setStore($this->_storeManager->getStore());
-            $categoryCollection->addFieldToSelect('*');
-            $categoryCollection->addAttributeToFilter([
-                [
-                    'attribute' => 'level',
-                    'eq' => self::BRAND_CATEGORY
-                ]
-            ]);
+            $categoryCollection = $this->prepareBrandCollection();
 
-            if (!empty($categoryIds)) {
+            if ($categoryCollection && !empty($categoryIds)) {
                 $ids = explode(',', $categoryIds);
                 $categoryCollection->addAttributeToFilter('entity_id', ['in' => $ids]);
             }
-            $categoryCollection->setPageSize($this->getPageSize());
 
             return $categoryCollection;
-        } catch (NoSuchEntityException $e) {
+        } catch (\Exception $e) {
             $this->_logger->critical($e->getMessage());
         }
-        return [];
+
+        return null;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    protected function getCurPage()
+    {
+        return 1;
     }
 
     /**
@@ -167,8 +164,8 @@ class BrandList extends \Bss\BrandRepresentative\Block\Brand\Pages\BrandList imp
      *
      * @return int
      */
-    private function getPageSize()
+    protected function getPageSize()
     {
-        return $this->getData('page_size') ?: self::ALL_BRAND_PAGE_SIZE;
+        return $this->getData('page_size') ?: self::DEFAULT_FEATURE_BRANDS_LIMIT;
     }
 }

@@ -117,22 +117,16 @@ class BrandList extends Template
     /**
      * Get list category by filter
      *
-     * @return \Magento\Catalog\Model\ResourceModel\Category\Collection
+     * @return \Magento\Catalog\Model\ResourceModel\Category\Collection|null
      */
     public function getCategories()
     {
         try {
-            /** @var \Magento\Catalog\Model\ResourceModel\Category\Collection $categoryCollection */
-            $categoryCollection = $this->categoryCollectionFactory->create()
-                ->setStore($this->_storeManager->getStore());
-            $categoryCollection
-                ->addAttributeToSelect('*')
-                ->addAttributeToFilter([
-                    [
-                        'attribute' => 'level',
-                        'eq' => self::BRAND_CATEGORY_LEVEL_IDENTIFIER
-                    ]
-                ]);
+            $categoryCollection = $this->prepareBrandCollection();
+
+            if (!$categoryCollection) {
+                return null;
+            }
 
             if ($this->brandToolbar->getCurrentOrder() === 'most_viewed') {
                 $orderExpr = new \Zend_Db_Expr('traffic IS NULL asc, traffic desc');
@@ -151,13 +145,44 @@ class BrandList extends Template
                 );
             }
 
-            $categoryCollection->setCurPage($this->brandToolbar->getCurrentPage());
-            $categoryCollection->setPageSize(Toolbar::DEFAULT_LIMIT);
-
             return $categoryCollection;
         } catch (\Exception $e) {
             $this->_logger->critical($e);
         }
+
+        return null;
+    }
+
+    /**
+     * Prepare brand collection
+     *
+     * @return \Magento\Catalog\Model\ResourceModel\Category\Collection|null
+     */
+    protected function prepareBrandCollection()
+    {
+        try {
+            return $this->categoryCollectionFactory->create()
+                ->setStore($this->_storeManager->getStore())
+                ->addFieldToSelect('*')
+                ->addAttributeToFilter('level', self::BRAND_CATEGORY_LEVEL_IDENTIFIER)
+                ->addAttributeToFilter('is_active', 1)
+                ->setCurPage($this->getCurPage())
+                ->setPageSize($this->getPageSize());
+        } catch (\Exception $e) {
+            $this->_logger->critical($e);
+        }
+
+        return null;
+    }
+
+    /**
+     * Get current page
+     *
+     * @return int
+     */
+    protected function getCurPage()
+    {
+        return $this->brandToolbar->getCurrentPage();
     }
 
     /**
@@ -177,13 +202,9 @@ class BrandList extends Template
                     "brand.grid.toolbar"
                 )->setCollection($this->getCategories());
 
-            $pager = $this->getLayout()->createBlock(
-                \Magento\Theme\Block\Html\Pager::class,
-                "product_list_toolbar_pager"
-            );
-            $toolbar->setChild(
+            $toolbar->addChild(
                 "product_list_toolbar_pager",
-                $pager
+                \Magento\Theme\Block\Html\Pager::class
             );
         }
 
@@ -200,5 +221,15 @@ class BrandList extends Template
         /** @var Image $helper */
         $imagePlaceholder = $this->helperImageFactory->create();
         return $this->_assetRepo->getUrl($imagePlaceholder->getPlaceholder('small_image'));
+    }
+
+    /**
+     * Get page size
+     *
+     * @return int
+     */
+    protected function getPageSize()
+    {
+        return Toolbar::DEFAULT_LIMIT;
     }
 }

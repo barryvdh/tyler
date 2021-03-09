@@ -22,13 +22,14 @@ use Bss\BrandRepresentative\Block\Brand\Widget\BrandList;
  */
 ?>
 
+<?php $categories = $block->getCategories(); ?>
+<?php if ($categories): ?>
 <div class="brands-list-all">
     <div class="content-featured-brand">
         <div class="container">
             <h4 class="title-nomal"><?= $block->getTitle()?></h4>
             <div class="products wrapper grid columns5 products-grid">
                 <ol class="filterproducts products list items product-items">
-                    <?php $categories = $block->getCategories(); ?>
                     <?php foreach ($categories as $category): ?>
                         <li class="item product product-item">
                             <div class="product-item-info type1" data-container="product-grid">
@@ -51,3 +52,4 @@ use Bss\BrandRepresentative\Block\Brand\Widget\BrandList;
         </div>
     </div>
 </div>
+<?php endif; ?>
