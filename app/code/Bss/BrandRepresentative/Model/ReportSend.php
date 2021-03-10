@@ -245,6 +245,12 @@ class ReportSend
 //                        $this->logger->critical(__('Brand Not Found, ID: ') . $rowData['brand']);
 //                    }
 
+                    $orderTime = $this->localeDate->date(new \DateTime($rowData['created_at']));
+                    $orderTime = $this->localeDate->formatDateTime(
+                        $orderTime,
+                        \IntlDateFormatter::MEDIUM,
+                        \IntlDateFormatter::MEDIUM
+                    );
                     $data['report'][] = [
                         'order_id' => $rowData['order_id'],
                         'product_sku' => $rowData['product_sku'],
@@ -252,7 +258,7 @@ class ReportSend
                         'brand' => $rowData['brand'],
                         'product_type' => $rowData['product_type'],
                         'ordered_qty' => $rowData['ordered_qty'],
-                        'ordered_time' => $rowData['created_at'],
+                        'ordered_time' => $orderTime,
                         'customer_name' => $rowData['customer_name'],
                         'address' => $rowData['address'],
                         'city' => $rowData['city'],

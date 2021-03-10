@@ -116,8 +116,7 @@ class HideField extends AbstractModifier
      */
     public function modifyMeta(array $meta)
     {
-        $isEnable = $this->helper->isEnable();
-        if (!$this->aggregateCustomizeHelper->isBrandManager() || !$isEnable) {
+        if ($this->isNoAction()) {
             return $meta;
         }
         $amastyRole = $this->coreRegistry->registry('current_amrolepermissions_rule');
@@ -228,6 +227,21 @@ class HideField extends AbstractModifier
     }
 
     /**
+     * No hide action
+     *
+     * @return bool
+     */
+    protected function isNoAction(): bool
+    {
+        $isEnable = $this->helper->isEnable();
+        if (!$this->aggregateCustomizeHelper->isBrandManager() || !$isEnable) {
+            return true;
+        }
+
+        return false;
+    }
+
+    /**
      * Modify Product Data Adminhtml Product Form
      *
      * @param array $data
@@ -235,6 +249,9 @@ class HideField extends AbstractModifier
      */
     public function modifyData(array $data)
     {
+        if ($this->isNoAction()) {
+            return $data;
+        }
         $productId = $this->locator->getProduct()->getId();
         $data[$productId]["visible_fields"] = [
             'gallery' => !in_array("gallery", $this->getHideAttributes())

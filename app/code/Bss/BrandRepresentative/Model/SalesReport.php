@@ -21,6 +21,26 @@ namespace Bss\BrandRepresentative\Model;
 use Magento\Framework\DataObject\IdentityInterface;
 use Magento\Framework\Model\AbstractModel;
 
+/**
+ * Class SalesReport Model
+ *
+ * Data method:
+ * @method $this    setOrderId($orderId)
+ * @method $this    setStoreId($storeId)
+ * @method $this    setProductSku($sku)
+ * @method $this    setProductId($productId)
+ * @method $this    setProductName($productName)
+ * @method $this    setProductType($productType)
+ * @method $this    setOrderedQty($qty)
+ * @method $this    setOrderedTime($date)
+ * @method $this    setCustomerName($customerName)
+ * @method $this    setAddress($address)
+ * @method $this    setCity($city)
+ * @method $this    setProvince($province)
+ * @method $this    setRepresentativeEmail($rawData)
+ * @method $this    setSentStatus($status)
+ * @method $this    setBrand($brandName)
+ */
 class SalesReport extends AbstractModel implements IdentityInterface
 {
     public const CACHE_TAG = 'bss_sales_report';

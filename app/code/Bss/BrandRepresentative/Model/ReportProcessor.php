@@ -123,34 +123,31 @@ class ReportProcessor
                 $newReport->setProductName($product->getName());
                 $newReport->setProductType($product->getTypeId());
                 $newReport->setOrderedQty($item->getQtyOrdered());
-                $orderDate = $this->localeDate->scopeDate($order->getStore(), $order->getCreatedAt())->format("Y-m-d");
+                try {
+                    $orderDate = $this->localeDate->date(new \DateTime($order->getCreatedAt()))->format("Y-m-d");
+                } catch (\Exception $e) {
+                    $this->logger->critical($e);
+                    $orderDate = $this->localeDate->date()->format("Y-m-d");
+                }
                 $newReport->setOrderedTime($orderDate);
                 $newReport->setCustomerName($order->getCustomerName());
-                if ($order->getShippingAddress()) {
-                    $shippingAddress = $order->getShippingAddress()->getStreet();
-                    if ($shippingAddress) {
-                        $newReport->setAddress(implode(',', $shippingAddress));
+
+                if ($shippingAddress = $order->getShippingAddress()) {
+                    $shippingAddressStreet = $shippingAddress->getStreet();
+
+                    if ($shippingAddressStreet) {
+                        $newReport->setAddress(implode(',', $shippingAddressStreet));
                     }
-                }
-                if ($order->getBillingAddress()) {
-                    $billingAddress = $order->getBillingAddress()->getStreet();
-                    if ($billingAddress) {
-                        $newReport->setCity($order->getBillingAddress()->getCity());
-                        $province = $order->getBillingAddress()->getRegion();
-                        $newReport->setProvince($province);
-                        $newReport->setAddress(implode(',', $billingAddress));
-                    }
+                    $newReport->setCity($shippingAddress->getCity());
+                    $newReport->setProvince($shippingAddress->getRegion());
                 }
                 $provinceId = $order->getShippingAddress()->getRegionId();
                 $email = $this->helper->extractRepresentativeEmail(
                     $product,
                     $provinceId
                 );
-
                 $newReport->setRepresentativeEmail($email);
-
                 $newReport->setSentStatus(SalesReport::SENT_STATUS_NOT_SEND);
-
                 try {
                     /* @var Category $brand */
                     $brand = $this->categoryRepository->get(implode(',', $product->getCategoryIds()));
@@ -167,6 +164,7 @@ class ReportProcessor
                 }
             }
         }
+
         return $returnData;
     }
 }
