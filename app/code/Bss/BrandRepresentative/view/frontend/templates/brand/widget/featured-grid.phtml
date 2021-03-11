@@ -41,8 +41,14 @@ use Bss\BrandRepresentative\Block\Brand\Widget\BrandList;
                                         <?php else: ?>
                                             <img class="product-image-photo default_image porto-lazyload" data-src="<?= $block->escapeUrl($block->getPlaceHolderImage()) ?>" alt="<?= $category->getName(); ?>" />
                                         <?php endif; ?>
-                                        <span><?php echo $category->getName(); ?></span>
                                     </a>
+                                </div>
+                                <div class="product details product-item-details">
+                                    <strong class="product name product-item-name">
+                                        <a class="product-item-link" href="<?= $category->getUrl() ?>">
+                                            <span><?php echo $category->getName(); ?></span>
+                                        </a>
+                                    </strong>
                                 </div>
                             </div>
                         </li>
