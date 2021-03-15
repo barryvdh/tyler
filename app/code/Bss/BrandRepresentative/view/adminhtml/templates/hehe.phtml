@@ -1,0 +1,23 @@
+<?php
+/** @var \Bss\BrandRepresentative\Block\Adminhtml\Form\Renderer\Config\BrandsTree $block */
+?>
+<div id="superman" data-bind="scope:'lucthanca_hehe'">
+    <!-- ko template: getTemplate() --><!-- /ko -->
+    <script type="text/x-magento-init">
+        {
+            "#superman": {
+                "Magento_Ui/js/core/app": {
+                    "components": {
+                        "lucthanca_hehe": {
+                            "component": "Bss_BrandRepresentative/js/components/config/brands-tree",
+                            "options": <?= $block->getSerializedCategories() ?>,
+                            "featuredBrandsInputName": "<?= $block->getData('featured_brands_input_name') ?>",
+                            "featuredBrandsHtmlId": "<?= $block->getData('featured_brands_html_id') ?>",
+                            "selectedBrands": <?= $block->getData('selected_brands') ?: "[]" ?>
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+</div>
