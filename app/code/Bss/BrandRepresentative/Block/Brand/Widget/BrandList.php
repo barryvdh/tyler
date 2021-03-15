@@ -109,7 +109,9 @@ class BrandList extends \Bss\BrandRepresentative\Block\Brand\Pages\BrandList imp
     }
 
     /**
-     * @inheritDoc
+     * Get list category follow widget config
+     *
+     * @return \Magento\Catalog\Model\ResourceModel\Category\Collection|null
      */
     public function getCategories()
     {
@@ -131,7 +133,9 @@ class BrandList extends \Bss\BrandRepresentative\Block\Brand\Pages\BrandList imp
     }
 
     /**
-     * @inheritDoc
+     * No pagination, so set current page is always 1
+     *
+     * @return int
      */
     protected function getCurPage()
     {
