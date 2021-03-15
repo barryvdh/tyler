@@ -44,7 +44,7 @@ class BrandList extends \Bss\BrandRepresentative\Block\Brand\Pages\BrandList imp
     /**
      * Default featured widget title
      */
-    public const PAGE_DEFAULT_FEATURE_TITLE = 'Featured Brands';
+    const PAGE_DEFAULT_FEATURE_TITLE = 'Featured Brands';
 
     /**
      * @var Conditions
