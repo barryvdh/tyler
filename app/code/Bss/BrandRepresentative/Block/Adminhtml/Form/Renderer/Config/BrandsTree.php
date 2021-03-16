@@ -9,7 +9,7 @@ use Magento\Catalog\Model\ResourceModel\Category\CollectionFactory as CategoryCo
 
 class BrandsTree extends \Magento\Config\Block\System\Config\Form\Field
 {
-    protected $_template = "Bss_BrandRepresentative::hehe.phtml";
+    protected $_template = "Bss_BrandRepresentative::featured_brands_field.phtml";
 
     /**
      * @var CategoryCollectionFactory
@@ -30,6 +30,7 @@ class BrandsTree extends \Magento\Config\Block\System\Config\Form\Field
      * BrandsTree constructor.
      *
      * @param CategoryCollectionFactory $categoryCollectionFactory
+     * @param SerializerInterface $serializer
      * @param Context $context
      * @param array $data
      * @param SecureHtmlRenderer|null $secureRenderer
@@ -46,6 +47,12 @@ class BrandsTree extends \Magento\Config\Block\System\Config\Form\Field
         parent::__construct($context, $data, $secureRenderer);
     }
 
+    /**
+     * Get field html content
+     *
+     * @param \Magento\Framework\Data\Form\Element\AbstractElement $element
+     * @return string
+     */
     protected function _getElementHtml(\Magento\Framework\Data\Form\Element\AbstractElement $element)
     {
         $this->setData('featured_brands_input_name', $element->getName());
@@ -54,6 +61,11 @@ class BrandsTree extends \Magento\Config\Block\System\Config\Form\Field
         return $this->_toHtml();
     }
 
+    /**
+     * Set value of the field
+     *
+     * @param \Magento\Framework\Data\Form\Element\AbstractElement $element
+     */
     protected function processSelectedBrands(\Magento\Framework\Data\Form\Element\AbstractElement $element)
     {
         $brands = [];

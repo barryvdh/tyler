@@ -35,6 +35,8 @@ use Psr\Log\LoggerInterface;
  */
 class Data extends AbstractHelper
 {
+    const FEATURED_BRANDS_CONFIG_PATH = "brand_representative/featured_brands/brand_ids";
+
     /**
      * @var CategoryRepositoryInterface
      */
@@ -150,5 +152,26 @@ class Data extends AbstractHelper
                 }
             }
         }
+    }
+
+    /**
+     * Get config featured brands
+     *
+     * @param int|null $storeId
+     * @return array
+     */
+    public function getFeaturedBrandIds($storeId = null)
+    {
+        $result = $this->scopeConfig->getValue(
+            self::FEATURED_BRANDS_CONFIG_PATH,
+            \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
+            $storeId
+        );
+
+        if ($result) {
+            return explode(",", $result);
+        }
+
+        return [];
     }
 }

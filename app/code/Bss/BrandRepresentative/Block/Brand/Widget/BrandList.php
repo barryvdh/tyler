@@ -27,6 +27,7 @@ use Magento\Framework\View\Element\Template\Context;
 use Magento\Store\Model\StoreManagerInterface;
 use Magento\Widget\Block\BlockInterface;
 use Magento\Widget\Helper\Conditions;
+use Bss\BrandRepresentative\Helper\Data as Helper;
 
 /**
  * Class BrandList
@@ -72,6 +73,7 @@ class BrandList extends \Bss\BrandRepresentative\Block\Brand\Pages\BrandList imp
      * @param \Magento\Catalog\Model\Category\Image $categoryImage
      * @param OutputHelper $outputHelper
      * @param StoreManagerInterface $storeManager
+     * @param Helper $helper
      * @param array $data
      */
     public function __construct(
@@ -83,6 +85,7 @@ class BrandList extends \Bss\BrandRepresentative\Block\Brand\Pages\BrandList imp
         \Magento\Catalog\Model\Category\Image $categoryImage,
         OutputHelper $outputHelper,
         StoreManagerInterface $storeManager,
+        Helper $helper,
         array $data = []
     ) {
         $this->conditionsHelper = $conditionsHelper;
@@ -96,6 +99,7 @@ class BrandList extends \Bss\BrandRepresentative\Block\Brand\Pages\BrandList imp
             $categoryImage,
             $outputHelper,
             $storeManager,
+            $helper,
             $data
         );
     }
@@ -125,8 +129,7 @@ class BrandList extends \Bss\BrandRepresentative\Block\Brand\Pages\BrandList imp
             $categoryCollection = $this->prepareBrandCollection();
 
             if ($categoryCollection && !empty($categoryIds)) {
-                $ids = explode(',', $categoryIds);
-                $categoryCollection->addAttributeToFilter('entity_id', ['in' => $ids]);
+                $categoryCollection->addAttributeToFilter('entity_id', ['in' => $categoryIds]);
             }
 
             return $categoryCollection;
@@ -150,22 +153,11 @@ class BrandList extends \Bss\BrandRepresentative\Block\Brand\Pages\BrandList imp
     /**
      * Retrieve category ids from widget
      *
-     * @return string
+     * @return array
      */
     public function getCategoryIds()
     {
-        $conditions = $this->getData('conditions') ?: $this->getData('conditions_encoded') ?? [];
-
-        if ($conditions) {
-            $conditions = $this->conditionsHelper->decode($conditions);
-        }
-
-        foreach ($conditions as $condition) {
-            if (!empty($condition['attribute']) && $condition['attribute'] === 'category_ids') {
-                return $condition['value'];
-            }
-        }
-        return '';
+        return $this->helper->getFeaturedBrandIds();
     }
 
     /**
