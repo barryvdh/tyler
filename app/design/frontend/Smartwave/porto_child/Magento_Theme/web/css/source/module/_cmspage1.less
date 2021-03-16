@@ -1,11 +1,10 @@
 & when (@media-common = true) {
   .tile-cms {
-    font-size: 60px;
     font-weight: bold;
     color: #FFEFC8;
-    letter-spacing: 1px;
     &.tile-gb {
       color: #2F3C4F;
+      letter-spacing: 1px;
     }
   }
   .btn-charco {
@@ -15,11 +14,9 @@
     color: #FFEFC8!important;
     padding: 10px 20px;
     display: block;
-    max-width: 318px;
     text-align: center;
-    font-size: 30px;
     text-transform: uppercase;
-    border-radius: 20px;
+    border-radius: 15px;
     text-decoration: none;
     font-family: @font-family__gothamblack;
     &:hover {
@@ -28,10 +25,8 @@
     }
   }
   .des-step {
-    font-size: 30px;
-    line-height: 30px;
+    line-height: 38px;
     color: #2F3C4F;
-    margin-top:40px;
   }
   .content-page1 {
     background-color: #2F3C4F;
@@ -44,7 +39,6 @@
     }
   }
   .para-cms {
-    font-size: 30px;
     color: #FBB43B;
     margin-top: 68px;
   }
@@ -73,7 +67,6 @@
     vertical-align: middle;
   }
   .number-step {
-    font-size: 200px;
     font-weight: 900;
     color: #FFEFC8;
     width: 10%;
@@ -149,20 +142,17 @@
     }
   }
   .feature-title {
-    font-size: 48px;
     margin-bottom: 22px;
   }
   .three-block {
     color: #FFEFC8;
     padding: 105px 0 130px;
     ul {
-      font-size:25px;
       font-family: @font-family__bothambook;
       margin: 0;
       padding: 0 0 0 25px;
     }
     .text-pag {
-      font-size:30px;
       font-family: @font-family__bothambook;
       margin-bottom: 20px;
     }
@@ -182,12 +172,20 @@
   .number-step {
     font-size:200px;
   }
+  .row-block2 {
+    .number-step {
+      padding-top:0;
+    }
+  }
   .tile-cms {
     font-size:60px;
   }
+  .para-cms {
+    font-size:30px;
+  }
   .des-step {
     font-size: 30px;
-    margin-top:40px;
+    margin-top:37px;
   }
   .list-brand-step {
     li {
@@ -204,8 +202,10 @@
       }
     }
   }
-  .row-block3 {
-    padding: 75px 140px 70px;
+  .row-block1 {
+    &.row-block3 {
+      padding: 86px 140px 86px;
+    }
   }
 }
 .media-width(@extremum, @break) when (@extremum = 'min') and (@break = @screen__xxl) {
@@ -257,7 +257,7 @@
     padding: 90px 140px 90px;
   }
   .img-step {
-    margin: 0 70px 0 70px;
+    margin: 0 65px 0 75px;
   }
   .btn-cms {
     max-width: 318px;
@@ -269,7 +269,7 @@
     }
   }
   .row-block1 {
-    padding: 22px 140px 0;
+    padding: 25px 140px 0;
   }
   .three-block {
     ul {
@@ -341,9 +341,6 @@
     .text-step {
       width:auto;
     }
-    &.row-block3 {
-      padding: 109px 140px 109px;
-    }
   }
   .three-block {
     ul {
@@ -359,17 +356,18 @@
     font-size:35px;
   }
   .row-block2 {
-    padding: 70px 148px 50px;
+    padding: 70px 148px 43px;
     .text-step {
       width: auto;
     }
     .number-step {
       margin-left:70px;
+      padding-top:30px;
     }
     &.row-block4 {
-      padding: 109px 148px;
+      padding: 83px 148px 88px;
       .text-step {
-        margin-top:0;
+        margin-top:40px;
         width: auto;
       }
     }
@@ -644,8 +642,8 @@
     margin: 0 30px 0 30px;
   }
   .btn-cms {
-    max-width: 240px;
-    font-size: 20px;
+    max-width: 190px;
+    font-size: 15px;
   }
   .list-brand-step {
     li {
@@ -656,7 +654,7 @@
     padding: 30px 20px 20px;
     text-align: center;
     &.row-block3 {
-      padding: 109px 20px 109px;
+      padding: 55px 20px;
     }
   }
   .three-block {
@@ -673,10 +671,15 @@
     }
   }
   .feature-title {
-    font-size:30px;
+    font-size:25px;
+  }
+  .two-block {
+    .title-content {
+      text-align: center;
+    }
   }
   .row-block2 {
-    padding: 70px 20px 50px;
+    padding: 30px 20px 30px;
     .text-step {
       width: 100%;
     }
@@ -684,7 +687,7 @@
       margin-left:0px;
     }
     &.row-block4 {
-      padding: 109px 20px;
+      padding: 55px 20px;
       .text-step {
         margin-top:0;
         width: 100%;
