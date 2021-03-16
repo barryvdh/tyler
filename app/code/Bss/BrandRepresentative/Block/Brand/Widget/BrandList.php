@@ -36,7 +36,15 @@ use Magento\Widget\Helper\Conditions;
  */
 class BrandList extends \Bss\BrandRepresentative\Block\Brand\Pages\BrandList implements BlockInterface
 {
+    /**
+     * Default widget limit
+     */
     const DEFAULT_FEATURE_BRANDS_LIMIT = 10;
+
+    /**
+     * Default featured widget title
+     */
+    const PAGE_DEFAULT_FEATURE_TITLE = 'Featured Brands';
 
     /**
      * @var Conditions
@@ -52,9 +60,6 @@ class BrandList extends \Bss\BrandRepresentative\Block\Brand\Pages\BrandList imp
      * @var OutputHelper
      */
     private $outputHelper;
-
-    //Default featured widget title
-    public const PAGE_DEFAULT_FEATURE_TITLE = 'Featured Brands';
 
     /**
      * BrandList constructor.
