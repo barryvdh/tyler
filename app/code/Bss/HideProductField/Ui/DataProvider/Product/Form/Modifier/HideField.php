@@ -207,10 +207,23 @@ class HideField extends AbstractModifier
                 }
             }
         }
+        $this->downloadableProduct($meta);
 
         return $meta;
     }
 
+    /**
+     * Set custom component to hide the is downloadable checkbox
+     *
+     * @param array $meta
+     */
+    protected function downloadableProduct(array &$meta)
+    {
+        if (isset($meta["downloadable"]["children"]["is_downloadable"]["arguments"]["data"]["config"]["component"])) {
+            $meta["downloadable"]["children"]["is_downloadable"]["arguments"]["data"]["config"]["component"]
+                = "Bss_HideProductField/js/components/product/is-downloadable-handler";
+        }
+    }
     /**
      * Hide section.
      *

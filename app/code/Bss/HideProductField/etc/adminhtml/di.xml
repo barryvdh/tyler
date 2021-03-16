@@ -34,5 +34,15 @@
                 type="Bss\HideProductField\Plugin\Product\RemoveEditDesignAttributePermissions"
                 sortOrder="20" />
     </type>
+    <type name="Magento\Catalog\Controller\Adminhtml\Product\NewAction">
+        <plugin name="brand_product_create"
+                type="Bss\HideProductField\Plugin\Product\RestrictDigitalManger"
+                sortOrder="20" />
+    </type>
+    <type name="Magento\Catalog\Controller\Adminhtml\Product\Edit">
+        <plugin name="brand_product_edit"
+                type="Bss\HideProductField\Plugin\Product\RestrictDigitalManger"
+                sortOrder="20" />
+    </type>
     <preference for="Magento\Framework\Controller\Result\Json" type="Bss\HideProductField\Controller\Result\Json"/>
 </config>

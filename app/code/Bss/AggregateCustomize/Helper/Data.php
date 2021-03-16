@@ -38,7 +38,7 @@ class Data
         }
         $roleName = $role->getRoleName();
 
-        return preg_match("/(Brand Manager)/", $roleName) > 0;
+        return preg_match("/(Digital|Brand) Manager/", $roleName) > 0;
     }
 
     /**
