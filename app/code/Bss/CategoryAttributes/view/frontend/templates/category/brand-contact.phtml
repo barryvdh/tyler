@@ -2,10 +2,12 @@
 /** @var \Magento\Framework\Escaper $escaper */
 /** @var \Bss\CategoryAttributes\Block\Category\BrandContact $block */
 ?>
+<?php $schedulePopupJsConfig = $block->getJsConfigData("schedule_visit_embedded_link");
+if ($schedulePopupJsConfig != "{}"): ?>
 <div class="content-sche btn-content">
     <div class="action wrapper">
         <a class="btn-sidebar sche" href="#schedule-visit-form"
-           data-mage-init='{"Bss_CategoryAttributes/js/view/show-contact-form": <?= $escaper->escapeHtmlAttr($block->getJsConfigData("schedule_visit_embedded_link")) ?>}'>
+           data-mage-init='{"Bss_CategoryAttributes/js/view/show-contact-form": <?= $escaper->escapeHtmlAttr($schedulePopupJsConfig) ?>}'>
             <?= $escaper->escapeHtml(__("REQUEST VISIT")) ?>
         </a>
         <div id="schedule-visit-form" style="display: none">
@@ -13,10 +15,13 @@
         </div>
     </div>
 </div>
+<?php endif; ?>
+<?php $contactPopupJsConfig = $block->getJsConfigData("contact_us_embedded_link");
+if ($contactPopupJsConfig != "{}"): ?>
 <div class="content-sche btn-content">
     <div class="action wrapper">
         <a class="btn-sidebar contact" href="#contact-us-form"
-           data-mage-init='{"Bss_CategoryAttributes/js/view/show-contact-form": <?= $escaper->escapeHtmlAttr($block->getJsConfigData("contact_us_embedded_link")) ?>}'>
+           data-mage-init='{"Bss_CategoryAttributes/js/view/show-contact-form": <?= $escaper->escapeHtmlAttr($contactPopupJsConfig) ?>}'>
             <?= $escaper->escapeHtml(__("CONTACT US")) ?>
         </a>
         <div id="contact-us-form" style="display: none">
@@ -24,3 +29,4 @@
         </div>
     </div>
 </div>
+<?php endif; ?>
