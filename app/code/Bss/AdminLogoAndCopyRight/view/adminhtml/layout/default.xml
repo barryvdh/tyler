@@ -21,5 +21,8 @@
                 </argument>
             </arguments>
         </referenceBlock>
+        <referenceBlock name="privacyPolicy" remove="true" />
+        <referenceBlock name="report" remove="true" />
+        <referenceBlock name="session.activity.link" template="Bss_AdminLogoAndCopyRight::activity_link.phtml" />
     </body>
 </page>
