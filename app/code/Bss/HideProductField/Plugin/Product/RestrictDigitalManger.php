@@ -48,7 +48,8 @@ class RestrictDigitalManger
         $proceed
     ) {
         if ($this->aggregateCustomizeHelper->isBrandManager() &&
-            $subject->getRequest()->getParam('type') !== DownloadableType::TYPE_DOWNLOADABLE
+            $subject->getRequest()->getParam('type') !== DownloadableType::TYPE_DOWNLOADABLE &&
+            !$subject->getRequest()->getParam('id')
         ) {
             return $this->redirectFactory->create()->setPath("catalog/*/");
         }

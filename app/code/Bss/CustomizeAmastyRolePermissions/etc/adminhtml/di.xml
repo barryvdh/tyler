@@ -3,5 +3,10 @@
     <type name="Magento\Catalog\Ui\DataProvider\Product\Form\Modifier\Categories">
         <plugin name="Amasty_Rolepermissions::CategoriesMeta" type="Bss\CustomizeAmastyRolePermissions\Plugin\Ui\DataProvider\Product\Form\Modifier\Categories" />
     </type>
+    <type name="Magento\Integration\Helper\Data">
+        <plugin name="remove_amasty_permissions_resources_from_system"
+                type="Bss\CustomizeAmastyRolePermissions\Plugin\Integration\Helper\Data"
+                sortOrder="20" />
+    </type>
     <preference for="Amasty\Rolepermissions\Helper\Data" type="Bss\CustomizeAmastyRolePermissions\Helper\Data"/>
 </config>

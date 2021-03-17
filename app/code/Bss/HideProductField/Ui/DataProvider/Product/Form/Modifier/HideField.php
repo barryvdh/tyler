@@ -208,8 +208,21 @@ class HideField extends AbstractModifier
             }
         }
         $this->downloadableProduct($meta);
+        $this->reviewSection($meta);
 
         return $meta;
+    }
+
+    /**
+     * Remove Reviews product section
+     *
+     * @param array $meta
+     */
+    protected function reviewSection(array &$meta)
+    {
+        if (isset($meta['review'])) {
+            unset($meta['review']);
+        }
     }
 
     /**
