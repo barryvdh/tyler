@@ -1,22 +1,7 @@
 <?php
-use Bss\PortoCustomSideBlock\Block\Template;
-
-/**
- * @var Template $block
- * */
-
-$isLoggedIn = $block->customerIsLoggedIn();
-?>
-<?php if ($isLoggedIn):
-    echo $block->getChildHtml('custom-button-block');
-            ?>
-<?php else: ?>
-    <div class="not-logged-in content-sche btn-content">
-        <p class="text-login"><?= __('You need to login for further action!') ?></p>
-        <div class="to-login action wrapper">
-            <a class="btn-sidebar btn sche" href="<?= $block->getUrl('customer/account/login') ?>">
-                <?= __('Login') ?>
-            </a>
-        </div>
-    </div>
-<?php endif; ?>
+$product_view = $this->getConfig('porto_settings/category');
+$block = $this->getLayout()->createBlock('Magento\Cms\Block\Block');
+if ($block) {
+    $block->setBlockId($product_view['side_custom_block']);
+    echo $block->toHtml();
+}

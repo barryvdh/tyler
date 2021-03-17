@@ -22,15 +22,9 @@
         <move element="category.image" destination="brand_information" />
         <referenceContainer name="sidebar.main">
             <block class="Magento\Catalog\Block\Category\View" name="category_banner" template="category/banner.phtml" ifconfig="porto_settings/category/category_description" before="-"/>
-            <block class="Bss\PortoCustomSideBlock\Block\Template"
+            <block class="Smartwave\Porto\Block\Template"
                    name="category_view_custom_block"
-                   after="-" template="Magento_Catalog::category/custom_block.phtml">
-                <block class="Magento\Cms\Block\Block" name="custom-button-block">
-                    <arguments>
-                        <argument name="block_id" xsi:type="string">porto_category_side_custom_block</argument>
-                    </arguments>
-                </block>
-            </block>
+                   after="-" template="Magento_Catalog::category/custom_block.phtml" />
         </referenceContainer>
     </body>
 </page>
