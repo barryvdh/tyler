@@ -6,6 +6,7 @@ define([
     return IsDownloadableHandler.extend({
         /**
          * Always check the component n  hide it
+         * Also hide the  samples fieldset
          *
          * @returns {IsDownloadableHandler}
          */
@@ -14,6 +15,9 @@ define([
 
             this.checked(true);
             this.visible(false);
+            if (this.samplesFieldset()) {
+                this.samplesFieldset().visible(false);
+            }
 
             return this;
         }
