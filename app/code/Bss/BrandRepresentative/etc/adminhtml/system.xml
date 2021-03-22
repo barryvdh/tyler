@@ -12,7 +12,7 @@
             <group id="featured_brands" translate="label" showInDefault="1" showInStore="1" showInWebsite="1" sortOrder="20">
                 <label>Featured Brands Configuration</label>
                 <field id="brand_ids" translate="label comment" type="text" showInWebsite="1" showInStore="1" showInDefault="1" sortOrder="10">
-                    <label>Brands</label>
+                    <label>Featured Brand</label>
                     <frontend_model>Bss\BrandRepresentative\Block\Adminhtml\Form\Renderer\Config\BrandsTree</frontend_model>
                     <comment><![CDATA[Select brands category to show in cms block Featured Brand.]]></comment>
                 </field>
