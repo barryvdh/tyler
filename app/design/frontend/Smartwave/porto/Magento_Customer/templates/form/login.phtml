@@ -19,7 +19,7 @@
             <?= $block->getBlockHtml('formkey') ?>
             <fieldset class="fieldset login" data-hasrequired="<?= $block->escapeHtml(__('* Required Fields')) ?>">
                 <div class="field note"><?= $block->escapeHtml(__('If you have an account, sign in with your email address.')) ?>
-                    <p><?= $block->escapeHtml(__('Don\'t have an account? Click')) ?> <a href="<?= $block->escapeUrl($block->getUrl('customer/account/create/')); ?>"><?= $block->escapeHtml(__('here')) ?></a> <?= $block->escapeHtml(__('to create one.')) ?> </p>
+                    <p><?= $block->escapeHtml(__('Don\'t have an account? Click')) ?> <a href="<?= $block->escapeUrl($block->getUrl('create-account')); ?>"><?= $block->escapeHtml(__('here')) ?></a> <?= $block->escapeHtml(__('to create one.')) ?> </p>
                 </div>
                 <div class="field email required">
                     <label class="label" for="email"><span><?= $block->escapeHtml(__('Email')) ?></span></label>
