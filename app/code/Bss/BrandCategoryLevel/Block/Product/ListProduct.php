@@ -3,12 +3,58 @@ declare(strict_types=1);
 
 namespace Bss\BrandCategoryLevel\Block\Product;
 
+use Magento\Catalog\Api\CategoryRepositoryInterface;
+use Magento\Catalog\Block\Product\Context;
+use Magento\Catalog\Helper\Output as OutputHelper;
+use Magento\Catalog\Model\Layer\Resolver;
+use Magento\Framework\Data\Helper\PostHelper;
+use Magento\Framework\Url\Helper\Data;
+
 /**
  * Class ListProduct
  * Customize for brand display
  */
 class ListProduct extends \Magento\Catalog\Block\Product\ListProduct
 {
+    /**
+     * @var \Bss\BrandCategoryLevel\Block\Product\ProductList\Toolbar
+     */
+    private $productToolbar;
+
+    /**
+     * ListProduct constructor.
+     *
+     * @param Context $context
+     * @param PostHelper $postDataHelper
+     * @param Resolver $layerResolver
+     * @param CategoryRepositoryInterface $categoryRepository
+     * @param Data $urlHelper
+     * @param ProductList\Toolbar $productToolbar
+     * @param array $data
+     * @param OutputHelper|null $outputHelper
+     */
+    public function __construct(
+        Context $context,
+        PostHelper $postDataHelper,
+        Resolver $layerResolver,
+        CategoryRepositoryInterface $categoryRepository,
+        Data $urlHelper,
+        \Bss\BrandCategoryLevel\Block\Product\ProductList\Toolbar $productToolbar,
+        array $data = [],
+        ?OutputHelper $outputHelper = null
+    ) {
+        $this->productToolbar = $productToolbar;
+        parent::__construct(
+            $context,
+            $postDataHelper,
+            $layerResolver,
+            $categoryRepository,
+            $urlHelper,
+            $data,
+            $outputHelper
+        );
+    }
+
     const BRAND_CATEGORY_LV = 3;
 
     /**
@@ -32,6 +78,28 @@ class ListProduct extends \Magento\Catalog\Block\Product\ListProduct
             }
         }
 
+        if ($this->productToolbar->getCurrentOrder() === 'most_viewed') {
+            $collection->getSelect()->reset('order');
+//            dump($this->productToolbar->getCurrentDirection());
+            $orderExpr = new \Zend_Db_Expr('traffic IS NULL asc, traffic desc');
+            $collection->getSelect()->order([
+                $orderExpr
+            ]);
+//            vadu_log($collection->getSelect()->assemble());
+//            dd($collection->getSelect()->assemble());
+        }
+        if ($this->productToolbar->getCurrentOrder() == "created_at") {
+            $collection->setOrder(
+                $this->productToolbar->getCurrentOrder(),
+                "desc"
+            );
+        }
+
+//        dump($collection->getSelect()->assemble());
+//        dd($collection->getItems());
+//        foreach ($collection->getItems() as $item) {
+//            dump($item->getData());
+//        }
         return $collection;
     }
 }

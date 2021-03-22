@@ -2,6 +2,7 @@
 declare(strict_types=1);
 namespace Bss\BrandRepresentative\Model;
 
+use Bss\BrandRepresentative\Api\Data\MostViewedInterface;
 use Bss\BrandRepresentative\Api\MostViewedRepositoryInterface;
 use Magento\Framework\Exception\CouldNotSaveException;
 use Magento\Framework\Exception\LocalizedException;
@@ -46,23 +47,22 @@ class MostViewedRepository implements MostViewedRepositoryInterface
     /**
      * @inheritDoc
      */
-    public function addVisitNumber($categoryId, $number = 1)
+    public function addVisitNumber($entityId, $entityType, $number = 1)
     {
         try {
-            $mostViewed = $this->get($categoryId);
+            $mostViewed = $this->get($entityId);
 
             if ($mostViewed->getId()) {
                 $number += (int) $mostViewed->getTraffic();
             }
 
-            $mostViewed->setCategoryId($categoryId);
+            $mostViewed->setEntityId($entityId);
             $mostViewed->setTraffic($number);
+            $mostViewed->setEntityType($entityType);
             $this->save($mostViewed);
 
             return true;
         } catch (CouldNotSaveException $e) {
-            throw $e;
-        } catch (LocalizedException $e) {
             throw $e;
         } catch (\Exception $e) {
             $this->logger->critical($e);
@@ -73,13 +73,13 @@ class MostViewedRepository implements MostViewedRepositoryInterface
     /**
      * @inheritDoc
      */
-    public function get($id, $byCategory = true)
+    public function get($id, $byEntity = true)
     {
         try {
             $mostViewed = $this->mostViewedFactory->create();
-            $loadField = 'category_id';
-            if (!$byCategory) {
-                $loadField = 'id';
+            $loadField = MostViewedInterface::ENTITY_ID;
+            if (!$byEntity) {
+                $loadField = MostViewedInterface::ID;
             }
             $this->mostViewedResource->load($mostViewed, $id, $loadField);
 
@@ -96,7 +96,9 @@ class MostViewedRepository implements MostViewedRepositoryInterface
     public function save(\Bss\BrandRepresentative\Api\Data\MostViewedInterface $mostViewed)
     {
         try {
-            return $this->mostViewedResource->save($mostViewed);
+            $this->mostViewedResource->save($mostViewed);
+
+            return $mostViewed;
         } catch (\Exception $e) {
             $this->logger->critical($e);
             throw new CouldNotSaveException(__("Could not save the site traffic. Please review the log!"));

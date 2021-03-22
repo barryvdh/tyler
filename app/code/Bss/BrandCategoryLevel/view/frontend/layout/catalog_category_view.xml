@@ -30,5 +30,6 @@
                 <argument name="view_model" xsi:type="object">Bss\BrandCategoryLevel\ViewModel\Category\Output</argument>
             </arguments>
         </referenceBlock>
+        <referenceBlock name="product_list_toolbar" class="Bss\BrandCategoryLevel\Block\Product\ProductList\Toolbar" />
     </body>
 </page>

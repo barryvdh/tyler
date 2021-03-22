@@ -6,11 +6,11 @@ namespace Bss\BrandRepresentative\Model\ResourceModel;
 use Bss\BrandRepresentative\Model\MostViewed as Model;
 
 /**
- * Class MostViewed
+ * Class MostViewed Brands/Products
  */
 class MostViewed extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 {
-    const TABLE = 'bss_most_viewed_brands';
+    const TABLE = 'bss_most_viewed';
 
     /**
      * @inheritDoc

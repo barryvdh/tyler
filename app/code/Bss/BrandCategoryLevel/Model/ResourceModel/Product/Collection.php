@@ -1,15 +1,12 @@
 <?php
 declare(strict_types=1);
-namespace Bss\BrandRepresentative\Model\ResourceModel\Category;
+
+namespace Bss\BrandCategoryLevel\Model\ResourceModel\Product;
 
 use Bss\BrandRepresentative\Api\Data\MostViewedInterface;
 use Bss\BrandRepresentative\Model\ResourceModel\MostViewed;
 
-/**
- * Class Collection
- * Add the traffic data column to the collection
- */
-class Collection extends \Magento\Catalog\Model\ResourceModel\Category\Collection
+class Collection extends \Mageplaza\LayeredNavigation\Model\ResourceModel\Fulltext\Collection
 {
     /**
      * Add category traffic value
@@ -23,7 +20,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Category\Collectio
         $this->getSelect()->joinLeft(
             ['most_viewed' => $this->getResource()->getTable(MostViewed::TABLE)],
             'most_viewed.' . MostViewedInterface::ENTITY_ID . ' = e.entity_id AND most_viewed.'
-            . MostViewedInterface::ENTITY_TYPE . '=' . MostViewedInterface::TYPE_CATEGORY,
+            . MostViewedInterface::ENTITY_TYPE . '=' . MostViewedInterface::TYPE_PRODUCT,
             ['traffic' => new \Zend_Db_Expr('COALESCE(most_viewed.traffic, 0)')]
         );
 

@@ -2,10 +2,12 @@
 declare(strict_types=1);
 namespace Bss\BrandRepresentative\Block\Category;
 
+use Bss\BrandRepresentative\Api\Data\MostViewedInterface;
 use Magento\Framework\Registry;
 use Magento\Framework\View\Element\Template;
+
 /**
- * Class MostViewedCollector
+ * Class MostViewedCollector block
  */
 class MostViewedCollector extends \Magento\Framework\View\Element\Template
 {
@@ -33,17 +35,25 @@ class MostViewedCollector extends \Magento\Framework\View\Element\Template
         $this->registry = $registry;
     }
 
+    /**
+     * Set collector template
+     *
+     * @return string
+     */
     public function getTemplate()
     {
         return "Bss_BrandRepresentative::brand/most_viewed_collector.phtml";
     }
 
     /**
+     * Determine when to collect traffic data
+     *
      * @return bool
      */
-    public function isBrandCategory()
+    public function isNeedCollectTraffic()
     {
-        return $this->getCurrentCategory()->getLevel() >= self::IS_BRAND_CATEGORY_LV;
+        return $this->getCurrentCategory()->getLevel() >= self::IS_BRAND_CATEGORY_LV ||
+            $this->isProductPage();
     }
 
     /**
@@ -53,10 +63,28 @@ class MostViewedCollector extends \Magento\Framework\View\Element\Template
      */
     public function getAddNewVisitUrl()
     {
+        $entityId = $this->getCurrentCategory()->getId();
+        $entityType = MostViewedInterface::TYPE_CATEGORY;
+
+        if ($this->isProductPage()) {
+            $entityId = $this->getCurrentProduct()->getId();
+            $entityType = MostViewedInterface::TYPE_PRODUCT;
+        }
+
         return $this->getUrl(
             'bss_brandRepresentative/traffic/newVisit',
-            ['category_id' => $this->getCurrentCategory()->getId()]
+            ['entity_id' => $entityId, 'entity_type' => $entityType]
         );
+    }
+
+    /**
+     * Is in product page
+     *
+     * @return bool
+     */
+    protected function isProductPage()
+    {
+        return $this->getRequest()->getFullActionName() == "catalog_product_view";
     }
 
     /**
@@ -67,5 +95,15 @@ class MostViewedCollector extends \Magento\Framework\View\Element\Template
     public function getCurrentCategory()
     {
         return $this->registry->registry('current_category');
+    }
+
+    /**
+     * Get current product
+     *
+     * @return \Magento\Catalog\Model\Product
+     */
+    public function getCurrentProduct()
+    {
+        return $this->registry->registry('current_product');
     }
 }
