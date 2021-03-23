@@ -6,7 +6,7 @@
         </tab>
         <section id="brand_representative" translate="label" sortOrder="222" showInDefault="1" showInWebsite="1" showInStore="1">
             <class>separator-top</class>
-            <label>Brand Representative</label>
+            <label>Featured Brand</label>
             <tab>bss</tab>
             <resource>Bss_BrandRepresentative::config</resource>
             <group id="featured_brands" translate="label" showInDefault="1" showInStore="1" showInWebsite="1" sortOrder="20">
