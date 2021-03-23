@@ -6,7 +6,7 @@ namespace Bss\BrandCategoryLevel\Model\ResourceModel\Product;
 use Bss\BrandRepresentative\Api\Data\MostViewedInterface;
 use Bss\BrandRepresentative\Model\ResourceModel\MostViewed;
 
-class Collection extends \Mageplaza\LayeredNavigation\Model\ResourceModel\Fulltext\Collection
+class Collection extends \Magento\CatalogSearch\Model\ResourceModel\Fulltext\Collection
 {
     /**
      * Add category traffic value
@@ -15,8 +15,10 @@ class Collection extends \Mageplaza\LayeredNavigation\Model\ResourceModel\Fullte
      */
     protected function _initSelect()
     {
-        $this->addFilterToMap('traffic', 'most_viewed.traffic');
-        parent::_initSelect();
+        dd(1);
+        $this->addAttributeToSort('created_at', 'desc');
+        // $this->addFilterToMap('traffic', 'most_viewed.traffic');
+        return parent::_initSelect();
         $this->getSelect()->joinLeft(
             ['most_viewed' => $this->getResource()->getTable(MostViewed::TABLE)],
             'most_viewed.' . MostViewedInterface::ENTITY_ID . ' = e.entity_id AND most_viewed.'
@@ -25,5 +27,15 @@ class Collection extends \Mageplaza\LayeredNavigation\Model\ResourceModel\Fullte
         );
 
         return $this;
+    }
+
+    protected function _renderFiltersBefore()
+    {
+        dd(1);
+    }
+
+    public function hahaha()
+    {
+        return "2312312312123123";
     }
 }

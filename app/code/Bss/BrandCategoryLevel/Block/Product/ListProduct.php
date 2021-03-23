@@ -78,28 +78,6 @@ class ListProduct extends \Magento\Catalog\Block\Product\ListProduct
             }
         }
 
-        if ($this->productToolbar->getCurrentOrder() === 'most_viewed') {
-            $collection->getSelect()->reset('order');
-//            dump($this->productToolbar->getCurrentDirection());
-            $orderExpr = new \Zend_Db_Expr('traffic IS NULL asc, traffic desc');
-            $collection->getSelect()->order([
-                $orderExpr
-            ]);
-//            vadu_log($collection->getSelect()->assemble());
-//            dd($collection->getSelect()->assemble());
-        }
-        if ($this->productToolbar->getCurrentOrder() == "created_at") {
-            $collection->setOrder(
-                $this->productToolbar->getCurrentOrder(),
-                "desc"
-            );
-        }
-
-//        dump($collection->getSelect()->assemble());
-//        dd($collection->getItems());
-//        foreach ($collection->getItems() as $item) {
-//            dump($item->getData());
-//        }
         return $collection;
     }
 }
