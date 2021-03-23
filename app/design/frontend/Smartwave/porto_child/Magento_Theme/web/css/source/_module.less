@@ -563,12 +563,19 @@
         }
     }
     .megamenu-new.navigation {
-        li.level0.fullwidth:hover {
-            > .submenu {
-                visibility: visible;
-                opacity: 1;
+        li.level0 {
+            &.fullwidth,
+            &.classic {
+                &:hover {
+                    > .submenu {
+                        visibility: visible;
+                        opacity: 1;
+                        display:block;
+                    }
+                }
             }
         }
+
     }
 }
 
@@ -748,13 +755,19 @@
                     left:0;
                     right:auto;
                 }
+                &.classic {
+                 > .submenu {
+                    left:auto;
+                    right:auto;
+                }
+                }
             }
         }
     }
     .megamenu-new.navigation {
         li.level0 {
             > .submenu {
-                display: block;
+                display: none;
                 visibility: hidden;
                 opacity: 0;
                 transition: .2s opacity;
@@ -784,7 +797,8 @@
                     }
                 }
             }
-            &.fullwidth {
+            &.fullwidth,
+            &.classic {
                 > .level0 {
                     a {
                         padding:0 12px;
@@ -1025,7 +1039,8 @@
                 color: #161616;
                 text-align: left;
                 pointer-events: all;
-                &.fullwidth {
+                &.fullwidth,
+                &.classic {
                     position: static;
                     > .submenu {
                         padding:10px;
@@ -1043,8 +1058,15 @@
                     right: 0;
                     margin-left: auto!important;
                     margin-right: auto!important;
-                    display: block!important;
                     width: 100%;
+                }
+                &.classic {
+                    .submenu {
+                        width:auto;
+                        width: auto;
+                        left: auto;
+                        right: auto;
+                    }
                 }
             }
             .navigation {
@@ -1066,13 +1088,14 @@
                 border-top-width: 0;
             }
             .navigation li.level0.fullwidth >.submenu >li.level1 > a,
-            .navigation li.level0.staticwidth .submenu li.level1 > a {
+            .navigation li.level0.classic >.submenu li.level1 > a {
                 font-size: 13px;
-                font-weight: 700;
+                font-weight: 400;
                 margin-bottom: 4px;
                 color: #434d53;
             }
-            .navigation li.level0.fullwidth .subchildmenu .submenu a,
+            .navigation li.level0.fullwidth
+            .subchildmenu .submenu a,
             .navigation li.level0.classic .submenu a,
             .navigation li.level0.staticwidth .submenu a {
                 font-size: 12px;
