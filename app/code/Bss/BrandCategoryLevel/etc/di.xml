@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
+    <type name="Magento\Catalog\Block\Product\ProductList\Toolbar">
+        <plugin name="add_custom_sort" type="Bss\BrandCategoryLevel\Plugin\Catalog\Block\Toolbar"/>
+    </type>
+    <type name="Magento\Catalog\Model\Config">
+        <plugin name="add_custom_sort" type="Bss\BrandCategoryLevel\Plugin\Catalog\Model\Config"/>
+    </type>
+
+    <virtualType name="additionalFieldsProviderForElasticsearch" type="Magento\AdvancedSearch\Model\Adapter\DataMapper\AdditionalFieldsProvider">
+        <arguments>
+            <argument name="fieldsProviders" xsi:type="array">
+                <item name="most_viewed" xsi:type="object">
+                    Bss\BrandCategoryLevel\Model\Adapter\BatchDataMapper\MappingCustomFieldDataProvider
+                </item>
+            </argument>
+        </arguments>
+    </virtualType>
+</config>

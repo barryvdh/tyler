@@ -13,11 +13,12 @@ interface MostViewedRepositoryInterface
      * Plus more number of visit
      *
      * @param int $categoryId
+     * @param int $entityType
      * @param int $number
      * @return bool
      * @throws LocalizedException
      */
-    public function addVisitNumber($categoryId, $number = 1);
+    public function addVisitNumber($categoryId, $entityType, $number = 1);
 
     /**
      * Get most view detail by id or category id

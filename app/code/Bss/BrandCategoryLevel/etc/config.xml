@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Store:etc/config.xsd">
+    <default>
+        <productSorting>
+            <general>
+                <enable_module>1</enable_module>
+            </general>
+            <date_view_count>
+                <enable_module>1</enable_module>
+                <sort_up_down>desc</sort_up_down>
+            </date_view_count>
+        </productSorting>
+    </default>
+</config>

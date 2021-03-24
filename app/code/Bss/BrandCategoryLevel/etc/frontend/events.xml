@@ -23,4 +23,7 @@
     <event name="catalog_controller_category_init_after">
         <observer name="bss_brand_category_info_load" instance="Bss\BrandCategoryLevel\Observer\Category\BrandInfo" />
     </event>
+    <event name="catalog_block_product_list_collection">
+        <observer name="custom_order" instance="Bss\BrandCategoryLevel\Observer\CatalogProductListCollectionCustomOrderFieldsObserver" shared="false" />
+    </event>
 </config>

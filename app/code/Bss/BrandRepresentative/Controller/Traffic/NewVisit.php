@@ -85,10 +85,11 @@ class NewVisit implements HttpPostActionInterface
         $message = "OK";
         try {
             $this->beforeExecute();
-            $categoryId = $this->request->getParam('category_id');
+            $entityId = $this->request->getParam('entity_id');
+            $entityType = $this->request->getParam('entity_type');
 
-            if ($categoryId) {
-                $this->mostViewedRepository->addVisitNumber($categoryId);
+            if ($entityId) {
+                $this->mostViewedRepository->addVisitNumber($entityId, $entityType);
             }
         } catch (InvalidFormKeyException $e) {
             $message = $e->getMessage();

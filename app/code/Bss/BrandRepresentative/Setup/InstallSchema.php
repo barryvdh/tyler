@@ -232,7 +232,7 @@ class InstallSchema implements InstallSchemaInterface
                 ],
                 'Most viewed item id'
             )->addColumn(
-                MostViewed::CATEGORY_ID,
+                MostViewed::ENTITY_ID,
                 Table::TYPE_INTEGER,
                 null,
                 [
@@ -241,6 +241,14 @@ class InstallSchema implements InstallSchemaInterface
                 ],
                 'The Category (Brand) Id'
             )->addColumn(
+                MostViewed::ENTITY_TYPE,
+                Table::TYPE_SMALLINT,
+                null,
+                [
+                    'unsigned' => true,
+                    'nullable' => false
+                ]
+            )->addColumn(
                 MostViewed::TRAFFIC,
                 Table::TYPE_BIGINT,
                 null,
@@ -248,18 +256,7 @@ class InstallSchema implements InstallSchemaInterface
                     'unsigned' => true,
                     'default' => 0
                 ],
-                'Traffic value - to help us know which brands are most interested in'
-            )->addForeignKey(
-                $installer->getFkName(
-                    MostViewedResource::TABLE,
-                    MostViewed::CATEGORY_ID,
-                    'catalog_category_entity',
-                    'entity_id'
-                ),
-                MostViewed::CATEGORY_ID,
-                $installer->getTable('catalog_category_entity'),
-                'entity_id',
-                Table::ACTION_CASCADE
+                'Traffic value - to help us know which brands/products are most interested in'
             )->setComment('Bss Most Viewed Brands Table');
         $installer->getConnection()->createTable($table);
     }

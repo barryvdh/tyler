@@ -23,5 +23,6 @@
     <module name="Bss_BrandCategoryLevel" setup_version="1.0.0">
         <sequence name="Bss_BrandRepresentative" />
         <sequence name="Magento_Catalog" />
+        <sequence name="Magento_CatalogSearch" />
     </module>
 </config>

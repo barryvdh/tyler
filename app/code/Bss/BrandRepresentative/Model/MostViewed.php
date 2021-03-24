@@ -39,17 +39,33 @@ class MostViewed extends AbstractModel implements MostViewedInterface
     /**
      * @inheritDoc
      */
-    public function getCategoryId()
+    public function getEntityId()
     {
-        return $this->getData(self::CATEGORY_ID);
+        return $this->getData(self::ENTITY_ID);
     }
 
     /**
      * @inheritDoc
      */
-    public function setCategoryId($val)
+    public function setEntityId($val)
     {
-        return $this->setData(self::CATEGORY_ID, $val);
+        return $this->setData(self::ENTITY_ID, $val);
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function getEntityType()
+    {
+        return $this->getData(self::ENTITY_TYPE);
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function setEntityType($val)
+    {
+        return $this->setData(self::ENTITY_TYPE, $val);
     }
 
     /**

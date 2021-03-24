@@ -315,7 +315,7 @@ return [
         'MagePal_GmailSmtpApp' => 1,
         'Mageplaza_AjaxLayer' => 1,
         'Mageplaza_Search' => 1,
-        'Mageplaza_LayeredNavigation' => 1,
+        'Mageplaza_LayeredNavigation' => 0,
         'Mageplaza_Webhook' => 1,
         'Bss_CustomizeMageplazaSearch' => 1,
         'PayPal_Braintree' => 1,
