@@ -6,10 +6,14 @@ namespace Bss\BrandCategoryLevel\Plugin\Catalog\Block;
 use Magento\Catalog\Block\Product\ProductList\Toolbar as BePlugged;
 use Magento\Framework\View\Element\Template;
 
+/**
+ * Class Toolbar
+ * Set default direction for custom sorting
+ */
 class Toolbar extends Template
 {
     /**
-     * Description
+     * Make desc direction for most_viewed and newest sorting
      *
      * @param BePlugged $subject
      * @param string $result
@@ -18,12 +22,12 @@ class Toolbar extends Template
      */
     public function afterGetCurrentDirection(BePlugged $subject, $result)
     {
-        switch ($subject->getCurrentOrder()) {
-            case "most_viewed":
-            case "created_at":
-                $dir = "DESC";
-                break;
+        if ($subject->getCurrentOrder() == "most_viewed" ||
+            $subject->getCurrentOrder() == "newest"
+        ) {
+            $dir = "DESC";
         }
+
         if (isset($dir)) {
             $this->setData('_current_grid_direction', $dir ?? $result);
             $subject->setData('_current_grid_direction', $dir ?? $result);

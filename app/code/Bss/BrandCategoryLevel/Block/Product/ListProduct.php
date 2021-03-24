@@ -16,45 +16,6 @@ use Magento\Framework\Url\Helper\Data;
  */
 class ListProduct extends \Magento\Catalog\Block\Product\ListProduct
 {
-    /**
-     * @var \Bss\BrandCategoryLevel\Block\Product\ProductList\Toolbar
-     */
-    private $productToolbar;
-
-    /**
-     * ListProduct constructor.
-     *
-     * @param Context $context
-     * @param PostHelper $postDataHelper
-     * @param Resolver $layerResolver
-     * @param CategoryRepositoryInterface $categoryRepository
-     * @param Data $urlHelper
-     * @param ProductList\Toolbar $productToolbar
-     * @param array $data
-     * @param OutputHelper|null $outputHelper
-     */
-    public function __construct(
-        Context $context,
-        PostHelper $postDataHelper,
-        Resolver $layerResolver,
-        CategoryRepositoryInterface $categoryRepository,
-        Data $urlHelper,
-        \Bss\BrandCategoryLevel\Block\Product\ProductList\Toolbar $productToolbar,
-        array $data = [],
-        ?OutputHelper $outputHelper = null
-    ) {
-        $this->productToolbar = $productToolbar;
-        parent::__construct(
-            $context,
-            $postDataHelper,
-            $layerResolver,
-            $categoryRepository,
-            $urlHelper,
-            $data,
-            $outputHelper
-        );
-    }
-
     const BRAND_CATEGORY_LV = 3;
 
     /**

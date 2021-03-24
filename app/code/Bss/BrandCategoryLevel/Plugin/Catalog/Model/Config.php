@@ -3,10 +3,14 @@ declare(strict_types=1);
 
 namespace Bss\BrandCategoryLevel\Plugin\Catalog\Model;
 
+/**
+ * Class Config
+ * Add custom sorting
+ */
 class Config
 {
     /**
-     * Description
+     * Add most_viewed and newest custom sorting
      *
      * @param \Magento\Catalog\Model\Config $subject
      * @param array $options
@@ -22,7 +26,7 @@ class Config
         }
 
         $options['most_viewed'] = __("Most Viewed");
-        $options['created_at'] = __("Newest");
+        $options['newest'] = __("Newest");
 
         return $options;
     }
