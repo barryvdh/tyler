@@ -232,9 +232,13 @@ class HideField extends AbstractModifier
      */
     protected function downloadableProduct(array &$meta)
     {
+        dd($meta['downloadable']['children']['container_links']['children']['link']['children']['record'], $meta);
         if (isset($meta["downloadable"]["children"]["is_downloadable"]["arguments"]["data"]["config"]["component"])) {
             $meta["downloadable"]["children"]["is_downloadable"]["arguments"]["data"]["config"]["component"]
                 = "Bss_HideProductField/js/components/product/is-downloadable-handler";
+        }
+        if (isset($meta["downloadable"]['arguments']['data']['config']['label'])) {
+            $meta["downloadable"]['arguments']['data']['config']['label'] = __("Downloadable Files");
         }
     }
     /**
@@ -281,6 +285,9 @@ class HideField extends AbstractModifier
         $productId = $this->locator->getProduct()->getId();
         $data[$productId]["visible_fields"] = [
             'gallery' => !in_array("gallery", $this->getHideAttributes())
+        ];
+        $data[$productId]["visible_fields"] = [
+            'galleryLabel' => __("Thumbnail Images and Videos")
         ];
         return $data;
     }

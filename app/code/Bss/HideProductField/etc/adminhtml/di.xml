@@ -45,4 +45,9 @@
                 sortOrder="20" />
     </type>
     <preference for="Magento\Framework\Controller\Result\Json" type="Bss\HideProductField\Controller\Result\Json"/>
+    <type name="Magento\Downloadable\Model\Source\Shareable">
+        <plugin name="remove_use_config_for_brand_manager"
+                type="Bss\HideProductField\Plugin\DownloadableProduct\Source\Shareable"
+                sortOrder="20" />
+    </type>
 </config>
