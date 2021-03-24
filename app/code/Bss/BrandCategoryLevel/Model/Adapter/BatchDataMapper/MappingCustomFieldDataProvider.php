@@ -59,7 +59,6 @@ class MappingCustomFieldDataProvider implements AdditionalFieldsProviderInterfac
             ];
         }
 
-        vadu_log('runn');
         return $fields;
     }
 }
