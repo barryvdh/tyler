@@ -24,7 +24,6 @@
       border-radius: 0 60px 60px 0;
       min-width: 320px;
       h2 {
-        font-size: 45px;
         font-weight: 600;
         margin: 5px 70px 5px 0;
       }
@@ -181,7 +180,7 @@
   .features-title,
   .bottom-main {
     p {
-      max-width: 420px;
+      max-width: 440px;
       margin:0 auto;
     }
   }
@@ -316,6 +315,7 @@
     .blog-content {
       color:#2f3c4f;
       font-size: 20px;
+      font-family: @font-family__bothambook;
     }
     .blog-title {
       margin-bottom: 50px;
@@ -445,10 +445,44 @@
   .section2,
   .section3 {
     padding: 80px 0 120px;
+    .section-title {
+      margin: 50px 0 80px;
+    }
   }
   .section1 {
     .section-title {
       padding: 120px 0 0 10px;
+    }
+  }
+}
+.media-width(@extremum, @break) when (@extremum = 'min') and (@break = @screen__ll) {
+  .brand-content {
+    .features-header {
+      padding: 50px 0;
+    }
+  }
+  .section4 {
+    padding:150px 0 100px;
+  }
+  .section5 {
+    padding:0;
+  }
+  .brand-content {
+    .features-bottom {
+      padding: 50px 0;
+      .feature-logo {
+        margin-left:-30px;
+      }
+    }
+  }
+  .bottom-main {
+    width: calc(~'100% - 200px');
+  }
+  .section5 {
+    .section-title {
+      span {
+        font-size:28px;
+      }
     }
   }
 }
@@ -457,6 +491,21 @@
     font-size:45px!important;
     line-height:55px!important;
   }
+  .section4 {
+    .description {
+      font-size:23px;
+    }
+  }
+  .bottom-main {
+    padding: 30px 0 0 60px;
+  }
+  .features-content {
+    .description {
+      p {
+        font-size:22px;
+      }
+    }
+  }
 }
 .media-width(@extremum, @break) when (@extremum = 'min') and (@break = @screen__m) {
   .section1 {
@@ -464,9 +513,43 @@
       padding:0 20px 0 0;
     }
   }
+  .bottom-main {
+    width:auto;
+    padding: 30px 0 0 15px;
+  }
+  .section4 {
+    .description {
+      font-size:18px;
+    }
+  }
+  .features-content {
+    .description {
+      p {
+        font-size:18px;
+      }
+    }
+  }
+  .section5 {
+    .section-title {
+      span {
+        font-size:18px;
+      }
+    }
+  }
+  .brand-content {
+    .features-bottom {
+      padding: 0;
+      .feature-logo {
+        margin-left:10px;
+      }
+    }
+  }
   .section2,
   .section3 {
     padding: 40px 40px 80px;
+    .section-title {
+      margin: 30px 0;
+    }
   }
   .size-m {
     font-size:30px!important;
@@ -480,12 +563,30 @@
       width:40%;
     }
   }
+  .section4,
+  .section5 {
+    padding:40px;
+  }
+  .brand-content {
+    .features-header {
+      padding: 20px 40px;
+    }
+  }
 }
 
 .media-width(@extremum, @break) when (@extremum = 'max') and (@break = @screen__m) {
   .font16 {
     font-size:16px;
   }
+  .brand-content {
+    .features-bottom {
+      padding: 0;
+      .feature-logo {
+        margin-left:10px;
+      }
+    }
+  }
+
   .brand-content {
     .section1 {
       > div {
@@ -529,7 +630,7 @@
   }
   .section8 {
     .blog-title {
-      .features-title();
+      font-size:24px;
       line-height:40px;
     }
   }
@@ -601,7 +702,6 @@
     }
   }
   .features-content {
-    padding: 0 30px;
     > div {
       width: 100%;
       float:none;
@@ -645,7 +745,6 @@
   }
   .brand-content {
     .features-bottom {
-      margin-top: -30px;
       position: relative;
       padding: 20px 40px;
       overflow: auto;
@@ -729,7 +828,7 @@
   }
   .features-bottom {
     .bottom-main {
-      .features-title ();
+      .features-title();
     }
   }
 }
