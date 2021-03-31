@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<widgets xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Widget:etc/widget.xsd">
+    <widget id="brand_landing_page" class="Bss\BrandLandingPage\Block\Brand\Widget\BrandSignup">
+        <label translate="true">Brand's Signup</label>
+        <description>
+            Signup widget for Brand
+        </description>
+        <parameters>
+            <parameter sort_order="10"
+                       name="brand"
+                       xsi:type="select"
+                       required="true"
+                       visible="true"
+                       source_model="Bss\BrandLandingPage\Model\Config\Source\Brand">
+                <label>Select Brand</label>
+            </parameter>
+            <parameter sort_order="20" name="template" xsi:type="select" required="true" visible="true">
+                <label>Template</label>
+                <options>
+                    <option name="brand-signup" value="brand/brand-signup.phtml" selected="true">
+                        <label translate="true">Brand's Signup Template</label>
+                    </option>
+                </options>
+            </parameter>
+        </parameters>
+    </widget>
+</widgets>
