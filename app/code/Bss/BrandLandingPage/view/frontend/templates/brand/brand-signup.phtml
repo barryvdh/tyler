@@ -27,7 +27,8 @@ $vatDefault = $block->getVatFieldDefault();
 <?php /* Extensions placeholder */ ?>
 <?php echo $block->getCustomerFormRegisterExtraHtml() ?>
 <form class="form create account form-create-account" action="<?php echo $escaper->escapeUrl($block->getPostAction()) ?>" method="post" id="form-validate" enctype="multipart/form-data" autocomplete="off">
-    <input name="signup_sources" type="hidden" value="<?= $block->getBrandCategoryId() ?>" />
+    <input name="signup_sources" type="hidden" value="<?= $escaper->escapeHtmlAttr($block->getBrandCategoryId()) ?>" />
+    <input name="signup_sources_url" type="hidden" value="<?= $escaper->escapeHtmlAttr($block->getUrl('*/*/*', ['_current' => true, '_use_rewrite' => true])) ?>"
     <?php /* @noEscape */ echo $block->getBlockHtml('formkey'); ?>
     <fieldset class="fieldset create info">
         <legend class="legend"><span><?php echo $escaper->escapeHtml(__('Personal Information')) ?></span></legend><br>
