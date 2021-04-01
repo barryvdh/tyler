@@ -1,0 +1,12 @@
+<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" layout="1column" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
+    <body>
+
+        <referenceContainer name="bss.form.additional.info">
+            <block name="signup.sources.field" template="Bss_BrandLandingPage::brand/signup-sources.phtml" />
+        </referenceContainer>
+
+        <referenceBlock name="customer_attribute" class="Bss\BrandLandingPage\Block\Integration\RegisterForm" />
+        <referenceBlock name="personal.information.section" class="Bss\BrandLandingPage\Block\Integration\PersonalInformationSectionAttribute" />
+        <referenceBlock name="signin.information.section" class="Bss\BrandLandingPage\Block\Integration\SigninInformationSectionAttribute" />
+    </body>
+</page>
