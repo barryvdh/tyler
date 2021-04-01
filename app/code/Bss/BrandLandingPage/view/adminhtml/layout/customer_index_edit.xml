@@ -20,6 +20,6 @@
 <page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" layout="admin-2columns-left"
       xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
     <body>
-        <referenceBlock name="bss" template="Bss_BrandLandingPage::tab/view/personal_info.phtml" />
+        <referenceBlock name="bss" class="Bss\BrandLandingPage\Block\Adminhtml\Edit\Tab\Status" template="Bss_BrandLandingPage::tab/view/personal_info.phtml" />
     </body>
 </page>

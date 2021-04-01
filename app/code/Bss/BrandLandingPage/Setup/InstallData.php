@@ -11,6 +11,9 @@ use Magento\Framework\Setup\ModuleDataSetupInterface;
 use Magento\Eav\Model\Entity\Attribute\SetFactory as AttributeSetFactory;
 use Magento\Customer\Setup\CustomerSetupFactory;
 
+/**
+ * Create signup sources customer attribute
+ */
 class InstallData implements InstallDataInterface
 {
     /**

@@ -72,10 +72,12 @@ $createDateStore = $block->getStoreCreateDate();
             <th><?php /* @escapeNotVerified */ echo __('Customer Group:') ?></th>
             <td><?php /* @escapeNotVerified */ echo $block->getGroupName() ?></td>
         </tr>
+        <?php if ($signupSource = $block->getSignupSourcesLabel()): ?>
         <tr>
             <th><?php /* @escapeNotVerified */ echo __('Signup Sources:') ?></th>
-            <td><?php /* @escapeNotVerified */ echo "HeHe" ?></td>
+            <td><?php /* @escapeNotVerified */ echo $signupSource ?></td>
         </tr>
+        <?php endif; ?>
         <?php $status = $block->getStatus();
         if($status):
         ?>
