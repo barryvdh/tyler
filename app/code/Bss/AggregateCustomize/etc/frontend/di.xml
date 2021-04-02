@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
+   <type name="Bss\AggregateCustomize\ViewModel\ImageOutput">
+       <arguments>
+           <argument name="galleryImagesConfig" xsi:type="array">
+               <item name="small_image" xsi:type="array">
+                   <item name="image_id" xsi:type="string">product_page_image_small</item>
+                   <item name="data_object_key" xsi:type="string">small_image_url</item>
+                   <item name="json_object_key" xsi:type="string">thumb</item>
+               </item>
+               <item name="medium_image" xsi:type="array">
+                   <item name="image_id" xsi:type="string">product_page_image_medium</item>
+                   <item name="data_object_key" xsi:type="string">medium_image_url</item>
+                   <item name="json_object_key" xsi:type="string">img</item>
+               </item>
+               <item name="large_image" xsi:type="array">
+                   <item name="image_id" xsi:type="string">product_page_image_large</item>
+                   <item name="data_object_key" xsi:type="string">large_image_url</item>
+                   <item name="json_object_key" xsi:type="string">full</item>
+               </item>
+           </argument>
+       </arguments>
+   </type>
+</config>

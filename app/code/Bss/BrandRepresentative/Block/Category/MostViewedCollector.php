@@ -52,8 +52,13 @@ class MostViewedCollector extends \Magento\Framework\View\Element\Template
      */
     public function isNeedCollectTraffic()
     {
-        return $this->isProductPage() ||
-            $this->getCurrentCategory()->getLevel() >= self::IS_BRAND_CATEGORY_LV;
+        if ($this->isProductPage() ||
+            ($this->getCurrentCategory() && $this->getCurrentCategory()->getLevel() >= self::IS_BRAND_CATEGORY_LV)
+        ) {
+            return true;
+        }
+
+        return false;
     }
 
     /**
