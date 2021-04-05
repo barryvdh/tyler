@@ -10,7 +10,7 @@
             <tab>bss</tab>
             <resource>Magento_Catalog::config_catalog</resource>
             <group id="popup_options" translate="label" type="text" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
-                <label>Pop-up Configuration</label>
+                <label>Sign-up Configuration</label>
                 <field id="width" translate="label" type="text" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
                     <label>Pop-up Width</label>
                     <comment><![CDATA[The Pop-up width size. Example: 500px, 75%]]></comment>
@@ -18,14 +18,6 @@
                 <field id="height" translate="label" type="text" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
                     <label>Pop-up Height</label>
                     <comment><![CDATA[The Pop-up height size. Example: 500px, 75%]]></comment>
-                </field>
-                <field id="openEffect" translate="label" type="select" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
-                    <label>Pop-up Open Effect</label>
-                    <source_model>Bss\CategoryAttributes\Model\Config\Source\AnimationEffect</source_model>
-                </field>
-                <field id="closeEffect" translate="label" type="select" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
-                    <label>Pop-up Close Effect</label>
-                    <source_model>Bss\CategoryAttributes\Model\Config\Source\AnimationEffect</source_model>
                 </field>
             </group>
         </section>
