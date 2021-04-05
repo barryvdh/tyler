@@ -22,14 +22,16 @@ define([
          * @returns {*}
          */
         storeNewVisit: function () {
-            return $.ajax({
-                url: this.options.addNewVisitUrl,
-                data: {
-                    'form_key': $.cookie('form_key')
-                },
-                dataType: 'json',
-                method: 'POST'
-            });
+            if (this.options.addNewVisitUrl) {
+                return $.ajax({
+                    url: this.options.addNewVisitUrl,
+                    data: {
+                        'form_key': $.cookie('form_key')
+                    },
+                    dataType: 'json',
+                    method: 'POST'
+                });
+            }
         }
     });
 

@@ -68,7 +68,9 @@ class MostViewedCollector extends \Magento\Framework\View\Element\Template
      */
     public function getAddNewVisitUrl()
     {
-        $entityId = $this->getCurrentCategory()->getId();
+        if ($this->getCurrentCategory()) {
+            $entityId = $this->getCurrentCategory()->getId();
+        }
         $entityType = MostViewedInterface::TYPE_CATEGORY;
 
         if ($this->isProductPage()) {
@@ -76,10 +78,13 @@ class MostViewedCollector extends \Magento\Framework\View\Element\Template
             $entityType = MostViewedInterface::TYPE_PRODUCT;
         }
 
-        return $this->getUrl(
-            'bss_brandRepresentative/traffic/newVisit',
-            ['entity_id' => $entityId, 'entity_type' => $entityType]
-        );
+        if (isset($entityId) && $entityId) {
+            $this->getUrl(
+                'bss_brandRepresentative/traffic/newVisit',
+                ['entity_id' => $entityId, 'entity_type' => $entityType]
+            );
+        }
+        return false;
     }
 
     /**
