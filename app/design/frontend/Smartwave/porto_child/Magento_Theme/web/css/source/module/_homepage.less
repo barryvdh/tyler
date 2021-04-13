@@ -6,7 +6,8 @@
     .brand-content {
       .main-title {
         margin-top: 125px;
-        width: 44.5%;
+        width: 40%;
+        padding: 15px 50px;
       }
     }
   }
@@ -88,7 +89,7 @@
       list-style: none;
 
       .item {
-        margin: 48px 0;
+        margin: 20px 0;
         float: left;
 
         &:nth-child(3n + 1) {
@@ -120,11 +121,11 @@
     }
     .btn-cms {
       margin: 70px auto 0;
-      max-width: 380px!important;
+      max-width: 320px!important;
       width:100%;
       color:#fff!important;
-      height: 70px;
-      line-height: 47px;
+      height: 60px;
+      line-height: 40px;
     }
   }
   .content-one-two {
@@ -149,20 +150,20 @@
 }
 .media-width(@extremum, @break) when (@extremum = 'min') and (@break = @screen__xl) {
   #banner-slider-home {
-    padding: 70px 0;
+    padding: 20px 0;
   }
   .content-home {
     .brand-content {
       .main-title {
         .tile-for {
-          font-size:60px!important;
+          font-size:45px!important;
         }
       }
     }
   }
   .title-brid {
-    font-size:60px;
-    line-height: 72px;
+    font-size:45px;
+    line-height: 50px;
   }
   .custom-swag {
     .content-contain {
@@ -172,42 +173,62 @@
     }
   }
   .bridging {
-    padding: 20px 0 175px;
+    padding: 20px 0 115px;
     .text-brid {
-      font-size:30px;
-      margin: 60px auto 0;
+      font-size:25px;
+      margin: 35px auto 0;
     }
   }
   .featured-branch-home {
-    padding: 155px 0;
+    padding: 80px 0 110px;
     .item-branch {
-      padding: 40px 0 120px;
+      padding: 0px 0 20px;
+      .item {
+        a {
+          padding:0 30px;
+        }
+      }
     }
   }
   .custom-swag {
-    padding: 210px 0 125px;
+    padding: 80px 0 110px;
     .text-pa {
-      font-size: 30px;
+      font-size: 25px;
       margin: 65px 0 60px;
     }
     .see-more-para {
-      font-size: 48px;
-      line-height: 48px;
+      font-size: 40px;
+      line-height: 40px;
     }
     .btn-cms {
-      max-width: 380px !important;
-      height: 70px;
-      line-height: 47px;
+      max-width: 320px !important;
+      height: 60px;
+      line-height: 40px;
     }
   }
   .content-one-two {
     padding: 125px 0px 142px;
     .find-out {
-      font-size:30px;
-      line-height:36px;
+      font-size:25px;
+      line-height:30px;
     }
     .interest {
-      line-height: 70px;
+      line-height: 50px;
+    }
+  }
+}
+.media-width(@extremum, @break) when (@extremum = 'min') and (@break = @screen__xxl) {
+  .content-home {
+    .btn-cms {
+      font-size:25px;
+      max-width: 280px;
+    }
+  }
+  .custom-swag {
+    .col-img {
+      img {
+        max-width:700px;
+      }
     }
   }
 }
@@ -279,7 +300,7 @@
   .bridging {
     padding: 0 20px 60px;
     .btn-cms {
-      margin: 35px auto 0;
+      margin: 25px auto 0;
     }
     .text-brid {
       font-size:15px;
