@@ -66,13 +66,14 @@ class OrderedProduct extends AbstractDb
                     $filterDate["configTz"],
                     $filterDate["startDate"],
                     $filterDate["endDate"]
-                ));
+                ))->where("state != 'canceled' and state != 'closed'");
             $select->columns(
                 [
                     "total_qty" => new \Zend_Db_Expr(sprintf("SUM(%s)", $this->getTotalQtyField()))
                 ]
             );
 
+            vadu_log($select->assemble());
             return $connection->fetchOne($select);
         } catch (\Exception $e) {
             $this->logger->critical($e);

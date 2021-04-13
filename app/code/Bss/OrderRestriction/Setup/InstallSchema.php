@@ -3,6 +3,8 @@ declare(strict_types=1);
 
 namespace Bss\OrderRestriction\Setup;
 
+use Bss\OrderRestriction\Model\ResourceModel\RefundItem as RefundItemResource;
+use Bss\OrderRestriction\Api\Data\RefundItemInterface as RefundItem;
 use Magento\Framework\DB\Ddl\Table;
 use Magento\Framework\Setup\ModuleContextInterface;
 use Magento\Framework\Setup\SchemaSetupInterface;
@@ -77,5 +79,38 @@ class InstallSchema implements \Magento\Framework\Setup\InstallSchemaInterface
             )->setComment("The Order Restriction Table");
 
         $installer->getConnection()->createTable($table);
+        $table = $installer->getConnection()
+            ->newTable($installer->getTable(RefundItemInterface::TABLE))
+            ->addColumn(
+                RefundItem::ID,
+                Table::TYPE_INTEGER,
+                null,
+                [
+                    'identity' => true,
+                    'unsigned' => true,
+                    'nullable' => false,
+                    'primary' => true
+                ],
+                "Identifier"
+            )->addColumn(
+                RefundItem::ORDER_ID,
+                Table::TYPE_INTEGER,
+                null,
+                [
+                    'unsigned' => true,
+                    'nullable' => false
+                ],
+                "Order id"
+            )->addColumn(
+                RefundItem::CUSTOMER_ID,
+                TABLE::TYPE_INTEGER,
+                null,
+                [
+                    'unsigned' => true,
+                    'nullable' => false
+                ],
+                "Customer id"
+            )->setComment("Customer Refund items");
+        $installer->endSetup();
     }
 }
