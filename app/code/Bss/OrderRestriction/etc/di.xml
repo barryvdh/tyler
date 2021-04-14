@@ -5,4 +5,8 @@
                 type="Bss\OrderRestriction\Model\OrderRule"/>
     <preference for="Bss\OrderRestriction\Api\OrderRuleRepositoryInterface"
                 type="Bss\OrderRestriction\Model\OrderRuleRepository"/>
+    <preference for="Bss\OrderRestriction\Api\RefundItemRepositoryInterface"
+                type="Bss\OrderRestriction\Model\RefundItemRepository"/>
+    <preference for="Bss\OrderRestriction\Api\Data\RefundItemInterface"
+                type="Bss\OrderRestriction\Model\RefundItem"/>
 </config>

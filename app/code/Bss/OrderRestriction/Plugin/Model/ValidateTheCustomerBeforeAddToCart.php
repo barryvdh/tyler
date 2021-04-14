@@ -123,7 +123,7 @@ class ValidateTheCustomerBeforeAddToCart
         }
 
         $relatedProducts = $this->getRelatedProducts($request);
-        $requestProductData = [...$requestProductData, ...$relatedProducts];
+        $requestProductData = array_merge($requestProductData, $relatedProducts);
 
         try {
             $canAddProduct = $this->addCartChecker->canAddProductToCart($requestProductData);
