@@ -80,7 +80,7 @@ class InstallSchema implements \Magento\Framework\Setup\InstallSchemaInterface
 
         $installer->getConnection()->createTable($table);
         $table = $installer->getConnection()
-            ->newTable($installer->getTable(RefundItemInterface::TABLE))
+            ->newTable($installer->getTable(RefundItemResource::TABLE))
             ->addColumn(
                 RefundItem::ID,
                 Table::TYPE_INTEGER,
@@ -102,6 +102,15 @@ class InstallSchema implements \Magento\Framework\Setup\InstallSchemaInterface
                 ],
                 "Order id"
             )->addColumn(
+                RefundItem::PRODUCT_ID,
+                TABLE::TYPE_INTEGER,
+                null,
+                [
+                    'unsigned' => true,
+                    'nullable' => false
+                ],
+                "Product id"
+            )->addColumn(
                 RefundItem::CUSTOMER_ID,
                 TABLE::TYPE_INTEGER,
                 null,
@@ -110,7 +119,15 @@ class InstallSchema implements \Magento\Framework\Setup\InstallSchemaInterface
                     'nullable' => false
                 ],
                 "Customer id"
+            )->addColumn(
+                RefundItem::QTY,
+                Table::TYPE_DECIMAL,
+                '12,4',
+                [
+                    'nullable' => true
+                ]
             )->setComment("Customer Refund items");
+        $installer->getConnection()->createTable($table);
         $installer->endSetup();
     }
 }

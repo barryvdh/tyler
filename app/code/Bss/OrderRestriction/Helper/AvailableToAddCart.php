@@ -149,9 +149,14 @@ class AvailableToAddCart
             )->format("P")
         ];
 
+        $defaultQty = $this->configProvider->getDefaultSaleQtyValue();
+
         foreach ($productDataIds as $productData) {
             $productOrderRule = $this->orderRuleRepository->getByProductId($productData["product_id"]);
-            $allowedSaleQty = $productOrderRule->getSaleQtyPerMonth();
+            $allowedSaleQty = $defaultQty;
+            if ($productOrderRule->getId() && $productOrderRule->getUseConfig()) {
+                $allowedSaleQty = $productOrderRule->getSaleQtyPerMonth();
+            }
 
             if (!isset($productData["product_id"]) ||
                 !$productData["product_id"] ||
