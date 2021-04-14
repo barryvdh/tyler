@@ -31,20 +31,13 @@
   .content-page1 {
     background-color: #2F3C4F;
   }
-  .one-block {
-    .content {
-      float:right;
-      max-width: 885px;
-      padding: 230px 0;
-    }
-  }
   .para-cms {
     color: #FBB43B;
     margin-top: 35px;
   }
   .two-block {
     .title-content {
-      padding: 12px 0 47px 0;
+      padding: 0px 0 30px 0;
     }
   }
   .row-block1 {
@@ -120,7 +113,7 @@
     }
   }
   .row-block3 {
-    padding: 75px 140px 70px;
+    padding: 50px 140px 50px;
     .tile-cms {
       margin-top:0;
       line-height: 48px;
@@ -146,7 +139,7 @@
   }
   .three-block {
     color: #FFEFC8;
-    padding: 80px 0 100px;
+    padding: 50px 0;
     ul {
       font-family: @font-family__bothambook;
       margin: 0;
@@ -154,7 +147,7 @@
     }
     .text-pag {
       font-family: @font-family__bothambook;
-      margin-bottom: 20px;
+      margin-bottom: 10px;
     }
     .btn-cms {
       margin:0 auto;
@@ -198,17 +191,20 @@
   }
   .row-block1 {
     &.row-block3 {
-      padding: 70px 140px 70px;
+      padding: 60px 140px 60px;
     }
   }
 }
 .media-width(@extremum, @break) when (@extremum = 'min') and (@break = @screen__xxl) {
+  .one-block {
+    background-position: left !important;
+  }
   .number-step {
     font-size:150px;
   }
   .tile-cms {
-    font-size:45px;
-    line-height:45px;
+    font-size:40px;
+    line-height:40px;
   }
   .des-step {
     margin-top: 25px;
@@ -274,7 +270,7 @@
   }
   .three-block {
     .text-pag {
-      font-size:25px;
+      font-size:20px;
     }
   }
   .feature-title {
@@ -345,7 +341,7 @@
   }
   .three-block {
     .text-pag {
-      font-size:24px;
+      font-size:20px;
     }
   }
   .feature-title {
@@ -360,7 +356,7 @@
       margin-left:70px;
     }
     &.row-block4 {
-      padding: 70px 148px 70px;
+      padding: 50px 148px 50px;
       .text-step {
         margin-top:20px;
         width: auto;
@@ -369,11 +365,13 @@
   }
   .one-block {
     .content {
-      padding: 70px 0;
+      padding: 30px 0;
+      max-width:1000px;
+      float:right;
     }
   }
   .para-cms {
-    font-size:25px;
+    font-size:20px;
   }
 }
 .media-width(@extremum, @break) when (@extremum = 'min') and (@break = @screen__l) {
@@ -439,12 +437,12 @@
   }
   .three-block {
     ul {
-      font-size:20px;
+      font-size:18px;
     }
   }
   .three-block {
     .text-pag {
-      font-size:24px;
+      font-size:20px;
     }
   }
   .feature-title {
@@ -557,7 +555,7 @@
     }
   }
   .one-block {
-    background-position: center!important;
+    background-position: -70px center!important;
     .content {
       padding: 100px 0;
     }
