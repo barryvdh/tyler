@@ -54,6 +54,11 @@
                                 <?php /* @escapeNotVerified */ echo $block->getProductPrice($_item) ?>
                             <?php endif; ?>
                         <?php endif; ?>
+                        <?php if ($_product->isSaleable() && $block->isStockAlertAllowed()): ?>
+                            <?php if (!$_item->isSaleable()): ?>
+                                <div id="stock-notice-elem-grouped-<?php echo $_item->getId()?>" title="<?php /* @escapeNotVerified */ echo __('Notify') ?>"></div>
+                            <?php endif; ?>
+                        <?php endif; ?>
                     </td>
                     <?php if ($_product->isSaleable()): ?>
                         <td data-th="<?php echo $escaper->escapeHtml(__('Qty')); ?>" class="col qty">
