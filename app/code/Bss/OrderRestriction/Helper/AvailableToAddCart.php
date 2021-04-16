@@ -154,7 +154,7 @@ class AvailableToAddCart
         foreach ($productDataIds as $productData) {
             $productOrderRule = $this->orderRuleRepository->getByProductId($productData["product_id"]);
             $allowedSaleQty = $defaultQty;
-            if ($productOrderRule->getId() && $productOrderRule->getUseConfig()) {
+            if ($productOrderRule->getId() && !$productOrderRule->getUseConfig()) {
                 $allowedSaleQty = $productOrderRule->getSaleQtyPerMonth();
             }
 
