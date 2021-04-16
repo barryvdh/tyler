@@ -4,6 +4,7 @@
     <module name="Bss_AggregateCustomize" setup_version="1.0.0">
         <sequence>
             <module name="Bss_ProductStockAlert"/>
+            <module name="Bss_CompanyAccount"/>
         </sequence>
     </module>
 </config>
