@@ -298,6 +298,7 @@ return [
         'Bss_BrandSalesReport' => 1,
         'Bss_CategoryAttributes' => 1,
         'Bss_CompanyAccount' => 1,
+        'Bss_Core' => 1,
         'Bss_CustomerAttributes' => 1,
         'Bss_CustomerToSubUser' => 1,
         'Bss_CustomizeAmastyRolePermissions' => 1,
@@ -308,6 +309,7 @@ return [
         'Bss_HideProductField' => 1,
         'Bss_OrderRestriction' => 1,
         'Bss_AggregateCustomize' => 1,
+        'Bss_Reindex' => 1,
         'Dotdigitalgroup_Email' => 1,
         'Dotdigitalgroup_Chat' => 1,
         'Klarna_Core' => 1,
@@ -332,6 +334,7 @@ return [
         'Temando_ShippingRemover' => 1,
         'Vertex_Tax' => 1,
         'Vertex_AddressValidation' => 1,
-        'Yotpo_Yotpo' => 1
+        'Yotpo_Yotpo' => 1,
+        'Zoho_Salesiq' => 1
     ]
 ];
