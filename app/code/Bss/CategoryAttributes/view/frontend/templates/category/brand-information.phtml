@@ -31,8 +31,8 @@ if ($brandCover) {
 <div class="category-top <?php if ($_description = $category->getShortDescription()): ?>have-des<?php endif; ?>">
 	<div class="container">
 		<div class="row">
-			<div class="col-md-3"><?php echo $block->getChildHtml('category.image');?></div>
-			<div class="col-md-9 col-right">
+			<div class="col-md-3 col-lg-2"><?php echo $block->getChildHtml('category.image');?></div>
+			<div class="col-md-9 col-lg-10 col-right">
 				<div class="name-category">
 					<h2 class="title-category title-nomal">
 						<?php if ($_categoryname = $category->getName()): ?>
