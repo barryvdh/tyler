@@ -37,4 +37,17 @@ class Permissions extends \Bss\CompanyAccount\Model\Config\Source\Permissions
         }
         return $output;
     }
+
+    /**
+     * Get mapped rules data array for tree js
+     *
+     * @return array
+     */
+    public function mappedDataArray()
+    {
+        $output = parent::mappedDataArray();
+        $output['data'] = __("Company Account");
+
+        return $output;
+    }
 }
