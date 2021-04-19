@@ -1,0 +1,51 @@
+.bss-stock-list.products, .bss-stock-list.products ol {
+    margin: 4px 0px;
+}
+.bss-stock-list ol .product-item-info .product-image-container {
+    min-width: inherit;
+    width: 125px;
+}
+
+.bss-stock-list ol .product-item-info .product-image-container span.product-image-container {
+    margin: 0;
+    width: 100%;
+}
+
+.bss-stock-list ol .product-item-info .product-image-container span.product-image-container .product-image-wrapper {
+    height: 150px;
+    position: relative;
+    width: 100%;
+    border-radius: 7px;
+    border: 1px dotted #ddd;
+}
+
+.bss-stock-list ol .product-item-info .product-image-container span.product-image-container .product-image-wrapper img {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: auto;
+}
+
+.bss-stock-list ol li.product-item {
+    padding: 10px 10px 10px 0;
+}
+
+.bss-stock-list ol li.product-item:not(:last-child) {
+    border-bottom: 1px solid #ddd;
+}
+
+.bss-stock-list ol .product-item-info .product-item-details {
+    padding: 10px 0;
+    width: calc(100% - 155px);
+}
+
+.productstockalert-index-index .bss-stock-list .product-image-container {
+    margin-right: 30px;
+}
+
+.order-products-toolbar.bss-stock-index .pager {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
