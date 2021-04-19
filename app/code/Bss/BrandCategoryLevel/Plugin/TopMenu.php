@@ -45,6 +45,8 @@ class TopMenu
     }
 
     /**
+     * Get brand category
+     *
      * @param \Magento\Theme\Block\Html\Topmenu $subject
      * @param string $outermostClass
      * @param string $childrenWrapClass
@@ -80,6 +82,9 @@ class TopMenu
                     $newMenuItems[] = $menuItem;
                 }
             }
+
+            // Sort order by name
+            usort($newMenuItems, [$this, "sort"]);
             //remove all menu items
             foreach ($firstLevel as $childNode) {
                 $menu->removeChild($childNode);
@@ -89,5 +94,25 @@ class TopMenu
                 $menu->addChild($newMenuItem);
             }
         }
+    }
+
+    /**
+     * Node compare
+     *
+     * @param Node $node1
+     * @param Node $node2
+     * @return int
+     * @SuppressWarnings(PHPMD.UnusedPrivateMethod)
+     */
+    private function sort(
+        \Magento\Framework\Data\Tree\Node $node1,
+        \Magento\Framework\Data\Tree\Node $node2
+    ) {
+        $al = strtolower($node1->getName());
+        $bl = strtolower($node2->getName());
+        if ($al == $bl) {
+            return 0;
+        }
+        return ($al > $bl) ? +1 : -1;
     }
 }
