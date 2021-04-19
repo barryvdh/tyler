@@ -7,35 +7,53 @@
     }
   }
   .nomal {
-    font-size: 45px;
+    font-size: 40px;
     font-weight: 600;
     color: #ffeec7;
-    line-height: 55px;
+    line-height: 40px;
   }
   .brand-content,
   .detonate {
     .main-title {
-      width: 40%;
+      width: 38.5%;
       background: #62a9a3;
       text-align: right;
       color: #ffeec7;
-      padding: 20px 50px 20px 0;
+      padding: 10px 50px 10px 0;
       margin-top: 50px;
       border-radius: 0 60px 60px 0;
       min-width: 320px;
       h2 {
         font-weight: 600;
         margin: 5px 70px 5px 0;
+        font-size:40px;
       }
     }
   }
-.section1 {
-  > div {
-    float:left;
+  .section2,
+  .section3 {
+    .owl-theme {
+      .owl-controls {
+        margin-top:0;
+      }
+    }
   }
+  .section1 {
   .section-title {
     max-width: 600px;
     padding: 120px 0 0 10px;
+  }
+  .img-mollo,
+  .section-title {
+    width: 49.5%;
+    vertical-align: middle;
+    display: inline-block;
+    float: none;
+  }
+  .img-mollo {
+    img {
+      max-width:450px;
+    }
   }
 }
 .brand-content {
@@ -78,13 +96,16 @@
     }
     .feature-logo {
       margin-left: -30px;
+      img {
+        max-width:165px;
+      }
     }
   }
   .brands-slider {
     .owl-carousel {
       .owl-item {
         img {
-          max-width: 250px;
+          max-width: 210px;
           margin:0 auto;
         }
       }
@@ -131,8 +152,8 @@
 }
 .brand-content {
   .section1 {
-    max-width: 1600px;
-    margin: 150px auto 100px;
+    max-width: 1140px;
+    margin: 40px auto 0px;
   }
 }
   .section4,
@@ -156,12 +177,12 @@
       max-width: 1140px;
       margin: 0 auto;
       color: #fbb43b;
-      font-size: 23px;
+      font-size: 22px;
       font-weight: 500;
       padding-top: 60px;
       p {
         max-width: 623px;
-        margin-bottom: 30px;
+        margin-bottom: 10px;
       }
     }
   }
@@ -182,10 +203,12 @@
     p {
       max-width: 440px;
       margin:0 auto;
+      font-size:20px;
+      line-height: 25px;
     }
   }
   .bottom-main {
-    padding: 30px 0 0 60px;
+    padding: 0px 0 0 60px;
   }
   .features-content {
     max-width: 1140px;
@@ -235,11 +258,11 @@
         line-height:33px;
         font-size:22px;
         &.main {
-          font-size: 45px;
+          font-size: 40px;
           font-weight: 700;
           max-width: 340px;
-          line-height: 50px;
-          margin-bottom: 35px;
+          line-height: 40px;
+          margin-bottom: 25px;
         }
       }
     }
@@ -265,7 +288,7 @@
   .section2,
   .section3 {
     .section-title {
-      margin: 50px 0 80px;
+      margin: 50px 0 45px;
     }
   }
   .section2 {
@@ -326,16 +349,15 @@
     .slider {
       background: url('../images/quote-begin.png') left top no-repeat, url('../images/quote-end.png') right bottom no-repeat;
       background-size: 240px;
-      padding: 100px 0;
     }
   }
   .section9 {
-    padding:150px 0;
+    padding:50px 0;
     text-align: center;
     .section-title {
       max-width:700px;
       text-align: left;
-      margin:0 auto 80px;
+      margin:0 auto 50px;
     }
   }
   .detonate {
@@ -352,8 +374,8 @@
       font-weight:600;
     }
     .section-title {
-      font-size: 45px;
-      line-height: 55px;
+      font-size: 35px;
+      line-height: 40px;
       margin-bottom: 60px;
       font-weight:600;
     }
@@ -432,44 +454,30 @@
   }
 }
 
-.media-width(@extremum, @break) when (@extremum = 'min') and (@break = @screen__xxxl) {
-  .section1 {
-    .section-title,
-    .img-mollo {
-      width: auto;
-    }
-  }
-}
-
 .media-width(@extremum, @break) when (@extremum = 'min') and (@break = @screen__xl) {
   .section2,
   .section3 {
-    padding: 80px 0 120px;
+    padding: 5px 0 45px;
     .section-title {
       margin: 50px 0 80px;
-    }
-  }
-  .section1 {
-    .section-title {
-      padding: 120px 0 0 10px;
     }
   }
 }
 .media-width(@extremum, @break) when (@extremum = 'min') and (@break = @screen__ll) {
   .brand-content {
     .features-header {
-      padding: 50px 0;
+      padding: 15px 0 0;
     }
   }
   .section4 {
-    padding:150px 0 100px;
+    padding:40px 0 10px;
   }
   .section5 {
-    padding:0;
+    padding:30px 0 0;
   }
   .brand-content {
     .features-bottom {
-      padding: 50px 0;
+      padding: 15px 0 5px;
       .feature-logo {
         margin-left:-30px;
       }
@@ -506,8 +514,71 @@
       }
     }
   }
+  .brand-content {
+    .section-title {
+      p {
+        font-size:40px;
+      }
+    }
+  }
+  .features-title,
+  .bottom-main {
+    p {
+      font-size:40px;
+      line-height:40px;
+    }
+  }
+  .brand-content {
+    .main-title {
+      h2 {
+        font-size:40px;
+      }
+    }
+  }
+  .section8 {
+    .blog-title {
+      font-size:40px;
+    }
+  }
+  .features-header {
+    .feature-logo {
+      max-width: 200px;
+    }
+  }
 }
 .media-width(@extremum, @break) when (@extremum = 'min') and (@break = @screen__m) {
+  .features-header {
+    .feature-logo {
+      max-width: 165px;
+    }
+  }
+  .features-title,
+  .bottom-main {
+    p {
+      font-size:30px;
+      line-height:30px;
+    }
+  }
+  .brand-content {
+    .main-title {
+      h2 {
+        font-size:30px;
+      }
+    }
+  }
+  .brand-content {
+    .features-header {
+      .features-title {
+        padding-top: 30px;
+      }
+    }
+    .section-title {
+      p {
+        font-size:30px;
+      }
+    }
+  }
+
   .section1 {
     .section-title {
       padding:0 20px 0 0;
@@ -555,14 +626,6 @@
     font-size:30px!important;
     line-height:40px!important;
   }
-  .section1 {
-    .section-title {
-      width: 60%;
-    }
-    .img-mollo {
-      width:40%;
-    }
-  }
   .section4,
   .section5 {
     padding:40px;
@@ -570,6 +633,11 @@
   .brand-content {
     .features-header {
       padding: 20px 40px;
+    }
+  }
+  .section8 {
+    .blog-title {
+      font-size:30px;
     }
   }
 }
@@ -631,7 +699,7 @@
   .section8 {
     .blog-title {
       font-size:24px;
-      line-height:40px;
+      line-height:25px;
     }
   }
   .features-content {
@@ -811,6 +879,18 @@
   .section4,
   .section5 {
     padding: 40px;
+  }
+  .section8 {
+    padding: 15px 0;
+  }
+  .brand-content {
+    .features-bottom {
+      .feature-logo {
+        img {
+          max-width:100%;
+        }
+      }
+    }
   }
 }
 .media-width(@extremum, @break) when (@extremum = 'max') and (@break = @screen__xs) {
