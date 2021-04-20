@@ -16,7 +16,4 @@
             </argument>
         </arguments>
     </virtualType>
-
-    <preference for="Magento\Catalog\Plugin\Block\Topmenu"
-                type="Bss\BrandCategoryLevel\Plugin\Block\Topmenu"/>
 </config>
