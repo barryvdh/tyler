@@ -1,0 +1,53 @@
+<?php /**
+ * BSS Commerce Co.
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the EULA
+ * that is bundled with this package in the file LICENSE.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://bsscommerce.com/Bss-Commerce-License.txt
+ *
+ * @category  BSS
+ * @package   Bss_Popub
+ * @author    Extension Team
+ * @copyright Copyright (c) 2018-2020 BSS Commerce Co. ( http://bsscommerce.com )
+ * @license   http://bsscommerce.com/Bss-Commerce-License.txt
+ */
+// @codingStandardsIgnoreFile
+?>
+<?php
+/** @var \Magento\Newsletter\Block\Subscribe $block */
+?>
+<div class="block newsletter ">
+    <div class="title-popup"><strong><?= $block->escapeHtml(__('Subscribe to Newsletter!')) ?></strong></div>
+    <div class="content">
+        <form class="form subscribe"
+              novalidate
+              action="<?= $block->escapeUrl($block->getFormActionUrl()) ?>"
+              method="post"
+              id="newsletter-validate-detail">
+            <div class="field newsletter">
+                <div class="control">
+                    <label for="newsletter">
+                        <span class="label">
+                            <?= $block->escapeHtml(__('Sign Up for Our Newsletter:')) ?>
+                        </span>
+                        <input name="email" type="email" id="newsletter"
+                               placeholder="<?= $block->escapeHtmlAttr(__('Enter your email address')) ?>"
+                               data-validate="{required:true, 'validate-email':true}"
+                        />
+                    </label>
+                </div>
+            </div>
+            <div class="actions">
+                <button class="action subscribe primary"
+                        title="<?= $block->escapeHtmlAttr(__('Subscribe')) ?>"
+                        type="submit"
+                        aria-label="Subscribe">
+                    <span><?= $block->escapeHtml(__('Send')) ?></span>
+                </button>
+            </div>
+        </form>
+    </div>
+</div>

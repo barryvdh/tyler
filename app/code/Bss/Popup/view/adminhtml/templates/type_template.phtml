@@ -1,0 +1,34 @@
+<?php
+/**
+ * BSS Commerce Co.
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the EULA
+ * that is bundled with this package in the file LICENSE.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://bsscommerce.com/Bss-Commerce-License.txt
+ *
+ * @category  BSS
+ * @package   Bss_Popub
+ * @author    Extension Team
+ * @copyright Copyright (c) 2018-2020 BSS Commerce Co. ( http://bsscommerce.com )
+ * @license   http://bsscommerce.com/Bss-Commerce-License.txt
+ */
+// @codingStandardsIgnoreFile
+?>
+<?php
+/**
+ * @var Magento\Backend\Block\Template $block
+ */
+?>
+<script type="text/x-magento-init">
+    {
+        "*":
+            {
+            "Bss_Popup/js/type_template": {
+                "urlTypeTemplate": "<?= $block->getUrl("bss_popup/template/type") ?>"
+            }
+        }
+    }
+</script>

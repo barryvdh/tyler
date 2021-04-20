@@ -1,0 +1,56 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * BSS Commerce Co.
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the EULA
+ * that is bundled with this package in the file LICENSE.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://bsscommerce.com/Bss-Commerce-License.txt
+ *
+ * @category   BSS
+ * @package    Bss_Popup
+ * @author     Extension Team
+ * @copyright  Copyright (c) 2018-2019 BSS Commerce Co. ( http://bsscommerce.com )
+ * @license    http://bsscommerce.com/Bss-Commerce-License.txt
+ */
+-->
+<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd"
+      layout="admin-2columns-left">
+    <update handle="editor"/>
+    <body>
+        <referenceContainer name="content">
+            <block class="Bss\Popup\Block\Adminhtml\Popup\Edit" name="bss_popup_popup_edit" />
+            <block class="Magento\Framework\View\Element\Template" name="bss_popup_popup_type_template" template="Bss_Popup::type_template.phtml"/>
+        </referenceContainer>
+        <referenceContainer name="left">
+            <block class="Bss\Popup\Block\Adminhtml\Popup\Edit\Tabs" name="bss_popup_popup_tabs">
+                <block class="Bss\Popup\Block\Adminhtml\Popup\Edit\Tab\Popup"
+                       name="bss_popup_popup_edit_tab_general"/>
+                <block class="Bss\Popup\Block\Adminhtml\Popup\Edit\Tab\Display"
+                       name="bss_popup_popup_edit_tab_display"/>
+                <block class="Bss\Popup\Block\Adminhtml\Popup\Edit\Tab\Content"
+                       name="bss_popup_popup_edit_tab_content"  />
+                <block name="bss_popup_popup_edit_tab_contentd" template="Bss_Popup::type_template.phtml" />
+
+                <action method="addTab">
+                    <argument name="name" xsi:type="string">general</argument>
+                    <argument name="block" xsi:type="string">bss_popup_popup_edit_tab_general</argument>
+                </action>
+
+                <action method="addTab">
+                    <argument name="name" xsi:type="string">display</argument>
+                    <argument name="block" xsi:type="string">bss_popup_popup_edit_tab_display</argument>
+                </action>
+
+                <action method="addTab">
+                    <argument name="name" xsi:type="string">content</argument>
+                    <argument name="block" xsi:type="string">bss_popup_popup_edit_tab_content</argument>
+                </action>
+            </block>
+        </referenceContainer>
+    </body>
+</page>

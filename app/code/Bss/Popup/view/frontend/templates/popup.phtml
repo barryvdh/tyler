@@ -1,0 +1,130 @@
+<?php
+/**
+ * BSS Commerce Co.
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the EULA
+ * that is bundled with this package in the file LICENSE.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://bsscommerce.com/Bss-Commerce-License.txt
+ *
+ * @category   BSS
+ * @package    Bss_Popup
+ * @author     Extension Team
+ * @copyright  Copyright (c) 2018-2019 BSS Commerce Co. ( http://bsscommerce.com )
+ * @license    http://bsscommerce.com/Bss-Commerce-License.txt
+ */
+
+// @codingStandardsIgnoreFile
+
+/**
+ * Block
+ *
+ * @var $block \Bss\Popup\Block\Popup
+ */
+$postUrl = $block->getBaseUrl() . 'popup/update/displayed';
+$checkTimeUrl = $block->getBaseUrl() . 'popup/render/time';
+$popup = $block->getPopup();
+
+if ($popup) {
+    $flagTop = ($popup['position'] <= \Bss\Popup\Model\Source\Position::TOP_RIGHT) ? "true" : "false";
+    $flagRight = (($popup['position'] == \Bss\Popup\Model\Source\Position::TOP_RIGHT) ||
+        ($popup['position'] == \Bss\Popup\Model\Source\Position::MIDDLE_RIGHT)) ?
+        "float:right;" : "";
+    $flagLeft = (($popup['position'] == \Bss\Popup\Model\Source\Position::TOP_LEFT) ||
+        ($popup['position'] == \Bss\Popup\Model\Source\Position::MIDDLE_LEFT)) ?
+        "margin: 0 0;" : "";
+}
+
+?>
+
+<?php if ($popup): ?>
+    <?php if ($popup['popup_css']): ?>
+        <style type="text/css">
+            <?php echo $popup['popup_css'] ?>
+        </style>
+    <?php endif; ?>
+    <?php
+    $templatepopup = $block->getTypeTemplatePopup();
+    switch ($templatepopup) {
+        case "1":
+            $templatepopup = 'template-contact-form';
+            break;
+        case "2":
+            $templatepopup = 'template-age-verification';
+            break;
+        case "3":
+            $templatepopup = 'template-newsletter';
+            break;
+        case "4":
+            $templatepopup = 'template-hot-deals';
+            break;
+        case "5":
+            $templatepopup = 'template-social-sharing';
+            break;
+        default:
+            $templatepopup = '';
+    }
+    ?>
+
+    <div class="popup_wrapper mfp-with-anim" style="
+    <?php if ($flagLeft === "" && $flagRight === "") {
+        echo "margin:auto";
+    } else {
+        echo $flagRight . $flagLeft;
+    } ?>" id="<?php echo $templatepopup; ?>">
+        <div class="bss_popup popup_content">
+            <?php echo $block->filterContent($popup['popup_content']) ?>
+        </div>
+    </div>
+    <script type="text/x-magento-init">
+        {
+        "*":
+            {
+                "Bss_Popup/js/initpopup": {
+                    "popupId": <?php echo $popup['popup_id'] ?>,
+                    "popupIsAllowedDisplay": <?php echo $block->popupIsAllowedDisplay($popup) ?>,
+                    "eventDisplay": <?php echo $popup['event_display'] ?>,
+                    "hideAfter": <?php echo $popup['hide_after'] ?>,
+                    "effectDisplay": <?php echo $popup['effect_display'] ?>,
+                    "afterLoad": <?php echo $popup['after_load'] ?>,
+                    "afterScroll": <?php echo $popup['after_scroll'] ?>,
+                    "popupPages": <?php echo $popup['page_view'] ?>,
+                    "pagesViewed": <?php echo $block->getPagesViewed() ?>,
+                    "animation": "<?php echo $block->getAnimation($popup) ?>",
+                    "updateUrl": "<?php echo $postUrl ?>",
+                    "flagTop": <?php echo $flagTop ?>,
+                    "checkTimeUrl": "<?php echo $checkTimeUrl ?>",
+                    "typeTemplatePopup": "<?= $block->getTypeTemplatePopup() ?>",
+                    "popupFrequently": <?php echo $popup['frequently']?>,
+                    "preview": <?= $block->isPreviewMode() ?>
+                }
+            }
+        }
+    </script>
+    <?php if ($block->getTypeTemplatePopup() == \Bss\Popup\Model\Source\Template::TEMPLATE_AGE_VERIFICATION): ?>
+        <script type="text/x-magento-init">
+        {
+        "*": {"Bss_Popup/js/age_verification":{}}
+        }
+
+        </script>
+    <?php endif; ?>
+<?php endif; ?>
+<script type="text/x-magento-init">
+    {
+        "#contact-form": {
+            "validation": {}
+        }
+    }
+</script>
+<script type="text/x-magento-init">
+    {
+        "#newsletter-validate-detail": {
+            "validation": {
+                "errorClass": "mage-error"
+            }
+        }
+    }
+</script>

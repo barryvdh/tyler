@@ -1,0 +1,33 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * BSS Commerce Co.
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the EULA
+ * that is bundled with this package in the file LICENSE.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://bsscommerce.com/Bss-Commerce-License.txt
+ *
+ * @category   BSS
+ * @package    Bss_AdminPreview
+ * @author     Extension Team
+ * @copyright  Copyright (c) 2017-2018 BSS Commerce Co. ( http://bsscommerce.com )
+ * @license    http://bsscommerce.com/Bss-Commerce-License.txt
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:Event/etc/events.xsd">
+    <event name="layout_load_before">
+        <observer name="bss_adminpreview_layout_load_before" instance="Bss\AdminPreview\Observer\LayoutLoadBefore" />
+    </event>
+    <event name="backend_auth_user_login_success">
+        <observer name="bss_adminpreview_login_success_observer" instance="Bss\AdminPreview\Observer\AdminLoginSucceeded" />
+    </event>
+    <event name="catalog_block_product_list_collection">
+        <observer name="bss_catalog_product_collection_load_before" instance="Bss\AdminPreview\Observer\AddFilterToProductCollectionObserver"/>
+    </event>
+    <event name="catalog_controller_product_view">
+        <observer name="bss_catalog_controller_product_view" instance="Bss\AdminPreview\Observer\CatalogProductViewObserver"/>
+    </event>
+</config>
