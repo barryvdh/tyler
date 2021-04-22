@@ -165,4 +165,14 @@ class QuickSet implements HttpPostActionInterface
     {
         return true;
     }
+
+    /**
+     * Get request
+     *
+     * @return \Magento\Framework\App\RequestInterface
+     */
+    public function getRequest()
+    {
+        return $this->request;
+    }
 }
