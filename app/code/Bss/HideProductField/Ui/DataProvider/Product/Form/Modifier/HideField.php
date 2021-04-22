@@ -232,7 +232,6 @@ class HideField extends AbstractModifier
      */
     protected function downloadableProduct(array &$meta)
     {
-        dd($meta['downloadable']['children']['container_links']['children']['link']['children']['record'], $meta);
         if (isset($meta["downloadable"]["children"]["is_downloadable"]["arguments"]["data"]["config"]["component"])) {
             $meta["downloadable"]["children"]["is_downloadable"]["arguments"]["data"]["config"]["component"]
                 = "Bss_HideProductField/js/components/product/is-downloadable-handler";
