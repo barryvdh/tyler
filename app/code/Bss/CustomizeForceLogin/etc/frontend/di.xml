@@ -5,15 +5,15 @@
                type="Bss\CustomizeForceLogin\Plugin\Cart\Add"
                sortOrder="20" />
    </type>
-    <type name="Bss\ForceLogin\Controller\Account\Login">
-        <plugin name="set_previous_url"
-                type="Bss\CustomizeForceLogin\Plugin\Controller\Account\Login"
-                sortOrder="20" />
-    </type>
+<!--    <type name="Bss\ForceLogin\Controller\Account\Login">-->
+<!--        <plugin name="set_previous_url"-->
+<!--                type="Bss\CustomizeForceLogin\Plugin\Controller\Account\Login"-->
+<!--                sortOrder="20" />-->
+<!--    </type>-->
 
-    <type name="Bss\ForceLogin\Plugin\Customer\LoginPost">
-        <plugin name="customize_redirect_referer_url"
-                type="Bss\CustomizeForceLogin\Plugin\Controller\Account\LoginPost"
-                sortOrder="20"/>
-    </type>
+<!--    <type name="Bss\ForceLogin\Plugin\Customer\LoginPost">-->
+<!--        <plugin name="customize_redirect_referer_url"-->
+<!--                type="Bss\CustomizeForceLogin\Plugin\Controller\Account\LoginPost"-->
+<!--                sortOrder="20"/>-->
+<!--    </type>-->
 </config>

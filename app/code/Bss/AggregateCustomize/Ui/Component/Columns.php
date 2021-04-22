@@ -9,12 +9,12 @@ use Magento\Framework\View\Element\UiComponentInterface;
  * Class Columns
  * Display specific columns for brand manager
  */
-class Columns extends \Magento\Catalog\Ui\Component\Listing\Columns
+class Columns extends \Bss\ProductGridInlineEditor\Ui\Component\Listing\Columns
 {
     /**
      * @var Data
      */
-    private $helper;
+    protected $aggregateHelper;
 
     /**
      * Visible columns in grid
@@ -35,23 +35,38 @@ class Columns extends \Magento\Catalog\Ui\Component\Listing\Columns
     /**
      * Columns constructor.
      *
-     * @param Data $helper
      * @param \Magento\Framework\View\Element\UiComponent\ContextInterface $context
      * @param \Magento\Catalog\Ui\Component\ColumnFactory $columnFactory
      * @param \Magento\Catalog\Ui\Component\Listing\Attribute\RepositoryInterface $attributeRepository
+     * @param \Magento\Framework\View\Element\UiComponentFactory $componentFactory
+     * @param \Bss\ProductGridInlineEditor\Helper\Data $productGridHelper
+     * @param \Magento\Framework\App\Request\Http $request
+     * @param Data $helper
      * @param array $components
      * @param array $data
      */
     public function __construct(
-        Data $helper,
         \Magento\Framework\View\Element\UiComponent\ContextInterface $context,
         \Magento\Catalog\Ui\Component\ColumnFactory $columnFactory,
         \Magento\Catalog\Ui\Component\Listing\Attribute\RepositoryInterface $attributeRepository,
+        \Magento\Framework\View\Element\UiComponentFactory $componentFactory,
+        \Bss\ProductGridInlineEditor\Helper\Data $productGridHelper,
+        \Magento\Framework\App\Request\Http $request,
+        Data $helper,
         array $components = [],
         array $data = []
     ) {
-        $this->helper = $helper;
-        parent::__construct($context, $columnFactory, $attributeRepository, $components, $data);
+        $this->aggregateHelper = $helper;
+        parent::__construct(
+            $context,
+            $columnFactory,
+            $attributeRepository,
+            $componentFactory,
+            $productGridHelper,
+            $request,
+            $components,
+            $data
+        );
     }
 
     /**
@@ -62,7 +77,7 @@ class Columns extends \Magento\Catalog\Ui\Component\Listing\Columns
     public function prepare()
     {
         parent::prepare();
-        if (!$this->helper->isBrandManager()) {
+        if (!$this->aggregateHelper->isBrandManager()) {
             return;
         }
         /**

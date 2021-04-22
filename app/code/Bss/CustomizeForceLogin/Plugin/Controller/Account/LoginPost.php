@@ -61,7 +61,7 @@ class LoginPost
             $isEnabled = $this->forceLoginHelper->isEnable();
             $previousUrl = $this->accountRedirect->getRefererUrl();
             $moduleAfterLoginConfig = $this->forceLoginHelper->getRedirectUrl();
-            
+
             if ($isEnabled && $previousUrl && $moduleAfterLoginConfig == "previous") {
                 $this->accountRedirect->clearRefererUrl();
                 $resultRedirect->setUrl($previousUrl);

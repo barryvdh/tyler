@@ -10,6 +10,11 @@
             <argument name="moduleName" xsi:type="string">Bss_AggregateCustomize</argument>
         </arguments>
     </type>
+    <type name="Bss\AdminPreview\Controller\Preview\Index">
+        <plugin name="Bss_AggregateCustomize::fix_preview"
+                type="Bss\AggregateCustomize\Plugin\AdminPreview\Controller\Preview\Index"
+                sortOrder="30" />
+    </type>
     <preference for="Bss\CompanyAccount\Model\Config\Source\SubRole\Converter"
                 type="Bss\AggregateCustomize\Model\Config\Source\SubRole\Converter"/>
     <preference for="Bss\CompanyAccount\Model\Config\Source\Permissions"

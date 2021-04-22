@@ -5,6 +5,8 @@
         <sequence>
             <module name="Bss_ProductStockAlert"/>
             <module name="Bss_CompanyAccount"/>
+            <module name="Bss_ProductGridInlineEditor"/>
+            <module name="Bss_AdminPreview"/>
         </sequence>
     </module>
 </config>
