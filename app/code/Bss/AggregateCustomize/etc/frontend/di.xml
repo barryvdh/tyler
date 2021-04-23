@@ -21,4 +21,9 @@
            </argument>
        </arguments>
    </type>
+    <type name="Magento\Catalog\Controller\Product\View">
+        <plugin name="Bss_AggregateCustomize::admin_view_restrict_product"
+                type="Bss\AggregateCustomize\Plugin\Controller\Catalog\Product\View"
+                sortOrder="50" />
+    </type>
 </config>

@@ -10,4 +10,7 @@
                 type="Bss\AggregateCustomize\Plugin\Notification\Controller\Index"
                 sortOrder="20" />
     </type>
+
+    <preference for="Bss\AdminPreview\Block\Adminhtml\OrderedItems"
+                type="Bss\AggregateCustomize\Block\Adminhtml\OrderedItems"/>
 </config>

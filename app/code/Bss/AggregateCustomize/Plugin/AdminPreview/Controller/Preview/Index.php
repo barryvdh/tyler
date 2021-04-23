@@ -2,11 +2,14 @@
 declare(strict_types=1);
 namespace Bss\AggregateCustomize\Plugin\AdminPreview\Controller\Preview;
 
-
 use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Framework\Controller\Result\RedirectFactory;
 use Magento\Store\Model\StoreManagerInterface;
 
+/**
+ * Class Index
+ * rewrite preview controller
+ */
 class Index
 {
     /**
