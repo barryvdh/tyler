@@ -311,7 +311,7 @@ return [
         'Bss_BrandLandingPage' => 1,
         'Bss_HideProductField' => 1,
         'Bss_OrderRestriction' => 1,
-        'Bss_Popup' => 0,
+        'Bss_Popup' => 1,
         'Bss_AggregateCustomize' => 1,
         'Bss_CustomizeProductStockAlert' => 1,
         'Bss_Reindex' => 1,

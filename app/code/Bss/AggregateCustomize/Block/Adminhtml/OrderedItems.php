@@ -193,67 +193,63 @@ class OrderedItems extends \Bss\AdminPreview\Block\Adminhtml\OrderedItems
                         break;
 
                     case 'qty_ordered':
-                        $qty_ordered = round($orderItem->getQtyOrdered());
-                        if ($parentPersistent) {
-                            $qty_ordered = $this->renderTdElementPreview($_parentItemId, $qty_ordered);
-                        } else {
-                            $qty_ordered = $this->renderTdElementProductType($itemProductType, $itemId, $qty_ordered, true);
-                        }
-                        array_push($columnsHtml[$key], $qty_ordered);
+                        $this->processOrderedQty(
+                            $columnsHtml,
+                            $parentPersistent,
+                            [
+                                "item" => $orderItem,
+                                "parent" => $_parentItem
+                            ],
+                            $key
+                        );
                         break;
 
                     case 'subtotal':
-                        $subtotal = $this->formatPrice($orderItem->getRowTotal());
-                        if ($parentPersistent) {
-                            if ($parentProductType == 'configurable') {
-                                $subtotal = $this->formatPrice($_parentItem->getRowTotal());
-                            }
-                            $subtotal = $this->renderTdElementPreview($_parentItemId, $subtotal);
-                        } else {
-                            $subtotal = $this->renderTdElementProductType($itemProductType, $itemId, $subtotal);
-                        }
-                        array_push($columnsHtml[$key], $subtotal);
+                        $this->processSubTotal(
+                            $columnsHtml,
+                            $parentPersistent,
+                            [
+                                "item" => $orderItem,
+                                "parent" => $_parentItem
+                            ],
+                            $key
+                        );
                         break;
 
                     case 'tax_amount':
-                        $tax_amount = $this->formatPrice($orderItem->getTaxAmount());
-                        if ($parentPersistent) {
-                            if ($parentProductType == 'configurable') {
-                                $tax_amount = $this->formatPrice($_parentItem->getTaxAmount());
-                            }
-                            $tax_amount = $this->renderTdElementPreview($_parentItemId, $tax_amount);
-                        } else {
-                            $tax_amount = $this->renderTdElementProductType($itemProductType, $itemId, $tax_amount);
-                        }
-                        array_push($columnsHtml[$key], $tax_amount);
+                        $this->processTaxAmount(
+                            $columnsHtml,
+                            $parentPersistent,
+                            [
+                                "item" => $orderItem,
+                                "parent" => $_parentItem
+                            ],
+                            $key
+                        );
                         break;
 
                     case 'tax_percent':
-                        $tax_percent = round($orderItem->getTaxPercent(), 2).'%';
-                        if ($parentPersistent) {
-                            if ($parentProductType == 'configurable') {
-                                $tax_percent = round($_parentItem->getTaxPercent(), 2).'%';
-                            }
-                            $tax_percent = $this->renderTdElementPreview($_parentItemId, $tax_percent);
-                        } else {
-                            $tax_percent = $this->renderTdElementProductType($itemProductType, $itemId, $tax_percent);
-                        }
-                        array_push($columnsHtml[$key], $tax_percent);
+                        $this->processTaxPercent(
+                            $columnsHtml,
+                            $parentPersistent,
+                            [
+                                "item" => $orderItem,
+                                "parent" => $_parentItem
+                            ],
+                            $key
+                        );
                         break;
 
                     case 'row_total_incl_tax':
-                        $tax = $orderItem->getTaxAmount() ? : 0;
-                        $row_total_incl_tax = $this->formatPrice($orderItem->getRowTotal() - $orderItem->getDiscountAmount() + $tax);
-                        if ($parentPersistent) {
-                            if ($parentProductType == 'configurable') {
-                                $tax = $_parentItem->getTaxAmount() ? $_parentItem->getTaxAmount() : 0;
-                            }
-                            $row_total_incl_tax = $this->formatPrice($_parentItem->getRowTotal() - $_parentItem->getDiscountAmount() + $tax);
-                            $row_total_incl_tax = $this->renderTdElementPreview($_parentItemId, $row_total_incl_tax);
-                        } else {
-                            $row_total_incl_tax = $this->renderTdElementProductType($itemProductType, $itemId, $row_total_incl_tax);
-                        }
-                        array_push($columnsHtml[$key], $row_total_incl_tax);
+                        $this->processRowTotalIncTax(
+                            $columnsHtml,
+                            $parentPersistent,
+                            [
+                                "item" => $orderItem,
+                                "parent" => $_parentItem
+                            ],
+                            $key
+                        );
                         break;
 
                     default:
@@ -264,6 +260,162 @@ class OrderedItems extends \Bss\AdminPreview\Block\Adminhtml\OrderedItems
         return $columnsHtml;
     }
     // @codingStandardsIgnoreEnd
+
+    /**
+     * Process tax amount
+     *
+     * @param array $columnsHtml
+     * @param bool $parentPersistent
+     * @param \Magento\Sales\Model\Order\Item[] $items
+     * @param string $colKey
+     */
+    protected function processRowTotalIncTax(
+        &$columnsHtml,
+        $parentPersistent,
+        $items,
+        $colKey
+    ) {
+        $orderItem = $items["item"];
+        $parentItem = $items["parent"];
+        $tax = $orderItem->getTaxAmount() ?: 0;
+        $row_total_incl_tax = $this->formatPrice($orderItem->getRowTotal() - $orderItem->getDiscountAmount() + $tax);
+        if ($parentPersistent) {
+            if ($parentItem->getProductType() == 'configurable') {
+                $tax = $parentItem->getTaxAmount() ? $parentItem->getTaxAmount() : 0;
+            }
+            $row_total_incl_tax = $this->formatPrice(
+                $parentItem->getRowTotal() - $parentItem->getDiscountAmount() + $tax
+            );
+            $row_total_incl_tax = $this->renderTdElementPreview($parentItem->getItemId(), $row_total_incl_tax);
+        } else {
+            $row_total_incl_tax = $this->renderTdElementProductType(
+                $orderItem->getProductType(),
+                $orderItem->getItemId(),
+                $row_total_incl_tax
+            );
+        }
+        array_push($columnsHtml[$colKey], $row_total_incl_tax);
+    }
+
+    /**
+     * Process tax amount
+     *
+     * @param array $columnsHtml
+     * @param bool $parentPersistent
+     * @param \Magento\Sales\Model\Order\Item[] $items
+     * @param string $colKey
+     */
+    protected function processTaxPercent(
+        &$columnsHtml,
+        $parentPersistent,
+        $items,
+        $colKey
+    ) {
+        $orderItem = $items["item"];
+        $parentItem = $items["parent"];
+        $tax_percent = round($orderItem->getTaxPercent(), 2) . '%';
+        if ($parentPersistent) {
+            if ($parentItem->getProductType() == 'configurable') {
+                $tax_percent = round($parentItem->getTaxPercent(), 2) . '%';
+            }
+            $tax_percent = $this->renderTdElementPreview($parentItem->getItemId(), $tax_percent);
+        } else {
+            $tax_percent = $this->renderTdElementProductType(
+                $orderItem->getProductType(),
+                $orderItem->getItemId(),
+                $tax_percent
+            );
+        }
+        array_push($columnsHtml[$colKey], $tax_percent);
+    }
+
+    /**
+     * Process tax amount
+     *
+     * @param array $columnsHtml
+     * @param bool $parentPersistent
+     * @param \Magento\Sales\Model\Order\Item[] $items
+     * @param string $colKey
+     */
+    protected function processTaxAmount(
+        &$columnsHtml,
+        $parentPersistent,
+        $items,
+        $colKey
+    ) {
+        $tax_amount = $this->formatPrice($items["item"]->getTaxAmount());
+        if ($parentPersistent) {
+            if ($items["parent"]->getProductType() == 'configurable') {
+                $tax_amount = $this->formatPrice($items["parent"]->getTaxAmount());
+            }
+            $tax_amount = $this->renderTdElementPreview($items["parent"]->getItemId(), $tax_amount);
+        } else {
+            $tax_amount = $this->renderTdElementProductType(
+                $items["item"]->getProductType(),
+                $items["item"]->getItemId(),
+                $tax_amount
+            );
+        }
+        array_push($columnsHtml[$colKey], $tax_amount);
+    }
+
+    /**
+     * Process subtotal
+     *
+     * @param array $columnsHtml
+     * @param bool $parentPersistent
+     * @param \Magento\Sales\Model\Order\Item[] $items
+     * @param string $colKey
+     */
+    protected function processSubTotal(
+        &$columnsHtml,
+        $parentPersistent,
+        $items,
+        $colKey
+    ) {
+        $subtotal = $this->formatPrice($items["item"]->getRowTotal());
+        if ($parentPersistent) {
+            if ($items["parent"]->getProductType() == 'configurable') {
+                $subtotal = $this->formatPrice($items["parent"]->getRowTotal());
+            }
+            $subtotal = $this->renderTdElementPreview($items["parent"]->getItemId(), $subtotal);
+        } else {
+            $subtotal = $this->renderTdElementProductType(
+                $items["item"]->getProductType(),
+                $items["item"]->getItemId(),
+                $subtotal
+            );
+        }
+        array_push($columnsHtml[$colKey], $subtotal);
+    }
+
+    /**
+     * Process ordered qty
+     *
+     * @param array $columnsHtml
+     * @param bool $parentPersistent
+     * @param \Magento\Sales\Model\Order\Item[] $items
+     * @param string $colKey
+     */
+    protected function processOrderedQty(
+        &$columnsHtml,
+        $parentPersistent,
+        $items,
+        $colKey
+    ) {
+        $qty_ordered = round($items["item"]->getQtyOrdered());
+        if ($parentPersistent) {
+            $qty_ordered = $this->renderTdElementPreview($items["parent"]->getItemId(), $qty_ordered);
+        } else {
+            $qty_ordered = $this->renderTdElementProductType(
+                $items["item"]->getProductType(),
+                $items["item"]->getItemId(),
+                $qty_ordered,
+                true
+            );
+        }
+        array_push($columnsHtml[$colKey], $qty_ordered);
+    }
 
     /**
      * Process price
