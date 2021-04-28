@@ -106,8 +106,7 @@ class CompanyAccountManagement implements CompanyAccountManagementInterface
     /**
      * @inheritDoc
      */
-    public function getCompanyAccountBySubEmail(string $email, $websiteId):
-    \Bss\CustomerToSubUser\Model\CompanyAccountResponse
+    public function getCompanyAccountBySubEmail(string $email, $websiteId)
     {
         /** @var \Bss\CustomerToSubUser\Model\CompanyAccountResponse $result */
         $result = $this->companyAccountResponseFactory->create();

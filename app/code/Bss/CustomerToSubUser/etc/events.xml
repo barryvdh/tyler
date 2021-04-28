@@ -1,16 +1,6 @@
 <?xml version="1.0"?>
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:Event/etc/events.xsd">
-    <event name="customer_save_after_data_object">
-        <observer name="bss_customer_to_sub_user"
-                  instance="Bss\CustomerToSubUser\Observer\AssignAsSubUserObserver"/>
-    </event>
-
     <event name="controller_action_predispatch">
         <observer name="check_sub_user_visible_middleware" instance="Bss\CustomerToSubUser\Observer\TheSubUserStillAssignToCurrent"/>
-    </event>
-
-    <event name="customer_delete_after">
-        <observer name="remove_sub_user_customer"
-                  instance="Bss\CustomerToSubUser\Observer\AssignAsSubUserObserver"/>
     </event>
 </config>

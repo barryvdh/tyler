@@ -15,8 +15,7 @@ interface CompanyAccountManagementInterface
      * @param int $websiteId
      * @return \Bss\CustomerToSubUser\Api\Data\CompanyAccountResponseInterface
      */
-    public function getCompanyAccountBySubEmail(string $email, $websiteId):
-    \Bss\CustomerToSubUser\Api\Data\CompanyAccountResponseInterface;
+    public function getCompanyAccountBySubEmail(string $email, $websiteId);
 
     /**
      * Get list custom attribute by customer id
