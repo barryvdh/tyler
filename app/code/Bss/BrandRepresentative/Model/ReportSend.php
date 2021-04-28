@@ -79,6 +79,11 @@ class ReportSend
     private $localeDate;
 
     /**
+     * @var \Bss\BrandRepresentative\Helper\Data
+     */
+    protected $helper;
+
+    /**
      * ReportSend constructor.
      *
      * @param TransportBuilder $transportBuilder
@@ -89,6 +94,7 @@ class ReportSend
      * @param RegionFactory $regionFactory
      * @param CategoryRepositoryInterface $CategoryRepositoryInterface
      * @param TimezoneInterface $localeDate
+     * @param \Bss\BrandRepresentative\Helper\Data $helper
      */
     public function __construct(
         TransportBuilder $transportBuilder,
@@ -98,7 +104,8 @@ class ReportSend
         DateTime $date,
         RegionFactory $regionFactory,
         CategoryRepositoryInterface $CategoryRepositoryInterface,
-        TimezoneInterface $localeDate
+        TimezoneInterface $localeDate,
+        \Bss\BrandRepresentative\Helper\Data $helper
     ) {
         $this->transportBuilder = $transportBuilder;
         $this->logger = $logger;
@@ -108,6 +115,7 @@ class ReportSend
         $this->regionFactory = $regionFactory;
         $this->categoryRepositoryInterface = $CategoryRepositoryInterface;
         $this->localeDate = $localeDate;
+        $this->helper = $helper;
     }
 
     /**
@@ -160,21 +168,24 @@ class ReportSend
 
             $postObject->setData($data);
 
+            $senderName = $this->helper->getSalesSenderName();
+            $senderEmail = $this->helper->getSalesEmailSender();
+
             $transport = $this->transportBuilder
                 ->setTemplateIdentifier('bss_daily_sale_report')
                 ->setTemplateOptions(['area' => Area::AREA_FRONTEND, 'store' => Store::DEFAULT_STORE_ID])
                 ->setTemplateVars(['data' => $postObject])
                 ->setFrom(
                     [
-                        'name' => 'Admin',
-                        'email' => 'one2onesales@gmail.com'
+                        'name' => $senderName,
+                        'email' => $senderEmail
                     ]
                 )
                 ->addTo($to)
                 ->getTransport();
             $transport->sendMessage();
         } catch (Exception $e) {
-            $this->logger->critical(__($e->getMessage()));
+            $this->logger->critical($e);
         }
     }
 
