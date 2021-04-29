@@ -58,11 +58,10 @@ class Preview
             $store = $this->storeManager->getDefaultStoreView();
         }
 
-        $url = sprintf("%sadminpreview/preview/index/product_id/%s", $store->getUrl(), $productId);
-        if ($storeId) {
-            $url .= sprintf("/store/%s", $storeId);
-        }
-
-        return $url;
+        return $this->frontendUrl->getFrontendUrl()
+            ->setScope($store)
+            ->getUrl("adminpreview/preview/index", [
+                "product_id" => $productId
+            ]);
     }
 }

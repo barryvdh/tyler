@@ -5,4 +5,8 @@
                type="Bss\CustomizeMageplazaSearch\Plugin\Helper\Data"
                sortOrder="20" />
    </type>
+
+    <preference
+        for="Mageplaza\Search\Helper\Data"
+        type="Bss\CustomizeMageplazaSearch\Helper\Data"/>
 </config>
