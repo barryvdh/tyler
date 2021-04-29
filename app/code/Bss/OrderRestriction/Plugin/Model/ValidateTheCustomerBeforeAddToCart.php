@@ -298,11 +298,10 @@ class ValidateTheCustomerBeforeAddToCart
         $productId = $requestInfoData["product"] ?? null;
 
         // Parent product id, simple, virtual, downloadable
-        // if is configurable product then the qty must be one
         if ($productId) {
             $requestProductData[] = [
                 "product_id" => $productId,
-                "qty" => isset($requestInfoData["super_attribute"]) ? 1 : $qty
+                "qty" => $qty
             ];
         }
 
@@ -310,12 +309,13 @@ class ValidateTheCustomerBeforeAddToCart
         $cartProductQty = [];
         foreach ($this->getQuote()->getAllItems() as $item) {
             if ($item->getProductType() === "configurable") {
-                $itemQty = 0;
+                // configurable product qty should be same qty with child
+                $itemQty = $item->getQty();
                 if (isset($cartProductQty[$item->getProductId()])) {
-                    $itemQty = $cartProductQty[$item->getProductId()];
+                    $itemQty += $cartProductQty[$item->getProductId()];
                 }
 
-                $cartProductQty[$item->getProductId()] = $itemQty + 1;
+                $cartProductQty[$item->getProductId()] = $itemQty;
                 continue;
             }
             $itemQty = $item->getQty();
