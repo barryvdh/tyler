@@ -5,6 +5,7 @@ namespace Bss\HideProductField\Plugin\Product;
 
 use Magento\Framework\Controller\Result\RedirectFactory;
 use Magento\Downloadable\Model\Product\Type as DownloadableType;
+use Magento\GroupedProduct\Model\Product\Type\Grouped as GroupedType;
 
 /**
  * Class RestrictDigitalManger
@@ -49,6 +50,7 @@ class RestrictDigitalManger
     ) {
         if ($this->aggregateCustomizeHelper->isBrandManager() &&
             $subject->getRequest()->getParam('type') !== DownloadableType::TYPE_DOWNLOADABLE &&
+            $subject->getRequest()->getParam('type') !== GroupedType::TYPE_CODE &&
             !$subject->getRequest()->getParam('id')
         ) {
             return $this->redirectFactory->create()->setPath("catalog/*/");
