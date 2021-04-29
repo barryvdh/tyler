@@ -16,14 +16,6 @@
         <plugin name="validate_unique_email_plugin"
                 type="Bss\CustomerToSubUser\Plugin\Model\ResourceModel\ValidateUniqueEmailPlugin" sortOrder="20"/>
     </type>
-    <type name="Magento\Customer\Model\Customer\DataProviderWithDefaultAddresses">
-        <plugin name="load_company_account_assigned_plugin"
-                type="Bss\CustomerToSubUser\Plugin\Model\Customer\CompanyAccountAssignedInfoPlugin" sortOrder="20" />
-    </type>
-    <type name="Magento\Customer\Model\AccountManagement">
-        <plugin name="customer_reset_password"
-                type="Bss\CustomerToSubUser\Plugin\Model\Customer\AccountManagement" sortOrder="20" />
-    </type>
 
     <type name="Bss\CompanyAccount\Model\SubUser">
         <plugin name="sub_user_can_access_plugin"

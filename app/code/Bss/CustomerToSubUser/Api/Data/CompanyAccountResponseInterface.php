@@ -16,14 +16,14 @@ interface CompanyAccountResponseInterface
      *
      * @return \Bss\CompanyAccount\Api\Data\SubUserInterface
      */
-    public function getSubUser(): \Bss\CompanyAccount\Api\Data\SubUserInterface;
+    public function getSubUser();
 
     /**
      * Get company account
      *
      * @return \Magento\Customer\Api\Data\CustomerInterface
      */
-    public function getCompanyCustomer(): \Magento\Customer\Api\Data\CustomerInterface;
+    public function getCompanyCustomer();
 
     /**
      * Set sub-user data
@@ -31,7 +31,7 @@ interface CompanyAccountResponseInterface
      * @param \Bss\CompanyAccount\Api\Data\SubUserInterface $user
      * @return $this
      */
-    public function setSubUser(\Bss\CompanyAccount\Api\Data\SubUserInterface $user): self;
+    public function setSubUser(\Bss\CompanyAccount\Api\Data\SubUserInterface $user);
 
     /**
      * Set company customer
@@ -39,5 +39,5 @@ interface CompanyAccountResponseInterface
      * @param \Magento\Customer\Api\Data\CustomerInterface $customer
      * @return $this
      */
-    public function setCompanyCustomer(\Magento\Customer\Api\Data\CustomerInterface $customer): self;
+    public function setCompanyCustomer(\Magento\Customer\Api\Data\CustomerInterface $customer);
 }

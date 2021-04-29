@@ -26,4 +26,7 @@
                 type="Bss\AggregateCustomize\Plugin\Controller\Catalog\Product\View"
                 sortOrder="50" />
     </type>
+
+    <preference for="Bss\CompanyAccount\Plugin\Checkout\Helper\Data"
+                type="Bss\AggregateCustomize\Plugin\Checkout\Helper\Data"/>
 </config>

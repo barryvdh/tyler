@@ -15,7 +15,7 @@ class CompanyAccountResponse extends AbstractSimpleObject implements CompanyAcco
     /**
      * @inheritDoc
      */
-    public function getSubUser(): \Bss\CompanyAccount\Api\Data\SubUserInterface
+    public function getSubUser()
     {
         return $this->_get(self::SUB_USER);
     }
@@ -23,7 +23,7 @@ class CompanyAccountResponse extends AbstractSimpleObject implements CompanyAcco
     /**
      * @inheritDoc
      */
-    public function getCompanyCustomer(): \Magento\Customer\Api\Data\CustomerInterface
+    public function getCompanyCustomer()
     {
         return $this->_get(self::COMPANY_CUSTOMER);
     }
@@ -31,7 +31,7 @@ class CompanyAccountResponse extends AbstractSimpleObject implements CompanyAcco
     /**
      * @inheritDoc
      */
-    public function setSubUser(\Bss\CompanyAccount\Api\Data\SubUserInterface $user): self
+    public function setSubUser(\Bss\CompanyAccount\Api\Data\SubUserInterface $user)
     {
         return $this->setData(self::SUB_USER, $user);
     }
@@ -39,7 +39,7 @@ class CompanyAccountResponse extends AbstractSimpleObject implements CompanyAcco
     /**
      * @inheritDoc
      */
-    public function setCompanyCustomer(\Magento\Customer\Api\Data\CustomerInterface $customer): self
+    public function setCompanyCustomer(\Magento\Customer\Api\Data\CustomerInterface $customer)
     {
         return $this->setData(self::COMPANY_CUSTOMER, $customer);
     }

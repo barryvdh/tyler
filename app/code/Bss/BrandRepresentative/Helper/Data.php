@@ -25,6 +25,7 @@ use Magento\Catalog\Model\Product;
 use Magento\Framework\App\Helper\AbstractHelper;
 use Magento\Framework\App\Helper\Context;
 use Magento\Framework\Exception\NoSuchEntityException;
+use Magento\Store\Model\ScopeInterface;
 use Magento\Store\Model\StoreManagerInterface;
 use Magento\Framework\Serialize\Serializer\Json;
 use Psr\Log\LoggerInterface;
@@ -36,6 +37,8 @@ use Psr\Log\LoggerInterface;
 class Data extends AbstractHelper
 {
     const FEATURED_BRANDS_CONFIG_PATH = "brand_representative/featured_brands/brand_ids";
+    const SALES_EMAIL_SENDER_CONFIG_PATH = "trans_email/ident_sales/email";
+    const SALES_SENDER_NAME_CONFIG_PATH = "trans_email/ident_sales/name";
 
     /**
      * @var CategoryRepositoryInterface
@@ -173,5 +176,41 @@ class Data extends AbstractHelper
         }
 
         return [];
+    }
+
+    /**
+     * Get sales email sender
+     *
+     * @param int|null $storeId
+     * @return string
+     */
+    public function getSalesEmailSender($storeId = null)
+    {
+        return $this->scopeConfig->getValue(
+            self::SALES_EMAIL_SENDER_CONFIG_PATH,
+            \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
+            $storeId
+        );
+    }
+
+    /**
+     * Get sales sender name
+     *
+     * @param null $storeId
+     * @return string
+     */
+    public function getSalesSenderName($storeId= null)
+    {
+        $senderName = $this->scopeConfig->getValue(
+            self::SALES_SENDER_NAME_CONFIG_PATH,
+            \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
+            $storeId
+        );
+
+        if (!$senderName) {
+            $senderName = __("Sales Support");
+        }
+
+        return $senderName;
     }
 }

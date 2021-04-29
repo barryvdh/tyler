@@ -3,6 +3,7 @@ declare(strict_types=1);
 namespace Bss\AggregateCustomize\Block\Adminhtml;
 
 use Bss\AggregateCustomize\Helper\Data;
+use \Magento\Downloadable\Model\Product\Type as DownloadableType;
 
 /**
  * Class ProductListing
@@ -36,31 +37,39 @@ class ProductListing extends \Magento\Catalog\Block\Adminhtml\Product
     }
 
     /**
-     * Remove dropdown and have it so you just click ‘Add Product’ and it defaults to creating a Downloadable Product
+     * Get allowed add options product, key is product type, value is default or not
      *
-     * @return $this
+     * @return array
      */
-    protected function _prepareLayout()
+    public function getAllowedAddProductOptions()
     {
-        parent::_prepareLayout();
-        if ($this->helper->isBrandManager()) {
-            $this->buttonList->update(
-                "add_new",
-                "class_name",
-                \Magento\Backend\Block\Widget\Button::class
-            );
-            $this->buttonList->update(
-                "add_new",
-                "class",
-                "action-primary"
-            );
-            // Add create downloadable product action for 'add product' button
-            $this->buttonList->update(
-                "add_new",
-                "onclick",
-                "setLocation('" . $this->_getProductCreateUrl("downloadable") . "')"
-            );
+        return ["grouped" => false, "downloadable" => true];
+    }
+
+    /**
+     * Filter add product options
+     *
+     * @return array
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     */
+    protected function _getAddProductButtonOptions()
+    {
+        $splitButtonOptions = parent::_getAddProductButtonOptions();
+
+        if (!$this->helper->isBrandManager()) {
+            return $splitButtonOptions;
         }
-        return $this;
+        $allowedOptions = $this->getAllowedAddProductOptions();
+        $splitButtonOptions = array_filter($splitButtonOptions, function ($btnOpt, $typeId) use ($allowedOptions) {
+            return isset($allowedOptions[$typeId]);
+        }, ARRAY_FILTER_USE_BOTH);
+
+        array_walk($splitButtonOptions, function (&$option, $typeId) use ($allowedOptions) {
+            if (isset($allowedOptions[$typeId])) {
+                $option['default'] = $allowedOptions[$typeId];
+            }
+        });
+
+        return $splitButtonOptions;
     }
 }
