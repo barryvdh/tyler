@@ -18,6 +18,9 @@
  */
 -->
 <page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" layout="2columns-left" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
+    <head>
+        <css src="Bss_BrandCategoryLevel::css/brand-breadcrumb.css" />
+    </head>
     <body>
         <referenceBlock name="category.products.list"
                         class="Bss\BrandCategoryLevel\Block\Product\ListProduct">
@@ -30,5 +33,11 @@
                 <argument name="view_model" xsi:type="object">Bss\BrandCategoryLevel\ViewModel\Category\Output</argument>
             </arguments>
         </referenceBlock>
+
+        <referenceBlock name="breadcrumbs" class="Bss\BrandCategoryLevel\Block\Brand\Breadcrumbs">
+            <action method="createBrandBreadcrumb" />
+        </referenceBlock>
+
+        <move element="breadcrumbs" destination="main.content" before="-" />
     </body>
 </page>
