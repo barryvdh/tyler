@@ -168,7 +168,7 @@ class ReportSend
 
             $postObject->setData($data);
 
-            $senderName = $this->helper->getSalesSenderName();
+            $senderName = __("One to One Support")->getText();
             $senderEmail = $this->helper->getSalesEmailSender();
 
             $transport = $this->transportBuilder
@@ -266,8 +266,6 @@ class ReportSend
                         'order_id' => $rowData['order_id'],
                         'product_sku' => $rowData['product_sku'],
                         'product_name' => $rowData['product_name'],
-                        'brand' => $rowData['brand'],
-                        'product_type' => $rowData['product_type'],
                         'ordered_qty' => $rowData['ordered_qty'],
                         'ordered_time' => $orderTime,
                         'customer_name' => $rowData['customer_name'],
