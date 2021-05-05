@@ -30,6 +30,7 @@ use Magento\Framework\Serialize\Serializer\Json;
 use Magento\Framework\Stdlib\DateTime\DateTime;
 use Magento\Framework\Stdlib\DateTime\TimezoneInterface;
 use Magento\Store\Model\Store;
+use Magento\Store\Model\StoreManagerInterface;
 use Psr\Log\LoggerInterface;
 
 /**
@@ -84,6 +85,11 @@ class ReportSend
     protected $helper;
 
     /**
+     * @var StoreManagerInterface
+     */
+    protected $storeManager;
+
+    /**
      * ReportSend constructor.
      *
      * @param TransportBuilder $transportBuilder
@@ -95,6 +101,7 @@ class ReportSend
      * @param CategoryRepositoryInterface $CategoryRepositoryInterface
      * @param TimezoneInterface $localeDate
      * @param \Bss\BrandRepresentative\Helper\Data $helper
+     * @param StoreManagerInterface $storeManager
      */
     public function __construct(
         TransportBuilder $transportBuilder,
@@ -105,7 +112,8 @@ class ReportSend
         RegionFactory $regionFactory,
         CategoryRepositoryInterface $CategoryRepositoryInterface,
         TimezoneInterface $localeDate,
-        \Bss\BrandRepresentative\Helper\Data $helper
+        \Bss\BrandRepresentative\Helper\Data $helper,
+        StoreManagerInterface $storeManager
     ) {
         $this->transportBuilder = $transportBuilder;
         $this->logger = $logger;
@@ -116,6 +124,7 @@ class ReportSend
         $this->categoryRepositoryInterface = $CategoryRepositoryInterface;
         $this->localeDate = $localeDate;
         $this->helper = $helper;
+        $this->storeManager = $storeManager;
     }
 
     /**
@@ -165,7 +174,7 @@ class ReportSend
     {
         try {
             $postObject = new DataObject();
-
+            $defaultStoreId = $this->storeManager->getDefaultStoreView()->getId();
             $postObject->setData($data);
 
             $senderName = __("One to One Support")->getText();
@@ -173,7 +182,7 @@ class ReportSend
 
             $transport = $this->transportBuilder
                 ->setTemplateIdentifier('bss_daily_sale_report')
-                ->setTemplateOptions(['area' => Area::AREA_FRONTEND, 'store' => Store::DEFAULT_STORE_ID])
+                ->setTemplateOptions(['area' => Area::AREA_FRONTEND, 'store' => $defaultStoreId])
                 ->setTemplateVars(['data' => $postObject])
                 ->setFrom(
                     [
