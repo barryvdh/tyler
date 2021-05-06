@@ -28,12 +28,12 @@ class CompanyAccountManagement implements CompanyAccountManagementInterface
     /**
      * @var CompanyAccountResponseFactory
      */
-    private CompanyAccountResponseFactory $companyAccountResponseFactory;
+    private $companyAccountResponseFactory;
 
     /**
      * @var SubUserManagementInterface
      */
-    private SubUserManagementInterface $subUserManagement;
+    private $subUserManagement;
 
     /**
      * @var \Psr\Log\LoggerInterface

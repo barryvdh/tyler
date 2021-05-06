@@ -34,7 +34,7 @@ class Collection extends CustomerGridCollection
      *
      * @return $this
      */
-    protected function _initSelect(): self
+    protected function _initSelect()
     {
         parent::_initSelect();
         $this->getSelect()->joinLeft(
