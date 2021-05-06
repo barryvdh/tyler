@@ -12,6 +12,7 @@
     },
     "require": {
         "amasty/module-advanced-permissions": "^1.4",
+        "bsscommerce/magento-2-reindex-extension": "^1.0",
         "magento/composer-root-update-plugin": "~1.0",
         "magento/product-community-edition": "2.4.0",
         "magepal/magento2-gmailsmtpapp": "^2.8"

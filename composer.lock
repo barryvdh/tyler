@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "5abc549090fc17c5c1129d22511f6cbe",
+    "content-hash": "bde540270f1c7aa5b1e4cdd86e5f5094",
     "packages": [
         {
             "name": "2tvenom/cborencode",
@@ -499,6 +499,71 @@
                 "source": "https://github.com/braintree/braintree_php/tree/4.5.0"
             },
             "time": "2019-10-28T16:05:37+00:00"
+        },
+        {
+            "name": "bsscommerce/core",
+            "version": "1.0.3",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/Joshua29LK/magento2-core.git",
+                "reference": "4b1ac70f2fd081c1a97a4514400cf6fb28fa4ba1"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/Joshua29LK/magento2-core/zipball/4b1ac70f2fd081c1a97a4514400cf6fb28fa4ba1",
+                "reference": "4b1ac70f2fd081c1a97a4514400cf6fb28fa4ba1",
+                "shasum": ""
+            },
+            "type": "magento2-module",
+            "autoload": {
+                "files": [
+                    "registration.php"
+                ],
+                "psr-4": {
+                    "Bss\\Core\\": ""
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "OSL-3.0",
+                "AFL-3.0"
+            ],
+            "description": "BSS Commerce - Core Module",
+            "time": "2020-10-01T02:55:02+00:00"
+        },
+        {
+            "name": "bsscommerce/magento-2-reindex-extension",
+            "version": "1.0.3",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/BssGroup/magento2-reindex.git",
+                "reference": "e6441b13ae88fabe5143840dc4e15fdeabc984e7"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/BssGroup/magento2-reindex/zipball/e6441b13ae88fabe5143840dc4e15fdeabc984e7",
+                "reference": "e6441b13ae88fabe5143840dc4e15fdeabc984e7",
+                "shasum": ""
+            },
+            "require": {
+                "bsscommerce/core": "@dev"
+            },
+            "type": "magento2-module",
+            "autoload": {
+                "files": [
+                    "registration.php"
+                ],
+                "psr-4": {
+                    "Bss\\Reindex\\": ""
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "OSL-3.0",
+                "AFL-3.0"
+            ],
+            "description": "Bss Reindex",
+            "time": "2019-08-12T10:11:19+00:00"
         },
         {
             "name": "christian-riesen/base32",
