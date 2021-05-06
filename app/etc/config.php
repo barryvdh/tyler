@@ -330,6 +330,7 @@ return [
         'MagePal_Core' => 1,
         'MagePal_GmailSmtpApp' => 1,
         'Mageplaza_AjaxLayer' => 1,
+        'Mageplaza_BetterMaintenance' => 1,
         'Mageplaza_Search' => 1,
         'Mageplaza_LayeredNavigation' => 0,
         'Bss_CustomizeMageplazaSearch' => 1,
