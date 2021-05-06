@@ -53,6 +53,7 @@ abstract class AbstractGetProductDataInQuote
     protected function getProductData($quote)
     {
         $productData = [];
+        /** @var \Magento\Quote\Model\Quote\Item $item */
         foreach ($quote->getAllItems() as $item) {
             $parentItem = $item->getParentItem();
             $qty = $item->getQty();
@@ -66,11 +67,8 @@ abstract class AbstractGetProductDataInQuote
             }
 
             if ($item->getProductType() == "configurable") {
-                $qty = 0;
-                if (isset($productData[$item->getProductIt()])) {
-                    $qty = $productData[$item->getProductIt()];
-                }
-                $qty++;
+                // skip configurable product
+                continue;
             }
 
             $productDataItem = [

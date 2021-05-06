@@ -166,20 +166,10 @@ class ValidateTheCustomerBeforeAddToCart
                 $updateCartItems[$itemId] =  ["qty" => $request->getParam("item_qty")];
             }
 
+            /** @var \Magento\Quote\Model\Quote\Item $item */
             foreach ($quote->getAllItems() as $item) {
                 if ($item->getProductType() == "configurable") {
-                    $existDataIdx = array_search(
-                        $item->getProductId(),
-                        array_column($productData, "product_id")
-                    );
-                    if ($existDataIdx !== false) {
-                        $productData[$existDataIdx]["qty"] += 1;
-                    } else {
-                        $productData[] = [
-                            "product_id" => $item->getProductId(),
-                            "qty" => 1
-                        ];
-                    }
+                    // skip configurable
                     continue;
                 }
                 if (isset($updateCartItems[$item->getId()]) ||
@@ -299,27 +289,31 @@ class ValidateTheCustomerBeforeAddToCart
 
         // Parent product id, simple, virtual, downloadable
         if ($productId) {
-            $requestProductData[] = [
-                "product_id" => $productId,
-                "qty" => $qty
-            ];
+            // escape configurable product
+            if (!isset($requestInfoData["super_attribute"])) {
+                $requestProductData[] = [
+                    "product_id" => $productId,
+                    "qty" => $qty
+                ];
+            }
         }
+
 
         // Get qty in cart and merge them
         $cartProductQty = [];
+        /** @var \Magento\Quote\Model\Quote\Item $item */
         foreach ($this->getQuote()->getAllItems() as $item) {
-            if ($item->getProductType() === "configurable") {
-                // configurable product qty should be same qty with child
-                $itemQty = $item->getQty();
-                if (isset($cartProductQty[$item->getProductId()])) {
-                    $itemQty += $cartProductQty[$item->getProductId()];
-                }
-
-                $cartProductQty[$item->getProductId()] = $itemQty;
-                continue;
-            }
             $itemQty = $item->getQty();
             $parentItem = $item->getParentItem();
+            if ($item->getProductType() === "configurable") {
+                // skip configurable
+                continue;
+            }
+
+            // if the child of configurable product then the item qty should be parent qty
+            if ($parentItem && $parentItem->getProductType() === "configurable") {
+                $itemQty = $parentItem->getQty();
+            }
 
             if ($parentItem && $parentItem->getProductType() === "bundle") {
                 $itemQty *= $parentItem->getQty();
