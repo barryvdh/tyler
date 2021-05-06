@@ -18,6 +18,7 @@
 
 namespace Bss\BrandCategoryLevel\ViewModel\Category;
 
+use Magento\Catalog\Helper\Output as OutputHelper;
 use Magento\Catalog\Model\Category;
 use Magento\Catalog\Model\ResourceModel\Category\Collection;
 use Magento\Framework\Exception\LocalizedException;
@@ -26,8 +27,6 @@ use Magento\Framework\Registry;
 use Magento\Framework\UrlInterface;
 use Magento\Framework\View\Element\Block\ArgumentInterface;
 use Magento\Store\Model\StoreManagerInterface;
-use Magento\Catalog\Helper\Output as OutputHelper;
-
 
 /**
  * Class Output View model
@@ -173,9 +172,9 @@ class Output implements ArgumentInterface
      */
     public function getBrandTemplate($defaultTmpl)
     {
-        if ($this->getCurrentCategory()->getLevel() != self::BRAND_CATEGORY_LV) {
-            return $defaultTmpl;
-        }
+        // if ($this->getCurrentCategory()->getLevel() != self::BRAND_CATEGORY_LV) {
+        //     return $defaultTmpl;
+        // }
 
         return 'Bss_BrandCategoryLevel::product/list.phtml';
     }

@@ -3,13 +3,6 @@ declare(strict_types=1);
 
 namespace Bss\BrandCategoryLevel\Block\Product;
 
-use Magento\Catalog\Api\CategoryRepositoryInterface;
-use Magento\Catalog\Block\Product\Context;
-use Magento\Catalog\Helper\Output as OutputHelper;
-use Magento\Catalog\Model\Layer\Resolver;
-use Magento\Framework\Data\Helper\PostHelper;
-use Magento\Framework\Url\Helper\Data;
-
 /**
  * Class ListProduct
  * Customize for brand display

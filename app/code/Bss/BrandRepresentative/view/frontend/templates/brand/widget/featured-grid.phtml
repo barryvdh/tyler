@@ -20,6 +20,9 @@ use Bss\BrandRepresentative\Block\Brand\Widget\BrandList;
 /**
  * @var $block BrandList
  */
+
+$placeholder = "data:image/gif;base64,R0lGODlhAQABAIAAAPT09P///yH5BAEAAAEALAAAAAABAAEAAAICRAEAOw==";
+
 ?>
 
 <?php $categories = $block->getCategories(); ?>
@@ -35,11 +38,10 @@ use Bss\BrandRepresentative\Block\Brand\Widget\BrandList;
                             <div class="product-item-info type1" data-container="product-grid">
                                 <div class="product photo product-item-photo">
                                     <a href=<?= $category->getUrl() ?> tabindex="-1">
-                                        <?php if ($category->getImageUrl()): ?>
-                                            <?php $imageResize = $block->getCategoryImage($category);?>
-                                            <img class="product-image-photo default_image porto-lazyload" data-src="<?= $block->escapeUrl($imageResize) ?>" alt="<?= $category->getName(); ?>" />
+                                        <?php if (!empty($image = $category->getImage())): ?>
+                                            <img class="product-image-photo default_image porto-lazyload" data-src="/<?= substr($image,strpos($image,'media')); ?>" data-org="<?= $image ?>" alt="<?= $category->getName(); ?>" src="<?= $placeholder ?>" />
                                         <?php else: ?>
-                                            <img class="product-image-photo default_image porto-lazyload" data-src="<?= $block->escapeUrl($block->getPlaceHolderImage()) ?>" alt="<?= $category->getName(); ?>" />
+                                            <img class="product-image-photo default_image porto-lazyload" data-src="<?= $escaper->escapeUrl($block->getPlaceHolderImage()) ?>" alt="<?= $category->getName(); ?>" />
                                         <?php endif; ?>
                                     </a>
                                 </div>

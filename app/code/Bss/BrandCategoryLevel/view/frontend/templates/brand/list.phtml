@@ -6,7 +6,7 @@
 
 <?php $childCategories = $block->getListBrandCategories() ?>
 <?php if (!$childCategories->count()): ?>
-    <div class="message info empty"><div><?php echo __('We can\'t find products or sub-brand matching the selection.') ?></div></div>
+    <div class="message info empty"><div><?php echo __('There are currently no items available in your region.') ?></div></div>
 <?php else: ?>
 <div class="products wrapper grid columns3 products-grid   ">
     <ol class="filterproducts products list items product-items ">
