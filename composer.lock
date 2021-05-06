@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "bde540270f1c7aa5b1e4cdd86e5f5094",
+    "content-hash": "2358dc36d42bc16dfd3101fdf0634374",
     "packages": [
         {
             "name": "2tvenom/cborencode",
@@ -1684,6 +1684,76 @@
                 "source": "https://github.com/ezimuel/ringphp/tree/1.1.2"
             },
             "time": "2020-02-14T23:51:21+00:00"
+        },
+        {
+            "name": "fooman/printorderpdf-implementation-m2",
+            "version": "104.0.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/fooman/printorderpdf-implementation-m2.git",
+                "reference": "d3407a90ae34fb56ac1d034e267efebfa5f05da7"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/fooman/printorderpdf-implementation-m2/zipball/d3407a90ae34fb56ac1d034e267efebfa5f05da7",
+                "reference": "d3407a90ae34fb56ac1d034e267efebfa5f05da7",
+                "shasum": ""
+            },
+            "require": {
+                "magento/framework": "^101.0.0 | ^102.0.0 | ^103.0.0",
+                "magento/module-backend": "^100.2.0 | ^101.0.0 | ^102.0.0",
+                "magento/module-sales": "^101.0.0 | ^102.0.0 | ^103.0.0",
+                "php": "7.0.2 | 7.0.4 | ~7.0.6 | ~7.1.0| ~7.2.0 | ~7.3.0 | ~7.4.0"
+            },
+            "require-dev": {
+                "captainhook/captainhook": "^4.2",
+                "fooman/magento2-phpunit-bridge": "^0.9",
+                "fooman/phpstan-magento2-magic-methods": "^0.6.0",
+                "magento/magento-coding-standard": "*",
+                "phpunit/phpunit": "^6.2 | ^9.1"
+            },
+            "type": "magento2-module",
+            "autoload": {
+                "psr-4": {
+                    "Fooman\\PrintOrderPdf\\": "src/"
+                },
+                "files": [
+                    "src/registration.php"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "OSL-3.0"
+            ],
+            "description": "Print the order as a pdf from the admin",
+            "time": "2020-07-28T05:34:50+00:00"
+        },
+        {
+            "name": "fooman/printorderpdf-m2",
+            "version": "3.2.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/fooman/printorderpdf-m2.git",
+                "reference": "c938a2e809f262a942b96226652cdfbe252af2c3"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/fooman/printorderpdf-m2/zipball/c938a2e809f262a942b96226652cdfbe252af2c3",
+                "reference": "c938a2e809f262a942b96226652cdfbe252af2c3",
+                "shasum": ""
+            },
+            "require": {
+                "fooman/printorderpdf-implementation-m2": "104.0.1",
+                "magento/framework": "101.0.0 - 101.0.11 | >=102.0.0 <102.0.6 | >=103.0.0 < 103.0.1",
+                "php": "7.0.2|7.0.4|~7.0.6|~7.1.0|~7.2.0|~7.3.0|~7.4.0"
+            },
+            "type": "metapackage",
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "OSL-3.0"
+            ],
+            "description": "Print the order as a pdf from the admin",
+            "time": "2020-07-28T22:04:44+00:00"
         },
         {
             "name": "google/recaptcha",
