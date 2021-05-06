@@ -314,6 +314,7 @@ return [
         'Bss_ProductStockAlert' => 1,
         'Bss_BrandLandingPage' => 1,
         'Bss_HideProductField' => 1,
+        'Bss_LoginAsCustomer' => 0,
         'Bss_OrderRestriction' => 1,
         'Bss_Popup' => 1,
         'Bss_AggregateCustomize' => 1,
