@@ -344,6 +344,7 @@ return [
         'Smartwave_Porto' => 1,
         'Smartwave_Socialfeeds' => 1,
         'Temando_ShippingRemover' => 1,
+        'Useone_Custom' => 1,
         'Vertex_Tax' => 1,
         'Vertex_AddressValidation' => 1,
         'Yotpo_Yotpo' => 1,
