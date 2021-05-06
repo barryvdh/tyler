@@ -1,0 +1,23 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Password Protected
+ *
+ * @category    Addify
+ * @package     Addify_PasswordProtected
+ * @author      Addify
+ * @Email       addifypro@gmail.com
+ *
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Backend:etc/menu.xsd">
+    <menu>
+        <update id="Addify_Extensions::addifyextensions" title="Addify Extensions" module="Magento_Backend" sortOrder="77" resource="Addify_Extensions::addifyextensions"/>
+
+            <add id="Addify_PasswordProtected::passwordprotectedparent" title="Addify Password Protected" module="Addify_PasswordProtected" sortOrder="1"  parent="Addify_Extensions::addifyextensions" resource="Addify_PasswordProtected::passwordprotectedparent" />
+            <!-- MANAGE EXTRA PRODUCT TABS -->
+            <add id="Addify_PasswordProtected::managepasswordprotected" title="Manage Password Protected" module="Addify_PasswordProtected" sortOrder="10" parent="Addify_PasswordProtected::passwordprotectedparent" action="passwordprotected/" resource="Addify_PasswordProtected::managepasswordprotected"/>
+            <!-- ADMIN CONFIGURATIONS -->
+            <add id="Addify_PasswordProtected::passwordprotected_configuration" title="Configuration" module="Addify_PasswordProtected" sortOrder="99" parent="Addify_PasswordProtected::passwordprotectedparent" action="adminhtml/system_config/edit/section/passwordprotected" resource="Addify_PasswordProtected::passwordprotected_configuration"/>
+    </menu>
+</config>

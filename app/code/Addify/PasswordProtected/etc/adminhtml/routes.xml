@@ -1,0 +1,19 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Password Protected
+ *
+ * @category    Addify
+ * @package     Addify_PasswordProtected
+ * @author      Addify
+ * @Email       addifypro@gmail.com
+ *
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:App/etc/routes.xsd">
+    <router id="admin">
+        <route id="passwordprotected" frontName="passwordprotected">
+            <module name="Addify_PasswordProtected" before="Magento_Backend" />
+        </route>
+    </router>
+</config>

@@ -1,0 +1,35 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Password Protected
+ *
+ * @category    Addify
+ * @package     Addify_PasswordProtected
+ * @author      Addify
+ * @Email       addifypro@gmail.com
+ *
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Store:etc/config.xsd">
+    <default>
+        <passwordprotected>
+            <general>
+                <enabled>1</enabled>
+            </general>
+            <pagesetting>
+                <heading>Heading</heading>
+                <label>Password</label>
+                <button>Unlock</button>
+                <rightheading>Heading</rightheading>
+                <description>content goes here</description>
+            </pagesetting>
+            <seosuffix>
+                <identifier>restricted</identifier>
+                <url_suffix>.html</url_suffix>
+                <title>Restricted Content</title>
+                <googleenabled>1</googleenabled>
+            </seosuffix>
+        </passwordprotected>
+
+    </default>
+</config>
