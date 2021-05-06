@@ -22,3 +22,7 @@
 .email-items tr:nth-child(even) {
     background-color: #dddddd;
 }
+
+.footer td {
+    padding: 25px;
+}
