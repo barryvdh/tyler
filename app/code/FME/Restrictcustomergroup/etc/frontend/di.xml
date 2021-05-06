@@ -1,0 +1,46 @@
+<?xml version="1.0"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
+    <preference for="Magento\Catalog\CustomerData\CompareProducts"
+      type="FME\Restrictcustomergroup\CustomerData\CompareProducts"/>
+    <type name="Magento\Catalog\Block\Product\ProductList\Toolbar">
+        <plugin name="fme_restrictcustomergroup_catalog_block_product_productlist_toolbar" type="FME\Restrictcustomergroup\Plugin\Catalog\Block\Product\ProductList\ToolbarPlugin" sortOrder="1" disabled="false"/>
+    </type>
+    <type name="Magento\Catalog\Model\Layer\Filter\Item\DataBuilder">
+      <plugin name="configurelayernavigation" type="FME\Restrictcustomergroup\Plugin\HideCatLayerNavigation" sortOrder="5"/>
+    </type>
+    <preference for="Magento\Cms\Block\Widget\Block" type="FME\Restrictcustomergroup\Block\Cms\Block\Widget\Block" />
+    <type name="Magento\Framework\App\Action\AbstractAction">
+      <plugin name="fme-pricebycustomergroup-app-action-dispatchController-context-plugin" type="FME\Restrictcustomergroup\Plugin\App\Action\Context" sortOrder="3"/>
+    </type>
+    <type name="Magento\Cms\Controller\Noroute\Index">
+      <plugin name="fme-pricebycustomergroup-redirect-404-plugin" type="FME\Restrictcustomergroup\Plugin\RedirectFourOFour" sortOrder="4"/>
+    </type>
+    <type name="Magento\Theme\Block\Html\Topmenu">
+      <plugin name="configuretopmenu" type="FME\Restrictcustomergroup\Plugin\Menu" sortOrder="2"/>
+    </type>
+    <type name="Magento\Catalog\Block\Product\ProductList\Related">
+      <plugin name="hiderelatedproduct" type="FME\Restrictcustomergroup\Plugin\HideProduct\Related" sortOrder="6"/>
+    </type>
+    <type name="Magento\Catalog\Block\Product\ProductList\Upsell">
+      <plugin name="hideupsellproduct" type="FME\Restrictcustomergroup\Plugin\HideProduct\Upsell" sortOrder="7"/>
+    </type>
+    <type name="Magento\Catalog\Block\Product\ProductList\Crosssell">
+      <plugin name="hidecrosssellproduct" type="FME\Restrictcustomergroup\Plugin\HideProduct\Crosssell" sortOrder="8"/>
+    </type>
+    <type name="Magento\CatalogWidget\Block\Product\ProductsList">
+      <plugin name="hidehotsellproduct" type="FME\Restrictcustomergroup\Plugin\HideProduct\Hotsell" sortOrder="9"/>
+    </type>
+    <type name="Magento\Catalog\Block\Product\ProductList\Toolbar">
+      <plugin name="hidetoolbarproduct" type="FME\Restrictcustomergroup\Plugin\HideProduct\Toolbar" sortOrder="12"/>
+    </type>
+    <type name="Magento\Wishlist\CustomerData\Wishlist">
+      <plugin name="hidewishlistproductsidebar" type="FME\Restrictcustomergroup\Plugin\HideProduct\Wishlist\Sidebar" sortOrder="13"/>
+    </type>
+    <type name="Magento\Wishlist\Block\Customer\Wishlist">
+      <plugin name="hidewishlistproductmain" type="FME\Restrictcustomergroup\Plugin\HideProduct\Wishlist\Main" sortOrder="14"/>
+    </type>
+    <type name="Magento\Catalog\Block\Product\Compare\ListCompare">
+      <plugin name="hidecompareproductmain" type="FME\Restrictcustomergroup\Plugin\HideProduct\Compare\Main" sortOrder="15"/>
+    </type>
+    <preference for="Magento\Catalog\Block\Product\Widget\NewWidget" type="FME\Restrictcustomergroup\Block\Product\Widget\NewWidget" />
+</config>

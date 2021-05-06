@@ -1,0 +1,48 @@
+<?xml version="1.0"?>
+<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" layout="admin-2columns-left" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
+    <body>
+        <referenceContainer name="left">
+            <block class="FME\Restrictcustomergroup\Block\Adminhtml\Rule\Edit\Tabs" name="restrictcustomergroup_rule_edit_tabs">
+                <block class="FME\Restrictcustomergroup\Block\Adminhtml\Rule\Edit\Tab\Main" name="restrictcustomergroup_rule_edit_tab_main"/>
+                <block class="FME\Restrictcustomergroup\Block\Adminhtml\Rule\Edit\Tab\Conditions" name="restrictcustomergroup_rule_edit_tab_conditions"/>
+
+                <action method="addTab">
+                    <argument name="name" xsi:type="string">main_section</argument>
+                    <argument name="block" xsi:type="string">restrictcustomergroup_rule_edit_tab_main</argument>
+                </action>
+
+                <action method="addTab">
+                    <argument name="name" xsi:type="string">conditions_section</argument>
+                    <argument name="block" xsi:type="string">restrictcustomergroup_rule_edit_tab_conditions</argument>
+                </action>
+
+                <block class="FME\Restrictcustomergroup\Block\Adminhtml\Rule\Edit\Tab\Cms" name="restrictcustomergroup_rule_edit_tab_cms"/>
+
+                <action method="addTab">
+                    <argument name="name" xsi:type="string">cms_section</argument>
+                    <argument name="block" xsi:type="string">restrictcustomergroup_rule_edit_tab_cms</argument>
+                </action>
+
+                <block class="FME\Restrictcustomergroup\Block\Adminhtml\Rule\Edit\Tab\Categories" name="restrictcustomergroup_rule_edit_tab_categories"/>
+
+                <action method="addTab">
+                    <argument name="name" xsi:type="string">categories_section</argument>
+                    <argument name="block" xsi:type="string">restrictcustomergroup_rule_edit_tab_categories</argument>
+                </action>
+
+                <block class="FME\Restrictcustomergroup\Block\Adminhtml\Rule\Edit\Tab\UrlRedirect" name="restrictcustomergroup_rule_edit_tab_redirect"/>
+
+                <action method="addTab">
+                    <argument name="name" xsi:type="string">redirect_section</argument>
+                    <argument name="block" xsi:type="string">restrictcustomergroup_rule_edit_tab_redirect</argument>
+                </action>
+            </block>
+        </referenceContainer>
+        <referenceContainer name="js">
+            <block class="Magento\Backend\Block\Template" name="showhiderestrictedcustomer_js" template="FME_Restrictcustomergroup::showhiderestrictedcustomer_js.phtml"/>
+        </referenceContainer>
+        <referenceContainer name="content">
+            <block class="FME\Restrictcustomergroup\Block\Adminhtml\Rule\Edit" name="restrictcustomergroup_rule_edit"/>
+        </referenceContainer>
+    </body>
+</page>

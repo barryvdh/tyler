@@ -1,0 +1,28 @@
+<?xml version="1.0"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Config:etc/system_file.xsd">
+    <system>
+        <tab id="fmeextensions" translate="label" sortOrder="1">
+            <label>FME Extensions</label>
+        </tab>
+        <section id="restrictcustomergroup" translate="label" sortOrder="1" showInDefault="1" showInWebsite="1" showInStore="1">
+            <label>Restrict Customer Group</label>
+            <tab>fmeextensions</tab>
+            <resource>FME_Restrictcustomergroup::configuration</resource>
+            <group id="general" translate="label" type="text" sortOrder="1" showInDefault="1"
+                   showInWebsite="1"
+                   showInStore="1">
+                <label>General Settings</label>
+                <field id="enable_in_frontend" translate="label" type="select" sortOrder="1"  showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Enable in frontend</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                    <backend_model>FME\Restrictcustomergroup\Model\Config\Backend\AfterConfiSave</backend_model>
+                </field>
+                <field id="exclude_ip" translate="label" type="textarea" sortOrder="1"  showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Excluded IP</label>
+                    <comment>Please provide (,) seperated IP addresses which would have access to restricted elements on frontend, for example: 192.168.0.0,172.31.255.255</comment>
+                </field>
+            </group>
+        </section>
+    </system>
+</config>
