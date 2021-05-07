@@ -17,6 +17,7 @@ use Magento\Catalog\Model\Locator\LocatorInterface;
 use Magento\Catalog\Model\Product\Type as ProductType;
 use Magento\Catalog\Ui\DataProvider\Product\Form\Modifier\AbstractModifier;
 use Magento\Downloadable\Model\Product\Type as DonwloadType;
+use Magento\GroupedProduct\Model\Product\Type\Grouped as GroupedProductType;
 use Magento\Framework\App\RequestInterface;
 use Magento\Framework\Registry;
 
@@ -135,7 +136,10 @@ class HideField extends AbstractModifier
                 $productType = $params['type'];
             }
 
-            if ($productType == DonwloadType::TYPE_DOWNLOADABLE || $productType == ProductType::TYPE_VIRTUAL) {
+            if ($productType === DonwloadType::TYPE_DOWNLOADABLE ||
+                $productType === ProductType::TYPE_VIRTUAL ||
+                $productType === GroupedProductType::TYPE_CODE
+            ) {
                 $needProcessFields = [
                     'container_custom_block',
                     'container_custom_block_2',
