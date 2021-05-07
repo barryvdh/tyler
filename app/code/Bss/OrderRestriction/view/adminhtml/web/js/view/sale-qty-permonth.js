@@ -17,7 +17,7 @@ define([
 
                 if (stockData['use_config_sale_qty_per_month'] === "0") {
                     if (typeof this.value === 'function') {
-                        this.value(null);
+                        this.value(stockData['sale_qty_per_month_origin']);
                     } else {
                         this.value = null;
                     }

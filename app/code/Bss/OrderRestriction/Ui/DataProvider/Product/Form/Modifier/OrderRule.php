@@ -52,6 +52,7 @@ class OrderRule extends AbstractModifier
 
         if ($orderRule->getId()) {
             $stockData["sale_qty_per_month"] = $orderRule->getSaleQtyPerMonth();
+            $stockData["sale_qty_per_month_origin"] = $orderRule->getSaleQtyPerMonth();
             $stockData["use_config_sale_qty_per_month"] = $orderRule->getUseConfig();
         }
         return $data;
