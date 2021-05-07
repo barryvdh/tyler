@@ -9,7 +9,7 @@
                         <item name="dataScope" xsi:type="string">stock_data</item>
                     </item>
                 </argument>
-                <field name="sale_qty_per_month" formElement="input">
+                <field name="sale_qty_per_month" formElement="input" component="Bss_OrderRestriction/js/view/sale-qty-permonth">
                     <argument name="data" xsi:type="array">
                         <item name="config" xsi:type="array">
                             <item name="value" xsi:type="object">Bss\OrderRestriction\Model\Source\OrderRuleConfiguration</item>
