@@ -355,4 +355,50 @@
     font-size: 20px;
     line-height: 25px;
   }
+  .cms-porto_home_18{
+    .custom-swag{
+      #get-quote-sub-container{
+        width: max-content !important;
+      }
+    }
+  }
+}
+.cms-porto_home_18{
+  .custom-swag{
+    #get-quote-main{
+      width: 100%;
+      height: 100%;
+      top: 0;
+      bottom: 0;
+      left: 0;
+      position: fixed;
+      visibility: hidden;
+      display: none;
+      background-color: rgba(22,22,22,0.5);
+      z-index: 100;
+      #get-quote-sub-container{
+        background:#f9f9f9;
+        margin: 0 auto;
+        width:60%;
+        border-radius: 6px;
+        position:relative;
+        z-index:41;
+        top: 20%;
+        padding:30px;
+        -webkit-box-shadow:0 0 10px rgba(0,0,0,0.4);
+        -moz-box-shadow:0 0 10px rgba(0,0,0,0.4);
+        box-shadow:0 0 10px rgba(0,0,0,0.4);
+        #get-quote-close-btn{
+          font-size: 26px;
+          color: black;
+          float: right;
+          cursor: pointer;
+        }
+      }
+    }
+    #get-quote-main:target{
+      visibility: visible;
+      display: block;
+    }
+  }
 }
