@@ -502,6 +502,13 @@
   }
 }
 .media-width(@extremum, @break) when (@extremum = 'min') and (@break = @screen__l) {
+  .features-content {
+    .description {
+      p.main {
+        .lib-font-size(40);
+      }
+    }
+  }
   .size-l {
     font-size:45px!important;
     line-height:55px!important;
@@ -554,6 +561,13 @@
   }
 }
 .media-width(@extremum, @break) when (@extremum = 'min') and (@break = @screen__m) {
+  .features-content {
+    .description {
+      p.main {
+        .lib-font-size(30);
+      }
+    }
+  }
   .features-header {
     .feature-logo {
       max-width: 165px;
