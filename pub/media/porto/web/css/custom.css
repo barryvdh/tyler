@@ -2348,8 +2348,3 @@ hr.solid {
     max-width: unset;
     padding: 0;
 }
-.brand-content > div:not(.main-title) {
-    max-width: 1140px;
-    margin: 0 auto;
-    padding: 0 10px;
-}
