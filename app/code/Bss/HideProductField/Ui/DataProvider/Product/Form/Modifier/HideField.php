@@ -290,7 +290,7 @@ class HideField extends AbstractModifier
             'gallery' => !in_array("gallery", $this->getHideAttributes())
         ];
         $data[$productId]["visible_fields"] = [
-            'galleryLabel' => __("Thumbnail Images and Videos")
+            'galleryLabel' => __("Thumbnail Images")
         ];
         return $data;
     }

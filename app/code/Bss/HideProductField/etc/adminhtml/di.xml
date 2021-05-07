@@ -50,4 +50,10 @@
                 type="Bss\HideProductField\Plugin\DownloadableProduct\Source\Shareable"
                 sortOrder="20" />
     </type>
+
+    <type name="Magento\Catalog\Block\Adminhtml\Product\Helper\Form\Gallery\Content">
+        <plugin name="Bss_HideField::hideAddVideoBtnForBrandManager"
+                type="Bss\HideProductField\Plugin\Block\Adminhtml\Product\Form\Gallery\Content"
+                sortOrder="30" />
+    </type>
 </config>
