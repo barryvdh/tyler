@@ -1106,6 +1106,11 @@
 //    Mobile @screen__s
 //--------------------------------------
 .media-width(@extremum, @break) when (@extremum = 'max') and (@break = @screen__s) {
+    #maincontent {
+        .breadcrumbs {
+            margin-left: 25px;
+        }
+    }
     .product-social-links {
         .action.tocompare {
             display: none;
@@ -1161,6 +1166,9 @@
             }
         }
         #maincontent {
+            .breadcrumbs {
+                max-width: 720px
+            }
             .columns {
                 max-width: 720px;
                 margin:0 auto;
@@ -1880,6 +1888,9 @@ body.catalog-product-compare-index {
     }
     .catalog-category-view {
         #maincontent {
+            .breadcrumbs {
+                max-width: 960px
+            }
             .columns {
                 max-width:960px;
                 margin:0 auto;
@@ -1916,6 +1927,9 @@ body.catalog-product-compare-index {
 .media-width(@extremum, @break) when (@extremum = 'min') and (@break = @screen__xl) {
     .catalog-category-view {
         #maincontent {
+            .breadcrumbs {
+                max-width: 1140px;
+            }
             .columns {
                 max-width: 1140px;
                 margin: 0 auto;
