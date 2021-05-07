@@ -1,0 +1,21 @@
+{
+  "name": "bsscommerce/brand-landing-page",
+  "version": "1.0.0",
+  "description": "Brand landing page",
+  "type": "magento2-module",
+  "require": {
+    "magento/framework": "*",
+    "bsscommerce/b2b-registration": "1.2.*"
+  },
+  "license": [
+    "Proprietary"
+  ],
+  "autoload": {
+    "files": [
+      "registration.php"
+    ],
+    "psr-4": {
+      "Bss\\BrandLandingPage\\": ""
+    }
+  }
+}

@@ -1,0 +1,21 @@
+{
+  "name": "bsscommerce/customize-mageplaza-search",
+  "version": "1.0.0",
+  "description": "Customize search categories list",
+  "type": "magento2-module",
+  "require": {
+    "magento/framework": "*",
+    "mageplaza/module-search": "2.0.*"
+  },
+  "license": [
+    "Proprietary"
+  ],
+  "autoload": {
+    "files": [
+      "registration.php"
+    ],
+    "psr-4": {
+      "Bss\\CustomizeMageplazaSearch\\": ""
+    }
+  }
+}
