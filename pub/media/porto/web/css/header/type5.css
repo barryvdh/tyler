@@ -33,7 +33,7 @@
     .page-header.type5 .navigation>ul{text-align:right}
     .page-header.type5 .navigation>ul>li{pointer-events:all;text-align:left}
     .page-header.type5:not(.header-newskin) .navigation .level0>.level-top{color:#3d3734;line-height:30px;display:inline-block;transition-delay:0.3s}
-    .page-header.type5:not(.header-newskin) .navigation .level0.active>.level-top,.page-header.type5 .navigation .level0.has-active>.level-top{color:#fff;background-color:#3d3734;border-radius:5px}
+    .page-header.type5:not(.header-newskin) .navigation .level0.active>.level-top,.page-header.type5 .navigation .level0.has-active>.level-top{}
     .page-header.type5:not(.header-newskin) .navigation .level0.parent>a:after{line-height:30px}
     .page-header.type5:not(.header-newskin) .navigation .level0.parent:hover>.level-top{border-radius:5px 5px 0 0}
     .page-header.type5:not(.header-newskin) .navigation .level0:hover>.level-top{color:#fff;background-color:#3d3734;border-radius:5px}
@@ -65,7 +65,7 @@
         position: relative;
         display: inline-block;
         float: right;
-    }    
+    }
     .page-header.type5.header-newskin .top-links-icon {display: none;}
 
     .page-header.type5.header-newskin .panel.header .top-links-area ul {
@@ -83,7 +83,7 @@
     }
     .page-header.type5.header-newskin .panel.header .top-links-area ul li > span {
         padding: 0 10px;
-    } 
+    }
     .page-header.type5.header-newskin .header.content {
         display: block;
         vertical-align: middle;
