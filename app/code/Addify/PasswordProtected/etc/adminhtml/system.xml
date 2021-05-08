@@ -13,7 +13,7 @@
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Config:etc/system_file.xsd">
     <system>
         <tab id="addify_extensions" translate="label" sortOrder="200">
-            <label><![CDATA[<img src="http://www.addifypro.com/images/logo.png" alt="Addify" height="25" style="vertical-align:middle;"/>]]></label>
+            <label>Addify</label>
         </tab>
         <section id="passwordprotected" translate="label" sortOrder="130" showInDefault="1" showInWebsite="1" showInStore="1">
             <class>separator-top</class>
