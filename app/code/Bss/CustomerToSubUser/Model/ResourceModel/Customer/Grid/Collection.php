@@ -27,7 +27,9 @@ class Collection extends CustomerGridCollection
         "billing_fax",
         "billing_vat_id",
         "billing_company",
-        "website_id"
+        "website_id",
+        "ca_company_website",
+        "ca_company_name"
     ];
 
     /**
@@ -43,11 +45,13 @@ class Collection extends CustomerGridCollection
         $data = [];
         $connection = $select->getConnection();
         foreach ($this->replaceFields as $field) {
-            $data[$field] = $connection->getCheckSql(
-                '`main_table`.entity_id IS NULL',
-                "`company`.$field",
-                "`main_table`.$field"
-            );
+            if ($connection->tableColumnExists($this->getMainTable(), $field)) {
+                $data[$field] = $connection->getCheckSql(
+                    '`main_table`.entity_id IS NULL',
+                    "`company`.$field",
+                    "`main_table`.$field"
+                );
+            }
         }
 
         return $data;
