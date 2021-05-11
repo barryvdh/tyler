@@ -309,6 +309,7 @@ return [
         'Bss_CustomerAttributes' => 1,
         'Bss_CustomerToSubUser' => 1,
         'Bss_CustomizeAmastyRolePermissions' => 1,
+        'Bss_CustomizeCompanyAccount' => 1,
         'Bss_CustomizeForceLogin' => 1,
         'Mageplaza_Core' => 1,
         'Bss_ProductStockAlert' => 1,
