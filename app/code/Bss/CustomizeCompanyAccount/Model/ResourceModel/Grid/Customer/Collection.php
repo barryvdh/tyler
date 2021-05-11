@@ -24,6 +24,10 @@ class Collection extends \Bss\CustomerToSubUser\Model\ResourceModel\Customer\Gri
             ["sub_user" => $this->getTable("bss_sub_user")],
             "sub_user.sub_email=main_table.email",
             ["sub_name", "sub_email", "customer_id", "sub_id"]
+        )->joinLeft(
+            ['company' => $this->getMainTable()],
+            "`sub_user`.`customer_id`=`company`.`entity_id`",
+            ["company_account_name" => "name"]
         );
 
         $customerJoinRightPartUnion = clone $this->getSelect();
@@ -32,6 +36,10 @@ class Collection extends \Bss\CustomerToSubUser\Model\ResourceModel\Customer\Gri
             ["sub_user" => $this->getTable("bss_sub_user")],
             "sub_user.sub_email=main_table.email",
             ["sub_name", "sub_email", "customer_id", "sub_id"]
+        )->joinLeft(
+            ['company' => $this->getMainTable()],
+            "`sub_user`.`customer_id`=`company`.`entity_id`",
+            ["company_account_name" => "name"]
         );
 
         $fromPart = $this->getSelect()->getPart("from");
