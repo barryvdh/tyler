@@ -3,6 +3,7 @@
         xsi:noNamespaceSchemaLocation="urn:magento:framework:Module/etc/module.xsd">
     <module name="Bss_CustomizeCompanyAccount" setup_version="1.0.0">
         <sequence>
+            <module name="Magento_CustomerImportExport"/>
             <module name="Bss_CompanyAccount"/>
             <module name="Bss_CustomerToSubUser"/>
         </sequence>
