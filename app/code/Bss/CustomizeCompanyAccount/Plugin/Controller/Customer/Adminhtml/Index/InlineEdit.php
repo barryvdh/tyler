@@ -24,7 +24,7 @@ class InlineEdit
         $params = $request->getParams();
         if (isset($params['items'])) {
             foreach ($params['items'] as $cId => $param) {
-                if (preg_match('/sub-/', $cId)) {
+                if (preg_match('/sub-/', $cId . "")) {
                     unset($params['items'][$cId]);
                 }
             }

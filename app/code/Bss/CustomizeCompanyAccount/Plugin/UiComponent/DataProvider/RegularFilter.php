@@ -35,6 +35,12 @@ class RegularFilter
         }
 
         switch ($filter->getField()) {
+            case "sub_status":
+                $collection->addFieldToFilter(
+                    sprintf("main_table.%s", $filter->getField()),
+                    ['eq' => $filter->getValue()]
+                );
+                break;
             case "is_sub_user":
                 if ($filter->getValue()) {
                     $collection->addFieldToFilter(

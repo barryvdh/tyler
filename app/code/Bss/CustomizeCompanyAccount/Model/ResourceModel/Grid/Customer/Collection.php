@@ -23,11 +23,15 @@ class Collection extends \Bss\CustomerToSubUser\Model\ResourceModel\Customer\Gri
         $customerJoinLeftPartUnion->joinLeft(
             ["sub_user" => $this->getTable("bss_sub_user")],
             "sub_user.sub_email=main_table.email",
-            ["sub_name", "sub_email", "customer_id", "sub_id"]
+            ["sub_name", "sub_email", "customer_id", "sub_id", "sub_status"]
         )->joinLeft(
             ['company' => $this->getMainTable()],
             "`sub_user`.`customer_id`=`company`.`entity_id`",
             ["company_account_name" => "name"]
+        )->joinLeft(
+            ['sub_user_role' => $this->getTable("bss_sub_role")],
+            "`sub_user_role`.`role_id`=`sub_user`.`role_id`",
+            ["role_name"]
         );
 
         $customerJoinRightPartUnion = clone $this->getSelect();
@@ -35,11 +39,15 @@ class Collection extends \Bss\CustomerToSubUser\Model\ResourceModel\Customer\Gri
         $customerJoinRightPartUnion->joinRight(
             ["sub_user" => $this->getTable("bss_sub_user")],
             "sub_user.sub_email=main_table.email",
-            ["sub_name", "sub_email", "customer_id", "sub_id"]
+            ["sub_name", "sub_email", "customer_id", "sub_id", "sub_status"]
         )->joinLeft(
             ['company' => $this->getMainTable()],
             "`sub_user`.`customer_id`=`company`.`entity_id`",
             ["company_account_name" => "name"]
+        )->joinLeft(
+            ['sub_user_role' => $this->getTable("bss_sub_role")],
+            "`sub_user_role`.`role_id`=`sub_user`.`role_id`",
+            ["role_name"]
         );
 
         $fromPart = $this->getSelect()->getPart("from");

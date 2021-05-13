@@ -1,6 +1,36 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <listing xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Ui:etc/ui_configuration.xsd">
-    <columns name="customer_columns">
+    <modal name="bss_company_account_update_sub_user">
+        <settings>
+            <options>
+                <option name="title" xsi:type="string" translate="true">Update Sub-user</option>
+            </options>
+        </settings>
+        <insertForm name="update_bss_companyaccount_customer_subuser_form_loader" component="Bss_CompanyAccount/js/sub-user/form/components/insert-form">
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="subUserListingProvider" xsi:type="string">index = customer_listing_data_source</item>
+                    <item name="subUserModalProvider" xsi:type="string">${ $.parentName }</item>
+                </item>
+            </argument>
+            <settings>
+                <formSubmitType>ajax</formSubmitType>
+                <renderUrl path="mui/index/render_handle">
+                    <param name="handle">customize_ca_customer_subuser_edit</param>
+                    <param name="buttons">1</param>
+                </renderUrl>
+                <loading>true</loading>
+                <toolbarContainer>${ $.parentName }</toolbarContainer>
+                <externalProvider>${ $.ns }.customize_ca_customer_subuser_form_data_source</externalProvider>
+                <ns>customize_ca_customer_subuser_form</ns>
+                <imports>
+                    <link name="onSubUserDelete">${ $.ns }.${ $.ns }:deleteSubUserAction</link>
+                </imports>
+            </settings>
+        </insertForm>
+    </modal>
+
+    <columns name="customer_columns" component="Bss_CustomizeCompanyAccount/js/grid/listing">
         <column name="is_sub_user" component="Magento_Ui/js/grid/columns/select" sortOrder="35">
             <settings>
                 <options class="Magento\Config\Model\Config\Source\Yesno"/>
@@ -10,11 +40,34 @@
                 <label translate="true">Is SubUser</label>
             </settings>
         </column>
+        <column name="sub_status" sortOrder="36" component="Magento_Ui/js/grid/columns/select">
+            <settings>
+                <options class="Magento\Config\Model\Config\Source\Enabledisable" />
+                <filter>select</filter>
+                <dataType>select</dataType>
+                <dataScope>sub_status</dataScope>
+                <label translate="true">Sub-user status</label>
+            </settings>
+        </column>
+        <column name="role_name" sortOrder="37">
+            <settings>
+                <dataScope>role_name</dataScope>
+                <label translate="true">Role</label>
+            </settings>
+        </column>
         <column name="company_account_name" sortOrder="38">
             <settings>
                 <filter>text</filter>
                 <label translate="true">Company Account Name</label>
             </settings>
         </column>
+
+        <actionsColumn name="actions" class="Bss\CustomizeCompanyAccount\Ui\Component\Listing\Column\Actions">
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="bodyTmpl" xsi:type="string">ui/grid/cells/actions</item>
+                </item>
+            </argument>
+        </actionsColumn>
     </columns>
 </listing>
