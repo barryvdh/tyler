@@ -334,6 +334,7 @@ return [
         'Mageplaza_BetterMaintenance' => 1,
         'Mageplaza_Search' => 1,
         'Mageplaza_LayeredNavigation' => 0,
+        'Mageplaza_LoginAsCustomer' => 1,
         'Bss_CustomizeMageplazaSearch' => 1,
         'Mageplaza_Webhook' => 1,
         'PayPal_Braintree' => 1,
