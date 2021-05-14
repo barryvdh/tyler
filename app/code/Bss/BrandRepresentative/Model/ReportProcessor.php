@@ -142,11 +142,11 @@ class ReportProcessor
                     $newReport->setProvince($shippingAddress->getRegion());
                 }
                 $provinceId = $order->getShippingAddress()->getRegionId();
-                $email = $this->helper->extractRepresentativeEmail(
+                $emails = $this->helper->extractRepresentativeEmail(
                     $product,
                     $provinceId
                 );
-                $newReport->setRepresentativeEmail($email);
+                $newReport->setRepresentativeEmail($emails);
                 $newReport->setSentStatus(SalesReport::SENT_STATUS_NOT_SEND);
                 try {
                     /* @var Category $brand */
