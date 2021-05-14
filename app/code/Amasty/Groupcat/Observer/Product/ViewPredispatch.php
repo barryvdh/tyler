@@ -90,7 +90,10 @@ class ViewPredispatch implements ObserverInterface
             }
 
             $rule = $this->ruleRepository->get($ruleIndex[RuleInterface::RULE_ID]);
-            $this->helper->setRedirect($observer->getEvent()->getControllerAction(), $rule);
+
+            if ($this->ruleProvider->isProductRestricted($product)) {
+                $this->helper->setRedirect($observer->getEvent()->getControllerAction(), $rule);
+            }
         } catch (NoSuchEntityException $e) {
             null;
         }

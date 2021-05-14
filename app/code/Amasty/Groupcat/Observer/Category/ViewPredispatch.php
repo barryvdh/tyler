@@ -54,7 +54,7 @@ class ViewPredispatch implements ObserverInterface
             ->setCurPage(1)
             ->getFirstItem();
 
-        if ($rule->getId()) {
+        if ($rule->getId() && $rule->getData('hide_category')) {
             $this->helper->setRedirect($observer->getEvent()->getControllerAction(), $rule);
         }
     }
