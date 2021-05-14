@@ -312,6 +312,7 @@ return [
         'Bss_CustomizeForceLogin' => 1,
         'Mageplaza_Core' => 1,
         'Bss_ProductStockAlert' => 1,
+        'Bss_FixAdminActionLog' => 1,
         'Bss_BrandLandingPage' => 1,
         'Bss_HideProductField' => 1,
         'Bss_LoginAsCustomer' => 0,
