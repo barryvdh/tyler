@@ -328,6 +328,8 @@ return [
         'Klarna_Ordermanagement' => 1,
         'Klarna_Onsitemessaging' => 1,
         'Klarna_Kp' => 1,
+        'Lof_AdvancedReports' => 0,
+        'Lof_All' => 0,
         'MagePal_Core' => 1,
         'MagePal_GmailSmtpApp' => 1,
         'Mageplaza_AjaxLayer' => 1,
