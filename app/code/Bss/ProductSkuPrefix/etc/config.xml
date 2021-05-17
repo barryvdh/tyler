@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Store:etc/config.xsd">
+    <default>
+        <catalog>
+            <fields_masks>
+                <enable_sku_prefix>1</enable_sku_prefix>
+                <sku_prefix>{"_1621219737411_411":{"product_type":"downloadable","prefix":"DIGITAL-"},"2":{"product_type":"grouped","prefix":"GROUPED-"}}</sku_prefix>
+            </fields_masks>
+        </catalog>
+    </default>
+</config>
