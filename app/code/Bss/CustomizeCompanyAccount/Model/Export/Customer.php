@@ -12,6 +12,13 @@ use Bss\CompanyAccount\Model\ResourceModel\SubUser\CollectionFactory as SubUserC
  */
 class Customer extends \Magento\CustomerImportExport\Model\Export\Customer
 {
+    /**
+     * Permanent sub-user field
+     *
+     * @var string[]
+     */
+    public $permanentFields = ["full_name" => "sub_name", "email" => "sub_email"];
+
     protected $validSubUserFields = [];
 
     /**
@@ -66,6 +73,23 @@ class Customer extends \Magento\CustomerImportExport\Model\Export\Customer
     }
 
     /**
+     * Export given customer data. And add full name
+     *
+     * @param \Magento\Customer\Model\Customer $item
+     * @return void
+     * @throws \Magento\Framework\Exception\LocalizedException
+     */
+    public function exportItem($item)
+    {
+        $row = $this->_addAttributeValuesToRow($item);
+        $row[self::COLUMN_WEBSITE] = $this->_websiteIdToCode[$item->getWebsiteId()];
+        $row[self::COLUMN_STORE] = $this->_storeIdToCode[$item->getStoreId()];
+
+        $row["full_name"] = $item->getName();
+        $this->getWriter()->writeRow($row);
+    }
+
+    /**
      * Add sub-user header columns
      *
      * @return array|string[]
@@ -74,13 +98,25 @@ class Customer extends \Magento\CustomerImportExport\Model\Export\Customer
     protected function _getHeaderColumns()
     {
         $this->getSubUserHeaderColumns();
-        return array_merge(parent::_getHeaderColumns(), $this->validSubUserFields);
+        $validCols = array_merge(parent::_getHeaderColumns(), $this->validSubUserFields);
+        $afterEmailKey = array_keys($validCols, "email");
+
+        if (isset($afterEmailKey[0])) {
+            // insert full_name column
+            array_splice($validCols, $afterEmailKey[0]++, 0, "full_name");
+        } else {
+            // else insert to the last
+            $validCols[] = "full_name";
+        }
+
+        return $validCols;
     }
 
     /**
      * Add Sub-user fields to header
      *
      * @SuppressWarnings(PHPMD.UnusedLocalVariable)
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     protected function getSubUserHeaderColumns()
     {
@@ -98,7 +134,10 @@ class Customer extends \Magento\CustomerImportExport\Model\Export\Customer
             }
             $attributeCodes = [];
             foreach ($exportFilter['sub_user'] as $field => $value) {
-                if (!isset($skippedAttributes[$field]) && $field !== Export::FILTER_ELEMENT_SKIP) {
+                if (!isset($skippedAttributes[$field]) &&
+                    $field !== Export::FILTER_ELEMENT_SKIP &&
+                    !in_array($field, $this->getMappingToCustomerFields())
+                ) {
                     $attributeCodes[] = $field;
                 }
             }
@@ -148,6 +187,11 @@ class Customer extends \Magento\CustomerImportExport\Model\Export\Customer
         foreach ($this->validSubUserFields as $field) {
             $row[$field] = $item->getData($field);
         }
+
+        // Mapping sub-user data to custoemr field
+        foreach ($this->getMappingToCustomerFields() as $customerField => $subUserField) {
+            $row[$customerField] = $item->getData($subUserField);
+        }
     }
 
     /**
@@ -186,7 +230,8 @@ class Customer extends \Magento\CustomerImportExport\Model\Export\Customer
             $this->getSubUserHeaderColumns();
         }
 
-        $collection->addFieldToSelect($this->validSubUserFields);
+        // select all field include mapping field
+        $collection->addFieldToSelect(array_merge($this->validSubUserFields, array_values($this->getMappingToCustomerFields())));
         /** @var \Bss\CustomizeCompanyAccount\Model\SubUserField $field */
         foreach ($fieldCollection as $field) {
             if (isset($subUserFilter[$field->getField()])) {
@@ -235,4 +280,14 @@ class Customer extends \Magento\CustomerImportExport\Model\Export\Customer
         return $collection;
     }
     // @codingStandardsIgnoreEnd
+
+    /**
+     * Static get sub-user permanent fields
+     *
+     * @return string[]
+     */
+    public function getMappingToCustomerFields(): array
+    {
+        return $this->permanentFields;
+    }
 }
