@@ -2,6 +2,7 @@
 declare(strict_types=1);
 namespace Bss\CustomizeCompanyAccount\Block\Adminhtml\Export;
 
+use Bss\CustomizeCompanyAccount\Model\Export\Customer;
 use Bss\CustomizeCompanyAccount\Model\SubUserField;
 use \Magento\ImportExport\Model\Export;
 
@@ -11,6 +12,31 @@ use \Magento\ImportExport\Model\Export;
  */
 class Filter extends \Magento\ImportExport\Block\Adminhtml\Export\Filter
 {
+    /**
+     * @var Customer
+     */
+    protected $customerExport;
+
+    /**
+     * Filter constructor.
+     *
+     * @param Customer $customerExport
+     * @param \Magento\Backend\Block\Template\Context $context
+     * @param \Magento\Backend\Helper\Data $backendHelper
+     * @param \Magento\ImportExport\Helper\Data $importExportData
+     * @param array $data
+     */
+    public function __construct(
+        Customer $customerExport,
+        \Magento\Backend\Block\Template\Context $context,
+        \Magento\Backend\Helper\Data $backendHelper,
+        \Magento\ImportExport\Helper\Data $importExportData,
+        array $data = []
+    ) {
+        $this->customerExport = $customerExport;
+        parent::__construct($context, $backendHelper, $importExportData, $data);
+    }
+
     /**
      * Add columns for grid
      *
@@ -33,7 +59,8 @@ class Filter extends \Magento\ImportExport\Block\Adminhtml\Export\Filter
                 'sortable' => false,
                 'index' => 'field',
                 'header_css_class' => 'col-id',
-                'column_css_class' => 'col-id data-grid-checkbox-cell'
+                'column_css_class' => 'col-id data-grid-checkbox-cell',
+                'frame_callback' => [$this, 'skipPermanentField']
             ]
         );
         $this->addColumn(
@@ -89,6 +116,26 @@ class Filter extends \Magento\ImportExport\Block\Adminhtml\Export\Filter
     protected function _toHtml()
     {
         return "<div><strong>Sub-user fields filter</strong></div>" . parent::_toHtml();
+    }
+
+    /**
+     * Skip exclude permanent field
+     *
+     * @param string $cellHtml
+     * @param \Magento\Framework\DataObject $row
+     * @param \Magento\Framework\DataObject $column
+     * @return string
+     */
+    public function skipPermanentField($cellHtml, $row, \Magento\Framework\DataObject $column)
+    {
+        if (in_array(
+            $row->getData($column->getIndex()),
+            $this->customerExport->getMappingToCustomerFields()
+        )) {
+            return "";
+        }
+
+        return $cellHtml;
     }
 
     /**
