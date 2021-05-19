@@ -4,6 +4,7 @@ namespace Bss\ProductSkuPrefix\Plugin\Ui\DataProvider;
 
 use Bss\ProductSkuPrefix\Helper\ConfigProvider;
 use Bss\ProductSkuPrefix\Model\ResourceModel\GetProductEntityNextIncrementValue;
+use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Catalog\Ui\DataProvider\Product\Form\Modifier\General as BePlugged;
 
 /**
@@ -12,6 +13,11 @@ use Magento\Catalog\Ui\DataProvider\Product\Form\Modifier\General as BePlugged;
  */
 class ModifySku
 {
+    const NOT_EDITABLE = [
+        \Magento\Downloadable\Model\Product\Type::TYPE_DOWNLOADABLE,
+        \Magento\GroupedProduct\Model\Product\Type\Grouped::TYPE_CODE
+    ];
+
     /**
      * @var ConfigProvider
      */
@@ -28,20 +34,28 @@ class ModifySku
     protected $request;
 
     /**
+     * @var ProductRepositoryInterface
+     */
+    protected $productRepository;
+
+    /**
      * ModifySku constructor.
      *
      * @param ConfigProvider $configProvider
      * @param GetProductEntityNextIncrementValue $getProductEntityNextIncrementValue
      * @param \Magento\Framework\App\RequestInterface $request
+     * @param ProductRepositoryInterface $productRepository
      */
     public function __construct(
         ConfigProvider $configProvider,
         GetProductEntityNextIncrementValue $getProductEntityNextIncrementValue,
-        \Magento\Framework\App\RequestInterface $request
+        \Magento\Framework\App\RequestInterface $request,
+        ProductRepositoryInterface $productRepository
     ) {
         $this->configProvider = $configProvider;
         $this->getProductEntityNextIncrementValue = $getProductEntityNextIncrementValue;
         $this->request = $request;
+        $this->productRepository = $productRepository;
     }
 
     /**
@@ -61,10 +75,18 @@ class ModifySku
             'type',
             \Magento\Catalog\Model\Product\Type::TYPE_SIMPLE
         );
+        if ($productId) {
+            try {
+                $product = $this->productRepository->getById($productId);
+                $productType = $product->getTypeId();
+            } catch (\Exception $e) {
+                return $meta;
+            }
+        }
         $prefix = $this->configProvider->getProductTypePrefix(
             $productType
         );
-        if ($productId || $prefix === false || !$this->configProvider->isEnable()) {
+        if ($prefix === false || !$this->configProvider->isEnable()) {
             return $meta;
         }
 
@@ -73,8 +95,11 @@ class ModifySku
         ) {
             $skuConfig = &$meta["product-details"]["children"]["container_sku"]["children"]
             ["sku"]["arguments"]["data"]["config"];
-            $uniqueSkuNum = $this->getProductEntityNextIncrementValue->execute();
-            $skuConfig['prefixSku'] = $prefix . $uniqueSkuNum;
+            $skuConfig['usePrefix'] = true;
+            $skuConfig['editable'] = $this->configProvider->isEditable($productType);
+            if ($skuConfig['editable']) {
+                $skuConfig['notice'] = __("Leave blank for auto-generated or type manual.");
+            }
             $skuConfig['component'] = 'Bss_ProductSkuPrefix/js/components/view/prefix-sku';
         }
 

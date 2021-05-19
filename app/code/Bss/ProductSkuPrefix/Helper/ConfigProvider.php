@@ -8,11 +8,12 @@ use Magento\Framework\Serialize\SerializerInterface;
 
 /**
  * Class ConfigProvider
+ * Get module config
  */
 class ConfigProvider
 {
-    const XML_SKU_PREFIX_ENABLE = 'catalog/fields_masks/enable_sku_prefix';
-    const XML_SKU_PREFIX_DATA = 'catalog/fields_masks/sku_prefix';
+    const XML_SKU_PREFIX_ENABLE = 'product_prefix/general/enable_sku_prefix';
+    const XML_SKU_PREFIX_DATA = 'product_prefix/general/sku_prefix';
 
     /**
      * @var array
@@ -84,15 +85,38 @@ class ConfigProvider
      * Get product prefix
      *
      * @param string $productType
-     * @return false|mixed
+     * @return false|string
      */
-    public function getProductTypePrefix($productType)
+    public function getProductTypePrefix(string $productType)
+    {
+        return $this->getPrefixData($productType, "prefix");
+    }
+
+    /**
+     * Get is editable
+     *
+     * @param string $productType
+     * @return false|string
+     */
+    public function isEditable(string $productType)
+    {
+        return $this->getPrefixData($productType, "editable");
+    }
+
+    /**
+     * Get prefix product type by key
+     *
+     * @param string $productType
+     * @param string $keyData
+     * @return false|string
+     * @SuppressWarnings(PHPMD.UnusedLocalVariable)
+     */
+    public function getPrefixData(string $productType, string $keyData)
     {
         $configData = $this->getSerializedConfigData();
-
         foreach ($configData as $rowId => $value) {
             if (isset($value["product_type"]) && $value['product_type'] === $productType) {
-                return $value["prefix"] ?? false;
+                return $value[$keyData] ?? false;
             }
         }
 

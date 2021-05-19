@@ -5,20 +5,37 @@ define([
     'use strict';
 
     return Sku.extend({
-        defaults: {},
-
         /** @inheritdoc */
         initialize: function () {
             this._super();
 
-            if (!this.prefixSku) {
+            if (!this.usePrefix) {
                 return this;
             }
-            // set prefix sku
-            if (ko.isObservable(this.value)) {
-                this.value(this.prefixSku);
+
+            if (this.hasOwnProperty('editable')) {
+                // disable required validation for editable prefix
+                // to allowed admin leave blank to auto generated sku
+                if (this.editable) {
+                    this._setValue('required', false);
+                    this.validation['required-entry'] = false;
+                }
+                this._setValue('disabled', !Boolean(this.editable))
+            }
+        },
+
+        /**
+         * Set local variable
+         *
+         * @param {String} prop
+         * @param {*} value
+         * @private
+         */
+        _setValue: function (prop, value) {
+            if (ko.isObservable(this[prop])) {
+                this[prop](value);
             } else {
-                this.value = this.prefixSku;
+                this[prop] = value;
             }
         },
 
@@ -28,7 +45,7 @@ define([
          * @returns {*}
          */
         setHandlers: function () {
-            if (!this.prefixSku) {
+            if (!this.usePrefix) {
                 return this._super();
             }
         }

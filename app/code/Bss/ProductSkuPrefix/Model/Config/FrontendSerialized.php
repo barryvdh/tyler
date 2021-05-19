@@ -60,12 +60,17 @@ class FrontendSerialized extends AbstractFieldArray
     {
         // create columns
         $this->addColumn('product_type', [
-            'label' => __('Product Type'),
-            'style' => 'width:300px',
+            'label' => __('Product Type')
         ]);
+        $this->addColumn(
+            'editable',
+            [
+                'label' => __('Editable')
+            ]
+        );
         $this->addColumn('prefix', [
             'label' => __('Prefix'),
-            'style' => 'width:300px'
+            'class' => 'required-entry admin__control-text'
         ]);
         $this->_addAfter = false;
         $this->_addButtonLabel = __('Add');
@@ -99,6 +104,16 @@ class FrontendSerialized extends AbstractFieldArray
             return str_replace("\n", '', $element->getElementHtml());
         }
 
+        if ($columnName === 'editable' && isset($this->_columns[$columnName])) {
+            $element = $this->elementFactory->create('checkbox');
+            $element->setForm($this->getForm())
+                ->setName($this->_getCellInputElementName($columnName))
+                ->setHtmlId(
+                    $this->_getCellInputElementId('<%- _id %>', $columnName)
+                )->setValue(1);
+            return str_replace("\n", '', $element->getElementHtml());
+        }
+
         return parent::renderCellTemplate($columnName);
     }
 
@@ -119,5 +134,15 @@ class FrontendSerialized extends AbstractFieldArray
         }
 
         return $productTypes;
+    }
+
+    /**
+     * Get custom template
+     *
+     * @return string
+     */
+    public function getTemplate()
+    {
+        return "Bss_ProductSkuPrefix::system/config/form/array.phtml";
     }
 }
