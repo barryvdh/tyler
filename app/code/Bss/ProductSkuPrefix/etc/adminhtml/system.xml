@@ -1,8 +1,15 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Config:etc/system_file.xsd">
     <system>
-        <section id="catalog">
-            <group id="fields_masks">
+        <tab id="bss" translate="label" sortOrder="300">
+            <label><![CDATA[Bss Commerce]]></label>
+        </tab>
+        <section id="product_prefix" sortOrder="50" type="text" translate="label" showInDefault="1" showInStore="1" showInWebsite="1">
+            <class>separator-top</class>
+            <label>Product Prefix</label>
+            <tab>bss</tab>
+            <resource>Bss_ProductSkuPrefix::config</resource>
+            <group id="general" translate="label" type="text" sortOrder="1" showInDefault="1" showInWebsite="1" showInStore="1">
                 <field id="enable_sku_prefix" translate="label" type="select" sortOrder="1" showInDefault="1" showInWebsite="1" showInStore="1">
                     <label>Enable SKU Prefix</label>
                     <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
