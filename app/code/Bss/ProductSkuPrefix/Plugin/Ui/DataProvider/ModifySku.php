@@ -3,7 +3,6 @@ declare(strict_types=1);
 namespace Bss\ProductSkuPrefix\Plugin\Ui\DataProvider;
 
 use Bss\ProductSkuPrefix\Helper\ConfigProvider;
-use Bss\ProductSkuPrefix\Model\ResourceModel\GetProductEntityNextIncrementValue;
 use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Catalog\Ui\DataProvider\Product\Form\Modifier\General as BePlugged;
 
@@ -24,11 +23,6 @@ class ModifySku
     protected $configProvider;
 
     /**
-     * @var GetProductEntityNextIncrementValue
-     */
-    protected $getProductEntityNextIncrementValue;
-
-    /**
      * @var \Magento\Framework\App\RequestInterface
      */
     protected $request;
@@ -42,18 +36,15 @@ class ModifySku
      * ModifySku constructor.
      *
      * @param ConfigProvider $configProvider
-     * @param GetProductEntityNextIncrementValue $getProductEntityNextIncrementValue
      * @param \Magento\Framework\App\RequestInterface $request
      * @param ProductRepositoryInterface $productRepository
      */
     public function __construct(
         ConfigProvider $configProvider,
-        GetProductEntityNextIncrementValue $getProductEntityNextIncrementValue,
         \Magento\Framework\App\RequestInterface $request,
         ProductRepositoryInterface $productRepository
     ) {
         $this->configProvider = $configProvider;
-        $this->getProductEntityNextIncrementValue = $getProductEntityNextIncrementValue;
         $this->request = $request;
         $this->productRepository = $productRepository;
     }
@@ -83,10 +74,8 @@ class ModifySku
                 return $meta;
             }
         }
-        $prefix = $this->configProvider->getProductTypePrefix(
-            $productType
-        );
-        if ($prefix === false || !$this->configProvider->isEnable()) {
+
+        if (!$this->configProvider->isEnable()) {
             return $meta;
         }
 
@@ -95,11 +84,11 @@ class ModifySku
         ) {
             $skuConfig = &$meta["product-details"]["children"]["container_sku"]["children"]
             ["sku"]["arguments"]["data"]["config"];
-            $skuConfig['usePrefix'] = true;
-            $skuConfig['editable'] = $this->configProvider->isEditable($productType);
-            if ($skuConfig['editable']) {
-                $skuConfig['notice'] = __("Leave blank for auto-generated or type manual.");
-            }
+            $skuConfig['productSku'] = isset($product) ? $product->getSku() : false;
+            $skuConfig['isLoaded'] = (bool) $productId;
+            $skuConfig['productType'] = $productType;
+            $skuConfig['prefixData'] = $this->configProvider->getSerializedConfigData();
+            $skuConfig['prefixNotice'] = __("Leave blank for auto-generated or type manual.");
             $skuConfig['component'] = 'Bss_ProductSkuPrefix/js/components/view/prefix-sku';
         }
 
