@@ -126,7 +126,7 @@ class Data extends AbstractHelper
                         ) {
                             $categoryEmails = explode(',', $emailData['bss_email']);
                             $this->uniqueEmailList($emailList, $categoryEmails);
-                            $emailList[$categoryId] = $categoryEmails;
+                            $this->pushToEmailList($emailList[$categoryId], $categoryEmails);
                         }
                     }
                 }
@@ -136,6 +136,20 @@ class Data extends AbstractHelper
             }
         }
         return $this->json->serialize($emailList);
+    }
+
+    /**
+     * Push to email list
+     *
+     * @param array $emailList
+     * @param array $needPushEmails
+     */
+    protected function pushToEmailList(&$emailList, $needPushEmails)
+    {
+        if ($emailList === null) {
+            $emailList = [];
+        }
+        $emailList = array_merge($emailList, $needPushEmails);
     }
 
     /**

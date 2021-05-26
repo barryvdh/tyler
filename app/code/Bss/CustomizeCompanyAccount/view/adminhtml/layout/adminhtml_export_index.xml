@@ -1,0 +1,10 @@
+<?xml version="1.0"?>
+<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
+    <head>
+        <css src="Bss_CustomizeCompanyAccount::css/export-index.css" />
+    </head>
+    <body>
+        <referenceBlock name="export.form.before" template="Bss_CustomizeCompanyAccount::export/form/before.phtml" />
+        <referenceBlock name="export.form.after" template="Bss_CustomizeCompanyAccount::export/form/after.phtml" />
+    </body>
+</page>

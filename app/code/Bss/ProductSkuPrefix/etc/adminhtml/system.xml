@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Config:etc/system_file.xsd">
+    <system>
+        <tab id="bss" translate="label" sortOrder="300">
+            <label><![CDATA[Bss Commerce]]></label>
+        </tab>
+        <section id="product_prefix" sortOrder="50" type="text" translate="label" showInDefault="1" showInStore="1" showInWebsite="1">
+            <class>separator-top</class>
+            <label>Product Prefix</label>
+            <tab>bss</tab>
+            <resource>Bss_ProductSkuPrefix::config</resource>
+            <group id="general" translate="label" type="text" sortOrder="1" showInDefault="1" showInWebsite="1" showInStore="1">
+                <field id="enable_sku_prefix" translate="label" type="select" sortOrder="1" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Enable SKU Prefix</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                    <comment><![CDATA[Enable Product Prefix function]]></comment>
+                </field>
+                <field id="sku_prefix" translate="label" type="text" sortOrder="5" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <depends>
+                        <field id="catalog/fields_masks/enable_sku_prefix">1</field>
+                    </depends>
+                    <label><![CDATA[SKU Prefix]]></label>
+                    <frontend_model>Bss\ProductSkuPrefix\Model\Config\FrontendSerialized</frontend_model>
+                    <backend_model>Bss\ProductSkuPrefix\Model\Config\BackendSerialized</backend_model>
+                    <comment><![CDATA['Mask for SKU' will no longer apply to the 'Product Type' defined in the SKU prefix]]></comment>
+                </field>
+            </group>
+        </section>
+    </system>
+</config>
