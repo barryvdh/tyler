@@ -321,6 +321,7 @@ return [
         'Bss_AggregateCustomize' => 1,
         'Bss_CustomizeProductStockAlert' => 1,
         'Bss_Reindex' => 0,
+        'Custom_CatalogAdminProductPreview' => 1,
         'Dotdigitalgroup_Email' => 1,
         'Dotdigitalgroup_Chat' => 1,
         'FME_Restrictcustomergroup' => 0,
