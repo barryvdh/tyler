@@ -1,0 +1,13 @@
+<?xml version="1.0"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:framework:Module/etc/module.xsd">
+    <module name="Bss_CustomizeCompanyAccount" setup_version="1.0.1">
+        <sequence>
+            <module name="Bss_AdminPreview"/>
+            <module name="Bss_LoginAsCustomer"/>
+            <module name="Magento_CustomerImportExport"/>
+            <module name="Bss_CompanyAccount"/>
+            <module name="Bss_CustomerToSubUser"/>
+        </sequence>
+    </module>
+</config>

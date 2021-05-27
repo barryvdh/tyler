@@ -1,0 +1,1 @@
+/var/www/html/pub/app/code/Bss/CustomizeForceLogin/view/frontend/web/js/remove-add-to-cart-button.js

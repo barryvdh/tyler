@@ -1,0 +1,8 @@
+<?xml version="1.0"?>
+<layout xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/layout_generic.xsd">
+
+   <container name="root">
+      <block name="restrictcustomergroup.edit.tab.blocks" class="FME\Restrictcustomergroup\Block\Adminhtml\Rule\Edit\Tab\Blocks"/>
+   </container>
+
+</layout>

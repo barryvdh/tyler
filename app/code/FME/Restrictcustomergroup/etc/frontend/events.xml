@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:Event/etc/events.xsd">
+    <event name="controller_action_postdispatch_catalog_category_view">
+        <observer name="fme_restrictcustomergroup_postdispatch_catalog_category_view"
+          instance="FME\Restrictcustomergroup\Observer\CategoryObserver" />
+    </event>
+    <event name="controller_action_postdispatch_catalog_product_view">
+        <observer name="fme_restrictcustomergroup_postdispatch_catalog_product_view"
+          instance="FME\Restrictcustomergroup\Observer\ProductObserver" />
+    </event>
+    <event name="controller_action_postdispatch_cms_index_index">
+        <observer name="fme_restrictcustomergroup_postdispatch_cms_index_index"
+          instance="FME\Restrictcustomergroup\Observer\CmsObserver" />
+    </event>
+    <event name="controller_action_postdispatch_cms_page_view">
+        <observer name="fme_restrictcustomergroup_postdispatch_cms_page_view"
+          instance="FME\Restrictcustomergroup\Observer\CmsObserver" />
+    </event>
+    <event name="catalog_block_product_list_collection">
+        <observer name="fme_restrictcustomergroup_product_list_collection"
+          instance="FME\Restrictcustomergroup\Observer\ListCollectionObserver" />
+    </event>
+    <event name="customer_login">
+        <observer name="fme_restrictcustomergroup_customer_login"
+          instance="FME\Restrictcustomergroup\Observer\CustomerLoginObserver" />
+    </event>
+    <event name="controller_action_postdispatch">
+        <observer name="fme_restrictcustomergroup_postdispatch"
+          instance="FME\Restrictcustomergroup\Observer\PostDispatch" />
+    </event>
+
+    <event name="customer_logout">
+        <observer name="fme_restrictcustomergroup_customerlogout"
+          instance="FME\Restrictcustomergroup\Observer\CustomerLogout" />
+    </event>
+</config>

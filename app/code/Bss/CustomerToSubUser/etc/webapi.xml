@@ -1,0 +1,21 @@
+<?xml version="1.0"?>
+<routes xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Webapi:etc/webapi.xsd">
+    <route method="GET" url="/V1/company-account/roles/company/:emailOrId/website/:websiteId">
+        <service class="Bss\CustomerToSubUser\Api\CompanyRoleManagementInterface" method="getListByCompanyAccount"/>
+        <resources>
+            <resource ref="anonymous"/>
+        </resources>
+    </route>
+    <route method="GET" url="/V1/company-account/company-account/:email/:websiteId">
+        <service class="Bss\CustomerToSubUser\Api\CompanyAccountManagementInterface" method="getCompanyAccountBySubEmail"/>
+        <resources>
+            <resource ref="anonymous"/>
+        </resources>
+    </route>
+    <route method="GET" url="/V1/company-account/custom-attributes/:customerId">
+        <service class="Bss\CustomerToSubUser\Api\CompanyAccountManagementInterface" method="getCustomerCustomAttributes"/>
+        <resources>
+            <resource ref="anonymous"/>
+        </resources>
+    </route>
+</routes>

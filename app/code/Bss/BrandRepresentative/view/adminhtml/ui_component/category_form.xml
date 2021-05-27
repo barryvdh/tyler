@@ -1,0 +1,141 @@
+<form xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Ui:etc/ui_configuration.xsd">
+    <fieldset name="bss_brand_representative" sortOrder="10">
+        <settings>
+            <label translate="true">Sales Representative</label>
+            <additionalClasses>
+                <class name="admin__field-wide">true</class>
+            </additionalClasses>
+            <collapsible>true</collapsible>
+        </settings>
+
+        <field name="use_company_configuration"
+               formElement="select"
+               component="Bss_BrandRepresentative/js/components/use-company-category-configuration">
+            <settings>
+                <label translate="true">Sales Representative Configuration</label>
+            </settings>
+
+            <formElements>
+                <select>
+                    <settings>
+                        <options class="Bss\BrandRepresentative\ViewModel\UseCompanyConfig" />
+                    </settings>
+                </select>
+            </formElements>
+        </field>
+
+        <dynamicRows name="bss_brand_representative_email" component="Magento_Ui/js/dynamic-rows/dynamic-rows">
+            <settings>
+                <label translate="true">Configuration</label>
+                <additionalClasses>
+                    <class name="admin__field-wide">true</class>
+                </additionalClasses>
+                <addButtonLabel translate="true">Add Representative</addButtonLabel>
+                <dndConfig>
+                    <param name="enabled" xsi:type="boolean">false</param>
+                </dndConfig>
+                <componentType>dynamicRows</componentType>
+                <imports>
+                    <link name="disabled">${ $.parentName }.use_company_configuration:disabledBrandRepresentativeEmail</link>
+                </imports>
+            </settings>
+            <container name="record" component="Magento_Ui/js/dynamic-rows/record">
+                <argument name="data" xsi:type="array">
+                    <item name="config" xsi:type="array">
+                        <item name="isTemplate" xsi:type="boolean">true</item>
+                        <item name="is_collection" xsi:type="boolean">true</item>
+                        <item name="componentType" xsi:type="string">container</item>
+                    </item>
+                </argument>
+                <field name="bss_email" sortOrder="0" formElement="textarea">
+                    <argument name="data" xsi:type="array">
+                        <item name="config" xsi:type="array">
+                            <item name="source" xsi:type="string">bss_email</item>
+                            <item name="resizeDefaultWidth" xsi:type="number">150</item>
+                        </item>
+                    </argument>
+                    <settings>
+                        <dataType>text</dataType>
+                        <label translate="true">Email</label>
+                        <disabled>false</disabled>
+                        <dataScope>bss_email</dataScope>
+                        <imports>
+                            <link name="disabled">category_form.category_form.bss_brand_representative.use_company_configuration:disabledBrandRepresentativeEmail</link>
+                        </imports>
+                        <validation>
+                            <rule name="required-entry" xsi:type="boolean">true</rule>
+                            <rule name="validate-emails" xsi:type="boolean">true</rule>
+                        </validation>
+                    </settings>
+                </field>
+                <field name="bss_country" component="Bss_BrandRepresentative/js/components/country" sortOrder="10" formElement="select">
+                    <argument name="data" xsi:type="array">
+                        <item name="config" xsi:type="array">
+                            <item name="source" xsi:type="string">bss_country</item>
+                            <item name="default" xsi:type="string">CA</item>
+                        </item>
+                    </argument>
+                    <settings>
+                        <dataType>text</dataType>
+                        <label translate="true">Country</label>
+                        <disabled>false</disabled>
+                        <dataScope>bss_country</dataScope>
+                        <imports>
+                            <link name="disabled">category_form.category_form.bss_brand_representative.use_company_configuration:disabledBrandRepresentativeEmail</link>
+                        </imports>
+                    </settings>
+                    <formElements>
+                        <select>
+                            <settings>
+                                <options class="Bss\BrandRepresentative\Model\Config\Source\CountryOptions"/>
+                            </settings>
+                        </select>
+                    </formElements>
+                </field>
+                <field name="bss_province" component="Bss_BrandRepresentative/js/components/province" sortOrder="20" formElement="multiselect">
+                    <argument name="data" xsi:type="array">
+                        <item name="config" xsi:type="array">
+                            <item name="source" xsi:type="string">bss_province</item>
+                        </item>
+                    </argument>
+                    <settings>
+                        <dataType>text</dataType>
+                        <label translate="true">Province</label>
+                        <disabled>false</disabled>
+                        <listens>
+                            <link name="${ $.provider }:${ $.parentScope }.bss_country">setCountryId</link>
+                        </listens>
+                        <imports>
+                            <link name="country_id">${ $.provider }:${ $.parentScope }.bss_country</link>
+                            <link name="disabled">category_form.category_form.bss_brand_representative.use_company_configuration:disabledBrandRepresentativeEmail</link>
+                        </imports>
+                    </settings>
+                    <formElements>
+                        <multiselect>
+                            <settings>
+                                <options class="Bss\BrandRepresentative\Model\Config\Source\ProvinceOptions"/>
+                                <filterBy>
+                                    <field>country_id</field>
+                                    <target>${ $.provider }:${ $.parentScope }.bss_country</target>
+                                </filterBy>
+                            </settings>
+                        </multiselect>
+                    </formElements>
+                </field>
+                <actionDelete template="Magento_Backend/dynamic-rows/cells/action-delete" sortOrder="40">
+                    <settings>
+                        <componentType>actionDelete</componentType>
+                        <dataType>text</dataType>
+                        <label>Actions</label>
+                        <additionalClasses>
+                            <class name="data-grid-actions-cell">true</class>
+                        </additionalClasses>
+                        <imports>
+                            <link name="disabled">category_form.category_form.bss_brand_representative.use_company_configuration:disabledBrandRepresentativeEmail</link>
+                        </imports>
+                    </settings>
+                </actionDelete>
+            </container>
+        </dynamicRows>
+    </fieldset>
+</form>

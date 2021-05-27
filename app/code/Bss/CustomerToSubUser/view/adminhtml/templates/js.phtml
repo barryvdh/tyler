@@ -1,0 +1,13 @@
+<?php
+/** @var \Magento\Backend\Block\Template $block */
+/** @var \Magento\Framework\Escaper $escaper */
+?>
+<script>
+    require([
+        'mage/url'
+    ], function (urlBuilder) {
+        urlBuilder.setBaseUrl(
+            '<?= $escaper->escapeUrl($block->getBaseUrl())?>'
+        );
+    });
+</script>

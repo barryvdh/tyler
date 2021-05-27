@@ -1,0 +1,77 @@
+<?php
+/**
+ * BSS Commerce Co.
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the EULA
+ * that is bundled with this package in the file LICENSE.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://bsscommerce.com/Bss-Commerce-License.txt
+ *
+ * @category   BSS
+ * @package    Bss_AdminPreview
+ * @author     Extension Team
+ * @copyright  Copyright (c) 2017-2018 BSS Commerce Co. ( http://bsscommerce.com )
+ * @license    http://bsscommerce.com/Bss-Commerce-License.txt
+ */
+// @codingStandardsIgnoreFile
+?>
+<?php
+$titles = $this->getColumnsTitle();
+$columnsHtml = $this->getProductItemColumnsHtml($order);
+?>
+<div class="grids">
+    <table class="data-table order-tables" cellspacing="0">
+        <thead>
+        <tr class="headings">
+            <?php foreach ($titles as $key => $title) : ?>
+                <?php if ($key == 'image') : ?>
+                    <th class="data-grid-th _sortable _draggable" style="width:70px"><?php echo $title ?></th>
+                <?php elseif ($key == 'sku') : ?>
+                    <th class="data-grid-th _sortable _draggable" style="width:50px"><?php echo $title ?></th>
+                <?php elseif ($key == 'name') : ?>
+                    <th class="data-grid-th _sortable _draggable" style="min-width:120px"><?php echo $title ?></th>
+                <?php else : ?>
+                    <th class="data-grid-th _sortable _draggable" style="width:80px"><?php echo $title ?></th>
+                <?php endif ?>
+            <?php endforeach ?>
+        </tr>
+        </thead>
+        <?php
+        ?>
+
+        <?php $_i = 0;
+        foreach ($columnsHtml as $_rowHtml) : ?>
+            <tbody class="<?php echo(++$_i % 2 ? 'even' : 'odd') ?>">
+            <tr>
+                <?php foreach ($_rowHtml as $key => $value) : ?>
+                    <?php echo $value ?>
+                <?php endforeach ?>
+            </tr>
+            </tbody>
+        <?php endforeach ?>
+
+    </table>
+</div>
+<script>
+    require(['jquery'
+    ], function ($) {
+        $(document).ready(function () {
+            $('td[class^=bss-show-hide-preview-]').each(function () {
+                var id = $(this).attr('class').replace('bss-show-hide-preview-', '');
+                $(this).parent().parent().addClass('parent-show-hide-preview parent-show-hide-preview-' + id);
+            });
+            $('td[class^=parent-preview-id-]').each(function () {
+                var id = $(this).attr('class').replace('parent-preview-id-', '');
+                $(this).parent().parent().addClass('parent-preview-clickable parent-preview-id-' + id);
+                $(this).parent().parent().attr('item-id', id);
+            });
+            $('tbody.parent-preview-clickable').each(function () {
+                if ($(this).find('.showhide').length == 0) {
+                    $(this).append('<span class="showhide">+</span>');
+                }
+            });
+        });
+    });
+</script>

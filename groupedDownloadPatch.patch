@@ -1,0 +1,12 @@
+--- ./vendor/magento/module-downloadable/Observer/SaveDownloadableOrderItemObserver.php	2020-04-28 17:40:22.000000000 +0530
++++ ./vendor/magento/module-downloadable/Observer/SaveDownloadableOrderItemObserver.php	2021-04-17 10:32:22.525059600 +0530
+@@ -86,7 +86,7 @@
+             //order not saved in the database
+             return $this;
+         }
+-        if ($orderItem->getProductType() != \Magento\Downloadable\Model\Product\Type::TYPE_DOWNLOADABLE) {
++        if ($orderItem->getProductType() !== \Magento\Downloadable\Model\Product\Type::TYPE_DOWNLOADABLE && $orderItem->getRealProductType() !== \Magento\Downloadable\Model\Product\Type::TYPE_DOWNLOADABLE) {
+             return $this;
+         }
+         $product = $orderItem->getProduct();
+         

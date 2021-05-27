@@ -1,0 +1,1 @@
+/var/www/html/pub/app/code/Bss/BrandRepresentative/view/frontend/web/js/scroll-to-brand-list.js

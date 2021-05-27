@@ -1,0 +1,21 @@
+<?php
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+
+/**
+ * @var $block \Magento\Theme\Block\Html\Title
+ */
+$titleIdHtml = ($block->getTitleId()) ? ' id="' . $block->escapeHtmlAttr($block->getTitleId()) . '"' : '';
+$titleClass = ($block->getTitleClass()) ? ' ' . $block->getTitleClass() : '';
+$title = $block->getPageTitle();
+?>
+
+<div class="page-title-wrapper<?= $block->escapeHtmlAttr($titleClass) ?>">
+    <h1 class="page-title"<?= /* @noEscape */ $titleIdHtml ?>><?= $block->escapeHtml($title) ?></h1>
+    <?= $block->getChildHtml() ?>
+</div>
+
+<!-- Zoho CHat System for Admin -->
+<script type="text/javascript">var $zoho=$zoho || {};$zoho.salesiq = $zoho.salesiq || {widgetcode:"6bddc4c52566fe3e9800547996831bd5d0bac8e3b4b41093a351294cff2de680", values:{},ready:function(){}};var d=document;s=d.createElement("script");s.type="text/javascript";s.id="zsiqscript";s.defer=true;s.src="https://salesiq.zoho.com/widget";t=d.getElementsByTagName("script")[0];t.parentNode.insertBefore(s,t);d.write("<div id='zsiqwidget'></div>");</script>

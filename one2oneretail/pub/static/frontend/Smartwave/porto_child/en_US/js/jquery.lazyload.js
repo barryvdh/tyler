@@ -1,0 +1,1 @@
+/var/www/html/pub/app/design/frontend/Smartwave/porto/web/js/jquery.lazyload.js

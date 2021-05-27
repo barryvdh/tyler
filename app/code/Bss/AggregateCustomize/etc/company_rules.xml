@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:Bss_AggregateCustomize/etc/company_rules_file.xsd">
+    <acl>
+        <rules>
+            <rule value="-1" title="Basic" translate="true">
+                <rule value="3" title="View And Add Account Wishlist" remove="true" />
+                <rule value="2" title="View Downloadable Products" translate="true" />
+            </rule>
+            <rule value="-2" title="Advanced" translate="true">
+                <rule value="10" title="View Quotes" remove="true" translate="true" />
+                <rule value="9" remove="true" title="Create a Quote" />
+                <rule value="7" title="View All Orders" translate="true" />
+                <rule value="8" title="View Reports" translate="true" />
+            </rule>
+        </rules>
+    </acl>
+</config>

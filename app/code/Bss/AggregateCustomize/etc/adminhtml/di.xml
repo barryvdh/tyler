@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
+   <type name="Magento\Downloadable\Ui\DataProvider\Product\Form\Modifier\Links">
+       <plugin name="remove_links_purchased_separately_plugin"
+               type="Bss\AggregateCustomize\Plugin\Ui\DataProvider\Product\Form\Modifier\Links"
+               sortOrder="20" />
+   </type>
+    <type name="Magento\AdminNotification\Controller\Adminhtml\Notification\Index">
+        <plugin name="disable_notification_feature"
+                type="Bss\AggregateCustomize\Plugin\Notification\Controller\Index"
+                sortOrder="20" />
+    </type>
+
+    <preference for="Bss\AdminPreview\Block\Adminhtml\OrderedItems"
+                type="Bss\AggregateCustomize\Block\Adminhtml\OrderedItems"/>
+</config>

@@ -1,0 +1,1 @@
+/var/www/html/pub/vendor/magento/module-catalog/view/frontend/web/js/gallery.js

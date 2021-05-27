@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<form xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Ui:etc/ui_configuration.xsd">
+    <modal name="advanced_inventory_modal">
+        <fieldset name="stock_data">
+            <container name="container_sale_qty_per_month" component="Magento_Ui/js/form/components/group" sortOrder="550">
+                <argument name="data" xsi:type="array">
+                    <item name="config" xsi:type="array">
+                        <item name="formElement" xsi:type="string">container</item>
+                        <item name="dataScope" xsi:type="string">stock_data</item>
+                    </item>
+                </argument>
+                <field name="sale_qty_per_month" formElement="input" component="Bss_OrderRestriction/js/view/sale-qty-permonth">
+                    <argument name="data" xsi:type="array">
+                        <item name="config" xsi:type="array">
+                            <item name="value" xsi:type="object">Bss\OrderRestriction\Model\Source\OrderRuleConfiguration</item>
+                        </item>
+                    </argument>
+                    <settings>
+                        <scopeLabel>[GLOBAL]</scopeLabel>
+                        <validation>
+                            <rule name="validate-number" xsi:type="boolean">true</rule>
+                        </validation>
+                        <label translate="true">Limit Product Quantity Per Month</label>
+                        <dataScope>sale_qty_per_month</dataScope>
+                        <imports>
+                            <link name="disabled">${$.parentName}.use_config_${$.index}:disableParent</link>
+                        </imports>
+                    </settings>
+                </field>
+                <field name="use_config_sale_qty_per_month" component="Magento_CatalogInventory/js/components/use-config-settings" formElement="checkbox">
+                    <argument name="data" xsi:type="array">
+                        <item name="config" xsi:type="array">
+                            <item name="value" xsi:type="string">1</item>
+                            <item name="valueFromConfig" xsi:type="object">Bss\OrderRestriction\Model\Source\OrderRuleConfiguration</item>
+                            <item name="keyInConfiguration" xsi:type="string">sale_qty_per_month</item>
+                        </item>
+                    </argument>
+                    <settings>
+                        <dataScope>use_config_sale_qty_per_month</dataScope>
+                        <links>
+                            <link name="linkedValue">${$.provider}:data.product.stock_data.sale_qty_per_month</link>
+                        </links>
+                        <imports>
+                            <link name="disabled">ns = ${ $.ns }, index = stock_data:disabled</link>
+                        </imports>
+                    </settings>
+                    <formElements>
+                        <checkbox class="Magento\CatalogInventory\Ui\Component\Product\Form\Element\UseConfigSettings">
+                            <settings>
+                                <description translate="true">Use Config Settings</description>
+                                <valueMap>
+                                    <map name="false" xsi:type="string">0</map>
+                                    <map name="true" xsi:type="string">1</map>
+                                </valueMap>
+                            </settings>
+                        </checkbox>
+                    </formElements>
+                </field>
+            </container>
+        </fieldset>
+    </modal>
+</form>

@@ -1,0 +1,33 @@
+<?php
+/**
+ * Password Protected
+ *
+ * @category    Addify
+ * @package     Addify_PasswordProtected
+ * @author      Addify
+ * @Email       addifypro@gmail.com
+ *
+ */
+
+/** @var \Magento\Catalog\Block\Adminhtml\Category\AssignProducts $block */
+
+/** @var \Magento\Catalog\Block\Adminhtml\Category\Tab\Product $blockGrid */
+$blockGrid = $block->getBlockGrid();
+$gridJsObjectName = $blockGrid->getJsObjectName();
+?>
+<?= $block->getGridHtml() ?>
+<input type="hidden" name="tab_related_products" id="in_related_products" data-form-part="passwordprotected_edit" value="" />
+<script type="text/x-magento-init">
+    {
+        "*": {
+            "Addify_PasswordProtected/productgrid/products/assign-products": {
+                "selectedProducts": <?= /* @escapeNotVerified */ $block->getProductsJson() ?>,
+                "gridJsObjectName": <?= /* @escapeNotVerified */ '"' . $gridJsObjectName . '"' ?: '{}' ?>
+            }
+        }
+    }
+</script>
+<!-- @todo remove when "UI components" will support such initialization -->
+<script>
+    require('mage/apply/main').apply();
+</script>

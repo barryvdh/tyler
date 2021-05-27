@@ -1,0 +1,1 @@
+/var/www/html/pub/app/code/Bss/CustomerToSubUser/view/adminhtml/web/js/view/grid/columns/multiselect.js

@@ -1,0 +1,1 @@
+/var/www/html/pub/lib/web/jquery/colorpicker/js/colorpicker.js

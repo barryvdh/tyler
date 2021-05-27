@@ -1,0 +1,14 @@
+<?php
+/**
+ * Brand list toolbar
+ *
+ * @var $block \Bss\BrandRepresentative\Block\Brand\Pages\BrandList\Toolbar
+ */
+?>
+<?php if ($block->getCollection() && $block->getCollection()->getSize()): ?>
+    <div class="toolbar toolbar-products" data-mage-init='<?php /* @escapeNotVerified */ echo $block->getWidgetOptionsJson(); ?>'>
+        <?php include $block->getTemplateFile('Magento_Catalog::product/list/toolbar/sorter.phtml') ?>
+
+        <?= $block->getPagerHtml() ?>
+    </div>
+<?php endif ?>

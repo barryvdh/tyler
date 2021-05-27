@@ -1,0 +1,1 @@
+/var/www/html/pub/app/code/Bss/OrderRestriction/view/adminhtml/web/js/view/quick-set-order-restriction-modal.js

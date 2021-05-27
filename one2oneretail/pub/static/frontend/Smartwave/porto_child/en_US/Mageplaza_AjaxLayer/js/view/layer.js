@@ -1,0 +1,1 @@
+/var/www/html/pub/app/design/frontend/Smartwave/porto/Mageplaza_AjaxLayer/web/js/view/layer.js

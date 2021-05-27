@@ -1,0 +1,6 @@
+<?xml version="1.0"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Email:etc/email_templates.xsd">
+    <template id="bss_company_account_email_convert_customer_to_sub_user" label="BSS CA - Customer to Sub-user"
+              file="customer_to_sub_user.html" type="html" module="Bss_CustomerToSubUser"
+              area="frontend"/>
+</config>

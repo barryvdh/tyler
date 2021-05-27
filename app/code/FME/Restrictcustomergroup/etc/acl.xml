@@ -1,0 +1,25 @@
+<?xml version="1.0"?>
+
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:Acl/etc/acl.xsd">
+    <acl>
+        <resources>
+            <resource id="Magento_Backend::admin">
+                <resource id="FME_Extensions::fmeextensions" title="FME Extensions" sortOrder="70">
+                    <resource id="FME_Restrictcustomergroup::restrictcustomergroup" title="FME Restrict Customer Group" sortOrder="1">
+                        <resource id="FME_Restrictcustomergroup::rule" title="Manage Rules" sortOrder="10">
+                            <resource id="FME_Restrictcustomergroup::save" title="Save" sortOrder="1"/>
+                            <resource id="FME_Restrictcustomergroup::delete" title="Delete" sortOrder="2"/>
+                        </resource>
+                    </resource>
+                </resource>
+                <resource id="Magento_Backend::stores">
+                    <resource id="Magento_Backend::stores_settings">
+                        <resource id="Magento_Config::config">
+                            <resource id="FME_Restrictcustomergroup::configuration" title="FME Restrict Customer Group"/>
+                        </resource>
+                    </resource>
+                </resource>
+            </resource>
+        </resources>
+    </acl>
+</config>

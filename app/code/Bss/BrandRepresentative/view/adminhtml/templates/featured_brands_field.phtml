@@ -1,0 +1,23 @@
+<?php
+/** @var \Bss\BrandRepresentative\Block\Adminhtml\Form\Renderer\Config\BrandsTree $block */
+?>
+<div id="featured_brands" data-bind="scope:'featured_brands'">
+    <!-- ko template: getTemplate() --><!-- /ko -->
+    <script type="text/x-magento-init">
+        {
+            "#featured_brands": {
+                "Magento_Ui/js/core/app": {
+                    "components": {
+                        "featured_brands": {
+                            "component": "Bss_BrandRepresentative/js/components/config/brands-tree",
+                            "options": <?= $block->getSerializedCategories() ?>,
+                            "featuredBrandsInputName": "<?= $block->getData('featured_brands_input_name') ?>",
+                            "featuredBrandsHtmlId": "<?= $block->getData('featured_brands_html_id') ?>",
+                            "selectedBrands": <?= $block->getData('selected_brands') ?: "[]" ?>
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+</div>

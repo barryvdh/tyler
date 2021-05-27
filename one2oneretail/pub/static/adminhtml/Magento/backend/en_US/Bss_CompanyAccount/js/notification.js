@@ -1,0 +1,1 @@
+/var/www/html/pub/app/code/Bss/CompanyAccount/view/adminhtml/web/js/notification.js

@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<listing xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Ui:etc/ui_configuration.xsd">
+    <listingToolbar name="listing_top" class="Bss\AggregateCustomize\Ui\Component\ListingToolbar">
+        <filters name="listing_filters" class="Bss\AggregateCustomize\Ui\Component\Filters"/>
+        <massaction name="listing_massaction" class="Bss\AggregateCustomize\Ui\Component\MassAction" />
+    </listingToolbar>
+    <columns name="product_columns" class="Bss\AggregateCustomize\Ui\Component\Columns" />
+</listing>

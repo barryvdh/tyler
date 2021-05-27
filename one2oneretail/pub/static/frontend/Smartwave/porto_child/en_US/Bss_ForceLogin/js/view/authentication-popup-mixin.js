@@ -1,0 +1,1 @@
+/var/www/html/pub/app/code/Bss/ForceLogin/view/frontend/web/js/view/authentication-popup-mixin.js

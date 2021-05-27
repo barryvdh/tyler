@@ -1,0 +1,61 @@
+& when (@media-common = true) {
+    .fancybox-container {
+        .fancybox-navigation button {
+            position: absolute;
+            top: 50%;
+            margin: -50px 0 0;
+            z-index: 99997;
+            background: transparent;
+            width: 60px;
+            height: 100px;
+            padding: 17px;
+            &:before {
+                content: "";
+                position: absolute;
+                top: 30px;
+                right: 10px;
+                width: 40px;
+                height: 40px;
+                background: rgba(30,30,30,.6);
+            }
+        }
+        .fancybox-toolbar, .fancybox-navigation {
+            .fancybox-button {
+                border: 0;
+                color: #ccc;
+                line-height: inherit;
+                padding: 10px;
+            }
+        }
+        .fancybox-toolbar {
+            .fancybox-button {
+                height: 44px;
+                background: rgba(30,30,30,.6);
+            }
+        }
+    }
+    .table-wrapper.grouped {
+        table {
+            td {
+                .product-img-wrapper {
+                    float: left;
+                    height: 48px;
+                    margin-right: 15px;
+                    width: 48px;
+                    border: 1px dotted #eee;
+                    position: relative;
+                    a.fancybox {
+                        height: 100%;
+                        img {
+                            max-height: 100%;
+                            position: absolute;
+                            top: 50%;
+                            left: 50%;
+                            transform: translate(-50%, -50%);
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

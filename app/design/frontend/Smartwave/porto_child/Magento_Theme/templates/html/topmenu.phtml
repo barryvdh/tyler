@@ -1,0 +1,50 @@
+<?php
+/**
+ * BSS Commerce Co.
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the EULA
+ * that is bundled with this package in the file LICENSE.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://bsscommerce.com/Bss-Commerce-License.txt
+ *
+ * @category   BSS
+ * @package    Bss_BrandCategoryLevel
+ * @author     Extension Team
+ * @copyright  Copyright (c) 2021 BSS Commerce Co. ( http://bsscommerce.com )
+ * @license    http://bsscommerce.com/Bss-Commerce-License.txt
+ */
+
+/**
+ * Top menu for store
+ *
+ * @var $block Topmenu
+ */
+
+use Magento\Theme\Block\Html\Topmenu;
+
+$columnsLimit = $block->getColumnsLimit() ?: 0;
+$_menuHtml = $block->getHtml('level-top', 'submenu', $columnsLimit)
+?>
+
+<nav class="navigation megamenu-new" data-action="navigation">
+   	<ul>
+       <?= $this->getLayout()->createBlock('Magento\Cms\Block\Block')->setBlockId('view_all')->toHtml(); ?>
+   		<li class="ui-menu-item level0 parent fullwidth">
+   			<a class="level-top level-top-new" href="<?= $block->getUrl('brands')?>"><span><?= __("Brands")?></span></a>
+            <div class="level0 submenu">
+                <div class="container">
+                    <div class="row">
+                        <ul class="subchildmenu col-md-12 columns3" data-mage-init='{"menu":{"responsive":true, "expanded":true, "position":{"my":"left top","at":"left bottom"}}}'>
+                            <?= /* @noEscape */ $_menuHtml?>
+                            <?= $block->getChildHtml() ?>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+   		</li>
+   		<?= $this->getLayout()->createBlock('Magento\Cms\Block\Block')->setBlockId('custom_menu')->toHtml(); ?>
+   	</ul>
+</nav>

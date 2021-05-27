@@ -1,0 +1,1 @@
+/var/www/html/pub/app/design/frontend/Smartwave/porto_child/Magento_Catalog/web/js/script-category.js

@@ -1,0 +1,8 @@
+#!/bin/bash
+bin/magento maintenance:en
+bin/magento setup:upgrade
+bin/magento setup:di:compile
+rm -rf 'var/cache/*' && rm -rf 'var/view_preprocessed/*' && rm -rf 'var/page_cache/*' && rm -rf 'pub/static/*'
+bin/magento s:s:d -f
+bin/magento maintenance:di
+echo "Finished golive"

@@ -1,0 +1,59 @@
+<?xml version="1.0"?>
+<!--
+**
+ * BSS Commerce Co.
+ *
+ * NOTICE OF LICENSE
+ *
+ * @category   BSS
+ * @package    Bss_HideProductField
+ * @author     Extension Team
+ * @copyright  Copyright (c) 2021 BSS Commerce Co. ( http://bsscommerce.com )
+ * @license    http://bsscommerce.com/Bss-Commerce-License.txt
+ *
+ -->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
+    <virtualType name="Magento\Catalog\Ui\DataProvider\Product\Form\Modifier\Pool">
+        <arguments>
+            <argument name="modifiers" xsi:type="array">
+                <item name="productgridextend" xsi:type="array">
+                    <item name="class" xsi:type="string">Bss\HideProductField\Ui\DataProvider\Product\Form\Modifier\HideField</item>
+                    <item name="sortOrder" xsi:type="number">500</item>
+                </item>
+            </argument>
+        </arguments>
+    </virtualType>
+
+    <type name="Magento\Catalog\Controller\Adminhtml\Product\Validate">
+        <plugin name="escaper_validate_hide_field"
+                type="Bss\HideProductField\Plugin\Product\EscapeValidateHideAttribute"
+                sortOrder="20" />
+    </type>
+    <type name="Magento\Catalog\Controller\Adminhtml\Product\Save">
+        <plugin name="default_qty_if_be_hide"
+                type="Bss\HideProductField\Plugin\Product\RemoveEditDesignAttributePermissions"
+                sortOrder="20" />
+    </type>
+    <type name="Magento\Catalog\Controller\Adminhtml\Product\NewAction">
+        <plugin name="brand_product_create"
+                type="Bss\HideProductField\Plugin\Product\RestrictDigitalManger"
+                sortOrder="20" />
+    </type>
+    <type name="Magento\Catalog\Controller\Adminhtml\Product\Edit">
+        <plugin name="brand_product_edit"
+                type="Bss\HideProductField\Plugin\Product\RestrictDigitalManger"
+                sortOrder="20" />
+    </type>
+    <preference for="Magento\Framework\Controller\Result\Json" type="Bss\HideProductField\Controller\Result\Json"/>
+    <type name="Magento\Downloadable\Model\Source\Shareable">
+        <plugin name="remove_use_config_for_brand_manager"
+                type="Bss\HideProductField\Plugin\DownloadableProduct\Source\Shareable"
+                sortOrder="20" />
+    </type>
+
+    <type name="Magento\Catalog\Block\Adminhtml\Product\Helper\Form\Gallery\Content">
+        <plugin name="Bss_HideField::hideAddVideoBtnForBrandManager"
+                type="Bss\HideProductField\Plugin\Block\Adminhtml\Product\Form\Gallery\Content"
+                sortOrder="30" />
+    </type>
+</config>

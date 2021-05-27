@@ -1,0 +1,102 @@
+<form xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Ui:etc/ui_configuration.xsd">
+    <fieldset name="customer">
+        <field name="website_id">
+            <settings>
+                <exports>
+                    <link name="initialOptions" active="true">
+                        customer_form.areas.assign_to_company_account.assign_to_company_account.company_account_id:params.websiteOptions
+                    </link>
+                </exports>
+            </settings>
+        </field>
+    </fieldset>
+    <fieldset name="assign_to_company_account" class="Bss\CustomerToSubUser\Ui\Component\Customer\Form\AssignToCompanyAccountFieldset">
+        <settings>
+            <label translate="true">Assign as Sub-user</label>
+        </settings>
+
+        <field name="sub_id" formElement="hidden">
+            <settings>
+                <dataType>text</dataType>
+            </settings>
+        </field>
+
+        <field name="company_account_id"
+               formElement="input"
+               component="Bss_CustomerToSubUser/js/view/form/element/company-account">
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="source" xsi:type="string">assign_to_company_account</item>
+                </item>
+            </argument>
+            <settings>
+                <label translate="true">Company Account Info</label>
+                <dataType>text</dataType>
+            </settings>
+        </field>
+
+        <field name="role_id"
+               formElement="select"
+               component="Bss_CustomerToSubUser/js/view/form/element/company-account-roles">
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="source" xsi:type="string">assign_to_company_account</item>
+                </item>
+            </argument>
+            <settings>
+                <label translate="true">Role</label>
+                <dataType>text</dataType>
+            </settings>
+            <formElements>
+                <select>
+                    <settings>
+                        <options class="Bss\CustomerToSubUser\ViewModel\Role"/>
+                        <filterBy>
+                            <field>company_account_id</field>
+                            <target>${ $.provider }:${ $.parentScope }.company_account_id</target>
+                        </filterBy>
+                        <caption translate="true">-- Please Select --</caption>
+                    </settings>
+                </select>
+            </formElements>
+        </field>
+
+        <insertListing name="company_account_listing">
+            <settings>
+                <externalProvider>company_account_listing.company_account_listing_data_source</externalProvider>
+                <selectionsProvider>company_account_listing.company_account_listing.company_account_listing_columns.ids</selectionsProvider>
+                <autoRender>true</autoRender>
+                <dataScope>company_account_listing</dataScope>
+                <ns>company_account_listing</ns>
+                <imports>
+                    <link name="websiteId">${ $.provider }:data.customer.website_id</link>
+                </imports>
+                <exports>
+                    <link name="websiteId">${ $.externalProvider }:params.website_id</link>
+                </exports>
+            </settings>
+        </insertListing>
+    </fieldset>
+
+    <fieldset name="address">
+        <insertListing name="customer_address_listing">
+            <settings>
+                <exports>
+                    <link name="company_account_id">${ $.externalProvider }:params.company_account_id</link>
+                </exports>
+                <imports>
+                    <link name="company_account_id">${ $.provider }:data.assign_to_company_account.company_account_id</link>
+                </imports>
+            </settings>
+        </insertListing>
+        <modal name="customer_address_update_modal">
+            <insertForm name="update_customer_address_form_loader" component="Bss_CustomerToSubUser/js/view/form/address/insert-form">
+                <settings>
+                    <imports>
+                        <link name="companyAccountId">${ $.provider }:data.assign_to_company_account.company_account_id</link>
+                    </imports>
+                </settings>
+            </insertForm>
+        </modal>
+    </fieldset>
+</form>

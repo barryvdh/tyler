@@ -1,0 +1,35 @@
+<?php
+/**
+ * BSS Commerce Co.
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the EULA
+ * that is bundled with this package in the file LICENSE.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://bsscommerce.com/Bss-Commerce-License.txt
+ *
+ * @category   BSS
+ * @package    Bss_AdminPreview
+ * @author     Extension Team
+ * @copyright  Copyright (c) 2017-2018 BSS Commerce Co. ( http://bsscommerce.com )
+ * @license    http://bsscommerce.com/Bss-Commerce-License.txt
+ */
+?>
+<style>
+	td[class^="bss-show-hide-preview-"]{display:none;}
+	tbody.parent-preview-clickable{border:1px solid #e3e3e3;}
+	tbody.parent-preview-clickable .showhide:hover{cursor: pointer;}
+	tbody.parent-preview-clickable .showhide {display: block;position: relative;z-index: 9;color:#fff;font-weight: bold;border:1px solid #5F564F;width:12px;height:13px;line-height: 11px;background-color: #5F564F}
+	.parent-show-hide-preview.active td{display: table-cell;}
+	tbody.parent-preview-clickable > tr{border-bottom: 1px solid #e3e3e3}
+	tbody.parent-show-hide-preview > tr > td {background-color: #ddd!important;}
+</style>
+
+<script type="text/x-magento-init">
+    {
+        "*": {
+            "Bss_AdminPreview/js/preview":{}
+        }
+    }
+</script>

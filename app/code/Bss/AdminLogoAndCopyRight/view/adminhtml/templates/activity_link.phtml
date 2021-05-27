@@ -1,0 +1,18 @@
+<?php
+/**
+ * Account activity template
+ *
+ * @var $block \Magento\Framework\View\Element\Template
+ */
+/** @var $escaper \Magento\Framework\Escaper */
+?>
+<a class="link-account-activity"
+    href="<?= $escaper->escapeUrl($block->getUrl('security/session/activity')) ?>"
+    id="footer_account_activity"
+    target="_blank"
+    data-mage-init='{"popupWindow": {
+        "windowURL": "<?= $escaper->escapeJs($escaper->escapeUrl($block->getUrl('security/session/activity'))) ?>",
+        "windowName": "session-activity",
+        "width": 600, "height": 600, "top": 50, "left": 50, "resizable": 1, "scrollbars": 1}}'>
+    <?= $escaper->escapeHtml(__('Account Activity')) ?>
+</a>

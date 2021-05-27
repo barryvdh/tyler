@@ -1,0 +1,116 @@
+<?php
+$id = $this->getRequest()
+        ->getParam('rule_id');
+
+$model = $block->getRuleModel()->load($id);
+$info = [];
+?>
+
+<table cellspacing="0" class="form-list" >
+    <tbody id="fme_form_type">
+
+        <tr>
+            <td class="restrictcstuomergroup-td-label"><?php echo __('From') ?></td>
+            <td class="restrictcstuomergroup-td-label"><?php echo __('To') ?></td>
+        </tr>
+
+        <?php $i = 0;?>
+        <?php if ($model->getUrlSerialized()): ?>
+
+            <?php
+                $info = $block->getunserialize($model->getUrlSerialized());
+            ?>
+            <?php foreach ($info as $k => $v): ?>
+
+                <tr id="row-<?php echo $i; ?>">
+
+                    <td class="restrictcstuomergroup-td-label"><input type="text" style="width: 100%;" class='input-text validate-url' value="<?php echo $v['from']; ?>" name="url[<?php echo $i; ?>][from]"></td>
+                    <td class="restrictcstuomergroup-td-label"><input type="text" style="width: 100%;" class='input-text validate-url' value="<?php echo $v['to']; ?>" name="url[<?php echo $i; ?>][to]"></td>
+
+                    <?php if ($i == 0): ?>
+
+                        <td style="padding-left:20px; padding-top:5px;">
+                            <button style="" onclick="return addRow();" class="scalable" type="button" title="Add Option" id="add_new_option_button">
+                                <span><span>
+                                        <span><?php echo __('Add New') ?></span>
+                                    </span></span>
+                            </button>
+                        </td>
+
+                    <?php else: ?>
+
+                        <td style="padding-left:20px; padding-top:5px;">
+                            <button style="" onclick="removeRow(<?php echo $i; ?>)" class="scalable" type="button" title="Delete Option" id="delete_new_option_button">
+                                <span><span>
+                                        <span><?php echo __('Delete') ?></span>
+                                    </span></span>
+                            </button>
+                        </td>
+
+                    <?php endif; ?>
+
+                    <?php $i++; ?>
+
+                </tr>
+
+            <?php endforeach; ?>
+
+        <?php else: ?>
+
+            <tr>
+                <td class="restrictcstuomergroup-td-label"><input type="text" style="width: 100%;" class='input-text validate-url' value="" name="url[<?php echo $i; ?>][from]"></td>
+
+                <td class="restrictcstuomergroup-td-label"><input type="text" style="width: 100%;" class='input-text validate-url' value="" name="url[<?php echo $i; ?>][to]"></td>
+                <td style="padding-left:20px; padding-top:5px;">
+                    <button style="" onclick="return addRow();" class="scalable" type="button" title="Add Option" id="add_new_option_button">
+                        <span><span>
+                                <span><?php echo __('Add') ?></span>
+                            </span></span>
+                    </button>
+                </td>
+            </tr>
+
+        <?php endif; ?>
+    </tbody>
+</table>
+<style type="text/css">
+    .restrictcstuomergroup-td-label{
+        padding:2px;
+        width:50%;
+    }
+</style>
+<script type="text/javascript">
+
+
+    var superid = <?php echo ($info)? count($info): $i; ?>;
+
+    function addRow() {
+
+        var string = "";
+        var id = superid + 1;
+
+        var rowId = id;
+
+        string = "<tr id='row-" + id + "'>" +
+                    "<td class='restrictcstuomergroup-td-label'><input  type='text' style='width: 100%;' class='input-text validate-url' value='' name='url["+ id +"][from]'></td>" +
+                    "<td class='restrictcstuomergroup-td-label'><input type='text' style='width: 100%;' class='input-text validate-url' value='' name='url["+ id +"][to]'></td>" +
+                    "<td style='padding-left:20px; padding-top:5px;'>" +
+                        "<button onclick='removeRow(" + rowId + ")' class='scalable' type='button' title='Delete Option' id='delete_new_option_button'>" +
+                            "<span><span>" +
+                                "<span><?php echo __('Delete') ?></span>" +
+                            "</span></span>" +
+                        "</button>" +
+                    "</td>" +
+                "</tr>";
+        //document.getElementById('fme_form_type').innerHTML = string;
+        require(["jquery"], function ($) {
+            $('#fme_form_type').append(string);
+        });
+    }
+
+    function removeRow(e) {
+        require(["jquery"], function ($) {
+            $('#row-' + e).remove();
+        });
+    }
+</script>

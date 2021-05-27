@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
+   <type name="Magento\Checkout\Controller\Cart\Add">
+       <plugin name="force_login_add_to_cart"
+               type="Bss\CustomizeForceLogin\Plugin\Cart\Add"
+               sortOrder="20" />
+   </type>
+<!--    <type name="Bss\ForceLogin\Controller\Account\Login">-->
+<!--        <plugin name="set_previous_url"-->
+<!--                type="Bss\CustomizeForceLogin\Plugin\Controller\Account\Login"-->
+<!--                sortOrder="20" />-->
+<!--    </type>-->
+
+<!--    <type name="Bss\ForceLogin\Plugin\Customer\LoginPost">-->
+<!--        <plugin name="customize_redirect_referer_url"-->
+<!--                type="Bss\CustomizeForceLogin\Plugin\Controller\Account\LoginPost"-->
+<!--                sortOrder="20"/>-->
+<!--    </type>-->
+</config>

@@ -1,0 +1,49 @@
+<?php
+/** @var \Magento\Framework\Escaper $escaper */
+/** @var \Magento\Framework\View\Element\Template $block */
+/** @var \Bss\BrandRepresentative\Model\ResourceModel\Category\Collection $childCategories */
+?>
+
+<?php $childCategories = $block->getListBrandCategories() ?>
+<?php if (!$childCategories->count()): ?>
+    <div class="message info empty"><div><?php echo __('There are currently no items available in your region.') ?></div></div>
+<?php else: ?>
+<div class="products wrapper grid columns3 products-grid   ">
+    <ol class="filterproducts products list items product-items ">
+        <?php /* @var \Magento\Catalog\Model\Category $category*/?>
+        <?php foreach ($childCategories as $category): ?>
+            <li class="item product product-item">
+                <div class="product-item-info type1" data-container="product-grid">
+                    <div class="product photo product-item-photo">
+                        <a href="<?= $escaper->escapeUrl($category->getUrl()) ?>" tabindex="-1">
+                            <?php
+                            $outputHelper = $block->getViewModel()->getCatalogOutputHelper();
+                            $categoryImage = $this->getViewModel()->getCategoryImage();
+                            $imgHtml   = '';
+                            if ($imgUrl = $categoryImage->getUrl($category)) {
+                                $imgHtml = '<img src="' . $escaper->escapeUrl($imgUrl) . '" />';
+                                $imgHtml = $outputHelper->categoryAttribute($category, $imgHtml, 'image');
+                                /* @escapeNotVerified */ echo $imgHtml;
+                            } else {
+                                $imgUrl = $block->getViewModel()->preparePlaceholder();
+                                $imgHtml = '<img src="' . $escaper->escapeUrl($imgUrl) . '" />';
+                                $imgHtml = $outputHelper->categoryAttribute($category, $imgHtml, 'image');
+                                /* @escapeNotVerified */ echo $imgHtml;
+
+                            }
+                            ?>
+                        </a>
+                    </div>
+                    <div class="product details product-item-details">
+                        <strong class="product name product-item-name">
+                            <a class="product-item-link" href="<?= $escaper->escapeUrl($category->getUrl()) ?>">
+                                <span><?= __($category->getName()) ?></span>
+                            </a>
+                        </strong>
+                    </div>
+                </div>
+            </li>
+        <?php endforeach; ?>
+    </ol>
+</div>
+<?php endif; ?>

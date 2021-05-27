@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Config:etc/system_file.xsd">
+    <system>
+        <tab id="bss" translate="label" sortOrder="300">
+            <label><![CDATA[Bss Commerce]]></label>
+        </tab>
+        <section id="brand_contact" translate="label" sortOrder="111" showInDefault="1" showInStore="1" showInWebsite="1">
+            <class>separator-top</class>
+            <label>Brand Contact</label>
+            <tab>bss</tab>
+            <resource>Magento_Catalog::config_catalog</resource>
+            <group id="popup_options" translate="label" type="text" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
+                <label>Sign-up Configuration</label>
+                <field id="width" translate="label" type="text" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Pop-up Width</label>
+                    <comment><![CDATA[The Pop-up width size. Example: 500px, 75%]]></comment>
+                </field>
+                <field id="height" translate="label" type="text" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Pop-up Height</label>
+                    <comment><![CDATA[The Pop-up height size. Example: 500px, 75%]]></comment>
+                </field>
+            </group>
+        </section>
+    </system>
+</config>

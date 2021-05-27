@@ -1,0 +1,110 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Password Protected
+ *
+ * @category    Addify
+ * @package     Addify_PasswordProtected
+ * @author      Addify
+ * @Email       addifypro@gmail.com
+ *
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
+   <type name="Magento\Framework\View\Element\UiComponent\DataProvider\CollectionFactory">
+        <arguments>
+            <argument name="collections" xsi:type="array">
+                <!-- MANAGE EXTRA PRODUCT TAB COLLECTION -->
+                <item name="passwordprotected_listing_data_source" xsi:type="string">Addify\PasswordProtected\Model\ResourceModel\PasswordProtected\Grid\Collection</item>
+            </argument>
+        </arguments>
+    </type>
+    <!-- MANAGE EXTRA PRODUCT TAB -->
+    <type name="Addify\PasswordProtected\Model\ResourceModel\PasswordProtected\Grid\Collection">
+        <arguments>
+            <argument name="mainTable" xsi:type="string">addify_passwordprotected</argument>
+            <argument name="eventPrefix" xsi:type="string">passwordprotected_grid_collection</argument>
+            <argument name="eventObject" xsi:type="string">passwordprotected_grid_collection</argument>
+            <argument name="resourceModel" xsi:type="string">Addify\PasswordProtected\Model\ResourceModel\PasswordProtected</argument>
+        </arguments>
+    </type>
+    <virtualType name="passwordprotectedGirdFilterPool" type="Magento\Framework\View\Element\UiComponent\DataProvider\FilterPool">
+        <arguments>
+            <argument name="appliers" xsi:type="array">
+                <item name="regular" xsi:type="object">Magento\Framework\View\Element\UiComponent\DataProvider\RegularFilter</item>
+                <item name="fulltext" xsi:type="object">Magento\Framework\View\Element\UiComponent\DataProvider\FulltextFilter</item>
+            </argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="passwordprotectedGridDataProvider" type="Magento\Framework\View\Element\UiComponent\DataProvider\DataProvider">
+        <arguments>
+            <argument name="collection" xsi:type="object" shared="false">Addify\RestrictOrderByCustomer\Model\ResourceModel\PasswordProtected\Collection
+            </argument>
+            <argument name="filterPool" xsi:type="object" shared="false">passwordprotectedGirdFilterPool</argument>
+        </arguments>
+    </virtualType>
+    <type name="Magento\Framework\View\Element\UiComponent\DataProvider\CollectionFactory">
+        <arguments>
+            <argument name="collections" xsi:type="array">
+                <!-- MANAGE EXTRA PRODUCT TAB COLLECTION -->
+                <item name="passwords_listing_data_source" xsi:type="string">Addify\PasswordProtected\Model\ResourceModel\Passwords\Grid\Collection</item>
+            </argument>
+        </arguments>
+    </type>
+    <!-- MANAGE EXTRA PRODUCT TAB -->
+    <type name="Addify\PasswordProtected\Model\ResourceModel\Passwords\Grid\Collection">
+        <arguments>
+            <argument name="mainTable" xsi:type="string">addify_passwords</argument>
+            <argument name="eventPrefix" xsi:type="string">passwords_grid_collection</argument>
+            <argument name="eventObject" xsi:type="string">passwords_grid_collection</argument>
+            <argument name="resourceModel" xsi:type="string">Addify\PasswordProtected\Model\ResourceModel\Passwords</argument>
+        </arguments>
+    </type>
+    <virtualType name="passwordsGirdFilterPool" type="Magento\Framework\View\Element\UiComponent\DataProvider\FilterPool">
+        <arguments>
+            <argument name="appliers" xsi:type="array">
+                <item name="regular" xsi:type="object">Magento\Framework\View\Element\UiComponent\DataProvider\RegularFilter</item>
+                <item name="fulltext" xsi:type="object">Magento\Framework\View\Element\UiComponent\DataProvider\FulltextFilter</item>
+            </argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="passwordsGridDataProvider" type="Magento\Framework\View\Element\UiComponent\DataProvider\DataProvider">
+        <arguments>
+            <argument name="collection" xsi:type="object" shared="false">Addify\RestrictOrderByCustomer\Model\ResourceModel\Passwords\Collection
+            </argument>
+            <argument name="filterPool" xsi:type="object" shared="false">passwordsGirdFilterPool</argument>
+        </arguments>
+    </virtualType>
+    <type name="Magento\Framework\View\Element\UiComponent\DataProvider\CollectionFactory">
+        <arguments>
+            <argument name="collections" xsi:type="array">
+                <!-- MANAGE EXTRA PRODUCT TAB COLLECTION -->
+                <item name="passwordsanalytics_listing_data_source" xsi:type="string">Addify\PasswordProtected\Model\ResourceModel\PasswordAnalytics\Grid\Collection</item>
+            </argument>
+        </arguments>
+    </type>
+    <!-- MANAGE EXTRA PRODUCT TAB -->
+    <type name="Addify\PasswordProtected\Model\ResourceModel\PasswordAnalytics\Grid\Collection">
+        <arguments>
+            <argument name="mainTable" xsi:type="string">addify_passwords_analytics</argument>
+            <argument name="eventPrefix" xsi:type="string">passwordsanalytics_grid_collection</argument>
+            <argument name="eventObject" xsi:type="string">passwordsanalytics_grid_collection</argument>
+            <argument name="resourceModel" xsi:type="string">Addify\PasswordProtected\Model\ResourceModel\PasswordAnalytics</argument>
+        </arguments>
+    </type>
+    <virtualType name="passwordAnalyticsGirdFilterPool" type="Magento\Framework\View\Element\UiComponent\DataProvider\FilterPool">
+        <arguments>
+            <argument name="appliers" xsi:type="array">
+                <item name="regular" xsi:type="object">Magento\Framework\View\Element\UiComponent\DataProvider\RegularFilter</item>
+                <item name="fulltext" xsi:type="object">Magento\Framework\View\Element\UiComponent\DataProvider\FulltextFilter</item>
+            </argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="passwordAnalyticsGridDataProvider" type="Magento\Framework\View\Element\UiComponent\DataProvider\DataProvider">
+        <arguments>
+            <argument name="collection" xsi:type="object" shared="false">Addify\RestrictOrderByCustomer\Model\ResourceModel\PasswordAnalytics\Collection
+            </argument>
+            <argument name="filterPool" xsi:type="object" shared="false">passwordAnalyticsGirdFilterPool</argument>
+        </arguments>
+    </virtualType>
+</config>

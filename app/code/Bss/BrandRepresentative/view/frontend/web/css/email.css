@@ -1,0 +1,28 @@
+.report-listing-wrapper {
+    max-height: 300px;
+    overflow-x: scroll;
+}
+
+.email-items table {
+    font-family: arial, sans-serif;
+    border-collapse: collapse;
+    width: 100%;
+}
+
+.email-items thead {
+    background-color: #000000;
+    color: #fff;
+}
+
+.email-items td, th {
+    text-align: left;
+    padding: 8px;
+}
+
+.email-items tr:nth-child(even) {
+    background-color: #dddddd;
+}
+
+.footer td {
+    padding: 25px;
+}

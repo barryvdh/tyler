@@ -1,0 +1,1 @@
+/var/www/html/pub/app/code/Bss/BrandRepresentative/view/adminhtml/web/js/components/use-company-category-configuration.js

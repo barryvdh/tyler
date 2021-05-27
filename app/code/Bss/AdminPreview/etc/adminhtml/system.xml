@@ -1,0 +1,74 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * BSS Commerce Co.
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the EULA
+ * that is bundled with this package in the file LICENSE.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://bsscommerce.com/Bss-Commerce-License.txt
+ *
+ * @category   BSS
+ * @package    Bss_AdminPreview
+ * @author     Extension Team
+ * @copyright  Copyright (c) 2017-2018 BSS Commerce Co. ( http://bsscommerce.com )
+ * @license    http://bsscommerce.com/Bss-Commerce-License.txt
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Config:etc/system_file.xsd">
+    <system>
+        <tab id="bss" translate="label" sortOrder="300">
+            <label>Bss Commerce</label>
+        </tab>
+        <section id="bss_adminpreview" translate="label" type="text" sortOrder="1" showInDefault="1" showInWebsite="1" showInStore="1">
+            <class>separator-top</class>
+            <label>Admin Preview</label>
+            <tab>bss</tab>
+            <resource>Bss_AdminPreview::config_section</resource>
+            <group id="general" translate="label" type="text" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
+                <label>General</label>
+                <field id="enable" translate="label" type="select" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Enabled</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                    <comment><![CDATA[Choose 'yes' to enable module.<br>Version 1.1.0]]></comment>
+                </field>
+                <field id="product_grid_preview_column" translate="label comment" type="select" sortOrder="20" showInDefault="1" showInWebsite="0" showInStore="0">
+                    <label>Product Grid Preview Button Position</label>
+                    <source_model>Bss\AdminPreview\Model\Config\Source\PreviewGridColumnPosition</source_model>
+                </field>
+                <field id="product_grid_columns" translate="label comment" type="multiselect" sortOrder="25" showInDefault="1" showInWebsite="0" showInStore="0">
+                    <label>Product Grid Columns Table</label>
+                    <source_model>Bss\AdminPreview\Model\Config\Source\ProductColumns</source_model>
+                    <comment>
+                        <![CDATA[For Sales Order Grid]]>
+                    </comment>
+                </field>
+                <field id="product_preview_type_link" translate="label comment" type="select" sortOrder="30" showInDefault="1" showInWebsite="0" showInStore="0">
+                    <label>Product Preview Link Type</label>
+                    <source_model>Bss\AdminPreview\Model\Config\Source\ProductPreviewType</source_model>
+                    <comment>
+                        <![CDATA[For Sales Order Grid]]>
+                    </comment>
+                </field>
+                <field id="customer_grid_login_column" translate="label comment" type="select" sortOrder="100" showInDefault="1" showInWebsite="0" showInStore="0">
+                    <label>Customer Grid Login Button Column</label>
+                    <source_model>Bss\AdminPreview\Model\Config\Source\PreviewGridColumnPosition</source_model>
+                </field>
+
+
+                <field id="disable_page_cache" translate="label comment" type="select" sortOrder="110" showInDefault="1" showInWebsite="0" showInStore="0">
+                    <label>Disable Page Cache For Admin User</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+
+                <field id="backend_edit_links" translate="label comment" type="multiselect" sortOrder="120" showInDefault="1" showInWebsite="0" showInStore="0">
+                    <label>Show Edit Link In Frontend For</label>
+                    <source_model>Bss\AdminPreview\Model\Config\Source\BackendEditLinks</source_model>
+                    <can_be_empty>1</can_be_empty>
+                </field>
+            </group>
+        </section>
+    </system>
+</config>

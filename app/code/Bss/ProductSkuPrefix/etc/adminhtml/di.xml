@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
+   <type name="Magento\Catalog\Ui\DataProvider\Product\Form\Modifier\General">
+       <plugin name="Bss_ProductSkuPrefix::custom_sku_component"
+               type="Bss\ProductSkuPrefix\Plugin\Ui\DataProvider\ModifySku"
+               sortOrder="40" />
+   </type>
+
+    <type name="Magento\Catalog\Controller\Adminhtml\Product\Save">
+        <plugin name="Bss_ProductSkuPrefix::set_unique_prefix_sku"
+                type="Bss\ProductSkuPrefix\Plugin\Controller\Product\SetPrefixSku"
+                sortOrder="40" />
+    </type>
+    <type name="Magento\Catalog\Controller\Adminhtml\Product\Validate">
+        <plugin name="Bss_ProductSkuPrefix::skip_validate_sku_empty"
+                type="Bss\ProductSkuPrefix\Plugin\Controller\Product\SetPrefixSku"
+                sortOrder="50" />
+    </type>
+</config>

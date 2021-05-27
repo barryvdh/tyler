@@ -1,0 +1,36 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * BSS Commerce Co.
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the EULA
+ * that is bundled with this package in the file LICENSE.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://bsscommerce.com/Bss-Commerce-License.txt
+ *
+ * @category   BSS
+ * @package    Bss_AdminPreview
+ * @author     Extension Team
+ * @copyright  Copyright (c) 2017-2018 BSS Commerce Co. ( http://bsscommerce.com )
+ * @license    http://bsscommerce.com/Bss-Commerce-License.txt
+ */
+-->
+<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
+	<body>
+		<referenceBlock name="order_items">
+			<referenceBlock name="column_name">
+			    <action method="setTemplate" ifconfig="bss_adminpreview/general/enable">
+			        <argument name="template" xsi:type="string">Bss_AdminPreview::item_column_name.phtml</argument>
+			    </action>
+			</referenceBlock>
+			<referenceBlock name="column_name_grouped">
+			    <action method="setTemplate" ifconfig="bss_adminpreview/general/enable">
+			        <argument name="template" xsi:type="string">Bss_AdminPreview::item_column_name.phtml</argument>
+			    </action>
+			</referenceBlock>
+			<block class="Bss\AdminPreview\Block\Adminhtml\Sales\Order\View\Items\Renderer" name="order_items.bundle" as="bundle" template="Bss_AdminPreview::renderer.phtml"/>
+		</referenceBlock>
+	</body>
+</page>

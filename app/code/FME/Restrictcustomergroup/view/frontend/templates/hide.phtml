@@ -1,0 +1,26 @@
+<?php
+$restrictedcategoriesurl = [];
+// if ($block->isModuleEnabled())
+// {
+//   $restrictedcategoriesurl = $block->getRestrictedCategoriesIds();
+// }
+?>
+<script>
+  require([
+    'jquery',
+    'domReady!'
+  ], function ($) {
+      <?php
+        if (!empty($restrictedcategoriesurl))
+        {
+          foreach ($restrictedcategoriesurl as $key => $value)
+          {
+            ?>
+              $("div[class*='sidebar-main'] a[href='<?php echo $value; ?>']").parent().css("display", "none");
+              $("div[class*='sidebar-main'] a[href='<?php echo $value; ?>']").css("display", "none");
+            <?php
+          }
+        }
+      ?>
+  });
+</script>

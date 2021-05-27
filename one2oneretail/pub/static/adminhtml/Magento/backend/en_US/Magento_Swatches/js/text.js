@@ -1,0 +1,1 @@
+/var/www/html/pub/vendor/magento/module-swatches/view/adminhtml/web/js/text.js

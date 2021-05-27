@@ -1,0 +1,24 @@
+<listing xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Ui:etc/ui_configuration.xsd">
+    <dataSource name="customer_address_listing_data_source">
+        <dataProvider class="Bss\CustomerToSubUser\Ui\Component\Address\Listing\DataProvider" name="customer_address_listing_data_source" />
+    </dataSource>
+
+    <listingToolbar name="listing_top">
+        <massaction name="listing_massaction" component="Bss_CustomerToSubUser/js/view/grid/address/massactions">
+            <settings>
+                <imports>
+                    <link name="companyAccountId" active="true">customer_form.customer_form_data_source:data.assign_to_company_account.company_account_id</link>
+                </imports>
+            </settings>
+        </massaction>
+    </listingToolbar>
+    <columns name="customer_address_columns">
+        <actionsColumn name="actions" component="Bss_CustomerToSubUser/js/view/grid/columns/actions">
+            <settings>
+                <imports>
+                    <link name="companyAccountId" active="true">customer_form.customer_form_data_source:data.assign_to_company_account.company_account_id</link>
+                </imports>
+            </settings>
+        </actionsColumn>
+    </columns>
+</listing>

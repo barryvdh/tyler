@@ -1,0 +1,1 @@
+/var/www/html/pub/vendor/magento/module-downloadable/view/adminhtml/web/js/components/upload-type-handler.js

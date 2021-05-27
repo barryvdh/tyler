@@ -1,0 +1,49 @@
+<?php
+/**
+ * BSS Commerce Co.
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the EULA
+ * that is bundled with this package in the file LICENSE.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://bsscommerce.com/Bss-Commerce-License.txt
+ *
+ * @category   BSS
+ * @package    Bss_CategoryAttributes
+ * @author     Extension Team
+ * @copyright  Copyright (c) 2017-2018 BSS Commerce Co. ( http://bsscommerce.com )
+ * @license    http://bsscommerce.com/Bss-Commerce-License.txt
+ */
+/** @var \Magento\Catalog\Block\Category\View $block */
+/** @var \Bss\CategoryAttributes\ViewModel\Category\Output $viewModel*/
+/** @var \Magento\Framework\Escaper $escaper */
+/** @var \Magento\Catalog\Model\Category $category */
+$viewModel = $block->getData('view_model');
+$category = $block->getCurrentCategory();
+$brandCover = $category->getCustomAttribute('cover_category');
+$brandCoverPath = $viewModel->getDefaultBrandCover();
+if ($brandCover) {
+    $brandCoverPath = $viewModel->getCategoryImage()->getUrl($category, 'cover_category');
+}
+?>
+<img src="<?= $escaper->escapeUrl($brandCoverPath) ?>" alt="<?= $escaper->escapeHtml($category->getName()) ?>" />
+<div class="category-top <?php if ($_description = $category->getShortDescription()): ?>have-des<?php endif; ?>">
+	<div class="container">
+		<div class="row">
+			<div class="col-md-3 col-lg-2"><?php echo $block->getChildHtml('category.image');?></div>
+			<div class="col-md-9 col-lg-10 col-right">
+				<div class="name-category">
+					<h2 class="title-category title-nomal">
+						<?php if ($_categoryname = $category->getName()): ?>
+						   	<?= $viewModel->getCatalogOutputHelper()->categoryAttribute($category, $_categoryname, 'name');?>
+						<?php endif; ?>
+					</h2>
+				</div>
+				<?php if ($_description = $category->getShortDescription()): ?>
+				   	<?= $viewModel->getCatalogOutputHelper()->categoryAttribute($category, $_description, 'short_description');?>
+				<?php endif; ?>
+			</div>
+		</div>
+	</div>
+</div>

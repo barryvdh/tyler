@@ -1,0 +1,1 @@
+/var/www/html/pub/app/code/Bss/CategoryAttributes/view/adminhtml/web/js/view/visibility.js

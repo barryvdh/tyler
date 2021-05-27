@@ -1,0 +1,22 @@
+<?xml version="1.0"?>
+<!--/**
+ * Password Protected
+ *
+ * @category    Addify
+ * @package     Addify_PasswordProtected
+ * @author      Addify
+ * @Email       addifypro@gmail.com
+ *
+ */ -->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:Event/etc/events.xsd">
+
+
+    <event name="controller_action_predispatch">
+        <observer name="addify_passwordprotected" instance="Addify\PasswordProtected\Observer\PasswordProtected"/>
+    </event>
+    <!-- <event name="catalog_block_product_list_collection">
+        <observer name="addify_passwrodprotected_collection"
+                  instance="Addify\PasswordProtected\Observer\CollectionObserver" />
+    </event> -->
+
+</config>

@@ -1,0 +1,34 @@
+<?xml version="1.0"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Backend:etc/menu.xsd">
+    <menu>
+
+        <update id="FME_Extensions::fmeextensions" 
+                title="FME Extensions" 
+                module="Magento_Backend" 
+                sortOrder="70" 
+                resource="FME_Extensions::fmeextensions"/>   
+        
+        <add id="FME_Restrictcustomergroup::restrictcustomergroup" 
+             title="Restrict By Customer Group" 
+             module="FME_Restrictcustomergroup" 
+             sortOrder="10" 
+             parent="FME_Extensions::fmeextensions" 
+             resource="FME_Restrictcustomergroup::restrictcustomergroup" />
+             
+        <add id="FME_Restrictcustomergroup::rule" 
+             resource="FME_Restrictcustomergroup::rule" 
+             title="Manage Rules" 
+             action="restrictcustomergroup/rule/index" 
+             module="FME_Restrictcustomergroup" 
+             sortOrder="11" 
+             parent="FME_Restrictcustomergroup::restrictcustomergroup"/>
+        
+        <add id="FME_Restrictcustomergroup::configuration" 
+             title="Configurations" 
+            module="FME_Restrictcustomergroup" 
+             sortOrder="12" 
+             parent="FME_Restrictcustomergroup::restrictcustomergroup" 
+            action="adminhtml/system_config/edit/section/restrictcustomergroup" 
+            resource="FME_Restrictcustomergroup::configuration" />
+    </menu>
+</config>

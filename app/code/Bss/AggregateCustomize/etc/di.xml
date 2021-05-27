@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
+    <type name="Bss\CompanyAccount\Model\Config\Source\SubRole\Reader">
+        <arguments>
+            <argument name="schemaLocator" xsi:type="object">Bss\AggregateCustomize\Model\Config\Source\SubRole\SchemaLocator</argument>
+        </arguments>
+    </type>
+    <type name="Bss\AggregateCustomize\Model\Config\Source\SubRole\SchemaLocator">
+        <arguments>
+            <argument name="moduleName" xsi:type="string">Bss_AggregateCustomize</argument>
+        </arguments>
+    </type>
+    <type name="Bss\AdminPreview\Controller\Preview\Index">
+        <plugin name="Bss_AggregateCustomize::fix_preview"
+                type="Bss\AggregateCustomize\Plugin\AdminPreview\Controller\Preview\Index"
+                sortOrder="30" />
+    </type>
+
+    <type name="Bss\AggregateCustomize\Plugin\AdminPreview\Ui\Component\Edit\Product\Preview">
+        <arguments>
+            <argument name="url" xsi:type="object">Magento\Framework\Url</argument>
+        </arguments>
+    </type>
+
+    <type name="Bss\AdminPreview\Ui\Component\Edit\Product\Preview">
+        <plugin name="Bss_Aggregate::fix_get_product_url"
+                type="Bss\AggregateCustomize\Plugin\AdminPreview\Ui\Component\Edit\Product\Preview"
+                sortOrder="30" />
+    </type>
+
+    <type name="Magento\Cms\Model\Block">
+        <plugin name="Bss_AggregateCustomize::fix_can_click_edit_link"
+                type="Bss\AggregateCustomize\Plugin\AfterBlockGetContent"
+                sortOrder="30" />
+    </type>
+
+    <preference for="Bss\CompanyAccount\Model\Config\Source\SubRole\Converter"
+                type="Bss\AggregateCustomize\Model\Config\Source\SubRole\Converter"/>
+    <preference for="Bss\CompanyAccount\Model\Config\Source\Permissions"
+                type="Bss\AggregateCustomize\Model\Config\Source\Permissions"/>
+</config>

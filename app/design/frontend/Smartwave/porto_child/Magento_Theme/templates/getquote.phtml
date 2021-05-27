@@ -1,0 +1,24 @@
+<?php 
+$getQuotePopupJsConfig = $this->getLayout()->createBlock('Magento\Cms\Block\Block')->setBlockId('get_quote')->toHtml(); ?>
+<div style = "display: none;" id = "get-quote-main">
+    <div id = "get-quote-sub-container">
+        <p id = "get-quote-close-btn">&#10005;</p>
+        <?= $getQuotePopupJsConfig ?>
+    </div>
+</div>
+<script type="text/javascript">
+    require([
+        'jquery',
+        'mage/translate',
+        'domReady!'
+    ], function ($) {
+        $(document).ready(function () {
+            $('#get_quote').click(function(){
+                $('#get-quote-main').slideToggle('slow');
+            });
+            $('#get-quote-close-btn').click(function(){
+                $('#get-quote-main').slideToggle('slow');
+            })
+        });
+    });
+</script>

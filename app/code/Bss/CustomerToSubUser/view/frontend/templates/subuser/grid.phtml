@@ -1,0 +1,93 @@
+<?php
+/** @var \Bss\CompanyAccount\Block\SubUser\Index $block */
+/** @var \Magento\Framework\Escaper $escaper */
+$users = $block->getItems();
+?>
+<?php if (count($users)) : ?>
+    <div class="table-wrapper">
+        <table id="my-sub-user-table" class="data table">
+            <caption class="table-caption"><?= $escaper->escapeHtml(__('Sub-Users')) ?></caption>
+            <thead>
+            <tr>
+                <th scope="col" class="col id"><?= $escaper->escapeHtml(__('User #')) ?></th>
+                <th scope="col" class="col name"><?= $escaper->escapeHtml(__('Name')) ?></th>
+                <th scope="col" class="col email"><?= $escaper->escapeHtml(__('Email')) ?></th>
+                <th scope="col" class="col role"><?= $escaper->escapeHtml(__('Role')) ?></th>
+                <th scope="col" class="col status"><?= $escaper->escapeHtml(__('Status')) ?></th>
+                <th scope="col" class="col actions"><?= $escaper->escapeHtml(__('Actions')) ?></th>
+            </tr>
+            </thead>
+            <tbody>
+            <?php /** @var \Bss\CompanyAccount\Api\Data\SubUserInterface $user */ ?>
+            <?php foreach ($users as $user) : ?>
+                <tr>
+                    <td data-th="<?= $escaper->escapeHtmlAttr(__('User #')) ?>" class="col id">
+                        <?= $escaper->escapeHtml($user->getSubUserId()) ?>
+                    </td>
+                    <td data-th="<?= $escaper->escapeHtmlAttr(__('Name')) ?>" class="col name">
+                        <?= $escaper->escapeHtml($user->getSubUserName()) ?>
+                    </td>
+                    <td data-th="<?= $escaper->escapeHtmlAttr(__('Email')) ?>" class="col email">
+                        <a href="mailto:<?= $escaper->escapeHtml($user->getSubUserEmail()) ?>">
+                            <?= $escaper->escapeHtml($user->getSubUserEmail()) ?>
+                        </a>
+                    </td>
+                    <td data-th="<?= $escaper->escapeHtmlAttr(__('Role')) ?>" class="col role">
+                        <?= $escaper->escapeHtml($user->getData('role_name')) ?>
+                    </td>
+                    <td data-th="<?= $escaper->escapeHtmlAttr(__('Status')) ?>" class="col status">
+                        <?= $escaper->escapeHtml(__(ucfirst($user->getStatusLabel()))) ?>
+                    </td>
+                    <td data-th="<?= $escaper->escapeHtmlAttr(__('Actions')) ?>"
+                        title="<?= $escaper->escapeHtmlAttr(__('Edit')) ?>"
+                        class="col bss actions">
+                        <a href="<?= $escaper->escapeUrl($block->getEditUrl($user)) ?>" class="action edit">
+                            <i class="material-icons">create</i>
+                        </a>
+                        <a href="javascript:void(0);"
+                           data-mage-init='{ "Bss_CompanyAccount/js/grid/actions": { "url": "<?= $escaper->escapeUrl($block->getDeleteUrl($user)) ?>"} }'
+                           title="<?= $escaper->escapeHtmlAttr(__('Delete')) ?>"
+                           class="action delete _delete">
+                            <i class="material-icons">delete</i>
+                        </a>
+                        <a href="javascript:void(0);"
+                           data-mage-init='{ "Bss_CompanyAccount/js/grid/actions": { "url": "<?= $escaper->escapeUrl($block->getResetPasswordUrl($user)) ?>", "cfTitle": "<?= __('Reset password sub-user') ?>", "cfContent": "<?= __('Are you sure you want to send reset password mail to the sub-user?') ?>" } }'
+                           title="<?= $escaper->escapeHtmlAttr(__('Reset Password')) ?>"
+                           class="action reset-password _reset">
+                            <i class="material-icons">vpn_key</i>
+                        </a>
+                    </td>
+                </tr>
+            <?php endforeach; ?>
+            </tbody>
+        </table>
+    </div>
+
+    <?php if ($block->getChildHtml('pager')) : ?>
+        <div class="toolbar bottom">
+            <?= $block->getChildHtml('pager') ?>
+        </div>
+    <?php endif; ?>
+<?php else : ?>
+    <div class="message info empty"><span><?= $escaper->escapeHtml(__('You have not any sub-user yet.')) ?></span></div>
+<?php endif; ?>
+
+<div class="actions-toolbar">
+    <div class="primary">
+        <a href="<?= $escaper->escapeUrl($block->getCreateUrl()) ?>" class="action create primary">
+            <span><?= $escaper->escapeHtml(__('New Sub-user')) ?></span>
+        </a>
+    </div>
+</div>
+
+<script type="text/x-magento-init">
+    {
+        "._delete": {
+            "Bss_CompanyAccount/js/grid/actions": {
+                "cfTitle": "<?= __('Delete sub-user') ?>",
+                "cfContent": "<?= __('Are you sure you want to delete the sub-user?') ?>"
+            }
+        }
+    }
+</script>
+

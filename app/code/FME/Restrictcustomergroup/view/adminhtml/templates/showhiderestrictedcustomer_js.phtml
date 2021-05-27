@@ -1,0 +1,50 @@
+<script>
+  require(
+      [
+      'jquery'
+      ],
+      function($)
+      {
+
+        // setting pre selected value for restircted customers
+        var preSelectedValue = $("#rule_restricted_customer_response_type").children("option:selected").val();
+        if (preSelectedValue == '1')
+        {
+          $("#rule_errormsg_fieldset").show();
+          $("#rule_redirect_fieldset").hide();
+          $("#rule_redirect_url").removeClass("required-entry");
+          $("#rule_error_msg").addClass("required-entry");
+        }
+        else
+        {
+          $("#rule_errormsg_fieldset").hide();
+          $("#rule_redirect_fieldset").show();
+          $("#rule_redirect_url").addClass("required-entry");
+          $("#rule_redirect_url").addClass("validate-url");
+          $("#rule_error_msg").removeClass("required-entry");
+        }
+
+
+        // hide and show error and url redirect on event change
+        $("#rule_restricted_customer_response_type").change(function()
+        {
+            var selectedOptionValue = $(this).children("option:selected").val();
+            // 1 means error message
+            if(selectedOptionValue == '1')
+            {
+                $("#rule_errormsg_fieldset").show();
+                $("#rule_redirect_fieldset").hide();
+                $("#rule_redirect_url").removeClass("required-entry");
+                $("#rule_error_msg").addClass("required-entry");
+            }
+            if(selectedOptionValue == '2')
+            {
+                $("#rule_errormsg_fieldset").hide();
+                $("#rule_redirect_fieldset").show();
+                $("#rule_redirect_url").addClass("required-entry");
+                $("#rule_redirect_url").addClass("validate-url");
+                $("#rule_error_msg").removeClass("required-entry");
+            }
+        });
+      });
+</script>

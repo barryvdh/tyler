@@ -1,0 +1,30 @@
+<?php /**
+ * BSS Commerce Co.
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the EULA
+ * that is bundled with this package in the file LICENSE.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://bsscommerce.com/Bss-Commerce-License.txt
+ *
+ * @category  BSS
+ * @package   Bss_Popub
+ * @author    Extension Team
+ * @copyright Copyright (c) 2018-2020 BSS Commerce Co. ( http://bsscommerce.com )
+ * @license   http://bsscommerce.com/Bss-Commerce-License.txt
+ */
+// @codingStandardsIgnoreFile
+?>
+<?php
+/**
+ * @var Magento\Backend\Block\Template $block
+ */
+?>
+<div class="title-popup"><?= $block->escapeHtml(__('More updated news!'))?></div>
+<div class="des-popup"><?= $block->escapeHtml(__('Follow us on social media for more information.'))?></div>
+<ul class="social">
+    <li><a href="https://www.facebook.com/BSSGroupRecruitment/" target="_blank"><img src="<?= $block->getViewFileUrl('Bss_Popup::images/facebook.png'); ?>" alt="<?= $block->escapeHtml(__('Facebook'))?>" /></a></li>
+    <li><a href="https://twitter.com/BSScommerceIT" target="_blank"><img src="<?= $block->getViewFileUrl('Bss_Popup::images/twitter.png'); ?>" alt="<?= $block->escapeHtml(__('Twitter'))?>" /></a></li>
+    <li><a href="https://www.youtube.com/channel/UCpRqMGHkhBufDfvbbzRfx4g" target="_blank"><img src="<?= $block->getViewFileUrl('Bss_Popup::images/youtube.png'); ?>" alt="<?= $block->escapeHtml(__('Youtube')) ?>" /></a></li>
+</ul>

@@ -1,0 +1,77 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * BSS Commerce Co.
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the EULA
+ * that is bundled with this package in the file LICENSE.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://bsscommerce.com/Bss-Commerce-License.txt
+ *
+ * @category   BSS
+ * @package    Bss_AdminPreview
+ * @author     Extension Team
+ * @copyright  Copyright (c) 2017-2018 BSS Commerce Co. ( http://bsscommerce.com )
+ * @license    http://bsscommerce.com/Bss-Commerce-License.txt
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
+	<!-- category, cms edit button -->
+	<!-- <type name="Magento\Backend\Block\Widget\Context">
+		<plugin name="Bss_AdminPreview_ViewButton" type="Bss\AdminPreview\Plugin\Adminhtml\Edit\ButtonList" sortOrder="1"/>
+	</type> -->
+
+	<!-- product edit button -->
+	<!-- <type name="\Magento\Catalog\Block\Adminhtml\Product\Edit">
+		<plugin name="Bss_AdminPreview_ViewButton_Product" type="Bss\AdminPreview\Plugin\Adminhtml\Edit\ButtonListProduct" />
+	</type> -->
+
+	<!-- admin logout -->
+	<type name="Magento\Backend\Controller\Adminhtml\Auth">
+		<plugin name="Bss_AdminPreview_Admin_Logout" type="Bss\AdminPreview\Plugin\Adminhtml\AdminLogout" sortOrder="10" />
+	</type>
+
+	<!-- admin update session lifetime -->
+	<type name="Magento\Backend\Model\Auth\Session">
+		<plugin name="Bss_AdminPreview_Admin_Update_Session" type="Bss\AdminPreview\Plugin\Adminhtml\UpdateSession" sortOrder="10" />
+	</type>
+
+	<!-- preview product grid button -->
+	<type name="Magento\Catalog\Ui\Component\Listing\Columns\ProductActions">
+		<plugin name="Bss_AdminPreview_ViewButton_Product_Grid" type="Bss\AdminPreview\Plugin\Adminhtml\Grid\ProductActions" sortOrder="10" />
+	</type>
+
+	<!-- login customer grid button -->
+	<type name="Magento\Customer\Ui\Component\Listing\Column\Actions">
+		<plugin name="Bss_AdminPreview_LoginButton_Customer_Grid" type="Bss\AdminPreview\Plugin\Adminhtml\Grid\CustomerActions" sortOrder="10" />
+	</type>
+
+	<!-- sales order grid items -->
+	<virtualType name="Magento\Sales\Model\ResourceModel\Order\Grid">
+        <arguments>
+            <argument name="joins" xsi:type="array">
+                <item name="sales_order_item" xsi:type="array">
+                    <item name="table" xsi:type="string">sales_order_item</item>
+                    <item name="origin_column" xsi:type="string">entity_id</item>
+                    <item name="target_column" xsi:type="string">order_id</item>
+                </item>
+            </argument>
+            <argument name="columns" xsi:type="array">
+                <item name="items_ordered" xsi:type="string">sales_order_item.item_id</item>
+            </argument>
+        </arguments>
+    </virtualType>
+
+	<!--get frontend url-->
+	<type name="Bss\AdminPreview\Plugin\FrontendUrl">
+		<arguments>
+			<argument name="frontendUrl" xsi:type="object" shared="false">Magento\Framework\Url</argument>
+		</arguments>
+	</type>
+
+	<!--fix cms page view url on Magento 2.3.0-->
+	<!-- Reference: https://github.com/magento/magento2/commit/d6f7d244fffade4764afb53fc0d4b932f5b180a1 -->
+	<preference for="Magento\Cms\Block\Adminhtml\Page\Grid\Renderer\Action\UrlBuilder" type="Bss\AdminPreview\Block\Adminhtml\Page\Grid\UrlBuilder" />
+</config>
