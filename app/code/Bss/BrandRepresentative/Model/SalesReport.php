@@ -39,7 +39,10 @@ use Magento\Framework\Model\AbstractModel;
  * @method $this    setProvince($province)
  * @method $this    setRepresentativeEmail($rawData)
  * @method $this    setSentStatus($status)
- * @method $this    setBrand($brandName)
+ * @method $this    setBrandId($brandId)
+ * @method $this    setBrandName($brandName)
+ * @method $this    setCategoryName($categoryName)
+ * @method string    getCategoryName()
  */
 class SalesReport extends AbstractModel implements IdentityInterface
 {

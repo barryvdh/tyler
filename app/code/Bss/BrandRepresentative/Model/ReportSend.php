@@ -199,14 +199,17 @@ class ReportSend
     }
 
     /**
+     * Get report data
+     *
+     * @param string $stringTime
      * @return array
      */
-    public function getReportCollectionData(): array
+    public function getReportCollectionData(string $stringTime = "yesterday"): array
     {
         $collectionData = [];
         $collection = $this->reportCollectionFactory->create();
         //Filter previous day only;
-        $reportDay = $this->dateTime->gmtDate('y-m-d', strtotime("yesterday"));
+        $reportDay = $this->dateTime->gmtDate('y-m-d', strtotime($stringTime));
         $collection->addFieldToFilter('ordered_time', $reportDay);
         $collection->getSelect()->joinInner(
             [
@@ -271,16 +274,36 @@ class ReportSend
                         \IntlDateFormatter::MEDIUM,
                         \IntlDateFormatter::MEDIUM
                     );
+                    if (isset($rowData['product_options']) && $rowData['product_options']) {
+                        try {
+                            $productOptions = $this->json->unserialize($rowData['product_options']);
+                        } catch (\Exception $e) {
+                            $this->logger->critical(
+                                __("Error when unserialize children product for email report: ") .
+                                $e
+                            );
+                            $productOptions = [];
+                        }
+                    }
+                    $productTypeOptions = $this->helper->getAllProductTypes();
+
+                    if (isset($productTypeOptions[$rowData['product_type']])) {
+                        $rowData['product_type'] = $productTypeOptions[$rowData['product_type']];
+                    }
+
                     $data['report'][] = [
                         'order_id' => $rowData['order_id'],
                         'product_sku' => $rowData['product_sku'],
                         'product_name' => $rowData['product_name'],
+                        'product_type' => $rowData['product_type'],
                         'ordered_qty' => $rowData['ordered_qty'],
                         'ordered_time' => $orderTime,
                         'customer_name' => $rowData['customer_name'],
+                        'company_name' => $rowData['company_name'],
                         'address' => $rowData['address'],
                         'city' => $rowData['city'],
                         'province' => $rowData['province'],
+                        'product_options' => $productOptions ?? [],
                     ];
                 }
             }
