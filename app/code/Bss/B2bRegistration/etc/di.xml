@@ -19,6 +19,12 @@
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
     <preference for="Magento\Customer\Controller\Account\Confirm" type="Bss\B2bRegistration\Controller\Account\Confirm" />
+    <type name="Magento\Customer\Ui\Component\DataProvider\Document">
+        <plugin name="Bss_B2bRegistration::gridExport"
+                type="Bss\B2bRegistration\Plugin\Ui\Component\DataProvider\Document"
+                sortOrder="30" />
+    </type>
+
     <type name="Magento\Customer\Controller\Account\LoginPost">
         <plugin name="bss_change_customer_status" type="Bss\B2bRegistration\Plugin\LoginPost" sortOrder="10"/>
     </type>

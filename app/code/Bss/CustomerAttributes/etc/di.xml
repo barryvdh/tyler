@@ -18,6 +18,12 @@
  */
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
+    <type name="Magento\Customer\Ui\Component\DataProvider\Document">
+        <plugin name="Bss_CustomerAttributes::gridExport"
+                type="Bss\CustomerAttributes\Plugin\Ui\Component\DataProvider\Document"
+                sortOrder="30" />
+    </type>
+
     <!-- Define provider class that was used in node dataSource/class -->
     <virtualType name="CustomerAttributeGridDataProvider" type="Magento\Framework\View\Element\UiComponent\DataProvider\DataProvider">
         <arguments>
