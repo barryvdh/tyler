@@ -21,9 +21,6 @@ define([
 
             this.checked(true);
             this.visible(false);
-            if (this.samplesFieldset()) {
-                this.samplesFieldset().visible(false);
-            }
 
             if (this.titleField()) {
                 this.titleField().visible(false);
