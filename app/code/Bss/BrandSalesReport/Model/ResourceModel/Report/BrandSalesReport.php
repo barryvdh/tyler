@@ -79,7 +79,7 @@ class BrandSalesReport extends AbstractReport
      * @param TimezoneInterface $timezone
      * @param CollectionFactory $bssReportCollectionFactory
      * @param Json $json
-     * @param null $connectionName
+     * @param string|null $connectionName
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -197,9 +197,19 @@ class BrandSalesReport extends AbstractReport
                         'product_id'         => $info['product_id'],
                         'product_sku'        => $info['product_sku'],
                         'product_name'       => $info['product_name'],
-                        'product_brand'      => $info['brand'],
-                        'product_brand_email'=> $info['representative_email'] ? $this->convertEmailToSimpleString($info['representative_email']) : null,
-                        'qty_ordered'        => $info['ordered_qty']
+                        'category_name'      => $info['category_name'],
+                        'product_brand_email'=> $info['representative_email'] ?
+                            $this->convertEmailToSimpleString($info['representative_email']) :
+                            null,
+                        'qty_ordered'        => $info['ordered_qty'],
+                        'brand_id'           => $info['brand_id'],
+                        'brand_name'         => $info['brand_name'],
+                        'product_options'    => $info['product_options'],
+                        'company_name'       => $info['company_name'],
+                        'address'            => $info['address'],
+                        'city'               => $info['city'],
+                        'province'           => $info['province'],
+                        'product_type'       => $info['product_type'],
                     ];
                 }
             }
@@ -300,12 +310,21 @@ class BrandSalesReport extends AbstractReport
 
         $columns = [
             'period' => 't.period',
+            'order_id' => 't.order_id',
             'store_id' => 't.store_id',
             'product_id' => 't.product_id',
             'product_sku' => 't.product_sku',
             'product_name' => 't.product_name',
-            'product_brand' => 't.product_brand',
-            'product_brand_email' => 't.product_brand_email'
+            'category_name' => 't.category_name',
+            'product_brand_email' => 't.product_brand_email',
+            'brand_id' => 't.brand_id',
+            'brand_name' => 't.brand_name',
+            'product_options' => 't.product_options',
+            'company_name' => 't.company_name',
+            'address' => 't.address',
+            'city' => 't.city',
+            'province' => 't.province',
+            'product_type' => 't.product_type'
         ];
 
         if ($type === 'day') {

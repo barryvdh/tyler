@@ -79,7 +79,7 @@ class MostViewedCollector extends \Magento\Framework\View\Element\Template
         }
 
         if (isset($entityId) && $entityId) {
-            $this->getUrl(
+            return $this->getUrl(
                 'bss_brandRepresentative/traffic/newVisit',
                 ['entity_id' => $entityId, 'entity_type' => $entityType]
             );

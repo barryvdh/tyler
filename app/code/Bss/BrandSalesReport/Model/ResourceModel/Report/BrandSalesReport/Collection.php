@@ -35,6 +35,8 @@ use Zend_Db_Select_Exception;
  */
 class Collection extends AbstractCollection
 {
+    protected $brands;
+
     /**
      * Selected columns
      *
@@ -71,6 +73,18 @@ class Collection extends AbstractCollection
     ) {
         $resource->init($this->getTableByAggregationPeriod('daily'));
         parent::__construct($entityFactory, $logger, $fetchStrategy, $eventManager, $resource, $connection);
+    }
+
+    /**
+     * Set brand filter
+     *
+     * @param array $brands
+     * @return $this
+     */
+    public function setBrandFilter($brands)
+    {
+        $this->brands = $brands;
+        return $this;
     }
 
     /**
@@ -117,8 +131,15 @@ class Collection extends AbstractCollection
                     'product_id'            => 'product_id',
                     'product_sku'           => 'MAX(product_sku)',
                     'product_name'          => 'MAX(product_name)',
-                    'product_brand'         => 'MAX(product_brand)',
-                    'product_brand_email'   => 'MAX(product_brand_email)'
+                    'category_name'         => 'MAX(category_name)',
+                    'product_brand_email'   => 'MAX(product_brand_email)',
+                    'brand_name'            => 'MAX(brand_name)',
+                    'product_options'       => 'product_options',
+                    'company_name'          => 'MAX(company_name)',
+                    'address'               => 'MAX(address)',
+                    'city'                  => 'MAX(city)',
+                    'province'              => 'MAX(province)',
+                    'product_type'          => 'MAX(product_type)',
                 ];
                 if ('year' == $this->_period) {
                     $this->_selectedColumns['period'] = $connection->getDateFormatSql('period', '%Y');
@@ -136,6 +157,7 @@ class Collection extends AbstractCollection
      * @param string $from
      * @param string $to
      * @return Select
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     protected function _makeBoundarySelect($from, $to)
     {
@@ -158,7 +180,7 @@ class Collection extends AbstractCollection
         );
 
         $this->_applyStoresFilterToSelect($select);
-        //echo $select->__toString();
+        $this->applyBrandFilter($select);
         return $select;
     }
 
@@ -253,6 +275,26 @@ class Collection extends AbstractCollection
     }
 
     /**
+     * Query selected brands
+     *
+     * @param \Magento\Framework\DB\Select|null $select
+     * @return $this
+     */
+    protected function applyBrandFilter(\Magento\Framework\DB\Select $select = null)
+    {
+        if (empty($this->brands) || !is_array($this->brands)) {
+            return $this;
+        }
+
+        if (!$select) {
+            $select = $this->getSelect();
+        }
+        $select->where('brand_id IN (?)', $this->brands);
+
+        return $this;
+    }
+
+    /**
      * Redeclare parent method for applying filters after parent method
      * but before adding unions and calculating totals
      *
@@ -260,7 +302,7 @@ class Collection extends AbstractCollection
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
-     * @throws Zend_Db_Select_Exception
+     * @throws Zend_Db_Select_Exception|\Magento\Framework\Exception\LocalizedException
      */
     protected function _beforeLoad()
     {
@@ -420,5 +462,16 @@ class Collection extends AbstractCollection
         }
 
         return $this;
+    }
+
+    /**
+     * Apply brand fields
+     *
+     * @return Collection
+     */
+    protected function _applyCustomFilter()
+    {
+        $this->applyBrandFilter();
+        return parent::_applyCustomFilter();
     }
 }

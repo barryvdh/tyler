@@ -22,6 +22,7 @@ use Exception;
 use Magento\Catalog\Api\CategoryRepositoryInterface;
 use Magento\Catalog\Model\Category;
 use Magento\Catalog\Model\Product;
+use Magento\Catalog\Model\ProductTypes\ConfigInterface;
 use Magento\Framework\App\Helper\AbstractHelper;
 use Magento\Framework\App\Helper\Context;
 use Magento\Framework\Exception\NoSuchEntityException;
@@ -66,6 +67,11 @@ class Data extends AbstractHelper
     private $brandRepresentativeEmailDataResolver;
 
     /**
+     * @var ConfigInterface
+     */
+    protected $productTypeConfig;
+
+    /**
      * Data constructor.
      *
      * @param Context $context
@@ -74,6 +80,7 @@ class Data extends AbstractHelper
      * @param Json $json
      * @param LoggerInterface $logger
      * @param BrandRepresentativeEmailDataRecursiveResolver $brandRepresentativeEmailDataResolver
+     * @param ConfigInterface $productTypeConfig
      */
     public function __construct(
         Context $context,
@@ -81,25 +88,32 @@ class Data extends AbstractHelper
         StoreManagerInterface $storeManager,
         Json $json,
         LoggerInterface $logger,
-        BrandRepresentativeEmailDataRecursiveResolver $brandRepresentativeEmailDataResolver
+        BrandRepresentativeEmailDataRecursiveResolver $brandRepresentativeEmailDataResolver,
+        ConfigInterface $productTypeConfig
     ) {
         $this->categoryRepository = $categoryRepository;
         $this->storeManager = $storeManager;
         $this->json = $json;
         $this->logger = $logger;
         $this->brandRepresentativeEmailDataResolver = $brandRepresentativeEmailDataResolver;
+        $this->productTypeConfig = $productTypeConfig;
         parent::__construct($context);
     }
 
     /**
+     * Get representative emails from product with input region id
+     *
      * @param Product $product
      * @param int $regionId
      * @return string
+     * @SuppressWarnings(CyclomaticComplexity)
      */
     public function extractRepresentativeEmail(Product $product, int $regionId): string
     {
+        if ($regionId === 0) {
+            return '[]';
+        }
         $categoryIds = $product->getCategoryIds();
-        $currentStoreId = null;
         try {
             if ($this->storeManager->getStore()) {
                 $currentStoreId = $this->storeManager->getStore()->getId();
@@ -226,5 +240,28 @@ class Data extends AbstractHelper
         }
 
         return $senderName;
+    }
+
+    /**
+     * Get all product types
+     *
+     * @return array
+     */
+    public function getAllProductTypes(): array
+    {
+        $options = [];
+
+        try {
+            foreach ($this->productTypeConfig->getAll() as $productTypeData) {
+                $options[$productTypeData['name']] = $productTypeData['label'];
+            }
+        } catch (\Exception $e) {
+            $this->_logger->critical(
+                self::class . "::getAllProductTypes(): " .
+                $e
+            );
+        }
+
+        return $options;
     }
 }

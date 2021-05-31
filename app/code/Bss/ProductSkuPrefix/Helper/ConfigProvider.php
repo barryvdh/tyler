@@ -63,8 +63,9 @@ class ConfigProvider
      * Get serialized data
      *
      * @param int|null $storeId
+     * @return array
      */
-    public function getSerializedConfigData($storeId = null)
+    public function getSerializedConfigData(int $storeId = null): array
     {
         if (!$this->configPrefixData) {
             $values = $this->scopeConfig->getValue(
@@ -73,8 +74,12 @@ class ConfigProvider
                 $storeId
             );
 
-            if ($values) {
-                $this->configPrefixData = $this->serializer->unserialize($values);
+            try {
+                if ($values) {
+                    $this->configPrefixData = $this->serializer->unserialize($values);
+                }
+            } catch (\Exception $e) {
+                $this->configPrefixData = [];
             }
         }
 

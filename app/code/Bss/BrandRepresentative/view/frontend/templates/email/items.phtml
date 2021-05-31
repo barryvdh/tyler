@@ -33,6 +33,9 @@
                 <th class="row-product-name">
                     <?= /* @escapeNotVerified */  $block->escapeHtml(__('Product Name')) ?>
                 </th>
+                <th class="row-product-type">
+                    <?= /* @escapeNotVerified */  $block->escapeHtml(__('Product Type')) ?>
+                </th>
                 <th class="row-qty">
                     <?= /* @escapeNotVerified */  $block->escapeHtml(__('Ordered Quantity')) ?>
                 </th>
@@ -41,6 +44,9 @@
                 </th>
                 <th class="row-customer-name">
                     <?= /* @escapeNotVerified */  $block->escapeHtml(__('Customer')) ?>
+                </th>
+                <th class="row-company-name">
+                    <?= /* @escapeNotVerified */  $block->escapeHtml(__('Company Name')) ?>
                 </th>
                 <th class="row-address">
                     <?= /* @escapeNotVerified */  $block->escapeHtml(__('Address')) ?>
@@ -51,12 +57,31 @@
                 <th class="row-province">
                     <?= /* @escapeNotVerified */  $block->escapeHtml(__('Province')) ?>
                 </th>
+                <th class="row-children-products">
+                    <?= /* @escapeNotVerified */  $block->escapeHtml(__('Children Products')) ?>
+                </th>
             </tr>
         </thead>
         <tbody>
             <?php foreach ($report as $key => $rowItem): ?>
                 <tr class="row-data-<?=$key?>">
                     <?php foreach ($rowItem as $colKey => $colValue): ?>
+                        <?php if ($colKey === "product_options"): ?>
+                            <?php if (is_array($colValue) && !empty($colValue)): ?>
+                                <?php
+                                    /** @var \Magento\Framework\View\Layout $layout */
+                                    $layout = $block->getLayout();
+                                    $childrenGridHtml = $layout->createBlock(
+                                        \Magento\Framework\View\Element\Template::class
+                                    )->setTemplate("Bss_BrandSalesReport::brand/report/grid/children-item.phtml")
+                                    ->assign('rawItems', $colValue)->toHtml();
+                                ?>
+                            <td class="col-data-<?=$colKey?>"><?= $childrenGridHtml ?></td>
+                            <?php continue; ?>
+                            <?php else: ?>
+                            <?php $colValue = ""; ?>
+                            <?php endif; ?>
+                        <?php endif; ?>
                         <td class="col-data-<?=$colKey?>">
                             <?= /* @escapeNotVerified */  $block->escapeHtml(__((string)$colValue)) ?>
                         </td>
