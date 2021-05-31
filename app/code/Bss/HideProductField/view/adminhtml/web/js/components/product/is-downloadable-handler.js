@@ -4,12 +4,6 @@ define([
     'use strict';
 
     return IsDownloadableHandler.extend({
-        defaults: {
-            titleField: 'ns = ${ $.ns }, index=links_title',
-            modules: {
-                titleField: '${ $.titleField }'
-            }
-        },
         /**
          * Always check the component n  hide it
          * Also hide the  samples fieldset
@@ -21,10 +15,6 @@ define([
 
             this.checked(true);
             this.visible(false);
-
-            if (this.titleField()) {
-                this.titleField().visible(false);
-            }
 
             return this;
         }

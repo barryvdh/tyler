@@ -248,6 +248,11 @@ class HideField extends AbstractModifier
         if (isset($meta['downloadable']['children']['container_samples'])) {
             unset($meta['downloadable']['children']['container_samples']);
         }
+
+        // remove link title
+        if (isset($meta['downloadable']['children']['container_links']['children']['links_title'])) {
+            unset($meta['downloadable']['children']['container_links']['children']['links_title']);
+        }
     }
     /**
      * Hide section.
