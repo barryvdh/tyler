@@ -6,7 +6,6 @@
     <table class="data-table children-items-tables" cellspacing="0">
         <thead>
             <tr class="headings">
-                <th class="data-grid-th" style="width:100px"><?= __("Product ID") ?></th>
                 <th class="data-grid-th" style="width:250px"><?= __("Product Name") ?></th>
                 <th class="data-grid-th" style="width:200px"><?= __("Product SKU") ?></th>
                 <th class="data-grid-th" style="width:200px"><?= __("Ordered Quantity") ?></th>
@@ -17,7 +16,6 @@
         <?php $i = 0; ?>
         <?php foreach ($rawItems as $productData): ?>
             <tr class="<?php echo(++$i % 2 ? 'even' : 'odd') ?>">
-                <td><?= $productData["id"] ?></td>
                 <td><?= $productData["name"] ?></td>
                 <td><?= $productData["sku"] ?></td>
                 <td><?= $productData["ordered_qty"] ?></td>

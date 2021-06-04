@@ -1,6 +1,7 @@
 .report-listing-wrapper {
     max-height: 300px;
     overflow-x: scroll;
+    max-width: 610px;
 }
 
 .email-items table {
@@ -13,7 +14,25 @@
     background-color: #000000;
     color: #fff;
 }
-
+.email-items thead tr th,
+.email-items tbody tr td {
+    padding:9px 15px;
+    vertical-align: top;
+    font-size: 12px;
+    min-width:110px;
+}
+.email-items thead tr th.row-order-id,
+.email-items tbody tr td.col-data-order_id {
+    min-width:60px;
+}
+.email-items thead tr th,
+.email-items thead tr th:first-child {
+    border:1px solid #000;
+}
+.email-items tbody tr td,
+.email-items tbody tr td:first-child  {
+    border-right: 1px solid #ccc;
+}
 .email-items td, th {
     text-align: left;
     padding: 8px;
