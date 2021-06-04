@@ -6,12 +6,6 @@
         </arguments>
     </type>
 
-<!--    <type name="Magento\Catalog\Controller\Adminhtml\Product\Save">-->
-<!--        <plugin type="Bss\DigitalAssetsManage\Plugin\MoveImage"-->
-<!--                name="move_image"-->
-<!--                sortOrder="90" />-->
-<!--    </type>-->
-
 <!--    <preference for="Magento\Catalog\Model\Product\Gallery\Processor"-->
 <!--                type="Bss\DigitalAssetsManage\Model\Product\Gallery\Processor" />-->
 </config>

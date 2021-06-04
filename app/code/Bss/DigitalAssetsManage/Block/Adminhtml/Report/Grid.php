@@ -3,7 +3,7 @@ declare(strict_types=1);
 
 namespace Bss\DigitalAssetsManage\Block\Adminhtml\Report;
 
-use Bss\DigitalAssetsManage\Helper\UniqueFileName;
+use Bss\DigitalAssetsManage\Helper\GetBrandDirectory;
 use Magento\Framework\Data\Collection;
 
 /**
@@ -115,19 +115,39 @@ class Grid extends \Magento\Backend\Block\Widget\Grid\Extended
      * @param \Magento\Catalog\Model\Category $category
      * @param \Magento\Backend\Block\Widget\Grid\Column\Extended $column
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
-     * @throws \Magento\Framework\Exception\ValidatorException
      */
     public function storageCalculate($value, $category, $column)
     {
-        if ($category instanceof \Magento\Catalog\Model\Category) {
-            $size = $this->folderSize(
-                $this->getMediaDirectory()->getAbsolutePath(),
-                $category->getName()
+        $unitTbl = [
+            0 => "B",
+            1 => "KB",
+            2 => "MB",
+            3 => "GB"
+        ];
+
+        $unit = $unitTbl[0];
+        try {
+            if ($category instanceof \Magento\Catalog\Model\Category) {
+                $size = $this->folderSize(
+                    $this->getMediaDirectory()->getAbsolutePath(),
+                    $category->getName()
+                );
+                $i = 1;
+                while ($size > 1024) {
+                    $unit = $unitTbl[$i];
+                    $size = $size / 1024;
+                    $i++;
+                }
+
+                return round($size, 2) . " " . $unit;
+            }
+        } catch (\Exception $e) {
+            $this->_logger->critical(
+                "BSS - ERROR: When render storage amount. Detail: " . $e
             );
-            return round($size / 1024 / 1024, 1) . " MB";
         }
 
-        return 0 . "MB";
+        return 0 . $unitTbl[0];
     }
 
     /**
@@ -135,9 +155,9 @@ class Grid extends \Magento\Backend\Block\Widget\Grid\Extended
      *
      * @param string $dir
      * @param string $brandName
-     * @return false|int
+     * @return int
      */
-    protected function folderSize($dir, $brandName)
+    protected function folderSize(string $dir, string $brandName): int
     {
         $size = 0;
 
@@ -148,21 +168,48 @@ class Grid extends \Magento\Backend\Block\Widget\Grid\Extended
 //                    $brandName . DIRECTORY_SEPARATOR . UniqueFileName::DIGITAL_ASSETS_FOLDER_NAME
 //                ) !== false, ['strpos ' => [$each,
 //                $brandName . DIRECTORY_SEPARATOR . UniqueFileName::DIGITAL_ASSETS_FOLDER_NAME]]);
+
+
             if (is_file($each) &&
-                strpos(
-                    $each,
-                    $brandName . DIRECTORY_SEPARATOR . UniqueFileName::DIGITAL_ASSETS_FOLDER_NAME
-                ) !== false
+                strpos($each, $this->getDigitalAssetsPath($brandName)) !== false &&
+                $this->notInCache($each, $brandName)
             ) {
 //                dump(['filesize' => $this->getMediaDirectory()->stat($each)]);
 //                vadu_log(['sizeee_nme' => $each]);
-                $size += filesize($each);
+                $size += (int) filesize($each);
             } else {
                 $size += $this->folderSize($each, $brandName);
             }
         }
 
         return $size;
+    }
+
+    /**
+     * @param string $brandName
+     * @return string
+     */
+    protected function getDigitalAssetsPath(string $brandName): string
+    {
+        return $brandName . DS . GetBrandDirectory::DIGITAL_ASSETS_FOLDER_NAME;
+    }
+
+    /**
+     * Check if current path is not in cache folder
+     *
+     * @param string $path
+     * @param string $brandName
+     * @return bool
+     */
+    private function notInCache(string $path, string $brandName): bool
+    {
+        preg_match(
+            "/cache\/.*$brandName\/" . GetBrandDirectory::DIGITAL_ASSETS_FOLDER_NAME . "/i",
+            $path,
+            $matchs
+        );
+
+        return empty($matchs);
     }
 
     /**

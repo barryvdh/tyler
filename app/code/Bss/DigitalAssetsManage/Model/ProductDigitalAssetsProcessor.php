@@ -134,7 +134,6 @@ class ProductDigitalAssetsProcessor
      *
      * @param Product|int $product
      * @param string $brandPath
-     * @throws \Magento\Framework\Exception\NoSuchEntityException
      */
     public function moveAssetsToBrandFolder($product, string $brandPath)
     {
