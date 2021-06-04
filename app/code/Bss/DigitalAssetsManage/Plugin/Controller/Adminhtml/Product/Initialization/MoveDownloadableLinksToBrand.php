@@ -2,7 +2,7 @@
 declare(strict_types=1);
 namespace Bss\DigitalAssetsManage\Plugin\Controller\Adminhtml\Product\Initialization;
 
-use Bss\DigitalAssetsManage\Helper\UniqueFileName;
+use Bss\DigitalAssetsManage\Helper\GetBrandDirectory;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\App\RequestInterface;
 use Magento\Downloadable\Helper\File;
@@ -50,9 +50,9 @@ class MoveDownloadableLinksToBrand
     protected $sampleFactory;
 
     /**
-     * @var UniqueFileName
+     * @var GetBrandDirectory
      */
-    protected $uniqueFileName;
+    protected $getBrandDirectory;
 
     /**
      * @var \Psr\Log\LoggerInterface
@@ -67,7 +67,7 @@ class MoveDownloadableLinksToBrand
      * @param \Magento\Downloadable\Model\SampleFactory $sampleFactory
      * @param \Magento\Framework\Filesystem $filesystem
      * @param File $file
-     * @param UniqueFileName $uniqueFileName
+     * @param GetBrandDirectory $getBrandDirectory
      * @param \Psr\Log\LoggerInterface $logger
      * @throws \Magento\Framework\Exception\FileSystemException
      */
@@ -77,14 +77,14 @@ class MoveDownloadableLinksToBrand
         \Magento\Downloadable\Model\SampleFactory $sampleFactory,
         \Magento\Framework\Filesystem $filesystem,
         File $file,
-        UniqueFileName $uniqueFileName,
+        GetBrandDirectory $getBrandDirectory,
         \Psr\Log\LoggerInterface $logger
     ) {
         $this->request = $request;
         $this->linkFactory = $linkFactory;
         $this->mediaDirectory = $filesystem->getDirectoryWrite(DirectoryList::MEDIA);
         $this->file = $file;
-        $this->uniqueFileName = $uniqueFileName;
+        $this->getBrandDirectory = $getBrandDirectory;
         $this->logger = $logger;
         $this->sampleFactory = $sampleFactory;
     }
@@ -134,7 +134,7 @@ class MoveDownloadableLinksToBrand
                 $links = $extension->getDownloadableProductLinks();
                 $samples = $extension->getDownloadableProductSamples();
 
-                $brandPath = $this->uniqueFileName->getBrandDirectoryPath($product);
+                $brandPath = $this->getBrandDirectory->execute($product);
 
                 if (!$brandPath) {
                     return $product;
