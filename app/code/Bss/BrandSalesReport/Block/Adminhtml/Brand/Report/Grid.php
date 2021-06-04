@@ -31,6 +31,8 @@ use Magento\Reports\Block\Adminhtml\Sales\Grid\Column\Renderer\Date;
  */
 class Grid extends AbstractGrid
 {
+    const PRODUCT_NAME_COL_ID = "product_name";
+
     /**
      * GROUP BY criteria
      *
@@ -137,14 +139,15 @@ class Grid extends AbstractGrid
             ]
         );
         $this->addColumn(
-            'product_name',
+            static::PRODUCT_NAME_COL_ID,
             [
-                'header' => __('Product'),
-                'index' => 'product_name',
+                'header' => __('Product Name'),
+                'index' => static::PRODUCT_NAME_COL_ID,
                 'type' => 'string',
                 'sortable' => false,
                 'header_css_class' => 'col-product',
-                'column_css_class' => 'col-product'
+                'column_css_class' => 'col-product',
+                'frame_callback' => [$this, "processChildrenProduct"]
             ]
         );
         $this->addColumn(
@@ -160,25 +163,26 @@ class Grid extends AbstractGrid
             ]
         );
         $this->addColumn(
+            'qty_ordered',
+            [
+                'header' => __('Order Quantity'),
+                'index' => 'qty_ordered',
+                'type' => 'number',
+                'total' => 'sum',
+                'sortable' => false,
+                'header_css_class' => 'col-qty',
+                'column_css_class' => 'col-qty'
+            ]
+        );
+        $this->addColumn(
             'product_brand',
             [
                 'header' => __('Brand'),
                 'index' => 'brand_name',
                 'type' => 'string',
-                'sortable' => true,
-                'header_css_class' => 'col-brand',
-                'column_css_class' => 'col-brand'
-            ]
-        );
-        $this->addColumn(
-            'product_children',
-            [
-                'header' => __("Product children"),
                 'sortable' => false,
                 'header_css_class' => 'col-brand',
-                'column_css_class' => 'col-brand',
-                'type' => 'string',
-                'frame_callback' => [$this, "processChildrenProduct"]
+                'column_css_class' => 'col-brand'
             ]
         );
         $this->addColumn(
@@ -196,18 +200,6 @@ class Grid extends AbstractGrid
         if ($this->getFilterData()->getStoreIds()) {
             $this->setStoreIds(explode(',', $this->getFilterData()->getStoreIds()));
         }
-        $this->addColumn(
-            'qty_ordered',
-            [
-                'header' => __('Order Quantity'),
-                'index' => 'qty_ordered',
-                'type' => 'number',
-                'total' => 'sum',
-                'sortable' => false,
-                'header_css_class' => 'col-qty',
-                'column_css_class' => 'col-qty'
-            ]
-        );
         $this->addExportType('*/*/exportCsv', __('CSV'));
         $this->addExportType('*/*/exportExcel', __('Excel XML'));
 
@@ -265,22 +257,43 @@ class Grid extends AbstractGrid
      */
     public function processChildrenProduct($value, $reportItem, $column): string
     {
-        if (!isset($reportItem['product_options']) || !$reportItem['product_options']) {
-            return "";
+        $parentProductName = $value;
+
+        $rawItems = $this->unserializeChildrenProducts($reportItem['product_options'] ?? null);
+
+        if (empty($rawItems)) {
+            return $parentProductName;
         }
+
+        return $parentProductName .
+            $this->getLayout()->createBlock(\Magento\Framework\View\Element\Template::class)
+                ->setTemplate("Bss_BrandSalesReport::brand/report/grid/children-item.phtml")
+                ->assign("rawItems", $rawItems)->_toHtml();
+    }
+
+    /**
+     * Unserialize children product
+     *
+     * @param string|null $raw
+     * @return array
+     */
+    protected function unserializeChildrenProducts(string $raw = null): array
+    {
+        if (!$raw) {
+            return [];
+        }
+
         try {
-            $rawItems = $this->serializer->unserialize($reportItem['product_options']);
+            $serializedItems = $this->serializer->unserialize($raw);
         } catch (\Exception $e) {
             $this->_logger->critical(
-                __("Error when unserialize child product on brand sales report: ") .
+                __("BSS - ERROR: when unserialize child product on brand sales report: ") .
                 $e
             );
-            $rawItems = [];
+            $serializedItems = [];
         }
-        return $this->getLayout()->createBlock(
-            \Magento\Framework\View\Element\Template::class
-        )->setTemplate("Bss_BrandSalesReport::brand/report/grid/children-item.phtml")
-            ->assign("rawItems", $rawItems)->_toHtml();
+
+        return $serializedItems;
     }
 
     /**
@@ -336,5 +349,63 @@ class Grid extends AbstractGrid
         }
 
         return parent::_addCustomFilter($collection, $filterData);
+    }
+
+    /**
+     * Add children products data to csv export file
+     *
+     * @param \Magento\Framework\DataObject $item
+     * @param \Magento\Framework\Filesystem\File\WriteInterface $stream
+     */
+    protected function _exportCsvItem(
+        \Magento\Framework\DataObject $item,
+        \Magento\Framework\Filesystem\File\WriteInterface $stream
+    ) {
+        $row = [];
+        foreach ($this->getColumns() as $column) {
+            if ($column->getId() === static::PRODUCT_NAME_COL_ID) {
+                $column->setFrameCallback(null);
+            }
+
+            if (!$column->getIsSystem()) {
+                $row[] = $column->getRowFieldExport($item);
+            }
+        }
+
+        // Add children product(s)
+        $unserializedItems = $this->unserializeChildrenProducts($item['product_options']);
+
+        if (!empty($unserializedItems)) {
+            $rowData = [];
+            foreach ($unserializedItems as $item) {
+                if (isset($item['sku']) && isset($item['ordered_qty'])) {
+                    $rowData[] = sprintf("%s=%s", $item['sku'], (int) $item['ordered_qty']);
+                }
+            }
+            $row[] = implode(",", $rowData);
+        }
+
+        try {
+            $stream->writeCsv($row);
+        } catch (\Exception $e) {
+            $this->_logger->critical(
+                "BSS - ERROR: When wwrite csv: " . $e
+            );
+        }
+    }
+
+    /**
+     * Add children product headers col
+     *
+     * @return string[]
+     */
+    protected function _getExportHeaders(): array
+    {
+        $row = parent::_getExportHeaders();
+
+        // Add children product(s)
+        $row[] = "Children Product(s)";
+
+        return $row;
     }
 }

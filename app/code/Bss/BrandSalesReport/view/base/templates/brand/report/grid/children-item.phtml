@@ -2,7 +2,7 @@
 /** @var array $rawItems */
 
 ?>
-<div class="grids">
+<div class="grids" style="margin-top: 10px">
     <table class="data-table children-items-tables" cellspacing="0">
         <thead>
             <tr class="headings">
@@ -18,7 +18,7 @@
             <tr class="<?php echo(++$i % 2 ? 'even' : 'odd') ?>">
                 <td><?= $productData["name"] ?></td>
                 <td><?= $productData["sku"] ?></td>
-                <td><?= $productData["ordered_qty"] ?></td>
+                <td><?= (int) $productData["ordered_qty"] ?></td>
             </tr>
         <?php endforeach; ?>
         </tbody>

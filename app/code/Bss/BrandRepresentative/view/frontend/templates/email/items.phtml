@@ -15,6 +15,7 @@
  * @copyright  Copyright (c) 2021 BSS Commerce Co. ( http://bsscommerce.com )
  * @license    http://bsscommerce.com/Bss-Commerce-License.txt
  */
+use Bss\BrandSalesReport\Block\Adminhtml\Brand\Report\Grid;
 ?>
 <?php // @codingStandardsIgnoreFile ?>
 
@@ -28,7 +29,7 @@
                     <?= /* @escapeNotVerified */  $block->escapeHtml(__('Order ID')) ?>
                 </th>
                 <th class="row-sku">
-                    <?= /* @escapeNotVerified */  $block->escapeHtml(__('Product SKU')) ?>
+                    <?= /* @escapeNotVerified */  $block->escapeHtml(__('SKU')) ?>
                 </th>
                 <th class="row-product-name">
                     <?= /* @escapeNotVerified */  $block->escapeHtml(__('Product Name')) ?>
@@ -42,9 +43,6 @@
                 <th class="row-time">
                     <?= /* @escapeNotVerified */  $block->escapeHtml(__('Ordered Time')) ?>
                 </th>
-                <th class="row-customer-name">
-                    <?= /* @escapeNotVerified */  $block->escapeHtml(__('Customer')) ?>
-                </th>
                 <th class="row-company-name">
                     <?= /* @escapeNotVerified */  $block->escapeHtml(__('Company Name')) ?>
                 </th>
@@ -57,9 +55,6 @@
                 <th class="row-province">
                     <?= /* @escapeNotVerified */  $block->escapeHtml(__('Province')) ?>
                 </th>
-                <th class="row-children-products">
-                    <?= /* @escapeNotVerified */  $block->escapeHtml(__('Children Products')) ?>
-                </th>
             </tr>
         </thead>
         <tbody>
@@ -67,21 +62,25 @@
                 <tr class="row-data-<?=$key?>">
                     <?php foreach ($rowItem as $colKey => $colValue): ?>
                         <?php if ($colKey === "product_options"): ?>
-                            <?php if (is_array($colValue) && !empty($colValue)): ?>
-                                <?php
-                                    /** @var \Magento\Framework\View\Layout $layout */
-                                    $layout = $block->getLayout();
-                                    $childrenGridHtml = $layout->createBlock(
-                                        \Magento\Framework\View\Element\Template::class
-                                    )->setTemplate("Bss_BrandSalesReport::brand/report/grid/children-item.phtml")
-                                    ->assign('rawItems', $colValue)->toHtml();
-                                ?>
-                            <td class="col-data-<?=$colKey?>"><?= $childrenGridHtml ?></td>
                             <?php continue; ?>
-                            <?php else: ?>
-                            <?php $colValue = ""; ?>
+                        <?php endif; ?>
+
+                        <?php if ($colKey === Grid::PRODUCT_NAME_COL_ID): ?>
+                            <?php if (isset($rowItem['product_options']) && is_array($rowItem['product_options']) && !empty($rowItem['product_options'])): ?>
+                                <?php
+                                $productOptions = $rowItem['product_options'];
+                                /** @var \Magento\Framework\View\Layout $layout */
+                                $layout = $block->getLayout();
+                                $childrenGridHtml = $layout->createBlock(
+                                    \Magento\Framework\View\Element\Template::class
+                                )->setTemplate("Bss_BrandSalesReport::brand/report/grid/children-item.phtml")
+                                    ->assign('rawItems', $productOptions)->toHtml();
+                                ?>
+                                <td class="col-data-<?=$colKey?>"><?= $colValue . $childrenGridHtml ?></td>
+                                <?php continue; ?>
                             <?php endif; ?>
                         <?php endif; ?>
+
                         <td class="col-data-<?=$colKey?>">
                             <?= /* @escapeNotVerified */  $block->escapeHtml(__((string)$colValue)) ?>
                         </td>

@@ -274,6 +274,7 @@ class ReportSend
                         \IntlDateFormatter::MEDIUM,
                         \IntlDateFormatter::MEDIUM
                     );
+                    $productOptions = [];
                     if (isset($rowData['product_options']) && $rowData['product_options']) {
                         try {
                             $productOptions = $this->json->unserialize($rowData['product_options']);
@@ -296,14 +297,13 @@ class ReportSend
                         'product_sku' => $rowData['product_sku'],
                         'product_name' => $rowData['product_name'],
                         'product_type' => $rowData['product_type'],
-                        'ordered_qty' => $rowData['ordered_qty'],
+                        'product_options' => $productOptions ?? [],
+                        'ordered_qty' => (int) $rowData['ordered_qty'],
                         'ordered_time' => $orderTime,
-                        'customer_name' => $rowData['customer_name'],
                         'company_name' => $rowData['company_name'],
                         'address' => $rowData['address'],
                         'city' => $rowData['city'],
                         'province' => $rowData['province'],
-                        'product_options' => $productOptions ?? [],
                     ];
                 }
             }

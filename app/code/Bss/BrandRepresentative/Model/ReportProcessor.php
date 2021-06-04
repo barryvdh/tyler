@@ -300,7 +300,7 @@ class ReportProcessor
                     'id' => $childProduct->getId(),
                     'sku' => $childProduct->getSku(),
                     'name' => $childProduct->getName(),
-                    'ordered_qty' => $item->getQtyOrdered()
+                    'ordered_qty' => (int) $item->getQtyOrdered()
                 ];
             } catch (\Exception $e) {
                 $this->logger->critical("Error when process grouped product: " . $e);
