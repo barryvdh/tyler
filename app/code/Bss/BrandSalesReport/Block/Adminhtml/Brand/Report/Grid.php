@@ -165,7 +165,7 @@ class Grid extends AbstractGrid
         $this->addColumn(
             'qty_ordered',
             [
-                'header' => __('Order Quantity'),
+                'header' => __('Ordered Quantity'),
                 'index' => 'qty_ordered',
                 'type' => 'number',
                 'total' => 'sum',
@@ -361,6 +361,25 @@ class Grid extends AbstractGrid
         \Magento\Framework\DataObject $item,
         \Magento\Framework\Filesystem\File\WriteInterface $stream
     ) {
+        $row = $this->getExportRowData($item);
+
+        try {
+            $stream->writeCsv($row);
+        } catch (\Exception $e) {
+            $this->_logger->critical(
+                "BSS - ERROR: When wwrite csv: " . $e
+            );
+        }
+    }
+
+    /**
+     * Get export row data
+     *
+     * @param \Magento\Framework\DataObject $item
+     * @return array
+     */
+    protected function getExportRowData(\Magento\Framework\DataObject $item): array
+    {
         $row = [];
         foreach ($this->getColumns() as $column) {
             if ($column->getId() === static::PRODUCT_NAME_COL_ID) {
@@ -385,13 +404,18 @@ class Grid extends AbstractGrid
             $row[] = implode(",", $rowData);
         }
 
-        try {
-            $stream->writeCsv($row);
-        } catch (\Exception $e) {
-            $this->_logger->critical(
-                "BSS - ERROR: When wwrite csv: " . $e
-            );
-        }
+        return $row;
+    }
+
+    /**
+     *  Get a row data of the particular columns
+     *
+     * @param \Magento\Framework\DataObject $data
+     * @return string[]
+     */
+    public function getRowRecord(\Magento\Framework\DataObject $data)
+    {
+        return $this->getExportRowData($data);
     }
 
     /**

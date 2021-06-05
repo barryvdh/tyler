@@ -457,7 +457,8 @@ class Collection extends AbstractCollection
                 $this->getSelect()->reset()->from($cloneSelect, $this->getAggregatedColumns());
             } else {
                 // add sorting
-                $this->getSelect()->order(['period ASC', $this->getOrderedField() . ' DESC']);
+//                $this->getSelect()->order(['period ASC', $this->getOrderedField() . ' DESC']);
+                $this->getSelect()->order(['period ASC', 'order_id DESC']);
             }
         }
 
