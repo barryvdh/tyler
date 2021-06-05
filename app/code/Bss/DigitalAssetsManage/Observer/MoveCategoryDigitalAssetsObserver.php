@@ -94,10 +94,12 @@ class MoveCategoryDigitalAssetsObserver implements \Magento\Framework\Event\Obse
         try {
             foreach (array_keys($insert) as $pId) {
                 $this->digitalAssetsProcessor->moveAssetsToBrandFolder((int) $pId, $brandPath);
+                $this->digitalAssetsProcessor->moveDownloadableAssetsToBrandDir((int) $pId, $brandPath);
             }
 
             foreach (array_keys($delete) as $pId) {
                 $this->digitalAssetsProcessor->removeAssetsFromBrandFolder((int) $pId, $brandPath);
+                $this->digitalAssetsProcessor->moveDownloadableAssetsToDispersionPath((int) $pId, $brandPath);
             }
         } catch (\Exception $e) {
             $this->logger->critical(

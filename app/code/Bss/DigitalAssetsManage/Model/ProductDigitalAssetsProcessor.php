@@ -17,6 +17,10 @@ use Magento\Framework\Filesystem;
 use Magento\Framework\Filesystem\Directory\WriteInterface;
 use \Magento\Framework\File\Mime;
 use Magento\Framework\Api\Data\ImageContentInterfaceFactory;
+use Magento\Downloadable\Model\Link as DownloadableLink;
+use Magento\Downloadable\Model\Sample as DownloadableSample;
+use \Magento\Downloadable\Model\LinkFactory;
+use \Magento\Downloadable\Model\SampleFactory;
 
 /**
  * Class ProductDigitalAssetsProcessor
@@ -65,6 +69,20 @@ class ProductDigitalAssetsProcessor
     protected $productRepository;
 
     /**
+     * @var LinkFactory
+     */
+    protected $linkFactory;
+
+    /**
+     * @var SampleFactory
+     */
+    protected $sampleFactory;
+
+    protected $linkConfig;
+
+    protected $sampleConfig;
+
+    /**
      * ProductDigitalAssetsProcessor constructor.
      *
      * @param GetBrandDirectory $getBrandDirectory
@@ -75,6 +93,8 @@ class ProductDigitalAssetsProcessor
      * @param Mime $mime
      * @param ImageContentInterfaceFactory $imageContentInterfaceFactory
      * @param ProductRepositoryInterface $productRepository
+     * @param LinkFactory $linkFactory
+     * @param SampleFactory $sampleFactory
      * @throws FileSystemException
      */
     public function __construct(
@@ -85,17 +105,47 @@ class ProductDigitalAssetsProcessor
         MediaConfig $mediaConfig,
         Mime $mime,
         ImageContentInterfaceFactory $imageContentInterfaceFactory,
-        ProductRepositoryInterface $productRepository
+        ProductRepositoryInterface $productRepository,
+        LinkFactory $linkFactory,
+        SampleFactory $sampleFactory
     ) {
         $this->getBrandDirectory = $getBrandDirectory;
         $this->logger = $logger;
         $this->resourceConnection = $resourceConnection;
-
         $this->mediaDirectory = $filesystem->getDirectoryWrite(DirectoryList::MEDIA);
         $this->mediaConfig = $mediaConfig;
         $this->mime = $mime;
         $this->imageContentInterfaceFactory = $imageContentInterfaceFactory;
         $this->productRepository = $productRepository;
+        $this->linkFactory = $linkFactory;
+        $this->sampleFactory = $sampleFactory;
+    }
+
+    /**
+     * Get link config object
+     *
+     * @return DownloadableLink
+     */
+    public function getLink()
+    {
+        if (!$this->linkConfig) {
+            $this->linkConfig = $this->linkFactory->create();
+        }
+
+        return $this->linkConfig;
+    }
+
+    /**
+     * Get sample config object
+     *
+     * @return DownloadableSample
+     */
+    public function getSample()
+    {
+        if (!$this->sampleConfig) {
+            $this->sampleConfig = $this->sampleFactory->create();
+        }
+        return $this->sampleConfig;
     }
 
     /**
@@ -108,6 +158,8 @@ class ProductDigitalAssetsProcessor
         Product $product,
         string $brandDir = null
     ) {
+        $this->processDownloadableAssets($product, $brandDir);
+
         try {
             if ($this->removeAssetsFromBrandFolder($product)) {
                 return;
@@ -127,6 +179,375 @@ class ProductDigitalAssetsProcessor
         }
 
         $this->moveAssetsToBrandFolder($product, $brandDir);
+    }
+
+    /**
+     * Delete downloadable assets
+     *
+     * @param Product $product
+     * @param string|null $brandDir
+     */
+    public function processDownloadableAssets(Product $product, string $brandDir = null)
+    {
+        try {
+            if ($this->moveDownloadableAssetsToDispersionPath($product, $brandDir)) {
+                return;
+            }
+
+            if (!$brandDir) {
+                $brandDir = $this->getBrandDirectory->execute($product);
+            }
+
+            if (!$brandDir) {
+                return;
+            }
+
+            // Delete assets file
+            $extension = $product->getExtensionAttributes();
+            $links = $extension->getDownloadableProductLinks();
+            $samples = $extension->getDownloadableProductSamples();
+            $originData = $product->getOrigData();
+            $this->deleteRemovedAssetsInBrandDir(
+                $links,
+                $originData['downloadable_links'] ?? [],
+                $this->getLink()->getBasePath(),
+                $brandDir
+            );
+
+            if (isset($originData['downloadable_samples'])) {
+                if (!is_array($originData['downloadable_samples'])) {
+                    $downloadableSamples = $originData['downloadable_samples']->getItems();
+                }
+            }
+
+            $this->deleteRemovedAssetsInBrandDir(
+                $samples,
+                $downloadableSamples ?? [],
+                $this->getSample()->getBasePath(),
+                $brandDir
+            );
+        } catch (Exception $e) {
+            $this->logger->critical(
+                "BSS.ERROR: When process downloadable assets. " . $e
+            );
+        }
+    }
+
+    /**
+     * Check need to move assets form brand path
+     *
+     * Brand path chính là đại diện cho việc force remove
+     *
+     * @param Product $product
+     * @param string|null $brandPath
+     * @return bool
+     * @throws \Magento\Framework\Exception\NoSuchEntityException
+     */
+    public function needProcessRemove(Product $product, string &$brandPath = null): bool
+    {
+        if (is_int($product)) {
+            $product = $this->productRepository->getById($product);
+        }
+
+        if (!$brandPath) {
+            $newBrandDir = $this->getBrandDirectory->execute($product);
+            $oldBrandDir = $this->getBrandDirectory->execute($product, true);
+            $brandPath = $oldBrandDir;
+            return $oldBrandDir !== false && $newBrandDir === false;
+        }
+
+        return true;
+    }
+
+    /**
+     * Move downladoable assets back to dispersion path if not in digital assets
+     *
+     * @param Product|int $product
+     * @param string|null $brandPath
+     * @return bool
+     * @throws \Magento\Framework\Exception\CouldNotSaveException
+     * @throws \Magento\Framework\Exception\InputException
+     * @throws \Magento\Framework\Exception\StateException
+     */
+    public function moveDownloadableAssetsToDispersionPath($product, string $brandPath = null): bool
+    {
+        if (is_int($product)) {
+            $product = $this->productRepository->getById($product);
+        }
+        $needProcess = $this->needProcessRemove($product, $brandPath);
+
+        $entryChanged = false;
+        if ($needProcess) {
+            $this->moveDownloadableAssetsToBrandDir($product, $brandPath, $entryChanged, true);
+        }
+
+        if ($entryChanged) {
+            $this->productRepository->save($product);
+            return true;
+        }
+
+        return false;
+    }
+
+    /**
+     * Move downloadable assets to brand directory
+     *
+     * @param Product|int $product
+     * @param string|null $brandPath
+     * @param bool $entryChanged
+     * @param bool $backToDispersionPath
+     */
+    public function moveDownloadableAssetsToBrandDir(
+        $product,
+        string $brandPath = null,
+        bool &$entryChanged = false,
+        bool $backToDispersionPath = false
+    ) {
+        try {
+            if (is_int($product)) {
+                $product = $this->productRepository->getById($product);
+            }
+            $extension = $product->getExtensionAttributes();
+            $links = $extension->getDownloadableProductLinks();
+            $samples = $extension->getDownloadableProductSamples();
+
+            if (!$brandPath) {
+                $brandPath = $this->getBrandDirectory->execute($product);
+            }
+
+            if (!$brandPath) {
+                return;
+            }
+
+            $this->processProductLinks($links, $brandPath, $backToDispersionPath, $entryChanged);
+            $extension->setDownloadableProductLinks($links);
+
+
+            $this->processProductSamples($samples, $brandPath, $backToDispersionPath, $entryChanged);
+            $extension->setDownloadableProductSamples($samples);
+
+            $product->setExtensionAttributes($extension);
+        } catch (\Exception $e) {
+            $this->logger->critical(__("Error when move to brand directory: ") . $e);
+        }
+    }
+
+    /**
+     * Processing downloadable samples
+     *
+     * @param \Magento\Downloadable\Model\Sample[] $samples
+     * @param string $brandPath
+     * @param bool $backToDispersionPath
+     * @param bool $entryChanged
+     * @return void
+     * @throws FileSystemException
+     */
+    protected function processProductSamples(
+        $samples,
+        $brandPath,
+        bool $backToDispersionPath = false,
+        bool &$entryChanged = false
+    ) {
+        if (!$samples) {
+            return;
+        }
+
+        $changed = 0;
+        foreach ($samples as $link) {
+            if ($sampleFile = $link->getSampleFile()) {
+                if ($backToDispersionPath) {
+                    $brandPath = DS . $this->getDispersionPath($link->getSampleFile()) . DS;
+                }
+                $newSampleFile = $this->getNewBrandFilePath(
+                    $this->getSample()->getBasePath(),
+                    $brandPath,
+                    $sampleFile
+                );
+                if ($newSampleFile !== $sampleFile) {
+                    $changed++;
+                }
+                $link->setSampleFile($newSampleFile);
+            }
+        }
+
+        $entryChanged = $changed > 0;
+    }
+
+    /**
+     * Processing downloadable product links
+     *
+     * @param \Magento\Downloadable\Model\Link[] $links
+     * @param string $brandPath
+     * @param bool $backToDispersionPath
+     * @param bool $entryChanged
+     * @return void
+     * @throws \Magento\Framework\Exception\FileSystemException
+     */
+    protected function processProductLinks(
+        $links,
+        $brandPath,
+        bool $backToDispersionPath = false,
+        bool &$entryChanged = false
+    ) {
+        if (!$links) {
+            return;
+        }
+
+        $changed = 0;
+        foreach ($links as $link) {
+            if ($linkFile = $link->getLinkFile()) {
+                if ($backToDispersionPath) {
+                    $brandPath = DS . $this->getDispersionPath($link->getLinkFile()) . DS;
+                }
+                $newLinkFile = $this->getNewBrandFilePath(
+                    $this->getLink()->getBasePath(),
+                    $brandPath,
+                    $linkFile
+                );
+                if ($newLinkFile !== $linkFile) {
+                    $changed++;
+                }
+                $link->setLinkFile($newLinkFile);
+            }
+
+            if ($sampleFile = $link->getSampleFile()) {
+                if ($backToDispersionPath) {
+                    $brandPath = DS . $this->getDispersionPath($link->getSampleFile()) . DS;
+                }
+                $newSampleFile = $this->getNewBrandFilePath(
+                    $this->getLink()->getBaseSamplePath(),
+                    $brandPath,
+                    $sampleFile
+                );
+                if ($newSampleFile !== $sampleFile) {
+                    $changed++;
+                }
+                $link->setSampleFile($newSampleFile);
+            }
+        }
+
+        $entryChanged = $changed > 0;
+    }
+
+    /**
+     * Get Dispersion path
+     *
+     * @param string $file
+     * @return string
+     */
+    private function getDispersionPath(string $file): string
+    {
+        // phpcs:disable Magento2.Functions.DiscouragedFunction
+        $pathinfo = pathinfo($file);
+        $fileName = $pathinfo['basename'];
+        $dispersionPath = Uploader::getDispersionPath($fileName);
+        $dispersionPath = ltrim($dispersionPath, DS);
+
+        return rtrim($dispersionPath, DS);
+    }
+
+    /**
+     * Get brand file path
+     *
+     * @param string $basePath
+     * @param string $brandPath
+     * @param string $file
+     * @return mixed|string
+     * @throws \Magento\Framework\Exception\FileSystemException
+     */
+    protected function getNewBrandFilePath($basePath, $brandPath, $file)
+    {
+        // If be in brand path ren skip
+        // phpcs:disable Magento2.Functions.DiscouragedFunction
+//        if (ltrim(rtrim(dirname($file))) === ltrim(rtrim($brandPath))) {
+//            return $file;
+//        }
+
+        if (strpos($file, $brandPath) !== false) {
+            return $file;
+        }
+
+        return $this->moveToBrandDir($basePath, $brandPath, $file);
+    }
+
+    /**
+     * Delete brand assets files
+     *
+     * @param array $curLinks
+     * @param array $oriLinks
+     * @param string $basePath
+     * @param string $brandDir
+     */
+    protected function deleteRemovedAssetsInBrandDir(
+        array $curLinks,
+        array $oriLinks,
+        string $basePath,
+        string $brandDir
+    ) {
+        if (empty($oriLinks)) {
+            return;
+        }
+
+        if (!is_array($curLinks)) {
+            $curLinks = [];
+        }
+
+        $mappingCurlinks = [];
+
+        /** @var DownloadableLink $link */
+        foreach ($curLinks as $link) {
+            $mappingCurlinks[] = $link->getId();
+        }
+
+        foreach ($oriLinks as $link) {
+            try {
+                if (in_array($link->getId(), $mappingCurlinks)) {
+                    continue;
+                }
+
+                if ($link instanceof DownloadableLink) {
+                    // link
+                    $this->deleteFileInBrandDir(
+                        $this->getFilePath($basePath, $link->getLinkFile()),
+                        $brandDir
+                    );
+
+                    // set link sample base path
+                    $basePath = $this->getLink()->getBaseSamplePath();
+                    // link_sample
+                    $this->deleteFileInBrandDir(
+                        $this->getFilePath($basePath, $link->getSampleFile()),
+                        $brandDir
+                    );
+                }
+
+                // sample
+                if ($link instanceof DownloadableSample) {
+                    $this->deleteFileInBrandDir(
+                        $this->getFilePath($basePath, $link->getSampleFile()),
+                        $brandDir
+                    );
+                }
+            } catch (Exception $e) {
+                $this->logger->critical(
+                    "BSS.ERROR: Can't delete link file. " . $e
+                );
+            }
+        }
+    }
+
+    /**
+     * Delete file in brand directory
+     *
+     * @param string $file
+     * @param string $brandPath
+     * @throws FileSystemException
+     */
+    public function deleteFileInBrandDir(string $file, string $brandPath)
+    {
+        if ($file && strpos($file, $brandPath) !== false) {
+            $this->mediaDirectory->delete($file);
+        }
     }
 
     /**
@@ -249,25 +670,14 @@ class ProductDigitalAssetsProcessor
         if (is_int($product)) {
             $product = $this->productRepository->getById($product);
         }
-        $needProcess = true;
-        if (!$brandPath) {
-            $newBrandDir = $this->getBrandDirectory->execute($product);
-            $oldBrandDir = $this->getBrandDirectory->execute($product, true);
-            $brandPath = $oldBrandDir;
-            $needProcess = $oldBrandDir !== false && $newBrandDir === false;
-        }
+        $needProcess = $this->needProcessRemove($product, $brandPath);
         if ($needProcess) {
             $existingMediaGalleryEntries = $this->getMediaGalleryEntries($product);
 
             $entryChanged = false;
             foreach ($existingMediaGalleryEntries as $entry) {
                 if (strpos($entry->getFile(), ltrim($brandPath)) !== false) {
-                    // phpcs:disable Magento2.Functions.DiscouragedFunction
-                    $pathinfo = pathinfo($entry->getFile());
-                    $fileName = $pathinfo['basename'];
-                    $dispersionPath = Uploader::getDispersionPath($fileName);
-                    $dispersionPath = ltrim($dispersionPath, DS);
-                    $dispersionPath = rtrim($dispersionPath, DS);
+                    $dispersionPath = $this->getDispersionPath($entry->getFile());
 
                     $this->moveFileInCatalogProductFolder(
                         DS . $dispersionPath . DS,
@@ -300,6 +710,9 @@ class ProductDigitalAssetsProcessor
     {
         try {
             $existingMediaGalleryEntries = $product->getMediaGalleryEntries();
+            if (!$existingMediaGalleryEntries) {
+                return [];
+            }
         } catch (Exception $e) {
             $existingMediaGalleryEntries = [];
             $this->logger->critical(
