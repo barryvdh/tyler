@@ -5,6 +5,7 @@ namespace Bss\DigitalAssetsManage\Observer;
 use Bss\DigitalAssetsManage\Helper\GetBrandDirectory;
 use Bss\DigitalAssetsManage\Model\ProductDigitalAssetsProcessor;
 use Magento\Catalog\Api\CategoryRepositoryInterface;
+use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Catalog\Model\Category;
 use Magento\Catalog\Model\ImageUploader;
 use Magento\Framework\App\ObjectManager;
@@ -47,6 +48,11 @@ class MoveCategoryDigitalAssetsObserver implements \Magento\Framework\Event\Obse
     protected $digitalAssetsProcessor;
 
     /**
+     * @var ProductRepositoryInterface
+     */
+    protected $productRepository;
+
+    /**
      * MoveCategoryDigitalAssetsObserver constructor.
      *
      * @param LoggerInterface $logger
@@ -54,6 +60,7 @@ class MoveCategoryDigitalAssetsObserver implements \Magento\Framework\Event\Obse
      * @param CategoryRepositoryInterface $categoryRepository
      * @param GetBrandDirectory $getBrandDirectory
      * @param ProductDigitalAssetsProcessor $digitalAssetsProcessor
+     * @param ProductRepositoryInterface $productRepository
      * @param ImageUploader|null $imageUploader
      */
     public function __construct(
@@ -62,6 +69,7 @@ class MoveCategoryDigitalAssetsObserver implements \Magento\Framework\Event\Obse
         CategoryRepositoryInterface $categoryRepository,
         GetBrandDirectory $getBrandDirectory,
         ProductDigitalAssetsProcessor $digitalAssetsProcessor,
+        ProductRepositoryInterface $productRepository,
         ImageUploader $imageUploader = null
     ) {
         $this->filesystem = $filesystem;
@@ -71,6 +79,7 @@ class MoveCategoryDigitalAssetsObserver implements \Magento\Framework\Event\Obse
         $this->logger = $logger;
         $this->getBrandDirectory = $getBrandDirectory;
         $this->digitalAssetsProcessor = $digitalAssetsProcessor;
+        $this->productRepository = $productRepository;
     }
 
     /**
@@ -94,12 +103,23 @@ class MoveCategoryDigitalAssetsObserver implements \Magento\Framework\Event\Obse
         try {
             foreach (array_keys($insert) as $pId) {
                 $this->digitalAssetsProcessor->moveAssetsToBrandFolder((int) $pId, $brandPath);
-                $this->digitalAssetsProcessor->moveDownloadableAssetsToBrandDir((int) $pId, $brandPath);
+                $needSave = false;
+                $product = $this->digitalAssetsProcessor->moveDownloadableAssetsToBrandDir(
+                    (int) $pId,
+                    $brandPath,
+                    $needSave
+                );
+                if ($needSave) {
+                    $this->productRepository->save($product);
+                }
             }
 
             foreach (array_keys($delete) as $pId) {
                 $this->digitalAssetsProcessor->removeAssetsFromBrandFolder((int) $pId, $brandPath);
-                $this->digitalAssetsProcessor->moveDownloadableAssetsToDispersionPath((int) $pId, $brandPath);
+                $this->digitalAssetsProcessor->moveDownloadableAssetsToDispersionPath(
+                    (int) $pId,
+                    $brandPath
+                );
             }
         } catch (\Exception $e) {
             $this->logger->critical(

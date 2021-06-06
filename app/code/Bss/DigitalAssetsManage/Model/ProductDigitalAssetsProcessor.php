@@ -206,6 +206,14 @@ class ProductDigitalAssetsProcessor
             $extension = $product->getExtensionAttributes();
             $links = $extension->getDownloadableProductLinks();
             $samples = $extension->getDownloadableProductSamples();
+
+            if (!$links) {
+                $links = [];
+            }
+            if (!$samples) {
+                $samples = [];
+            }
+
             $originData = $product->getOrigData();
             $this->deleteRemovedAssetsInBrandDir(
                 $links,
@@ -311,6 +319,14 @@ class ProductDigitalAssetsProcessor
             $links = $extension->getDownloadableProductLinks();
             $samples = $extension->getDownloadableProductSamples();
 
+            if (!$links) {
+                $links = [];
+            }
+
+            if (!$samples) {
+                $samples = [];
+            }
+
             if (!$brandPath) {
                 $brandPath = $this->getBrandDirectory->execute($product);
             }
@@ -327,6 +343,7 @@ class ProductDigitalAssetsProcessor
             $extension->setDownloadableProductSamples($samples);
 
             $product->setExtensionAttributes($extension);
+            return $product;
         } catch (\Exception $e) {
             $this->logger->critical(__("Error when move to brand directory: ") . $e);
         }
