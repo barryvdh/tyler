@@ -18,6 +18,11 @@ class Grid extends \Magento\Backend\Block\Widget\Grid\Extended
     protected $categoryCollectionFactory;
 
     /**
+     * @var GetBrandDirectory
+     */
+    protected $getBrandDirectory;
+
+    /**
      * Grid constructor.
      *
      * @param \Magento\Backend\Block\Template\Context $context
@@ -29,9 +34,11 @@ class Grid extends \Magento\Backend\Block\Widget\Grid\Extended
         \Magento\Backend\Block\Template\Context $context,
         \Magento\Backend\Helper\Data $backendHelper,
         \Magento\Catalog\Model\ResourceModel\Category\CollectionFactory $categoryCollectionFactory,
+        GetBrandDirectory $getBrandDirectory,
         array $data = []
     ) {
         $this->categoryCollectionFactory = $categoryCollectionFactory;
+        $this->getBrandDirectory = $getBrandDirectory;
         parent::__construct($context, $backendHelper, $data);
     }
 
@@ -130,7 +137,7 @@ class Grid extends \Magento\Backend\Block\Widget\Grid\Extended
             if ($category instanceof \Magento\Catalog\Model\Category) {
                 $size = $this->folderSize(
                     $this->getMediaDirectory()->getAbsolutePath(),
-                    $category->getName()
+                    $this->getBrandDirectory->escapeBrandName($category->getName())
                 );
                 $i = 1;
                 while ($size > 1024) {

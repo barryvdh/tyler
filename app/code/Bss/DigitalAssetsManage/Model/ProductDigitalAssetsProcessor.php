@@ -207,14 +207,21 @@ class ProductDigitalAssetsProcessor
             $links = $extension->getDownloadableProductLinks();
             $samples = $extension->getDownloadableProductSamples();
 
-            if (!$links) {
+            $originData = $product->getOrigData();
+
+            $removeAllAssets = false;
+
+            if ($product->getTypeId() === 'virtual' && $originData['type_id'] === 'downloadable') {
+                $removeAllAssets = true;
+            }
+
+            if (!$links || $removeAllAssets) {
                 $links = [];
             }
-            if (!$samples) {
+            if (!$samples || $removeAllAssets) {
                 $samples = [];
             }
 
-            $originData = $product->getOrigData();
             $this->deleteRemovedAssetsInBrandDir(
                 $links,
                 $originData['downloadable_links'] ?? [],
@@ -257,14 +264,14 @@ class ProductDigitalAssetsProcessor
             $product = $this->productRepository->getById($product);
         }
 
+        $newBrandDir = $this->getBrandDirectory->execute($product);
         if (!$brandPath) {
-            $newBrandDir = $this->getBrandDirectory->execute($product);
             $oldBrandDir = $this->getBrandDirectory->execute($product, true);
             $brandPath = $oldBrandDir;
             return $oldBrandDir !== false && $newBrandDir === false;
+        } else {
+            return $newBrandDir === false;
         }
-
-        return true;
     }
 
     /**
@@ -523,6 +530,7 @@ class ProductDigitalAssetsProcessor
                 }
 
                 if ($link instanceof DownloadableLink) {
+                    $basePath = $this->getLink()->getBasePath();
                     // link
                     $this->deleteFileInBrandDir(
                         $this->getFilePath($basePath, $link->getLinkFile()),
@@ -562,7 +570,10 @@ class ProductDigitalAssetsProcessor
      */
     public function deleteFileInBrandDir(?string $file, string $brandPath)
     {
-        if ($file && strpos($file, $brandPath) !== false) {
+        if (!$file) {
+            return;
+        }
+        if (strpos($file, $brandPath) !== false) {
             $this->mediaDirectory->delete($file);
         }
     }
