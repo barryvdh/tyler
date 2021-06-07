@@ -385,11 +385,6 @@ class ProductDigitalAssetsProcessor
         foreach ($mappingPath as $type => $basePath) {
             if (isset($files[$type])) {
                 foreach ($files[$type] as $file) {
-                    vadu_log([
-                        'fie' => $files,
-                        'basbe ath' => $basePath,
-                        'brand path' => $brandPath
-                    ]);
                     $this->deleteFileInBrandDir($this->getFilePath($basePath, $file), $brandPath);
                 }
             }
