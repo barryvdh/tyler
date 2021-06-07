@@ -556,11 +556,11 @@ class ProductDigitalAssetsProcessor
     /**
      * Delete file in brand directory
      *
-     * @param string $file
+     * @param string|null $file
      * @param string $brandPath
      * @throws FileSystemException
      */
-    public function deleteFileInBrandDir(string $file, string $brandPath)
+    public function deleteFileInBrandDir(?string $file, string $brandPath)
     {
         if ($file && strpos($file, $brandPath) !== false) {
             $this->mediaDirectory->delete($file);
@@ -893,11 +893,14 @@ class ProductDigitalAssetsProcessor
      * Return full path to file
      *
      * @param string $path
-     * @param string $file
+     * @param string|null $file
      * @return string
      */
-    public function getFilePath(string $path, string $file): string
+    public function getFilePath(string $path, ?string $file): ?string
     {
+        if (!$file) {
+            return null;
+        }
         $path = rtrim($path, '/');
         $file = ltrim($file, '/');
 
