@@ -4,6 +4,7 @@ namespace Bss\DigitalAssetsManage\Model;
 
 use Bss\DigitalAssetsManage\Helper\GetBrandDirectory;
 use Magento\Catalog\Api\Data\ProductAttributeMediaGalleryEntryInterface;
+use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Catalog\Model\Product;
 use Magento\Framework\App\Filesystem\DirectoryList;
@@ -311,6 +312,7 @@ class ProductDigitalAssetsProcessor
      * @param string|null $brandPath
      * @param bool $entryChanged
      * @param bool $backToDispersionPath
+     * @return ?ProductInterface
      */
     public function moveDownloadableAssetsToBrandDir(
         $product,
@@ -342,6 +344,15 @@ class ProductDigitalAssetsProcessor
                 return;
             }
 
+            $this->removeNotUsedLinkFiles($this->getNotUsedLinkFiles(
+                $product->getOrigData('downloadable_links'),
+                $links
+            ), $brandPath);
+            $this->removeNotUsedLinkFiles($this->getNotUsedLinkFiles(
+                $product->getOrigData('downloadable_samples'),
+                $samples
+            ), $brandPath);
+
             $this->processProductLinks($links, $brandPath, $backToDispersionPath, $entryChanged);
             $extension->setDownloadableProductLinks($links);
 
@@ -354,6 +365,69 @@ class ProductDigitalAssetsProcessor
         } catch (\Exception $e) {
             $this->logger->critical(__("Error when move to brand directory: ") . $e);
         }
+    }
+
+    /**
+     * Remove not used links file in brand path
+     *
+     * @param array $files
+     * @param string $brandPath
+     * @throws FileSystemException
+     */
+    protected function removeNotUsedLinkFiles(array $files, string $brandPath)
+    {
+        $mappingPath = [
+            'links' => $this->getLink()->getBasePath(),
+            'link_samples' => $this->getLink()->getBaseSamplePath(),
+            'samples' => $this->getSample()->getBasePath()
+        ];
+
+        foreach ($mappingPath as $type => $basePath) {
+            if (isset($files[$type])) {
+                foreach ($files[$type] as $file) {
+                    vadu_log([
+                        'fie' => $files,
+                        'basbe ath' => $basePath,
+                        'brand path' => $brandPath
+                    ]);
+                    $this->deleteFileInBrandDir($this->getFilePath($basePath, $file), $brandPath);
+                }
+            }
+        }
+    }
+
+    /**
+     * Get not used link file to delete
+     *
+     * @param DownloadableLink[]|DownloadableSample[] $originLinks
+     * @param DownloadableLink[]|DownloadableSample[] $links
+     * @return array
+     */
+    protected function getNotUsedLinkFiles($originLinks, array $links): array
+    {
+        if (!$originLinks) {
+            return [];
+        }
+
+        $changedLinks = [];
+        foreach ($links as $link) {
+            foreach ($originLinks as $originLink) {
+                if ($originLink->getLinkFile() && $link->getLinkFile()
+                    && $link->getLinkFile() != $originLink->getLinkFile()
+                ) {
+                    $changedLinks['links'][] = $originLink->getLinkFile();
+                }
+
+                $sampleKey = $originLink instanceof DownloadableLink ? "link_samples" : "samples";
+                if ($originLink->getSampleFile() && $link->getSampleFile() &&
+                    $link->getSampleFile() != $originLink->getSampleFile()
+                ) {
+                    $changedLinks[$sampleKey][] = $originLink->getSampleFile();
+                }
+            }
+        }
+
+        return $changedLinks;
     }
 
     /**
