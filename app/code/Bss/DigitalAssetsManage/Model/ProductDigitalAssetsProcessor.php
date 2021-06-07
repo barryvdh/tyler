@@ -409,13 +409,15 @@ class ProductDigitalAssetsProcessor
             foreach ($originLinks as $originLink) {
                 if ($originLink->getLinkFile() && $link->getLinkFile()
                     && $link->getLinkFile() != $originLink->getLinkFile()
+                    && $link->getId() == $originLink->getId()
                 ) {
                     $changedLinks['links'][] = $originLink->getLinkFile();
                 }
 
                 $sampleKey = $originLink instanceof DownloadableLink ? "link_samples" : "samples";
-                if ($originLink->getSampleFile() && $link->getSampleFile() &&
-                    $link->getSampleFile() != $originLink->getSampleFile()
+                if ($originLink->getSampleFile() && $link->getSampleFile()
+                    && $link->getSampleFile() != $originLink->getSampleFile()
+                    && $link->getId() == $originLink->getId()
                 ) {
                     $changedLinks[$sampleKey][] = $originLink->getSampleFile();
                 }
