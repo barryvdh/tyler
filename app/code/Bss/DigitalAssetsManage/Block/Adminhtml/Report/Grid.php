@@ -28,6 +28,7 @@ class Grid extends \Magento\Backend\Block\Widget\Grid\Extended
      * @param \Magento\Backend\Block\Template\Context $context
      * @param \Magento\Backend\Helper\Data $backendHelper
      * @param \Magento\Catalog\Model\ResourceModel\Category\CollectionFactory $categoryCollectionFactory
+     * @param GetBrandDirectory $getBrandDirectory
      * @param array $data
      */
     public function __construct(
@@ -198,7 +199,7 @@ class Grid extends \Magento\Backend\Block\Widget\Grid\Extended
      */
     protected function getDigitalAssetsPath(string $brandName): string
     {
-        return $brandName . DS . GetBrandDirectory::DIGITAL_ASSETS_FOLDER_NAME;
+        return $brandName . DIRECTORY_SEPARATOR . GetBrandDirectory::DIGITAL_ASSETS_FOLDER_NAME;
     }
 
     /**

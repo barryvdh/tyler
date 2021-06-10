@@ -3,12 +3,8 @@ declare(strict_types=1);
 namespace Bss\DigitalAssetsManage\Observer;
 
 use Bss\DigitalAssetsManage\Helper\GetBrandDirectory;
-use Bss\DigitalAssetsManage\Model\ProductDigitalAssetsProcessor;
-use Magento\Catalog\Api\CategoryRepositoryInterface;
-use Magento\Catalog\Api\ProductRepositoryInterface;
+use Bss\DigitalAssetsManage\Model\DigitalAssetsProcessor;
 use Magento\Catalog\Model\Category;
-use Magento\Catalog\Model\ImageUploader;
-use Magento\Framework\App\ObjectManager;
 use Psr\Log\LoggerInterface;
 
 /**
@@ -17,21 +13,6 @@ use Psr\Log\LoggerInterface;
  */
 class MoveCategoryDigitalAssetsObserver implements \Magento\Framework\Event\ObserverInterface
 {
-    /**
-     * @var \Magento\Framework\Filesystem
-     */
-    protected $filesystem;
-
-    /**
-     * @var CategoryRepositoryInterface
-     */
-    protected $categoryRepository;
-
-    /**
-     * @var ImageUploader
-     */
-    protected $imageUploader;
-
     /**
      * @var LoggerInterface
      */
@@ -43,43 +24,25 @@ class MoveCategoryDigitalAssetsObserver implements \Magento\Framework\Event\Obse
     protected $getBrandDirectory;
 
     /**
-     * @var ProductDigitalAssetsProcessor
+     * @var DigitalAssetsProcessor
      */
-    protected $digitalAssetsProcessor;
-
-    /**
-     * @var ProductRepositoryInterface
-     */
-    protected $productRepository;
+    protected $assetsProcessor;
 
     /**
      * MoveCategoryDigitalAssetsObserver constructor.
      *
      * @param LoggerInterface $logger
-     * @param \Magento\Framework\Filesystem $filesystem
-     * @param CategoryRepositoryInterface $categoryRepository
      * @param GetBrandDirectory $getBrandDirectory
-     * @param ProductDigitalAssetsProcessor $digitalAssetsProcessor
-     * @param ProductRepositoryInterface $productRepository
-     * @param ImageUploader|null $imageUploader
+     * @param DigitalAssetsProcessor $assetsProcessor
      */
     public function __construct(
         \Psr\Log\LoggerInterface $logger,
-        \Magento\Framework\Filesystem $filesystem,
-        CategoryRepositoryInterface $categoryRepository,
         GetBrandDirectory $getBrandDirectory,
-        ProductDigitalAssetsProcessor $digitalAssetsProcessor,
-        ProductRepositoryInterface $productRepository,
-        ImageUploader $imageUploader = null
+        DigitalAssetsProcessor $assetsProcessor
     ) {
-        $this->filesystem = $filesystem;
-        $this->categoryRepository = $categoryRepository;
-        $this->imageUploader = $imageUploader ??
-            ObjectManager::getInstance()->get(ImageUploader::class);
         $this->logger = $logger;
         $this->getBrandDirectory = $getBrandDirectory;
-        $this->digitalAssetsProcessor = $digitalAssetsProcessor;
-        $this->productRepository = $productRepository;
+        $this->assetsProcessor = $assetsProcessor;
     }
 
     /**
@@ -100,31 +63,11 @@ class MoveCategoryDigitalAssetsObserver implements \Magento\Framework\Event\Obse
         $insert = array_diff_key($products, $oldProducts);
         $delete = array_diff_key($oldProducts, $products);
 
-        try {
-            foreach (array_keys($insert) as $pId) {
-                $this->digitalAssetsProcessor->moveAssetsToBrandFolder((int) $pId, $brandPath);
-                $needSave = false;
-                $product = $this->digitalAssetsProcessor->moveDownloadableAssetsToBrandDir(
-                    (int) $pId,
-                    $brandPath,
-                    $needSave
-                );
-                if ($needSave) {
-                    $this->productRepository->save($product);
-                }
-            }
-
-            foreach (array_keys($delete) as $pId) {
-                $this->digitalAssetsProcessor->removeAssetsFromBrandFolder((int) $pId, $brandPath);
-                $this->digitalAssetsProcessor->moveDownloadableAssetsToDispersionPath(
-                    (int) $pId,
-                    $brandPath
-                );
-            }
-        } catch (\Exception $e) {
-            $this->logger->critical(
-                "BSS - ERROR: When update product assets on category save. Detail: " . $e
-            );
+        foreach (array_keys($insert) as $pId) {
+            $this->assetsProcessor->process($pId, null, 'move');
+        }
+        foreach (array_keys($delete) as $pId) {
+            $this->assetsProcessor->process($pId, $brandPath, "remove");
         }
     }
 }

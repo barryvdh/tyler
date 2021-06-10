@@ -94,13 +94,16 @@ class GetBrandDirectory
     {
         $brandName = $this->getBrandName($category);
         if ($brandName) {
-            return DS . $this->escapeBrandName($brandName) . DS . static::DIGITAL_ASSETS_FOLDER_NAME;
+            return DIRECTORY_SEPARATOR .
+                $this->escapeBrandName($brandName) .
+                DIRECTORY_SEPARATOR .
+                static::DIGITAL_ASSETS_FOLDER_NAME;
         }
         return false;
     }
 
     /**
-     * No space in brand name
+     * Reformat brand name with non-space
      *
      * @param string $brandName
      * @return string
