@@ -2,15 +2,17 @@
 declare(strict_types=1);
 namespace Bss\DigitalAssetsManage\Controller\Adminhtml\Report;
 
+use Magento\Backend\App\Action;
+use Magento\Backend\App\Action\Context;
 use Magento\Framework\App\RequestInterface;
 use Magento\Framework\AuthorizationInterface;
 use Magento\Framework\View\Result\PageFactory;
-use Magento\Framework\App\ActionInterface;
 
 /**
  * Class Index
+ * Digital assets report Report page
  */
-class Index implements ActionInterface
+class Index extends Action
 {
     /**
      * Authorization level of a basic admin session
@@ -37,18 +39,15 @@ class Index implements ActionInterface
     /**
      * Index constructor.
      *
-     * @param RequestInterface $request
+     * @param Context $context
      * @param PageFactory $pageFactory
-     * @param AuthorizationInterface $authorization
      */
     public function __construct(
-        RequestInterface $request,
-        PageFactory $pageFactory,
-        AuthorizationInterface $authorization
+        Context $context,
+        PageFactory $pageFactory
     ) {
-        $this->request = $request;
+        parent::__construct($context);
         $this->pageFactory = $pageFactory;
-        $this->authorization = $authorization;
     }
 
     /**
@@ -64,25 +63,5 @@ class Index implements ActionInterface
             ->prepend(__("Digital Assets Brand Storage Report"));
 
         return $resultPage;
-    }
-
-    /**
-     * Get request object
-     *
-     * @return RequestInterface
-     */
-    public function getRequest()
-    {
-        return $this->request;
-    }
-
-    /**
-     * Is allowed to access
-     *
-     * @return bool
-     */
-    protected function _isAllowed()
-    {
-        return $this->authorization->isAllowed(static::ADMIN_RESOURCE);
     }
 }
