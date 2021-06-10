@@ -86,6 +86,8 @@ class DownloadableHelper
     }
 
     /**
+     * Delete provide downloadable links
+     *
      * @param \Magento\Downloadable\Model\Link[] $currentProductLinks
      * @param array $stillUsedIds
      * @throws \Magento\Framework\Exception\FileSystemException

@@ -9,4 +9,8 @@
         <observer name="move_digital_assets_to_brand_dir"
                   instance="Bss\DigitalAssetsManage\Observer\ProductDigitalAssetsMovingObserver"/>
     </event>
+    <event name="catalog_product_delete_after_done">
+        <observer name="delete_downloadable_assets_in_brand_folder"
+                  instance="Bss\DigitalAssetsManage\Observer\DeleteAssetsAfterProductDeleteObserver"/>
+    </event>
 </config>

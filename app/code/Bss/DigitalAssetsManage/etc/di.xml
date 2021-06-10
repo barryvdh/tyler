@@ -5,6 +5,12 @@
                 type="Bss\DigitalAssetsManage\Plugin\Model\Product\TypeTransitionManagerPlugin"
                 sortOrder="90" />
     </type>
+
+    <type name="Magento\Catalog\Model\ResourceModel\Product">
+        <plugin name="set_need_delete_links_file"
+                type="Bss\DigitalAssetsManage\Plugin\Model\Product\ResourceModel\Product"
+                sortOrder="80" />
+    </type>
 <!--    <preference for="Magento\Catalog\Model\Product\Gallery\Processor"-->
 <!--                type="Bss\DigitalAssetsManage\Model\Product\Gallery\Processor" />-->
 </config>

@@ -55,6 +55,8 @@ class DigitalAssetsProcessor
     }
 
     /**
+     * Process downloadable links
+     *
      * @param int|ProductInterface $product
      * @throws \Magento\Framework\Exception\NoSuchEntityException
      */
@@ -84,7 +86,7 @@ class DigitalAssetsProcessor
      *
      * @param ProductInterface|int $product
      * @param string|null $brandPath
-     * @param null $action
+     * @param string|null $action
      * @throws FileSystemException
      */
     public function processImageAssets(ProductInterface $product, string $brandPath = null, $action = null)
@@ -103,6 +105,8 @@ class DigitalAssetsProcessor
      * Process move/remove downloadable assets to brand directory
      *
      * @param ProductInterface|int $product
+     * @param string|null $brandPath
+     * @param string|null $action
      */
     public function processDownloadableAssets($product, string $brandPath = null, string $action = null)
     {

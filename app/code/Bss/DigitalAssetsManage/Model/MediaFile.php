@@ -58,7 +58,8 @@ class MediaFile
         }
 
         // Get final brand digital assets destination file path
-        $destFile = $subPath . DIRECTORY_SEPARATOR . $this->getUniqueFileNameInBrandDigitalFolder(
+        $destFile = $subPath . DIRECTORY_SEPARATOR .
+            $this->getUniqueFileNameInBrandDigitalFolder(
                 $pathInfo['basename'],
                 $basePath . $subPath
             );
@@ -106,5 +107,38 @@ class MediaFile
         $file = ltrim($file, '/');
 
         return $path . DIRECTORY_SEPARATOR . $file;
+    }
+
+    /**
+     * Get absolute path in media folder
+     *
+     * @param string $path
+     * @return string
+     */
+    public function getAbsolutePath(string $path): string
+    {
+        return $this->mediaDirectory->getAbsolutePath($path);
+    }
+
+    /**
+     * Is file exist
+     *
+     * @param string $path
+     * @return bool
+     */
+    public function isExist(string $path): bool
+    {
+        return $this->mediaDirectory->isExist($path);
+    }
+
+    /**
+     * Delete file
+     *
+     * @param string $path
+     * @throws FileSystemException
+     */
+    public function delete(string $path)
+    {
+        $this->mediaDirectory->delete($path);
     }
 }

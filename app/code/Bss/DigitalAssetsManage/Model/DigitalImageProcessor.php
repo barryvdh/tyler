@@ -285,7 +285,7 @@ class DigitalImageProcessor
      * @param Product $product
      * @return array|ProductAttributeMediaGalleryEntryInterface[]
      */
-    private function getMediaGalleryEntries(ProductInterface $product): array
+    public function getMediaGalleryEntries(ProductInterface $product): array
     {
         try {
             $existingMediaGalleryEntries = $product->getMediaGalleryEntries();
@@ -301,5 +301,37 @@ class DigitalImageProcessor
         }
 
         return $existingMediaGalleryEntries;
+    }
+
+    /**
+     * Delete all gallery images in storage
+     *
+     * @param ProductAttributeMediaGalleryEntryInterface[]|null $galleryEntries
+     * @throws FileSystemException
+     */
+    public function deleteGalleryImages(array $galleryEntries = null)
+    {
+        if (!$galleryEntries) {
+            return;
+        }
+
+        foreach ($galleryEntries as $entry) {
+            if (!$entry->getFile()) {
+                continue;
+            }
+
+            $absolutePath = $this->file->getFilePath(
+                $this->file->getAbsolutePath(
+                    $this->mediaConfig->getBaseMediaPath()
+                ),
+                $entry->getFile()
+            );
+
+            if (!$this->file->isExist($absolutePath)) {
+                continue;
+            }
+
+            $this->file->delete($absolutePath);
+        }
     }
 }
