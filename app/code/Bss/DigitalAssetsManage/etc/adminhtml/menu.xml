@@ -5,7 +5,7 @@
              title="Digital Assets Brand Storage Report"
              module="Bss_DigitalAssetsManage"
              sortOrder="1800"
-             parent="Magento_Reports::report_salesroot"
+             parent="Magento_Reports::report_products"
              action="bss_digitalassets/report/"
              resource="Bss_DigitalAssetsManage::digital_assets_report" />
     </menu>
