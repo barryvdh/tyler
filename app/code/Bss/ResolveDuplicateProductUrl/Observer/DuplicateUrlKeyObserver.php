@@ -62,11 +62,18 @@ class DuplicateUrlKeyObserver implements \Magento\Framework\Event\ObserverInterf
 
         $urlKey = $product->getUrlKey();
         $uniqueUrl = $urlKey;
+        $productId = (int) $product->getId();
         $index = 2;
         $isExisted = true;
 
         while ($isExisted) {
             $isExisted = $this->eavAttributeResource->isProductUrlKeyExists($uniqueUrl);
+            $existedProductId = $this->eavAttributeResource->getProductIdByUrlKey($uniqueUrl);
+
+            if ($existedProductId !== 0 && $productId !== 0) {
+                $isExisted = $productId !== $existedProductId;
+            }
+
             if ($isExisted) {
                 $uniqueUrl = sprintf("%s-%s", $urlKey, $index);
                 $index++;

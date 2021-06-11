@@ -35,6 +35,40 @@ class EavAttribute
      */
     public function isProductUrlKeyExists(string $urlKey): bool
     {
+        $result = $this->getProductUrlKey($urlKey);
+
+        if (isset($result['count'])) {
+            return (bool) $result['count'];
+        }
+
+        return false;
+    }
+
+    /**
+     * Get product id by url key
+     *
+     * @param string $urlKey
+     * @return int
+     */
+    public function getProductIdByUrlKey(string $urlKey): int
+    {
+        $result = $this->getProductUrlKey($urlKey);
+
+        if (isset($result['entity_id'])) {
+            return (int) $result['entity_id'];
+        }
+
+        return 0;
+    }
+
+    /**
+     * Get product url key count , entity_id
+     *
+     * @param string $urlKey
+     * @return mixed
+     */
+    protected function getProductUrlKey(string $urlKey)
+    {
         $connection = $this->resourceConnection->getConnection();
 
         $select = $connection->select()
@@ -63,13 +97,12 @@ class EavAttribute
         $select->limit(1);
         $select->columns(
             [
-                'count' => new \Zend_Db_Expr("COUNT(distinct `entity_varchar`.`entity_id`)")
+                'count' => new \Zend_Db_Expr("COUNT(distinct `entity_varchar`.`entity_id`)"),
+                'entity_id'
             ]
         );
 
-        $result = $connection->fetchOne($select);
-
-        return (bool) $result;
+        return $connection->fetchRow($select);
     }
 
     /**
