@@ -15,6 +15,7 @@ namespace Bss\HideProductField\Ui\DataProvider\Product\Form\Modifier;
 use Bss\HideProductField\Helper\Data;
 use Magento\Catalog\Model\Locator\LocatorInterface;
 use Magento\Catalog\Model\Product\Type as ProductType;
+use Magento\Catalog\Model\Product\Visibility;
 use Magento\Catalog\Ui\DataProvider\Product\Form\Modifier\AbstractModifier;
 use Magento\Downloadable\Model\Product\Type as DonwloadType;
 use Magento\GroupedProduct\Model\Product\Type\Grouped as GroupedProductType;
@@ -23,8 +24,7 @@ use Magento\Framework\Registry;
 
 /**
  * Class HideField
- *
- * @package Bss\HideProductField\Ui\DataProvider\Product\Form\Modifier
+ * Hide file follow the store còniug
  */
 class HideField extends AbstractModifier
 {
@@ -213,8 +213,34 @@ class HideField extends AbstractModifier
         }
         $this->downloadableProduct($meta);
         $this->reviewSection($meta);
+        $this->processVisibilityField($meta);
 
         return $meta;
+    }
+
+    /**
+     * Process with visibility field, hide options follow the configs, set default option
+     *
+     * @param array $meta
+     */
+    protected function processVisibilityField(array &$meta)
+    {
+        if (isset($meta['product-details']['children']['container_visibility'])) {
+            $visibilityContainer = &$meta['product-details']['children']['container_visibility'];
+            if (isset($visibilityContainer['children']['visibility']['arguments']['data']['config'])) {
+                $visibilityConfig = &$visibilityContainer['children']['visibility']['arguments']['data']['config'];
+            }
+        }
+
+        if (isset($visibilityConfig['options'])) {
+            $visibilityConfig['default'] = Visibility::VISIBILITY_IN_CATALOG;
+            $hideOptions = $this->helper->getHideVisibilityOptions();
+            foreach ($visibilityConfig['options'] as $key => $option) {
+                if (in_array($option['value'], $hideOptions)) {
+                    unset($visibilityConfig['options'][$key]);
+                }
+            }
+        }
     }
 
     /**

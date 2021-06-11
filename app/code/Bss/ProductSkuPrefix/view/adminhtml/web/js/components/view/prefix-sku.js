@@ -109,7 +109,10 @@ define([
 
                 if (prefixData) {
                     this._setPrefixSku(prefixData);
-                    if (this.productType === 'downloadable' && Boolean(this.productSku)) {
+
+                    if ((this.productType === 'downloadable' || this.productType === 'virtual') &&
+                        Boolean(this.productSku)
+                    ) {
                         this._setValue('value', this.productSku);
                     } else {
                         this._setValue('value', "");

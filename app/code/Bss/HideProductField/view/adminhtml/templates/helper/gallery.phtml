@@ -199,23 +199,56 @@ $elementToggleCode = $element->getToggleCode() ? $element->getToggleCode():
                             <span><?= $block->escapeHtml(__('Role')); ?></span>
                     </label>
                     <div class="admin__field-control">
-                        <ul class="multiselect-alt">
-                            <?php
-                            foreach ($block->getMediaAttributes() as $attribute):
-                                ?>
-                                <li class="item">
-                                    <label>
-                                        <input class="image-type"
-                                               data-role="type-selector"
-                                               data-form-part="<?= /* @noEscape */ $formNameEscaped ?>"
-                                               type="checkbox"
-                                               value="<?= $block->escapeHtmlAttr($attribute->getAttributeCode()) ?>"
-                                        />
-                                        <?= $block->escapeHtml($attribute->getFrontendLabel()) ?>
-                                    </label>
-                                </li>
-                            <?php endforeach; ?>
-                        </ul>
+                        <?php $mediaAttributes = $block->getMediaAttributes() ?>
+                        <?php if (!empty($mediaAttributes)): ?>
+                            <ul class="multiselect-alt">
+                                <?php
+                                foreach ($mediaAttributes as $attribute):
+                                    ?>
+                                    <li class="item">
+                                        <label>
+                                            <input class="image-type"
+                                                   data-role="type-selector"
+                                                   data-form-part="<?= /* @noEscape */ $formNameEscaped ?>"
+                                                   type="checkbox"
+                                                   value="<?= $block->escapeHtmlAttr($attribute->getAttributeCode()) ?>"
+                                            />
+                                            <?= $block->escapeHtml($attribute->getFrontendLabel()) ?>
+                                        </label>
+                                    </li>
+                                <?php endforeach; ?>
+                            </ul>
+
+                        <?php else: ?>
+                            <div class="admin__field-content-container">
+                                <div class="admin__field-content no-role">
+                                    <span><?= $escaper->escapeHtml(__("No role available!")) ?></span>
+                                </div>
+                            </div>
+
+                        <!-- Custom css for no role -->
+                            <style>
+                                .field-image-role .admin__field-content-container {
+                                    border-radius: 6px;
+                                    padding: 1px;
+                                    background-image: linear-gradient(
+                                        -135deg
+                                        , #f5f7fa 0%, #adadad 100%);
+                                }
+                                .field-image-role .admin__field-content-container .admin__field-content.no-role {
+                                    border-radius: 5px;
+                                    padding: 10px 15px;
+                                    cursor: no-drop;
+                                    user-select: none;
+                                    color: #aba8a9;
+                                    font-style: oblique;
+                                    background-image: linear-gradient(
+                                        -120deg
+                                        , #fff 0%, #fdfbfb 20%, #ebedee 85%);
+                                }
+                                }
+                            </style>
+                        <?php endif; ?>
                     </div>
                 </div>
 

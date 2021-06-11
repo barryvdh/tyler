@@ -17,6 +17,19 @@ define([
             this.visible(false);
 
             return this;
-        }
+        },
+
+        /**
+         * Change visibility for samplesFieldset & linksFieldset based on current statuses of checkbox.
+         */
+        changeVisibility: function () {
+            if (this.linksFieldset()) {
+                if (this.checked() && !this.disabled()) {
+                    this.linksFieldset().visible(true);
+                } else {
+                    this.linksFieldset().visible(false);
+                }
+            }
+        },
     });
 });

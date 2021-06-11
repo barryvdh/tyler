@@ -66,4 +66,37 @@ class Content
 
         return $template;
     }
+
+    /**
+     * Hide media attributes follow the store configs
+     *
+     * @param BePlugged $subject
+     * @param array|null $attributes
+     * @return array
+     */
+    public function afterGetMediaAttributes(
+        BePlugged $subject,
+        ?array $attributes
+    ): array {
+        if (!$attributes) {
+            return [];
+        }
+
+        $isEnable = $this->moduleHelper->isEnable();
+
+        if ($this->aggregateCustomizeHelper->isBrandManager() && $isEnable) {
+            $hideAttributes = $this->moduleHelper->getHideMediaAttributes();
+
+            if ($hideAttributes) {
+                foreach ($attributes as $code => $attribute) {
+                    if (in_array($attribute->getId(), $hideAttributes)) {
+                        unset($attributes[$code]);
+                    }
+                }
+            }
+        }
+
+
+        return $attributes;
+    }
 }
