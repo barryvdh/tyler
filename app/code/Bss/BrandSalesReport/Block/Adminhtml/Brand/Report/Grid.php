@@ -20,6 +20,7 @@ namespace Bss\BrandSalesReport\Block\Adminhtml\Brand\Report;
 
 use Bss\BrandRepresentative\Helper\Data;
 use Bss\BrandSalesReport\Model\ResourceModel\Report\BrandSalesReport\Collection;
+use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Catalog\Model\ProductTypes\ConfigInterface;
 use Magento\Framework\Serialize\SerializerInterface;
 use Magento\Reports\Block\Adminhtml\Grid\AbstractGrid;
@@ -51,6 +52,11 @@ class Grid extends AbstractGrid
     protected $helper;
 
     /**
+     * @var ProductRepositoryInterface
+     */
+    protected $productRepository;
+
+    /**
      * Grid constructor.
      *
      * @param \Magento\Backend\Block\Template\Context $context
@@ -60,6 +66,7 @@ class Grid extends AbstractGrid
      * @param \Magento\Reports\Helper\Data $reportsData
      * @param SerializerInterface $serializer
      * @param Data $helper
+     * @param ProductRepositoryInterface $productRepository
      * @param array $data
      */
     public function __construct(
@@ -70,10 +77,12 @@ class Grid extends AbstractGrid
         \Magento\Reports\Helper\Data $reportsData,
         SerializerInterface $serializer,
         Data $helper,
+        ProductRepositoryInterface $productRepository,
         array $data = []
     ) {
         $this->serializer = $serializer;
         $this->helper = $helper;
+        $this->productRepository = $productRepository;
         parent::__construct($context, $backendHelper, $resourceFactory, $collectionFactory, $reportsData, $data);
     }
 
@@ -361,10 +370,12 @@ class Grid extends AbstractGrid
         \Magento\Framework\DataObject $item,
         \Magento\Framework\Filesystem\File\WriteInterface $stream
     ) {
-        $row = $this->getExportRowData($item);
+        $rows = $this->getExportRowData($item);
 
         try {
-            $stream->writeCsv($row);
+            foreach ($rows as $row) {
+                $stream->writeCsv($row);
+            }
         } catch (\Exception $e) {
             $this->_logger->critical(
                 "BSS - ERROR: When wwrite csv: " . $e
@@ -376,7 +387,7 @@ class Grid extends AbstractGrid
      * Get export row data
      *
      * @param \Magento\Framework\DataObject $item
-     * @return array
+     * @return array - List row data
      */
     protected function getExportRowData(\Magento\Framework\DataObject $item): array
     {
@@ -390,18 +401,67 @@ class Grid extends AbstractGrid
                 $row[] = $column->getRowFieldExport($item);
             }
         }
+        $rows = [$row];
 
         // Add children product(s)
         $unserializedItems = $this->unserializeChildrenProducts($item['product_options']);
 
         if (!empty($unserializedItems)) {
-            $rowData = [];
-            foreach ($unserializedItems as $item) {
-                if (isset($item['sku']) && isset($item['ordered_qty'])) {
-                    $rowData[] = sprintf("%s=%s", $item['sku'], (int) $item['ordered_qty']);
+            foreach ($unserializedItems as $childItem) {
+                if (isset($childItem['id']) && isset($childItem['ordered_qty'])) {
+                    try {
+                        $rows[] = $this->getChildrenRow($childItem, $item);
+                    } catch (\Exception $e) {
+                        $this->_logger->critical(
+                            __("BSS.ERROR: When load product child to export. %1", $e)
+                        );
+                    }
                 }
             }
-            $row[] = implode(",", $rowData);
+        }
+
+        return $rows;
+    }
+
+    /**
+     * Get children data
+     *
+     * @param array $childItem
+     * @param \Magento\Framework\DataObject $parentItem
+     * @return array
+     * @throws \Magento\Framework\Exception\NoSuchEntityException
+     */
+    protected function getChildrenRow(array $childItem, \Magento\Framework\DataObject $parentItem): array
+    {
+        $row = [];
+        $product = $this->productRepository->getById($childItem['id']);
+        foreach ($this->_getExportHeaders() as $header) {
+            $headerText = $header;
+
+            if ($header instanceof \Magento\Framework\Phrase) {
+                $headerText = $header->getText();
+            }
+
+            switch ($headerText) {
+                case __('Order ID'):
+                    $row[] = $parentItem['order_id'];
+                    break;
+                case __('Product Name'):
+                    $row[] = $product->getName();
+                    break;
+                case __('SKU'):
+                    $row[] = $product->getSku();
+                    break;
+                case __('Ordered Quantity'):
+                    $row[] = $childItem['ordered_qty'];
+                    break;
+                case "Parent SKU":
+                    $row[] = $parentItem['product_sku'];
+                    break;
+                default:
+                    $row[] = "";
+                    break;
+            }
         }
 
         return $row;
@@ -411,11 +471,11 @@ class Grid extends AbstractGrid
      *  Get a row data of the particular columns
      *
      * @param \Magento\Framework\DataObject $data
-     * @return string[]
+     * @return array
      */
-    public function getRowRecord(\Magento\Framework\DataObject $data)
+    public function getRowRecord(\Magento\Framework\DataObject $data): array
     {
-        return $this->getExportRowData($data);
+        return ['rows' => $this->getExportRowData($data)];
     }
 
     /**
@@ -427,9 +487,53 @@ class Grid extends AbstractGrid
     {
         $row = parent::_getExportHeaders();
 
-        // Add children product(s)
-        $row[] = "Children Product(s)";
+        // Add parent sku
+        $row[] = "Parent SKU";
 
         return $row;
+    }
+
+    /**
+     * Retrieve a file container array by grid data as MS Excel 2003 XML Document
+     *
+     * Return array with keys type and value
+     * Use custom Excel model for process row with chilren item
+     *
+     * @param string $sheetName
+     * @return array
+     * @throws \Magento\Framework\Exception\FileSystemException
+     */
+    public function getExcelFile($sheetName = '')
+    {
+        $this->_isExport = true;
+        $this->_prepareGrid();
+
+        $convert = new \Bss\BrandSalesReport\Model\Excel(
+            $this->getCollection()->getIterator(),
+            [$this, 'getRowRecord']
+        );
+
+        // @codingStandardsIgnoreLine
+        $name = md5(microtime());
+        $file = $this->_path . '/' . $name . '.xml';
+
+        $this->_directory->create($this->_path);
+        $stream = $this->_directory->openFile($file, 'w+');
+        $stream->lock();
+
+        $convert->setDataHeader($this->_getExportHeaders());
+        if ($this->getCountTotals()) {
+            $convert->setDataFooter($this->_getExportTotals());
+        }
+
+        $convert->write($stream, $sheetName);
+        $stream->unlock();
+        $stream->close();
+
+        return [
+            'type' => 'filename',
+            'value' => $file,
+            'rm' => true // can delete file after use
+        ];
     }
 }
