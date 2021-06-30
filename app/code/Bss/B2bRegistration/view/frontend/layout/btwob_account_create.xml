@@ -13,7 +13,7 @@
  * @category   BSS
  * @package    Bss_B2bRegistration
  * @author     Extension Team
- * @copyright  Copyright (c) 2017-2018 BSS Commerce Co. ( http://bsscommerce.com )
+ * @copyright  Copyright (c) 2017-2021 BSS Commerce Co. ( http://bsscommerce.com )
  * @license    http://bsscommerce.com/Bss-Commerce-License.txt
  */
 -->
@@ -26,6 +26,7 @@
                 <block class="Magento\Customer\Block\Widget\Taxvat" name="bss-register-taxvat" as="bss.register.taxvat" template="Magento_Customer::widget/taxvat.phtml" />
                 <block class="Magento\Customer\Block\Widget\Gender" name="bss-register-gender" as="bss.register.gender" template="Magento_Customer::widget/gender.phtml" />
                 <container name="bss.captcha" as="bss.captcha"/>
+                <container name="bss.recaptcha" as="bss.recaptcha"/>
 
                 <!-- Start BSS Customer Attribute module integration -->
                 <container name="bss.form.additional.info" as="bss.form.additional.info">
@@ -57,6 +58,39 @@
                 <action method="setImgHeight">
                     <argument name="width" xsi:type="string">50</argument>
                 </action>
+            </block>
+        </referenceContainer>
+        <referenceContainer name="bss.recaptcha">
+            <block class="MSP\ReCaptcha\Block\Frontend\ReCaptcha" name="msp-recaptcha" after="-"
+                   template="MSP_ReCaptcha::msp_recaptcha.phtml"
+                   ifconfig="msp_securitysuite_recaptcha/frontend/enabled">
+
+                <arguments>
+                    <argument name="jsLayout" xsi:type="array">
+                        <item name="components" xsi:type="array">
+                            <item name="msp-recaptcha" xsi:type="array">
+                                <item name="component" xsi:type="string">MSP_ReCaptcha/js/reCaptcha</item>
+                                <item name="zone" xsi:type="string">forgot</item>
+                            </item>
+                        </item>
+                    </argument>
+                </arguments>
+            </block>
+            <block class="Magento\ReCaptchaUi\Block\ReCaptcha"
+                   name="recaptcha"
+                   after="-"
+                   template="Magento_ReCaptchaFrontendUi::recaptcha.phtml"
+                   ifconfig="recaptcha_frontend/type_for/customer_create">
+                <arguments>
+                    <argument name="recaptcha_for" xsi:type="string">customer_create</argument>
+                    <argument name="jsLayout" xsi:type="array">
+                        <item name="components" xsi:type="array">
+                            <item name="recaptcha" xsi:type="array">
+                                <item name="component" xsi:type="string">Magento_ReCaptchaFrontendUi/js/reCaptcha</item>
+                            </item>
+                        </item>
+                    </argument>
+                </arguments>
             </block>
         </referenceContainer>
         <referenceBlock name="head.components">

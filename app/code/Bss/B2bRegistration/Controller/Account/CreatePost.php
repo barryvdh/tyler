@@ -39,6 +39,11 @@ use Magento\Framework\Exception\State\InputMismatchException;
 class CreatePost extends \Magento\Customer\Controller\AbstractAccount
 {
     /**
+     * Template email confirm
+     */
+    const B2B_EMAIL_CONFIRM_CUSTOMER_TEMPLATE = 'b2b_email_setting_customer_confirm_templates';
+
+    /**
      * @var \Magento\Framework\App\Action\Context
      */
     protected $context;
@@ -396,6 +401,9 @@ class CreatePost extends \Magento\Customer\Controller\AbstractAccount
             $message = $this->helper->getPendingMess();
             $this->messageManager->addSuccess($message);
             $this->sendNewAccountEmail($customer, $autoApproval);
+            if ($this->helper->isEnableConfirmEmail()) {
+                $this->sendMailConfirmToCustomer($customer);
+            }
             $url = $this->createPostHelper
                 ->returnUrlFactory()
                 ->create()
@@ -451,5 +459,27 @@ class CreatePost extends \Magento\Customer\Controller\AbstractAccount
                 ->returnBssHelperEmail()
                 ->sendEmail($fromEmail, $recipient, $emailTemplate, $storeId, $emailVar);
         }
+    }
+
+    /**
+     * Send email confirm to customer
+     *
+     * @param object $customer
+     * @throws NoSuchEntityException
+     */
+    protected function sendMailConfirmToCustomer($customer)
+    {
+        $customerEmail = $customer->getEmail();
+        $customerName = $customer->getFirstName().' '.$customer->getLastName();
+        $storeId = $this->helper->getStoreId();
+        $emailTemplate = self::B2B_EMAIL_CONFIRM_CUSTOMER_TEMPLATE;
+        $fromEmail = $this->helper->getAdminEmailSender();
+        $recipient = $customerEmail;
+        $emailVar = [
+            'varName'  => $customerName
+        ];
+        $this->createPostHelper
+            ->returnBssHelperEmail()
+            ->sendEmail($fromEmail, $recipient, $emailTemplate, $storeId, $emailVar);
     }
 }

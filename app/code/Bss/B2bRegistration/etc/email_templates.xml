@@ -21,4 +21,5 @@
     <template id="b2b_admin_notification_admin_email_templates" label="Admin Email Template" file="admin_email.html" type="html" module="Bss_B2bRegistration" area="frontend"/>
     <template id="b2b_email_setting_customer_approve_templates" label="Approve Email Template" file="customer_approve_email.html" type="html" module="Bss_B2bRegistration" area="frontend"/>
     <template id="b2b_email_setting_customer_disapprove_templates" label="Disapprove Email Template" file="customer_disapprove_email.html" type="html" module="Bss_B2bRegistration" area="frontend"/>
+    <template id="b2b_email_setting_customer_confirm_templates" label="Confirm Email Template" file="customer_confirm_email.html" type="html" module="Bss_B2bRegistration" area="frontend"/>
 </config>

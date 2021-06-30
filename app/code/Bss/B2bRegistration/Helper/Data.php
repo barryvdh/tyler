@@ -587,4 +587,17 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
         );
         return $defaultAutoAssign;
     }
+
+    /**
+     * Enable send mail confirm to customer
+     *
+     * @return bool
+     */
+    public function isEnableConfirmEmail()
+    {
+        return $this->scopeConfig->getValue(
+            'b2b/email_setting/enable_confirm_mail',
+            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+        );
+    }
 }
