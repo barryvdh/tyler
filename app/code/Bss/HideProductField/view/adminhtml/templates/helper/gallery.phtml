@@ -156,7 +156,7 @@ $elementToggleCode = $element->getToggleCode() ? $element->getToggleCode():
                 <% } %>
             </div>
 
-            <ul class="item-roles" data-role="roles-labels">
+            <ul class="item-roles" data-role="roles-labels" style="display: none">
                 <?php foreach ($block->getImageTypes() as $typeData): ?>
                     <li data-role-code="<?= $block->escapeHtmlAttr($typeData['code']) ?>"
                         class="item-role item-role-<?= $block->escapeHtmlAttr($typeData['code']) ?>">
@@ -195,60 +195,20 @@ $elementToggleCode = $element->getToggleCode() ? $element->getToggleCode():
                 </div>
 
                 <div class="admin__field field-image-role">
-                    <label class="admin__field-label">
-                            <span><?= $block->escapeHtml(__('Role')); ?></span>
-                    </label>
                     <div class="admin__field-control">
-                        <?php $mediaAttributes = $block->getMediaAttributes() ?>
-                        <?php if (!empty($mediaAttributes)): ?>
-                            <ul class="multiselect-alt">
-                                <?php
-                                foreach ($mediaAttributes as $attribute):
-                                    ?>
-                                    <li class="item">
-                                        <label>
-                                            <input class="image-type"
-                                                   data-role="type-selector"
-                                                   data-form-part="<?= /* @noEscape */ $formNameEscaped ?>"
-                                                   type="checkbox"
-                                                   value="<?= $block->escapeHtmlAttr($attribute->getAttributeCode()) ?>"
-                                            />
-                                            <?= $block->escapeHtml($attribute->getFrontendLabel()) ?>
-                                        </label>
-                                    </li>
-                                <?php endforeach; ?>
-                            </ul>
+                        <div class="admin__field admin__field-option">
+                            <input type="checkbox"
+                                   id="image-role"
+                                   data-set-all="true"
+                                   data-role="type-selector"
+                                   data-form-part="<?= /* @noEscape */ $formNameEscaped ?>"
+                                   value="1"
+                                   class="admin__control-checkbox" />
 
-                        <?php else: ?>
-                            <div class="admin__field-content-container">
-                                <div class="admin__field-content no-role">
-                                    <span><?= $escaper->escapeHtml(__("No role available!")) ?></span>
-                                </div>
-                            </div>
-
-                        <!-- Custom css for no role -->
-                            <style>
-                                .field-image-role .admin__field-content-container {
-                                    border-radius: 6px;
-                                    padding: 1px;
-                                    background-image: linear-gradient(
-                                        -135deg
-                                        , #f5f7fa 0%, #adadad 100%);
-                                }
-                                .field-image-role .admin__field-content-container .admin__field-content.no-role {
-                                    border-radius: 5px;
-                                    padding: 10px 15px;
-                                    cursor: no-drop;
-                                    user-select: none;
-                                    color: #aba8a9;
-                                    font-style: oblique;
-                                    background-image: linear-gradient(
-                                        -120deg
-                                        , #fff 0%, #fdfbfb 20%, #ebedee 85%);
-                                }
-                                }
-                            </style>
-                        <?php endif; ?>
+                            <label for="image-role" class="admin__field-label">
+                                <?= $block->escapeHtml(__('Set Image Role')); ?>
+                            </label>
+                        </div>
                     </div>
                 </div>
 

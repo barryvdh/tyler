@@ -39,12 +39,12 @@
                     <comment><![CDATA[Choose attributes which can't display in backend product page.]]></comment>
                     <can_be_empty>1</can_be_empty>
                 </field>
-                <field id="media_attributes" translate="label" type="multiselect" sortOrder="50" showInDefault="1" showInWebsite="1" showInStore="1">
-                    <label><![CDATA[Hide Media Attributes]]></label>
-                    <source_model>Bss\HideProductField\Model\Config\Source\MediaAttributes</source_model>
-                    <comment><![CDATA[Choose media attributes which unavailable in gallery media.]]></comment>
-                    <can_be_empty>1</can_be_empty>
-                </field>
+<!--                <field id="media_attributes" translate="label" type="multiselect" sortOrder="50" showInDefault="1" showInWebsite="1" showInStore="1">-->
+<!--                    <label><![CDATA[Hide Media Attributes]]></label>-->
+<!--                    <source_model>Bss\HideProductField\Model\Config\Source\MediaAttributes</source_model>-->
+<!--                    <comment><![CDATA[Choose media attributes which unavailable in gallery media.]]></comment>-->
+<!--                    <can_be_empty>1</can_be_empty>-->
+<!--                </field>-->
                 <field id="visibility_options" translate="label comment" type="multiselect" sortOrder="80" showInDefault="1" showInWebsite="1" showInStore="1">
                     <label><![CDATA[Hide Visibility Options]]></label>
                     <source_model>Magento\Catalog\Model\Product\Visibility</source_model>
