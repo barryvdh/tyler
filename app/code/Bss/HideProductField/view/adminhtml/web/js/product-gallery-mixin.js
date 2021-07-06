@@ -63,16 +63,28 @@ define([
                 .find('[data-role=type-selector]')
                 .each($.proxy(function (index, checkbox) {
                     var $checkbox = $(checkbox),
-                        isChecked = true
+                        isChecked = true,
+                        parent = $checkbox.closest('.item'),
+                        selectedClass = 'selected';
 
-                    Object.entries(this.options.types).forEach(function ([key, type]) {
-                        //eslint-disable-next-line
-                        if (type.value != imageData.file) {
-                            isChecked = false;
-                        }
-                    });
+                    if ($checkbox.data('set-all')) {
+                        Object.entries(this.options.types).forEach(function ([key, type]) {
+                            //eslint-disable-next-line
+                            if (type.value != imageData.file) {
+                                isChecked = false;
+                            }
+                        });
 
-                    $checkbox.prop('checked', isChecked);
+                        $checkbox.prop('checked', isChecked);
+                        return false;
+                    }
+
+                    isChecked = this.options.types[$checkbox.val()].value == imageData.file; //eslint-disable-line
+                    $checkbox.prop(
+                        'checked',
+                        isChecked
+                    );
+                    parent.toggleClass(selectedClass, isChecked);
                 }, this));
         }
     };
