@@ -133,7 +133,7 @@ class Collection extends AbstractCollection
                     'product_name'          => 'MAX(product_name)',
                     'category_name'         => 'MAX(category_name)',
                     'product_brand_email'   => 'MAX(product_brand_email)',
-                    'brand_name'            => 'MAX(brand_name)',
+                    'brand_id'              => 'MAX(brand_id)',
                     'product_options'       => 'product_options',
                     'company_name'          => 'MAX(company_name)',
                     'address'               => 'MAX(address)',

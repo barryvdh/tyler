@@ -20,8 +20,8 @@ namespace Bss\BrandSalesReport\Block\Adminhtml\Brand\Report;
 
 use Bss\BrandRepresentative\Helper\Data;
 use Bss\BrandSalesReport\Model\ResourceModel\Report\BrandSalesReport\Collection;
+use Magento\Catalog\Api\CategoryRepositoryInterface;
 use Magento\Catalog\Api\ProductRepositoryInterface;
-use Magento\Catalog\Model\ProductTypes\ConfigInterface;
 use Magento\Framework\Serialize\SerializerInterface;
 use Magento\Reports\Block\Adminhtml\Grid\AbstractGrid;
 use Magento\Reports\Block\Adminhtml\Sales\Grid\Column\Renderer\Date;
@@ -57,6 +57,11 @@ class Grid extends AbstractGrid
     protected $productRepository;
 
     /**
+     * @var CategoryRepositoryInterface
+     */
+    protected $categoryRepository;
+
+    /**
      * Grid constructor.
      *
      * @param \Magento\Backend\Block\Template\Context $context
@@ -67,6 +72,7 @@ class Grid extends AbstractGrid
      * @param SerializerInterface $serializer
      * @param Data $helper
      * @param ProductRepositoryInterface $productRepository
+     * @param CategoryRepositoryInterface $categoryRepository
      * @param array $data
      */
     public function __construct(
@@ -78,11 +84,13 @@ class Grid extends AbstractGrid
         SerializerInterface $serializer,
         Data $helper,
         ProductRepositoryInterface $productRepository,
+        CategoryRepositoryInterface $categoryRepository,
         array $data = []
     ) {
         $this->serializer = $serializer;
         $this->helper = $helper;
         $this->productRepository = $productRepository;
+        $this->categoryRepository = $categoryRepository;
         parent::__construct($context, $backendHelper, $resourceFactory, $collectionFactory, $reportsData, $data);
     }
 
@@ -191,7 +199,8 @@ class Grid extends AbstractGrid
                 'type' => 'string',
                 'sortable' => false,
                 'header_css_class' => 'col-brand',
-                'column_css_class' => 'col-brand'
+                'column_css_class' => 'col-brand',
+                'frame_callback' => [$this, "getBrandName"]
             ]
         );
         $this->addColumn(
@@ -253,6 +262,32 @@ class Grid extends AbstractGrid
                 'index' => 'province'
             ]
         );
+    }
+
+    /**
+     * Get brand name for display in grid
+     *
+     * @param string|null $value
+     * @param \Magento\Reports\Model\Item $reportItem
+     * @param \Magento\Backend\Block\Widget\Grid\Column\Extended $column
+     * @return string|null
+     * @SuppressWarnings(UnusedFormalParameter)
+     */
+    public function getBrandName($value, $reportItem, $column): ?string
+    {
+        try {
+            if ($reportItem['brand_id']) {
+                $brand = $this->categoryRepository->get($reportItem['brand_id']);
+
+                return $brand->getName();
+            }
+        } catch (\Exception $e) {
+            $this->_logger->critical(
+                __("BSS.ERROR: Loading brand. %1", $e)
+            );
+        }
+
+        return null;
     }
 
     /**
