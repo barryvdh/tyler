@@ -225,7 +225,7 @@ class InventoryReport extends AbstractReport
         }
 
         if ($category->getLevel() > static::BRAND_LV) {
-            $this->getBrandIdRecursive($category->getParentId(), $startRecursiveId);
+            $this->getBrandIdRecursive((int) $category->getParentId(), $startRecursiveId);
         }
     }
 

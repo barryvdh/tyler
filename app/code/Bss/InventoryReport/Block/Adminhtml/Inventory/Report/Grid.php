@@ -64,10 +64,6 @@ class Grid extends AbstractGrid
      * @var OrderItemCollectionFactory
      */
     protected $orderItemCollectionFactory;
-    /**
-     * @var \Magento\Framework\Stdlib\DateTime\TimezoneInterface
-     */
-    protected $timezone;
 
     /**
      * Grid constructor.
@@ -99,7 +95,6 @@ class Grid extends AbstractGrid
         $this->productRepository = $productRepository;
         $this->categoryRepository = $categoryRepository;
         $this->orderItemCollectionFactory = $orderItemCollectionFactory;
-        $this->timezone = $context->getLocaleDate();
         parent::__construct($context, $backendHelper, $resourceFactory, $collectionFactory, $reportsData, $data);
     }
 
@@ -284,19 +279,37 @@ class Grid extends AbstractGrid
             return '0';
         }
         $queryDateFormat = "Y-m-d";
-        $to = $this->timezone->date()->format($queryDateFormat);
+        // UTC date
+        $to = date($queryDateFormat);
+        $from = date($queryDateFormat, strtotime($day . " days ago"));
 
-        $from = $this->timezone->date(strtotime($day . " days ago"))->format($queryDateFormat);
-
-        /** @var Item $item */
+        /** @var \Magento\Sales\Model\ResourceModel\Order\Item\Collection $collection */
         $collection = $this->orderItemCollectionFactory->create();
         $collection->getSelect()->reset(\Zend_Db_Select::COLUMNS)
             ->columns([
                 'order_quantity' => 'SUM(qty_ordered)'
             ])
-            ->where(sprintf("product_id = %s", $reportItem->getProductId()))
-            ->where(sprintf('created_at > "%s" AND created_at < "%s"', $from, $to));
+            ->where(
+                new \Zend_Db_Expr(
+                    sprintf(
+                        "`product_id` = %s OR " .
+                        "`product_options` LIKE '%%{\"product_type\":\"grouped\",\"product_id\":\"%s\"}}%%'",
+                        $reportItem->getProductId(),
+                        $reportItem->getProductId()
+                    )
+                )
+            )
+            ->where(
+                sprintf(
+                    '%s >= "%s" AND %s <= "%s"',
+                    $collection->getConnection()->getDateFormatSql("created_at", "%Y-%m-%d"),
+                    $from,
+                    $collection->getConnection()->getDateFormatSql("created_at", "%Y-%m-%d"),
+                    $to
+                )
+            );
 
+        /** @var Item $item */
         foreach ($collection as $item) {
             $qty = $item->getData("order_quantity");
 
