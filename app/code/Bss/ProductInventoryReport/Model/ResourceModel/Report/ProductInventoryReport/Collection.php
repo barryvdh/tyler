@@ -170,7 +170,6 @@ class Collection extends AbstractCollection
             'product_id DESC'
         );
 
-        $this->_applyStoresFilterToSelect($select);
         $this->applyBrandFilter($select);
 
         return $select;
@@ -238,6 +237,17 @@ class Collection extends AbstractCollection
     }
 
     /**
+     * No store filter
+     *
+     * @param Select $select
+     * @return $this
+     */
+    protected function _applyStoresFilterToSelect(\Magento\Framework\DB\Select $select)
+    {
+        return $this;
+    }
+
+    /**
      * Query selected brands
      *
      * @param \Magento\Framework\DB\Select|null $select
@@ -285,7 +295,7 @@ class Collection extends AbstractCollection
                         $dtFrom = clone $periodFrom;
                         // last day of the year
                         $dtTo = clone $periodFrom;
-                        $dtTo->setDate($dtTo->format('Y'), 12, 31);
+                        $dtTo->setDate((int) $dtTo->format('Y'), 12, 31);
                         if (!$periodTo || $dtTo < $periodTo) {
                             $selectUnions[] = $this->_makeBoundarySelect(
                                 $dtFrom->format('Y-m-d'),
@@ -295,7 +305,7 @@ class Collection extends AbstractCollection
                             // first day of the next year
                             $this->_from = clone $periodFrom;
                             $this->_from->modify('+1 year');
-                            $this->_from->setDate($this->_from->format('Y'), 1, 1);
+                            $this->_from->setDate((int) $this->_from->format('Y'), 1, 1);
                             $this->_from = $this->_from->format('Y-m-d');
                         }
                     }
@@ -305,7 +315,7 @@ class Collection extends AbstractCollection
                     // not the last day of the year
                     if ($periodTo->format('m') != 12 || $periodTo->format('d') != 31) {
                         $dtFrom = clone $periodTo;
-                        $dtFrom->setDate($dtFrom->format('Y'), 1, 1);
+                        $dtFrom->setDate((int) $dtFrom->format('Y'), 1, 1);
                         // first day of the year
                         $dtTo = clone $periodTo;
                         if (!$periodFrom || $dtFrom > $periodFrom) {
@@ -317,7 +327,7 @@ class Collection extends AbstractCollection
                             // last day of the previous year
                             $this->_to = clone $periodTo;
                             $this->_to->modify('-1 year');
-                            $this->_to->setDate($this->_to->format('Y'), 12, 31);
+                            $this->_to->setDate((int) $this->_to->format('Y'), 12, 31);
                             $this->_to = $this->_to->format('Y-m-d');
                         }
                     }
@@ -344,7 +354,7 @@ class Collection extends AbstractCollection
                         // last day of the month
                         $dtTo = clone $periodFrom;
                         $dtTo->modify('+1 month');
-                        $dtTo->setDate($dtTo->format('Y'), $dtTo->format('m'), 1);
+                        $dtTo->setDate((int) $dtTo->format('Y'), (int) $dtTo->format('m'), 1);
                         $dtTo->modify('-1 day');
                         if (!$periodTo || $dtTo < $periodTo) {
                             $selectUnions[] = $this->_makeBoundarySelect(
@@ -355,7 +365,11 @@ class Collection extends AbstractCollection
                             // first day of the next month
                             $this->_from = clone $periodFrom;
                             $this->_from->modify('+1 month');
-                            $this->_from->setDate($this->_from->format('Y'), $this->_from->format('m'), 1);
+                            $this->_from->setDate(
+                                (int) $this->_from->format('Y'),
+                                (int) $this->_from->format('m'),
+                                1
+                            );
                             $this->_from = $this->_from->format('Y-m-d');
                         }
                     }
@@ -365,7 +379,11 @@ class Collection extends AbstractCollection
                     // not the last day of the month
                     if ($periodTo->format('d') != $periodTo->format('t')) {
                         $dtFrom = clone $periodTo;
-                        $dtFrom->setDate($dtFrom->format('Y'), $dtFrom->format('m'), 1);
+                        $dtFrom->setDate(
+                            (int) $dtFrom->format('Y'),
+                            (int) $dtFrom->format('m'),
+                            1
+                        );
                         // first day of the month
                         $dtTo = clone $periodTo;
                         if (!$periodFrom || $dtFrom > $periodFrom) {
@@ -376,7 +394,11 @@ class Collection extends AbstractCollection
 
                             // last day of the previous month
                             $this->_to = clone $periodTo;
-                            $this->_to->setDate($this->_to->format('Y'), $this->_to->format('m'), 1);
+                            $this->_to->setDate(
+                                (int) $this->_to->format('Y'),
+                                (int) $this->_to->format('m'),
+                                1
+                            );
                             $this->_to->modify('-1 day');
                             $this->_to = $this->_to->format('Y-m-d');
                         }

@@ -23,6 +23,7 @@ use Bss\BrandRepresentative\Helper\Data;
 use Bss\ProductInventoryReport\Model\ResourceModel\Report\ProductInventoryReport\Collection;
 use Magento\Catalog\Api\CategoryRepositoryInterface;
 use Magento\Catalog\Api\ProductRepositoryInterface;
+use Magento\Catalog\Model\Product\Attribute\Source\Status;
 use Magento\Framework\View\Element\BlockInterface;
 use Magento\InventoryApi\Api\Data\SourceItemInterface;
 use Magento\Reports\Block\Adminhtml\Grid\AbstractGrid;
@@ -331,8 +332,8 @@ class Grid extends AbstractGrid
     public function getStatusOptions(): array
     {
         return [
-            '0' => __("Inactive"),
-            '1' => __("Active")
+            Status::STATUS_DISABLED => __("Inactive"),
+            Status::STATUS_ENABLED => __("Active")
         ];
     }
 
