@@ -19,9 +19,7 @@
 namespace Bss\BrandRepresentative\Model;
 
 use Bss\BrandRepresentative\Helper\Data;
-use Exception;
 use Magento\Catalog\Api\ProductRepositoryInterface;
-use Magento\Catalog\Model\Category;
 use Magento\Catalog\Model\Product;
 use Magento\Customer\Api\CustomerRepositoryInterface;
 use Magento\Framework\Serialize\SerializerInterface;
@@ -114,6 +112,17 @@ class ReportProcessor
     }
 
     /**
+     * Get item product
+     *
+     * @param \Magento\Sales\Model\Order\Item $item
+     * @return Product|null
+     */
+    protected function getProduct(\Magento\Sales\Model\Order\Item $item): ?Product
+    {
+        return $item->getProduct();
+    }
+
+    /**
      * Process to Save Data Report
      *
      * @param Order $order
@@ -131,15 +140,15 @@ class ReportProcessor
             foreach ($orderItems as $item) {
                 /* @var Item $item */
                 /* @var Product $product */
-                $product = $item->getProduct();
+                $product = $this->getProduct($item);
                 if (!$product) {
                     continue;
                 }
                 //Ignore Report for downloadable and virtual product
-                $productType = $product->getTypeId();
-                if ($productType === 'virtual') {
-                    continue;
-                }
+//                $productType = $product->getTypeId();
+//                if ($productType === 'virtual') {
+//                    continue;
+//                }
                 // GROUPED - Process grouped product
                 if ($item->getProductType() === \Magento\GroupedProduct\Model\Product\Type\Grouped::TYPE_CODE) {
                     $this->processGroupedProductInfo($reportData, $item);
@@ -196,7 +205,7 @@ class ReportProcessor
     ): array {
         $order = $item->getOrder();
         if (!$product) {
-            $product = $item->getProduct();
+            $product = $this->getProduct($item);
         }
         $rpProductData = [];
         $rpProductData['store_id'] = $order->getStoreId();
@@ -290,7 +299,7 @@ class ReportProcessor
                     $reportData[$product->getId()] = $rpProductDt;
                 }
 
-                $childProduct = $item->getProduct();
+                $childProduct = $this->getProduct($item);
                 if (!$childProduct || !$childProduct->getId()) {
                     return;
                 }
