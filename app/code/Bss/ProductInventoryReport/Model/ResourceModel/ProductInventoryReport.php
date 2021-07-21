@@ -17,7 +17,7 @@ declare(strict_types=1);
  * @license    http://bsscommerce.com/Bss-Commerce-License.txt
  */
 
-namespace Bss\ProductInventoryReport\Model\ResourceModel\Report;
+namespace Bss\ProductInventoryReport\Model\ResourceModel;
 
 use Magento\Catalog\Api\CategoryRepositoryInterface;
 use Magento\Catalog\Model\Product;
@@ -41,9 +41,6 @@ use Psr\Log\LoggerInterface;
 class ProductInventoryReport extends AbstractReport
 {
     const AGGREGATION_DAILY = InstallSchema::TBL_INVENTORY_REPORT_DAILY;
-    const AGGREGATION_MONTHLY = InstallSchema::TBL_INVENTORY_REPORT_MONTHLY;
-    const AGGREGATION_YEARLY = InstallSchema::TBL_INVENTORY_REPORT_YEARLY;
-
     const BRAND_LV = 3;
 
     /**
@@ -140,7 +137,6 @@ class ProductInventoryReport extends AbstractReport
             /** @var Product $product */
             foreach ($collection as $product) {
                 $batch = [
-                    'period'        => $product->getCreatedAt(),
                     'product_id'    => $product->getId(),
                     'product_sku'   => $product->getSku(),
                     'product_name'  => $product->getName(),
@@ -163,9 +159,6 @@ class ProductInventoryReport extends AbstractReport
             foreach (array_chunk($insertBatches, 100) as $batch) {
                 $connection->insertMultiple($tableName, $batch);
             }
-
-            $this->updateAggregationTable('month');
-            $this->updateAggregationTable('year');
 
             $this->_setFlagData(Flag::REPORT_INVENTORY_REPORT_FLAG_CODE);
             $this->_logger->info(
@@ -235,68 +228,6 @@ class ProductInventoryReport extends AbstractReport
     public function truncateTable()
     {
         $connection = $this->getConnection();
-        $tables = [
-            $connection->getTableName(self::AGGREGATION_DAILY),
-            $connection->getTableName(self::AGGREGATION_MONTHLY),
-            $connection->getTableName(self::AGGREGATION_YEARLY),
-        ];
-
-        foreach ($tables as $table) {
-            $connection->truncateTable($table);
-        }
-    }
-
-    /**
-     * Update data to aggregation table
-     *
-     * @param string $type
-     * @throws \Magento\Framework\Exception\LocalizedException
-     */
-    protected function updateAggregationTable(string $type)
-    {
-        $periodSubSelect = $this->getConnection()->select();
-        $mainTable = $this->getMainTable();
-
-        switch ($type) {
-            case 'year':
-                $periodCol = $this->getConnection()->getDateFormatSql('t.period', '%Y-01-01');
-                $aggregationTable = $this->getTable(self::AGGREGATION_YEARLY);
-                break;
-            case 'month':
-                $periodCol = $this->getConnection()->getDateFormatSql('t.period', '%Y-%m-01');
-                $aggregationTable = $this->getTable(self::AGGREGATION_MONTHLY);
-                break;
-            default:
-                $periodCol = 't.period';
-                break;
-        }
-
-        if (!isset($aggregationTable)) {
-            return;
-        }
-
-        $columns = [
-            'period' => $periodCol,
-            'product_id' => 't.product_id',
-            'product_sku' => 't.product_sku',
-            'product_name' => 't.product_name',
-            'brand_id' => 't.brand_id',
-            'status' => 't.status',
-            'stock_status'  => 't.stock_status',
-            'max_order_amount'  => 't.max_order_amount',
-            'inventory_qty'  => 't.inventory_qty',
-        ];
-
-        if ($type === 'day') {
-            $columns['id'] = 't.id';  // to speed-up insert on duplicate key update
-        }
-
-        $periodSubSelect->from(
-            ['t' => $mainTable],
-            $columns
-        );
-
-        $sql = $periodSubSelect->insertFromSelect($aggregationTable, array_keys($columns));
-        $this->getConnection()->query($sql);
+        $connection->truncateTable($connection->getTableName(self::AGGREGATION_DAILY));
     }
 }

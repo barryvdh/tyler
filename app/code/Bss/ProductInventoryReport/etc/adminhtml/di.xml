@@ -29,7 +29,7 @@
     <type name="Magento\Reports\Controller\Adminhtml\Report\Statistics">
         <arguments>
             <argument name="reportTypes" xsi:type="array">
-                <item name="inventory_report" xsi:type="string">Bss\ProductInventoryReport\Model\ResourceModel\Report\ProductInventoryReport</item>
+                <item name="inventory_report" xsi:type="string">Bss\ProductInventoryReport\Model\ResourceModel\ProductInventoryReport</item>
             </argument>
         </arguments>
     </type>

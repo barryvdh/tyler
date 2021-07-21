@@ -19,15 +19,12 @@ declare(strict_types=1);
 
 namespace Bss\ProductInventoryReport\Block\Adminhtml\Inventory\Report;
 
-use Bss\BrandRepresentative\Helper\Data;
-use Bss\ProductInventoryReport\Model\ResourceModel\Report\ProductInventoryReport\Collection;
+use Bss\ProductInventoryReport\Model\ResourceModel\ProductInventoryReport\CollectionFactory;
+use Bss\ProductInventoryReport\Model\ResourceModel\ProductInventoryReport\Collection;
 use Magento\Catalog\Api\CategoryRepositoryInterface;
-use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Catalog\Model\Product\Attribute\Source\Status;
 use Magento\Framework\View\Element\BlockInterface;
 use Magento\InventoryApi\Api\Data\SourceItemInterface;
-use Magento\Reports\Block\Adminhtml\Grid\AbstractGrid;
-use Magento\Reports\Block\Adminhtml\Sales\Grid\Column\Renderer\Date;
 use Magento\Sales\Model\ResourceModel\Order\Item\CollectionFactory as OrderItemCollectionFactory;
 use \Magento\Sales\Model\Order\Item;
 
@@ -35,26 +32,9 @@ use \Magento\Sales\Model\Order\Item;
  * Class Grid
  * Bss\ProductInventoryReport\Block\Adminhtml\Sales\Report
  */
-class Grid extends AbstractGrid
+class Grid extends \Magento\Backend\Block\Widget\Grid\Extended
 {
     const PRODUCT_NAME_COL_ID = "product_name";
-
-    /**
-     * GROUP BY criteria
-     *
-     * @var string
-     */
-    protected $_columnGroupBy = 'period';
-
-    /**
-     * @var Data
-     */
-    protected $helper;
-
-    /**
-     * @var ProductRepositoryInterface
-     */
-    protected $productRepository;
 
     /**
      * @var CategoryRepositoryInterface
@@ -67,36 +47,32 @@ class Grid extends AbstractGrid
     protected $orderItemCollectionFactory;
 
     /**
+     * @var CollectionFactory
+     */
+    protected $inventoryProductCollectionFactory;
+
+    /**
      * Grid constructor.
      *
      * @param \Magento\Backend\Block\Template\Context $context
      * @param \Magento\Backend\Helper\Data $backendHelper
-     * @param \Magento\Reports\Model\ResourceModel\Report\Collection\Factory $resourceFactory
-     * @param \Magento\Reports\Model\Grouped\CollectionFactory $collectionFactory
-     * @param \Magento\Reports\Helper\Data $reportsData
-     * @param Data $helper
-     * @param ProductRepositoryInterface $productRepository
      * @param CategoryRepositoryInterface $categoryRepository
      * @param OrderItemCollectionFactory $orderItemCollectionFactory
+     * @param CollectionFactory $inventoryProductCollectionFactory
      * @param array $data
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
         \Magento\Backend\Helper\Data $backendHelper,
-        \Magento\Reports\Model\ResourceModel\Report\Collection\Factory $resourceFactory,
-        \Magento\Reports\Model\Grouped\CollectionFactory $collectionFactory,
-        \Magento\Reports\Helper\Data $reportsData,
-        Data $helper,
-        ProductRepositoryInterface $productRepository,
         CategoryRepositoryInterface $categoryRepository,
         OrderItemCollectionFactory $orderItemCollectionFactory,
+        CollectionFactory $inventoryProductCollectionFactory,
         array $data = []
     ) {
-        $this->helper = $helper;
-        $this->productRepository = $productRepository;
         $this->categoryRepository = $categoryRepository;
         $this->orderItemCollectionFactory = $orderItemCollectionFactory;
-        parent::__construct($context, $backendHelper, $resourceFactory, $collectionFactory, $reportsData, $data);
+        $this->inventoryProductCollectionFactory = $inventoryProductCollectionFactory;
+        parent::__construct($context, $backendHelper, $data);
     }
 
     /**
@@ -106,38 +82,43 @@ class Grid extends AbstractGrid
     protected function _construct()
     {
         parent::_construct();
+        $this->setId("test_test");
+        $this->setFilterVisibility(false);
+        $this->setPagerVisibility(false);
+        $this->setUseAjax(false);
+        $this->setDefaultSort('product_id');
+        $this->setDefaultDir('DESC');
         $this->setCountTotals(false);
         $this->_exportPageSize = 10000;
     }
 
     /**
-     * @inheritdoc
-     * @codeCoverageIgnore
+     * Set collection and add filter
+     *
+     * @return Grid
      */
-    public function getResourceCollectionName()
+    protected function _prepareCollection()
     {
-        return Collection::class;
+        $collection = $this->inventoryProductCollectionFactory->create();
+        $this->setCollection($collection);
+        $this->addCustomFilter($collection, $this->getFilterData());
+
+        return parent::_prepareCollection();
+    }
+
+    /**
+     * No pager override
+     */
+    protected function _preparePage()
+    {
+        // No pager
     }
 
     /**
      * @inheritdoc
-     * @SuppressWarnings(ExcessiveMethodLength)
      */
     protected function _prepareColumns()
     {
-        $this->addColumn(
-            'period',
-            [
-                'header' => __('Period'),
-                'index' => 'period',
-                'sortable' => false,
-                'period_type' => $this->getPeriodType(),
-                'renderer' => Date::class,
-                'html_decorators' => ['nobr'],
-                'header_css_class' => 'col-period',
-                'column_css_class' => 'col-period'
-            ]
-        );
         $this->addColumn(
             'p_id',
             [
@@ -379,11 +360,11 @@ class Grid extends AbstractGrid
     /**
      * Add brand filter
      *
-     * @param \Magento\Reports\Model\ResourceModel\Report\Collection\AbstractCollection $collection
+     * @param Collection $collection
      * @param \Magento\Framework\DataObject $filterData
      * @return Grid
      */
-    protected function _addCustomFilter($collection, $filterData)
+    protected function addCustomFilter(Collection $collection, \Magento\Framework\DataObject $filterData): Grid
     {
         $brands = $filterData->getData('brands');
         if (isset($brands[0])) {
@@ -394,6 +375,6 @@ class Grid extends AbstractGrid
             $collection->setBrandFilter($brandIds);
         }
 
-        return parent::_addCustomFilter($collection, $filterData);
+        return $this;
     }
 }

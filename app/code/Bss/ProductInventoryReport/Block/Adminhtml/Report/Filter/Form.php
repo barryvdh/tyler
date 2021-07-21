@@ -47,6 +47,10 @@ class Form extends \Magento\Sales\Block\Adminhtml\Report\Filter\Form
         parent::_prepareForm();
         $form = $this->getForm();
         $fieldset = $form->getElement('base_fieldset');
+        $fieldset->removeField('period_type');
+        $fieldset->removeField('from');
+        $fieldset->removeField('to');
+        $fieldset->removeField('show_empty_rows');
         $fieldset->addField(
             'brands',
             'multiselect',
