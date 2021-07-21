@@ -11,15 +11,10 @@ use Magento\Framework\Message\ManagerInterface;
 
 /**
  * Class SetDefaultNewQty
- * Set default qty for product created by brand manager
+ * Set default qty for product and no manage stock for downloadable product created by brand manager
  */
 class SetDefaultNewQty implements \Magento\Framework\Event\ObserverInterface
 {
-    /**
-     * @var ProductRepositoryInterface
-     */
-    private $productRepository;
-
     /**
      * @var AggregateCustomizeHelper
      */
@@ -43,20 +38,17 @@ class SetDefaultNewQty implements \Magento\Framework\Event\ObserverInterface
     /**
      * SetDefaultNewQty constructor.
      *
-     * @param ProductRepositoryInterface $productRepository
      * @param AggregateCustomizeHelper $aggregateHelper
      * @param Data $moduleHelper
      * @param \Psr\Log\LoggerInterface $logger
      * @param ManagerInterface $messageManager
      */
     public function __construct(
-        ProductRepositoryInterface $productRepository,
         AggregateCustomizeHelper $aggregateHelper,
         Data $moduleHelper,
         \Psr\Log\LoggerInterface $logger,
         ManagerInterface $messageManager
     ) {
-        $this->productRepository = $productRepository;
         $this->aggregateHelper = $aggregateHelper;
         $this->moduleHelper = $moduleHelper;
         $this->logger = $logger;
@@ -64,7 +56,9 @@ class SetDefaultNewQty implements \Magento\Framework\Event\ObserverInterface
     }
 
     /**
-     * @inheritDoc
+     * Process set default qty = 1 and no manage stock for downloadable product if user is brand manager
+     *
+     * @param Observer $observer
      */
     public function execute(Observer $observer)
     {
@@ -79,10 +73,12 @@ class SetDefaultNewQty implements \Magento\Framework\Event\ObserverInterface
                     explode(",", $this->moduleHelper->getAdditionalAttributeConfig())
                 );
 
-                if ($product->isObjectNew() && $isQtyBeHided) {
-                    $product->setStockData(['qty' => '1', 'is_in_stock' => '1']);
+                if ($product->getId() && $product->isObjectNew() && $isQtyBeHided) {
                     $product->setQuantityAndStockStatus(['qty' => '1', 'is_in_stock' => '1']);
-                    // use model->save() to avoid required attributes errors
+                    if ($product->getTypeId() === "downloadable" || $product->getTypeId() === "virtual") {
+                        $product->setStockData(['manage_stock' => '0', 'use_config_manage_stock' => '0']);
+                    }
+                    // Use model->save() to escape required attributes validation
                     $product->save();
                 }
             }

@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
+    <preference for="Magento\CatalogInventory\Model\ResourceModel\Stock\Item\StockItemCriteriaMapper"
+                type="Bss\CustomCommand\Model\ResourceModel\Stock\Item\StockItemCriteriaMapper"/>
+
+    <type name="Magento\Framework\Console\CommandList">
+        <arguments>
+            <argument name="commands" xsi:type="array">
+                <item name="apply_no_manage_stock" xsi:type="object">Bss\CustomCommand\Console\ApplyNoManageStock</item>
+            </argument>
+        </arguments>
+    </type>
+</config>
