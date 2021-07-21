@@ -318,6 +318,7 @@ return [
         'Bss_FixAdminActionLog' => 1,
         'Bss_BrandLandingPage' => 1,
         'Bss_HideProductField' => 1,
+        'Bss_LatestProductListing' => 1,
         'Bss_CustomizeCompanyAccount' => 1,
         'Bss_OrderRestriction' => 1,
         'Bss_Popup' => 1,
