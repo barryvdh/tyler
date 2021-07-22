@@ -19,6 +19,7 @@ declare(strict_types=1);
 
 namespace Bss\ProductInventoryReport\Block\Adminhtml\Inventory\Report;
 
+use Bss\BrandRepresentative\Helper\Data;
 use Bss\ProductInventoryReport\Model\ResourceModel\ProductInventoryReport\CollectionFactory;
 use Bss\ProductInventoryReport\Model\ResourceModel\ProductInventoryReport\Collection;
 use Magento\Catalog\Api\CategoryRepositoryInterface;
@@ -52,6 +53,11 @@ class Grid extends \Magento\Backend\Block\Widget\Grid\Extended
     protected $inventoryProductCollectionFactory;
 
     /**
+     * @var Data
+     */
+    protected $helper;
+
+    /**
      * Grid constructor.
      *
      * @param \Magento\Backend\Block\Template\Context $context
@@ -59,6 +65,7 @@ class Grid extends \Magento\Backend\Block\Widget\Grid\Extended
      * @param CategoryRepositoryInterface $categoryRepository
      * @param OrderItemCollectionFactory $orderItemCollectionFactory
      * @param CollectionFactory $inventoryProductCollectionFactory
+     * @param Data $helper
      * @param array $data
      */
     public function __construct(
@@ -67,11 +74,13 @@ class Grid extends \Magento\Backend\Block\Widget\Grid\Extended
         CategoryRepositoryInterface $categoryRepository,
         OrderItemCollectionFactory $orderItemCollectionFactory,
         CollectionFactory $inventoryProductCollectionFactory,
+        Data $helper,
         array $data = []
     ) {
         $this->categoryRepository = $categoryRepository;
         $this->orderItemCollectionFactory = $orderItemCollectionFactory;
         $this->inventoryProductCollectionFactory = $inventoryProductCollectionFactory;
+        $this->helper = $helper;
         parent::__construct($context, $backendHelper, $data);
     }
 
@@ -139,6 +148,18 @@ class Grid extends \Magento\Backend\Block\Widget\Grid\Extended
                 'sortable' => false,
                 'header_css_class' => 'col-product-name',
                 'column_css_class' => 'col-product-name'
+            ]
+        );
+        $this->addColumn(
+            "product_type",
+            [
+                'header' => __('Product Type'),
+                'index' => "product_type",
+                'type' => 'options',
+                'options' => $this->helper->getAllProductTypes(),
+                'sortable' => false,
+                'header_css_class' => 'col-product-type',
+                'column_css_class' => 'col-product-type'
             ]
         );
         $this->addColumn(

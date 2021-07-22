@@ -40,6 +40,17 @@ class UpgradeSchema implements \Magento\Framework\Setup\UpgradeSchemaInterface
             if ($setup->getConnection()->isTableExists($dailyTbl) == true) {
                 $connection = $setup->getConnection();
                 $connection->dropColumn($dailyTbl, 'period');
+                $connection->addColumn(
+                    $dailyTbl,
+                    "product_type",
+                    [
+                        'type' => \Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
+                        'length' => 128,
+                        'nullable' => true,
+                        'after' => 'product_id',
+                        'comment' => 'Product type id'
+                    ]
+                );
             }
 
             // Drop not used table
