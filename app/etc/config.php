@@ -332,6 +332,7 @@ return [
         'Dotdigitalgroup_Chat' => 1,
         'FME_Restrictcustomergroup' => 0,
         'Fooman_PrintOrderPdf' => 1,
+        'Godogi_ProductGridColumns' => 1,
         'Klarna_Core' => 1,
         'Klarna_Ordermanagement' => 1,
         'Klarna_Onsitemessaging' => 1,
