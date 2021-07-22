@@ -30,6 +30,11 @@ class ApplyNoManageStock extends BaseCommand
     public const INPUT_ARG = "product_id";
 
     /**
+     * @var \Magento\Framework\App\State
+     */
+    protected $state;
+
+    /**
      * @var SearchCriteriaBuilder
      */
     protected $searchCriteriaBuilder;
@@ -42,17 +47,20 @@ class ApplyNoManageStock extends BaseCommand
     /**
      * ApplyNoManageStock constructor.
      *
+     * @param \Magento\Framework\App\State $state
      * @param \Psr\Log\LoggerInterface $logger
      * @param SearchCriteriaBuilder $searchCriteriaBuilder
      * @param \Magento\CatalogInventory\Model\Stock\StockItemRepository $stockItemRepository
      * @param string|null $name
      */
     public function __construct(
+        \Magento\Framework\App\State $state,
         \Psr\Log\LoggerInterface $logger,
         SearchCriteriaBuilder $searchCriteriaBuilder,
         \Magento\CatalogInventory\Model\Stock\StockItemRepository $stockItemRepository,
         string $name = null
     ) {
+        $this->state = $state;
         parent::__construct($logger, $name);
         $this->searchCriteriaBuilder = $searchCriteriaBuilder;
         $this->stockItemRepository = $stockItemRepository;
@@ -78,6 +86,7 @@ class ApplyNoManageStock extends BaseCommand
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         try {
+            $this->state->setAreaCode(\Magento\Framework\App\Area::AREA_GLOBAL);
             $progressBar = $this->getProgress($output);
             $productIds = $input->getArgument(self::INPUT_ARG);
 
@@ -112,6 +121,7 @@ class ApplyNoManageStock extends BaseCommand
                         $this->stockItemRepository->save($item);
                         $count++;
                     } catch (\Exception $e) {
+                        $this->logger->critical($e);
                         $output->writeln("");
                         $output->writeln(
                             sprintf(

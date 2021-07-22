@@ -1,0 +1,62 @@
+/**
+ * BSS Commerce Co.
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the EULA
+ * that is bundled with this package in the file LICENSE.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://bsscommerce.com/Bss-Commerce-License.txt
+ *
+ * @category   BSS
+ * @package    Bss_LatestProductListing
+ * @author     Extension Team
+ * @copyright  Copyright (c) 2020 BSS Commerce Co. ( http://bsscommerce.com )
+ * @license    http://bsscommerce.com/Bss-Commerce-License.txt
+ */
+& when (@media-common = true) {
+    .custom-new-products {
+        .product-image-photo {
+            border-radius: 20px;
+        }
+        &.products.wrapper {
+            .product-item-details {
+                .brand-item-link {
+                    border-bottom: 1px solid #f9f9fa;
+                    display: inherit;
+                    font-size: .75em;
+                    font-weight: 500;
+                    max-height: 15px;
+                    min-height: 15px;
+                    overflow: hidden;
+                    padding-left: 30px;
+                    padding-right: 30px;
+                    text-overflow: ellipsis;
+                    white-space: nowrap;
+                    position: relative;
+                    transform: translateZ(0);
+                    &:before {
+                        content: "";
+                        position: absolute;
+                        z-index: -1;
+                        left: 50%;
+                        right: 50%;
+                        bottom: 0;
+                        background: #f9f9fa;
+                        height: 1px;
+                        -webkit-transition-property: left right;
+                        transition-property: left right;
+                        -webkit-transition-duration: 0.3s;
+                        transition-duration: 0.3s;
+                        -webkit-transition-timing-function: ease-out;
+                        transition-timing-function: ease-out;
+                    }
+                    &:not(.no-brand-link):hover:before {
+                        left: 50px;
+                        right: 50px;
+                    }
+                }
+            }
+        }
+    }
+}

@@ -34,6 +34,8 @@ use Psr\Log\LoggerInterface;
 class InstallData implements InstallDataInterface
 {
     const PAGE_IDENTIFIER = "new.html";
+    const PAGE_LAYOUT = "1column";
+    const PAGE_LAYOUT_UPDATE = "LatestProductListing";
 
     /**
      * @var PageFactory
@@ -76,7 +78,7 @@ class InstallData implements InstallDataInterface
     }
 
     /**
-     * Create latest produc listing cms page
+     * Create latest product listing cms page
      *
      * @param ModuleDataSetupInterface $setup
      * @param ModuleContextInterface $context
@@ -90,13 +92,14 @@ class InstallData implements InstallDataInterface
             $page->setIdentifier(self::PAGE_IDENTIFIER)
                 ->setIsActive(true)
                 ->setTitle("Newest Products")
-                ->setPageLayout('full-width')
-                ->setContent(
-                    '{{block class="Bss\LatestProductListing\Block\Product\ListNew" name="product-listing"' .
-                    ' template="Bss_LatestProductListing::product/list-new.phtml"}}'
-                )
+                ->setPageLayout(self::PAGE_LAYOUT)
                 ->setStores([$defaultStore->getId()]);
 
+            $this->pageRepository->save($page);
+
+            // Set layout
+            $page = $this->pageRepository->getById($page->getId());
+            $page->setData("layout_update_selected", self::PAGE_LAYOUT_UPDATE);
             $this->pageRepository->save($page);
         } catch (\Exception $e) {
             $this->logger->error(

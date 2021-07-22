@@ -1,0 +1,15 @@
+<?php
+// @codingStandardsIgnoreFile
+?>
+<?php
+/**
+ * Product list toolbar
+ *
+ * @var $block \Magento\Catalog\Block\Product\ProductList\Toolbar
+ */
+?>
+<?php if ($block->getCollection()->getSize()): ?>
+    <div class="toolbar toolbar-products" data-mage-init='<?php /* @escapeNotVerified */ echo $block->getWidgetOptionsJson(); ?>'>
+        <?php echo $block->getPagerHtml() ?>
+    </div>
+<?php endif ?>
