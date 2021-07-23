@@ -333,6 +333,8 @@ return [
         'Dotdigitalgroup_Chat' => 1,
         'FME_Restrictcustomergroup' => 0,
         'Flagship_Shipping' => 1,
+        'Fooman_PdfCore' => 1,
+        'Fooman_PdfPickingList' => 1,
         'Fooman_PrintOrderPdf' => 1,
         'Godogi_ProductGridColumns' => 1,
         'Klarna_Core' => 1,

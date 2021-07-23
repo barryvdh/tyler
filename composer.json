@@ -13,6 +13,7 @@
     "require": {
         "amasty/module-advanced-permissions": "^1.4",
         "bsscommerce/magento-2-reindex-extension": "^1.0",
+        "fooman/pdfpickinglist-m2": "^6.0",
         "fooman/printorderpdf-m2": "^3.0",
         "magento/composer-root-update-plugin": "~1.0",
         "magento/product-community-edition": "2.4.0",
@@ -71,6 +72,10 @@
     "version": "2.4.0",
     "minimum-stability": "stable",
     "repositories": {
+        "fooman": {
+            "type": "composer",
+            "url": "https://customer-repos.fooman.co.nz/useone2one.com-e139267315c7df694e38aa25214fd1189b343c08"
+        },
         "amasty": {
             "type": "composer",
             "url": "https://composer.amasty.com/community/"
