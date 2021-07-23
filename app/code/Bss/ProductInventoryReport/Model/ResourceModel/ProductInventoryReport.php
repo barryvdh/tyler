@@ -19,6 +19,7 @@ declare(strict_types=1);
 
 namespace Bss\ProductInventoryReport\Model\ResourceModel;
 
+use Bss\BrandRepresentative\Model\BrandProcessor;
 use Magento\Catalog\Api\CategoryRepositoryInterface;
 use Magento\Catalog\Model\Product;
 use Magento\Catalog\Model\ResourceModel\Product\CollectionFactory;
@@ -64,6 +65,11 @@ class ProductInventoryReport extends AbstractReport
     protected $categoryRepository;
 
     /**
+     * @var BrandProcessor
+     */
+    protected $brandProcessor;
+
+    /**
      * @param Context $context
      * @param LoggerInterface $logger
      * @param TimezoneInterface $localeDate
@@ -73,6 +79,7 @@ class ProductInventoryReport extends AbstractReport
      * @param CollectionFactory $productCollectionFactory
      * @param CategoryRepositoryInterface $categoryRepository
      * @param \Magento\CatalogInventory\Api\StockRegistryInterface $stockRegistry
+     * @param BrandProcessor $brandProcessor
      * @param string|null $connectionName
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
@@ -86,6 +93,7 @@ class ProductInventoryReport extends AbstractReport
         CollectionFactory $productCollectionFactory,
         CategoryRepositoryInterface $categoryRepository,
         \Magento\CatalogInventory\Api\StockRegistryInterface $stockRegistry,
+        BrandProcessor $brandProcessor,
         $connectionName = null
     ) {
         parent::__construct(
@@ -100,6 +108,7 @@ class ProductInventoryReport extends AbstractReport
         $this->productCollectionFactory = $productCollectionFactory;
         $this->stockRegistry = $stockRegistry;
         $this->categoryRepository = $categoryRepository;
+        $this->brandProcessor = $brandProcessor;
     }
 
     /**
@@ -147,7 +156,7 @@ class ProductInventoryReport extends AbstractReport
                 $stockItem = $this->stockRegistry->getStockItem($product->getId());
 
                 $batch['stock_status'] = (int) $stockItem->getIsInStock();
-                $batch['brand_id'] = $this->getBrandId($product->getCategoryIds());
+                $batch['brand_id'] = $this->getBrandId($product);
                 $batch['max_order_amount'] = $stockItem->getMaxSaleQty();
                 $batch['inventory_qty'] = $stockItem->getQty();
 
@@ -182,45 +191,16 @@ class ProductInventoryReport extends AbstractReport
     /**
      * Get brand id
      *
-     * @param array $ids
+     * @param Product $product
      * @return int|null
-     * @throws \Magento\Framework\Exception\NoSuchEntityException
      */
-    protected function getBrandId(array $ids): ?int
+    protected function getBrandId(Product $product): ?int
     {
-        foreach ($ids as $categoryId) {
-            $categoryId = (int) $categoryId;
-            if (!isset($this->brandIdData[$categoryId])) {
-                $this->getBrandIdRecursive($categoryId, $categoryId);
-            }
-
-            return $this->brandIdData[$categoryId] ?? null;
+        if ($brand = $this->brandProcessor->getBrand($product)) {
+            return (int) $brand->getId();
         }
 
         return null;
-    }
-
-    /**
-     * Get brand id recursive
-     *
-     * @param int $categoryId
-     * @param int $startRecursiveId
-     * @throws \Magento\Framework\Exception\NoSuchEntityException
-     */
-    protected function getBrandIdRecursive(int $categoryId, int $startRecursiveId)
-    {
-        if (!$categoryId) {
-            return;
-        }
-
-        $category = $this->categoryRepository->get($categoryId);
-        if ((int) $category->getLevel() === static::BRAND_LV) {
-            $this->brandIdData[$startRecursiveId] = (int) $category->getId();
-        }
-
-        if ($category->getLevel() > static::BRAND_LV) {
-            $this->getBrandIdRecursive((int) $category->getParentId(), $startRecursiveId);
-        }
     }
 
     /**

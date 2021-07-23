@@ -317,15 +317,6 @@ class ListNew extends \Magento\Framework\View\Element\Template
      */
     public function getBrand(Product $product): ?Category
     {
-        $ids = $product->getCategoryIds();
-
-        foreach ($ids as $categoryId) {
-            $categoryId = (int) $categoryId;
-            $brand = $this->brandProcessor->getBrand($categoryId);
-            if ($brand && $brand->getId()) {
-                return $brand;
-            }
-        }
-        return null;
+        return $this->brandProcessor->getBrand($product);
     }
 }

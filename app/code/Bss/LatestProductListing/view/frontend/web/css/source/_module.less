@@ -16,18 +16,20 @@
  */
 & when (@media-common = true) {
     .custom-new-products {
+        .product-items {
+            display: flex;
+            flex-wrap: wrap;
+        }
         .product-image-photo {
             border-radius: 20px;
         }
         &.products.wrapper {
             .product-item-details {
                 .brand-item-link {
-                    border-bottom: 1px solid #f9f9fa;
                     display: inherit;
-                    font-size: .75em;
                     font-weight: 500;
-                    max-height: 15px;
-                    min-height: 15px;
+                    max-height: 19px;
+                    min-height: 19px;
                     overflow: hidden;
                     padding-left: 30px;
                     padding-right: 30px;
