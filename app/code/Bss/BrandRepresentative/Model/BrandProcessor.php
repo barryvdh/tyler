@@ -21,6 +21,7 @@ namespace Bss\BrandRepresentative\Model;
 
 use Magento\Catalog\Api\CategoryRepositoryInterface;
 use Magento\Catalog\Model\Category;
+use Magento\Catalog\Model\Product;
 
 /**
  * Processor for brand
@@ -51,12 +52,32 @@ class BrandProcessor
     }
 
     /**
+     * Get brand of provide product
+     *
+     * @param Product $product
+     * @return Category|null
+     */
+    public function getBrand(Product $product): ?Category
+    {
+        $ids = $product->getCategoryIds();
+
+        foreach ($ids as $categoryId) {
+            $categoryId = (int) $categoryId;
+            $brand = $this->getBrandOfCategory($categoryId);
+            if ($brand && $brand->getId()) {
+                return $brand;
+            }
+        }
+        return null;
+    }
+
+    /**
      * Get brand id recursive
      *
      * @param int $categoryId
      * @return null|Category
      */
-    public function getBrand(int $categoryId): ?Category
+    public function getBrandOfCategory(int $categoryId): ?Category
     {
         return $this->getBrandRecursive($categoryId, $categoryId);
     }

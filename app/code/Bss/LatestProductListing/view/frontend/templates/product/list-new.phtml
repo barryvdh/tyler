@@ -220,11 +220,13 @@ $block->getToolbarHtml();
                 <div class="product details product-item-details">
                     <?php
                         $_productNameStripped = $block->stripTags($_product->getName(), null, true);
+                        $pName = $escaper->escapeHtml($catalogHelperOutput->productAttribute($_product, $_product->getName(), 'name'))
                     ?>
                     <strong class="product name product-item-name">
                         <a class="product-item-link"
+                           title="<?= $pName ?>"
                            href="<?php echo $_product->getProductUrl() ?>">
-                            <?php echo $catalogHelperOutput->productAttribute($_product, $_product->getName(), 'name'); ?>
+                            <?= $pName ?>
                         </a>
                         <?php if ($brand = $block->getBrand($_product)): ?>
                         <a class="brand-item-link"
