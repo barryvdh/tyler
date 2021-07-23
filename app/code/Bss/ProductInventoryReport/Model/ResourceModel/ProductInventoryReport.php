@@ -138,6 +138,7 @@ class ProductInventoryReport extends AbstractReport
             foreach ($collection as $product) {
                 $batch = [
                     'product_id'    => $product->getId(),
+                    'product_type'  => $product->getTypeId(),
                     'product_sku'   => $product->getSku(),
                     'product_name'  => $product->getName(),
                     'status'        => $product->getStatus()
